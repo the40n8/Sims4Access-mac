@@ -18,8 +18,14 @@ from collections import deque
 import functools
 import os
 import socket
+import sys
 import threading
 import time
+
+# macOS port: the peer check below needs Windows' TCP owner table (ctypes),
+# and the Mac game's Python crashes when a background thread imports from a
+# zip while the simulation thread runs Python. No listener thread on macOS.
+IS_MAC = sys.platform == 'darwin'
 
 PORT_KEYBOARD = 45993
 PORT_SPEECH = 45994
@@ -118,6 +124,8 @@ def parse_post(line):
 
 def same_process_peer(peer_port, listener_port=None):
     """Use the documented Windows TCP owner table, never game memory."""
+    if IS_MAC:
+        return False
     if listener_port is None:
         listener_port = _port or PORT_KEYBOARD
     try:
@@ -437,6 +445,10 @@ def install():
         return result
 
     core.on_tick = on_tick
+    if IS_MAC:
+        log('macOS: startup listener not started (main menu and CAS speech unavailable)')
+        _thread = False
+        return
     _thread = threading.Thread(target=_serve, name='a11y_startup', daemon=True)
     _thread.start()
 

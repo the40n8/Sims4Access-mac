@@ -52,6 +52,18 @@ DEFAULTS = {
     'sapi_voice': 'zira',     # fallback voice, case-insensitive partial name
 }
 
+# macOS port defaults: narration for a shared session where a sighted player
+# drives with the mouse. The Windows keyboard hooks do not exist on macOS, so
+# keyboard-driven features start off; spoken events stay on. A stored
+# TS4_Access.cfg still wins over these.
+import sys as _sys
+if _sys.platform == 'darwin':
+    DEFAULTS.update({
+        'keyboard': False, 'simplified_menus': False, 'scanner': False,
+        'travel_list': False, 'build_controls': False, 'numpad_navigation': False,
+        'verbosity': 'brief', 'sapi_voice': '', 'logging': True,
+    })
+
 # Friendly key names for the cfg file and a11y.keybind (single source; the
 # keyboard module imports this).
 KEY_NAMES = {
@@ -165,7 +177,8 @@ tooltip delay = {tooltip_delay}
 logging = {logging}
 
 [voice]
-# Windows voice, used only when no screen reader is running.
+# Fallback voice (Windows SAPI; on macOS the ts4access-say companion).
+# On macOS, name is part of a voice name, e.g. Thomas or Amelie for French.
 # rate -10 to 10
 rate = {sapi_rate}
 # volume 0 to 100

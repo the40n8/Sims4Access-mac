@@ -367,6 +367,11 @@ def start_keys():
     global _keys_thread
     if _keys_thread is not None:
         return
+    import sys
+    if sys.platform == 'darwin':
+        # macOS port: Windows key polling only, and thread-side imports crash there.
+        _keys_thread = False
+        return
     _keys_thread = threading.Thread(target=_keys_loop, name="a11yplus_keys", daemon=True)
     _keys_thread.start()
 

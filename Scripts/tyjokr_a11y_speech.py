@@ -1,7 +1,16 @@
 """Screen-reader output through Prism, with configurable Windows speech fallback."""
 import os
+import sys
 import threading
 import time
+
+# macOS port: no ctypes, Prism or SAPI there. The fallback voice is the
+# ts4access-say companion (AVSpeechSynthesizer), which speaks the same
+# stdin line protocol as the Windows SAPI child.
+IS_MAC = sys.platform == 'darwin'
+# Imported here, on the loading thread: speech timers run on background
+# threads, and a first-time import there can crash the Mac game.
+from urllib.parse import quote as _quote  # noqa: F401  (warms the module)
 
 try:
     import subprocess
@@ -103,7 +112,7 @@ def log_line(message):
 
 def _try_init_prism():
     global _prism
-    if not os.path.isfile(PRISM_DLL_PATH):
+    if IS_MAC or not os.path.isfile(PRISM_DLL_PATH):
         return False
     try:
         from tyjokr_a11y_prism import Reader
@@ -171,8 +180,56 @@ def _sapi_script():
     return script
 
 
+def _mac_say_path():
+    candidates = [os.path.join(MODS_FOLDER, 'ts4access-say'),
+                  os.path.join(MODS_FOLDER, 'TS4_Access_Mac', 'ts4access-say'),
+                  os.path.join(_mods_root(), 'TS4_Access_Mac', 'ts4access-say')]
+    return next((p for p in candidates if os.path.isfile(p)), None)
+
+
+def _mac_lang():
+    try:
+        import tyjokr_a11y_lang as _lang
+        code = getattr(_lang, '_locale_lang', None)  # only once the client locale is known
+    except Exception:
+        code = None
+    return {'fr': 'fr-FR', 'de': 'de-DE', 'es': 'es-ES', 'en': 'en-US'}.get(code or '', '')
+
+
+def _try_init_mac_say():
+    global _sapi_proc
+    path = _mac_say_path()
+    if subprocess is None or path is None:
+        log_line('macOS speech companion missing (ts4access-say)')
+        return False
+    try:
+        import tyjokr_a11y_settings as _s
+        rate = max(-10, min(10, int(_s.get('sapi_rate'))))
+        volume = max(0, min(100, int(_s.get('sapi_volume'))))
+        voice = str(_s.get('sapi_voice') or '')
+    except Exception:
+        rate, volume, voice = 3, 70, ''
+    args = [path, '--rate', str(rate), '--volume', str(volume)]
+    if voice and voice.lower() != 'zira':   # Zira is the Windows default
+        args += ['--voice', voice]
+    lang = _mac_lang()
+    if lang:
+        args += ['--lang', lang]
+    try:
+        _sapi_proc = subprocess.Popen(
+            args, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL, close_fds=True)
+        log_line('macOS speech companion started: {}'.format(' '.join(args[1:])))
+        return True
+    except Exception as ex:
+        log_line('macOS speech companion failed: {!r}'.format(ex))
+        return False
+
+
 def _try_init_sapi():
     global _sapi_proc
+    if IS_MAC:
+        return _try_init_mac_say()
     if subprocess is None:
         return False
     try:
@@ -205,6 +262,19 @@ def list_voices():
     """Installed SAPI voice names (one-shot query, ~a second)."""
     if subprocess is None:
         return []
+    if IS_MAC:
+        path = _mac_say_path()
+        if path is None:
+            return []
+        try:
+            out = subprocess.run([path, '--list-voices'], stdout=subprocess.PIPE,
+                                 stderr=subprocess.DEVNULL, timeout=10)
+            return [line.split('\t')[1] for line in
+                    out.stdout.decode('utf-8', 'replace').splitlines()
+                    if line.count('\t') >= 2]
+        except Exception as ex:
+            log_line('voice list failed: {!r}'.format(ex))
+            return []
     try:
         out = subprocess.run(
             ['powershell', '-NoProfile', '-NonInteractive', '-Command',
@@ -292,6 +362,11 @@ def _beep():
 
     def _play():
         try:
+            if IS_MAC:
+                subprocess.Popen(['/usr/bin/afplay', '-v', '0.4',
+                                  '/System/Library/Sounds/Tink.aiff'],
+                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return
             import ctypes
             ctypes.windll.kernel32.Beep(1150, 45)
         except Exception:
