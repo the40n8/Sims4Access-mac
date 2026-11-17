@@ -4,9 +4,11 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
-	import { Speed, type Interaction, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { Speed, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
 	import type { CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
+	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
 	import { announce } from './Announcer.svelte';
+	import InteractionMenu from './InteractionMenu.svelte';
 
 	const game = $derived(live.state);
 	// Buttons say what they do ("Play"); the status line says the state ("Normal speed").
@@ -21,8 +23,6 @@
 	let targets = $state<Target[] | null>(null);
 	let query = $state('');
 	let selected = $state<Target | null>(null);
-	let menu = $state<Interaction[] | null>(null);
-	let menuHeading: HTMLHeadingElement | undefined = $state();
 	let lastTargetId = '';
 
 	async function act(call: () => Promise<CommandOutcome>, success = m.done) {
@@ -55,37 +55,6 @@
 		}
 	});
 
-	function groupLabel(t: Target): string {
-		if (t.isSelf) return m.group_SELF();
-		const key = `group_${t.group}` as keyof typeof m;
-		const fn = m[key] as (() => string) | undefined;
-		return typeof fn === 'function' ? fn() : t.group;
-	}
-
-	// Things a player uses most first; lights, decorations and doors last.
-	const GROUP_ORDER = [
-		'SELF',
-		'SIMS',
-		'APPLIANCES',
-		'PLUMBING',
-		'COMFORT',
-		'SURFACE',
-		'ELECTRONICS',
-		'ENTERTAINMENT',
-		'KIDS',
-		'STORAGE',
-		'PETS',
-		'VEHICLE',
-		'MISC',
-		'DECOR',
-		'LIGHTING',
-		'BUILD'
-	];
-	const rank = (t: Target) => {
-		const i = GROUP_ORDER.indexOf(t.isSelf ? 'SELF' : t.group);
-		return i < 0 ? GROUP_ORDER.length : i;
-	};
-
 	function matches(t: Target, words: string[]): boolean {
 		const hay = `${t.name} ${t.kind} ${t.keywords} ${groupLabel(t)}`.toLocaleLowerCase();
 		return words.every((w) => hay.includes(w));
@@ -104,111 +73,21 @@
 		return out;
 	});
 
-	async function open(t: Target) {
+	function open(t: Target) {
 		selected = t;
 		lastTargetId = t.id;
-		menu = null;
-		await tick();
-		menuHeading?.focus();
-		// Names come from the game's string tables: ask again while some are pending.
-		for (let attempt = 0; attempt < 4; attempt++) {
-			try {
-				const res = await client.getInteractions({ targetId: t.id });
-				if (!res.outcome?.ok) {
-					menu = [];
-					announce(m.failed({ reason: reasonText(res.outcome?.reason ?? '') }));
-					return;
-				}
-				menu = res.interactions;
-				if (!res.namesPending) return;
-			} catch {
-				menu = [];
-				return;
-			}
-			await new Promise((r) => setTimeout(r, 700));
-		}
 	}
 
 	async function back() {
 		selected = null;
-		menu = null;
 		await tick();
 		document.getElementById(`target-${lastTargetId}`)?.focus();
-	}
-
-	const menuGroups = $derived.by(() => {
-		const out: { label: string; items: Interaction[] }[] = [];
-		for (const i of menu ?? []) {
-			const label = i.category;
-			let g = out.find((x) => x.label === label);
-			if (!g) out.push((g = { label, items: [] }));
-			g.items.push(i);
-		}
-		// Top-level rows first, as in the game's pie menu.
-		return out.sort((a, b) => (a.label === '' ? -1 : b.label === '' ? 1 : 0));
-	});
-
-	async function choose(i: Interaction) {
-		if (!selected) return;
-		if (!i.enabled) {
-			announce(
-				i.reason ? m.unavailable_because({ name: i.name, reason: i.reason }) : m.unavailable({ name: i.name })
-			);
-			return;
-		}
-		const target = selected;
-		await act(
-			() => run(() => client.runInteraction({ targetId: target.id, interactionId: i.id })),
-			() => m.queued({ name: i.name })
-		);
-	}
-
-	function targetLabel(t: Target): string {
-		if (t.isSelf) return m.target_self({ name: t.name });
-		const name = t.kind ? `${t.kind}: ${t.name}` : t.name;
-		return t.distance > 0 ? m.target_distance({ name, meters: t.distance }) : name;
 	}
 </script>
 
 {#if game?.inGame}
 	{#if selected}
-		<section class="card stack" aria-labelledby="menu-title">
-			<button type="button" onclick={back}>{m.back_to_list()}</button>
-			<h2 id="menu-title" tabindex="-1" bind:this={menuHeading}>
-				{m.interactions_of({ name: selected.name })}
-			</h2>
-			{#if menu === null}
-				<p class="muted" role="status">{m.loading()}</p>
-			{:else if menu.length === 0}
-				<p class="muted">{m.no_interactions()}</p>
-			{:else}
-				{#each menuGroups as g (g.label)}
-					{#if g.label}<h3>{g.label}</h3>{/if}
-					<ul class="stack">
-						{#each g.items as i (i.id)}
-							<li>
-								<button
-									type="button"
-									class="row"
-									aria-disabled={!i.enabled}
-									disabled={busy}
-									onclick={() => choose(i)}
-								>
-									{#if i.enabled}
-										{i.name}
-									{:else if i.reason}
-										{m.unavailable_because({ name: i.name, reason: i.reason })}
-									{:else}
-										{m.unavailable({ name: i.name })}
-									{/if}
-								</button>
-							</li>
-						{/each}
-					</ul>
-				{/each}
-				<p class="muted">{m.dialog_on_mac()}</p>
-			{/if}
-		</section>
+		<InteractionMenu target={selected} onBack={back} />
 	{:else}
 		<section class="card stack" aria-labelledby="speed">
 			<h2 id="speed">{m.speed_title()}</h2>
@@ -275,13 +154,6 @@
 	.row {
 		width: 100%;
 		text-align: start;
-	}
-	button[aria-disabled='true'] {
-		opacity: 0.7;
-		border-style: dashed;
-	}
-	h2:focus {
-		outline: none;
 	}
 	.search input {
 		font: inherit;

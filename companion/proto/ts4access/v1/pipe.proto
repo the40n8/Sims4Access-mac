@@ -31,6 +31,7 @@ message CommandResult {
   repeated Target targets = 3;
   repeated Interaction interactions = 4;
   bool names_pending = 5;
+  HouseMap house_map = 6;
 }
 
 message ToBridge {
@@ -53,5 +54,6 @@ message ToGame {
     ListTargetsRequest list_targets = 6;
     GetInteractionsRequest get_interactions = 7;
     RunInteractionRequest run_interaction = 8;
+    GetHouseMapRequest get_house_map = 9;
   }
 }

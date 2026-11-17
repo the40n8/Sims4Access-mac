@@ -170,3 +170,52 @@ message Event {
   // Kind-specific detail: need level name, moodlet description, funds delta...
   string detail = 7;
 }
+
+// The house, room by room, for a mental map of the lot.
+message HouseMap {
+  repeated Room rooms = 1;
+  // Ground floor is 0, basements are negative.
+  repeated int32 floors = 2;
+}
+
+message Room {
+  string id = 1;
+  // What the room looks like from its furniture: KITCHEN, BATHROOM, BEDROOM,
+  // NURSERY, DINING, LIVING, STUDY, ROOM (unknown) or EMPTY.
+  string kind = 2;
+  // 2 for "Bedroom 2" when the house has several; 0 when it is the only one.
+  int32 number = 3;
+  // Name the player gave the room, if any.
+  string custom_name = 4;
+  int32 floor = 5;
+  // Size in metres (one tile is one metre).
+  int32 width = 6;
+  int32 depth = 7;
+  int32 area = 8;
+  // Part of the floor the room is in: N, NE, E, SE, S, SW, W, NW or C (middle).
+  string part = 9;
+  // The controlled Sim is in this room.
+  bool here = 10;
+  // From the controlled Sim, when on the same lot.
+  int32 distance = 11;
+  string bearing = 12;
+  repeated RoomLink links = 13;
+  repeated RoomItem items = 14;
+  // First names of the Sims in the room.
+  repeated string sims = 15;
+}
+
+message RoomLink {
+  // Room on the other side, "" for outside.
+  string room_id = 1;
+  // A door between them; otherwise they only share a wall or an opening.
+  bool door = 2;
+  // Side of this room the link is on: N, E, S, W...
+  string side = 3;
+}
+
+message RoomItem {
+  Target target = 1;
+  // Where in the room: N, NE... or C for the middle.
+  string side = 2;
+}

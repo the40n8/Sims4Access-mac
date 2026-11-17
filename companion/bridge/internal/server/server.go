@@ -99,6 +99,11 @@ func (s *service) RunInteraction(ctx context.Context, req *connect.Request[v1.Ru
 	return connect.NewResponse(&v1.RunInteractionResponse{Outcome: out}), nil
 }
 
+func (s *service) GetHouseMap(ctx context.Context, req *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error) {
+	res := s.hub.Call(ctx, &v1.ToGame{Command: &v1.ToGame_GetHouseMap{GetHouseMap: req.Msg}})
+	return connect.NewResponse(&v1.GetHouseMapResponse{Outcome: res.GetOutcome(), Map: res.GetHouseMap()}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

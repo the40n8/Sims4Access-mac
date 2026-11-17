@@ -265,6 +265,12 @@ def _run(cmd):
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
     if 'listTargets' in cmd:
         return True, '', {'targets': list_targets()}
+    if 'getHouseMap' in cmd:
+        import tyjokr_a11y_housemap as housemap
+        house = housemap.build()
+        if house is None:
+            return False, 'not_in_game'
+        return True, '', {'houseMap': house}
     if 'getInteractions' in cmd:
         return get_interactions(cmd['getInteractions'].get('targetId', ''))
     if 'runInteraction' in cmd:
@@ -796,7 +802,7 @@ def get_interactions(target_id):
                         routing_surface=obj.routing_surface, lot_id=lot_id, level=level)
         context = client.create_interaction_context(sim, pick=pick)
         context.add_preferred_objects((obj,))
-        menu.add_potential_aops(target, context, target.potential_interactions(context, **parameters))
+        menu.add_potential_aops(target, context, target.potential_interactions(context, **parameters), None)
         if getattr(target, 'is_sim', False) and target is not sim:
             try:
                 sim.fill_choices_menu_with_si_state_aops(target, context, menu)

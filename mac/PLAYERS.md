@@ -28,9 +28,12 @@ Better voices: System Settings > Accessibility > Spoken Content > System voice >
 
 ## Phone companion
 
-While the game runs, a phone on the same Wi-Fi can follow and control it:
-household status, a live feed read by VoiceOver, game speed, controlled
-Sim, cancelling actions. When the game starts, the Mac voice says "Phone
+While the game runs, a phone can follow and control it (any network, through
+a Cloudflare quick tunnel): household status, a live feed read by VoiceOver,
+game speed, controlled Sim, cancelling actions, and the game's own interaction
+menus for Sims and objects (Play). House describes the home room by room: each
+floor, the rooms on it and where they sit, which doors join them, and what is
+in each room, with its interactions one tap away. When the game starts, the Mac voice says "Phone
 link ready". Open the cheat console (Cmd+Shift+C) and type `a11y.companion`
 (or open the accessibility menu with `a11y.hub` > phone companion): a page
 with a QR code opens on the Mac. Scan it with the phone, then in Safari:

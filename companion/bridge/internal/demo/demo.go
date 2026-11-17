@@ -155,8 +155,29 @@ var demoMenus = map[string][]*v1.Interaction{
 	"o4":   {{Id: "1", Name: "Play Games", Enabled: true}, {Id: "2", Name: "Browse Web", Enabled: true}},
 }
 
+func item(t *v1.Target, side string) *v1.RoomItem { return &v1.RoomItem{Target: t, Side: side} }
+
+// demoHouse: a small two-floor house around the demo objects.
+func demoHouse() *v1.HouseMap {
+	return &v1.HouseMap{Floors: []int32{0, 1}, Rooms: []*v1.Room{
+		{Id: "r1", Kind: "KITCHEN", Floor: 0, Width: 4, Depth: 5, Area: 20, Part: "NW", Here: true, Sims: []string{"Bella"},
+			Links: []*v1.RoomLink{{RoomId: "r2", Door: false, Side: "E"}, {RoomId: "", Door: true, Side: "N"}},
+			Items: []*v1.RoomItem{item(demoTargets[0], "N"), item(&v1.Target{Id: "o5", Name: "Counter", Group: "SURFACE", Kind: "Counters"}, "W")}},
+		{Id: "r2", Kind: "LIVING", Floor: 0, Width: 6, Depth: 5, Area: 30, Part: "NE", Distance: 5, Bearing: "E",
+			Links: []*v1.RoomLink{{RoomId: "r1", Side: "W"}, {RoomId: "r3", Door: true, Side: "S"}, {RoomId: "", Door: true, Side: "E"}},
+			Items: []*v1.RoomItem{item(demoTargets[1], "C"), item(&v1.Target{Id: "o6", Name: "TV", Group: "ELECTRONICS", Kind: "Televisions"}, "N")}},
+		{Id: "r3", Kind: "BATHROOM", Floor: 0, Width: 2, Depth: 3, Area: 6, Part: "S", Distance: 8, Bearing: "SE",
+			Links: []*v1.RoomLink{{RoomId: "r2", Door: true, Side: "N"}},
+			Items: []*v1.RoomItem{item(demoTargets[2], "E")}},
+		{Id: "r4", Kind: "BEDROOM", Number: 0, Floor: 1, Width: 4, Depth: 4, Area: 16, Part: "C", Distance: 9, Bearing: "N",
+			Items: []*v1.RoomItem{item(demoTargets[3], "S"), item(&v1.Target{Id: "o7", Name: "Double Bed", Group: "COMFORT", Kind: "Beds"}, "N")}},
+	}}
+}
+
 func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 	switch cmd := c.Command.(type) {
+	case *v1.ToGame_GetHouseMap:
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, HouseMap: demoHouse()}
 	case *v1.ToGame_ListTargets:
 		var targets []*v1.Target
 		for _, s := range g.state.Sims {

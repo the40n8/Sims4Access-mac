@@ -4,9 +4,9 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
-import type { CancelActionRequest, CommandOutcome, GetInteractionsRequest, ListTargetsRequest, RunInteractionRequest, SelectSimRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
+import type { CancelActionRequest, CommandOutcome, GetHouseMapRequest, GetInteractionsRequest, ListTargetsRequest, RunInteractionRequest, SelectSimRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
 import { file_ts4access_v1_companion } from "./companion_pb.js";
-import type { Event, GameState, Interaction, Target } from "./game_pb.js";
+import type { Event, GameState, HouseMap, Interaction, Target } from "./game_pb.js";
 import { file_ts4access_v1_game } from "./game_pb.js";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/pipe.proto.
  */
 export const file_ts4access_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAkiuQEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCCLgAQoIVG9CcmlkZ2USJAoFaGVsbG8YASABKAsyEy50czRhY2Nlc3MudjEuSGVsbG9IABIoCgVzdGF0ZRgCIAEoCzIXLnRzNGFjY2Vzcy52MS5HYW1lU3RhdGVIABIkCgVldmVudBgDIAEoCzITLnRzNGFjY2Vzcy52MS5FdmVudEgAEi0KBnJlc3VsdBgEIAEoCzIbLnRzNGFjY2Vzcy52MS5Db21tYW5kUmVzdWx0SAASJAoFdm9pY2UYBSABKAsyEy50czRhY2Nlc3MudjEuVm9pY2VIAEIJCgdwYXlsb2FkIr0DCgZUb0dhbWUSCgoCaWQYASABKAkSMgoJc2V0X3NwZWVkGAIgASgLMh0udHM0YWNjZXNzLnYxLlNldFNwZWVkUmVxdWVzdEgAEjQKCnNlbGVjdF9zaW0YAyABKAsyHi50czRhY2Nlc3MudjEuU2VsZWN0U2ltUmVxdWVzdEgAEjoKDWNhbmNlbF9hY3Rpb24YBCABKAsyIS50czRhY2Nlc3MudjEuQ2FuY2VsQWN0aW9uUmVxdWVzdEgAEjoKDXNldF9uYXJyYXRpb24YBSABKAsyIS50czRhY2Nlc3MudjEuU2V0TmFycmF0aW9uUmVxdWVzdEgAEjgKDGxpc3RfdGFyZ2V0cxgGIAEoCzIgLnRzNGFjY2Vzcy52MS5MaXN0VGFyZ2V0c1JlcXVlc3RIABJAChBnZXRfaW50ZXJhY3Rpb25zGAcgASgLMiQudHM0YWNjZXNzLnYxLkdldEludGVyYWN0aW9uc1JlcXVlc3RIABI+Cg9ydW5faW50ZXJhY3Rpb24YCCABKAsyIy50czRhY2Nlc3MudjEuUnVuSW50ZXJhY3Rpb25SZXF1ZXN0SABCCQoHY29tbWFuZGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
+  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAi4AEKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSABCCQoHcGF5bG9hZCL4AwoGVG9HYW1lEgoKAmlkGAEgASgJEjIKCXNldF9zcGVlZBgCIAEoCzIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3RIABI0CgpzZWxlY3Rfc2ltGAMgASgLMh4udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlcXVlc3RIABI6Cg1jYW5jZWxfYWN0aW9uGAQgASgLMiEudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI6Cg1zZXRfbmFycmF0aW9uGAUgASgLMiEudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlcXVlc3RIABI4CgxsaXN0X3RhcmdldHMYBiABKAsyIC50czRhY2Nlc3MudjEuTGlzdFRhcmdldHNSZXF1ZXN0SAASQAoQZ2V0X2ludGVyYWN0aW9ucxgHIAEoCzIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPgoPcnVuX2ludGVyYWN0aW9uGAggASgLMiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdEgAEjkKDWdldF9ob3VzZV9tYXAYCSABKAsyIC50czRhY2Nlc3MudjEuR2V0SG91c2VNYXBSZXF1ZXN0SABCCQoHY29tbWFuZGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.Voice
@@ -108,6 +108,11 @@ export type CommandResult = Message<"ts4access.v1.CommandResult"> & {
    * @generated from field: bool names_pending = 5;
    */
   namesPending: boolean;
+
+  /**
+   * @generated from field: ts4access.v1.HouseMap house_map = 6;
+   */
+  houseMap?: HouseMap | undefined;
 };
 
 /**
@@ -218,6 +223,12 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
      */
     value: RunInteractionRequest;
     case: "runInteraction";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.GetHouseMapRequest get_house_map = 9;
+     */
+    value: GetHouseMapRequest;
+    case: "getHouseMap";
   } | { case: undefined; value?: undefined };
 };
 

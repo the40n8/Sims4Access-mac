@@ -21,6 +21,8 @@ service CompanionService {
   rpc GetInteractions(GetInteractionsRequest) returns (GetInteractionsResponse);
   // Queue an interaction from the last menu, as a click would.
   rpc RunInteraction(RunInteractionRequest) returns (RunInteractionResponse);
+  // The house room by room, with what is in each room.
+  rpc GetHouseMap(GetHouseMapRequest) returns (GetHouseMapResponse);
 }
 
 message WatchRequest {}
@@ -100,4 +102,11 @@ message CommandOutcome {
   // Stable reason key when ok is false (e.g. "sim_unavailable",
   // "not_cancelable", "not_in_game", "timeout").
   string reason = 2;
+}
+
+message GetHouseMapRequest {}
+
+message GetHouseMapResponse {
+  CommandOutcome outcome = 1;
+  HouseMap map = 2;
 }

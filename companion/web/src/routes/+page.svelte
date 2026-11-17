@@ -10,13 +10,15 @@
 	import LiveView from '$lib/components/LiveView.svelte';
 	import SimsView from '$lib/components/SimsView.svelte';
 	import PlayView from '$lib/components/PlayView.svelte';
+	import HouseView from '$lib/components/HouseView.svelte';
 	import SettingsView from '$lib/components/SettingsView.svelte';
 	import Feed from '$lib/components/Feed.svelte';
 
-	type Tab = 'live' | 'play' | 'sims' | 'history' | 'settings';
+	type Tab = 'live' | 'play' | 'house' | 'sims' | 'history' | 'settings';
 	const TABS: { id: Tab; label: () => string }[] = [
 		{ id: 'live', label: m.tab_live },
 		{ id: 'play', label: m.tab_play },
+		{ id: 'house', label: m.tab_house },
 		{ id: 'sims', label: m.tab_sims },
 		{ id: 'history', label: m.tab_history },
 		{ id: 'settings', label: m.tab_settings }
@@ -90,6 +92,8 @@
 			<LiveView onSeeAll={() => show('history')} />
 		{:else if tab === 'play'}
 			<PlayView />
+		{:else if tab === 'house'}
+			<HouseView />
 		{:else if tab === 'sims'}
 			<SimsView />
 		{:else if tab === 'history'}
@@ -113,7 +117,7 @@
 		position: fixed;
 		inset: auto 0 0 0;
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		gap: 0.25rem;
 		padding: 0.5rem 0.5rem calc(env(safe-area-inset-bottom) + 0.5rem);
 		background: var(--surface);

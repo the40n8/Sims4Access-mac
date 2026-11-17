@@ -1178,6 +1178,341 @@ func (x *Event) GetDetail() string {
 	return ""
 }
 
+// The house, room by room, for a mental map of the lot.
+type HouseMap struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Rooms []*Room                `protobuf:"bytes,1,rep,name=rooms,proto3" json:"rooms,omitempty"`
+	// Ground floor is 0, basements are negative.
+	Floors        []int32 `protobuf:"varint,2,rep,packed,name=floors,proto3" json:"floors,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HouseMap) Reset() {
+	*x = HouseMap{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HouseMap) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HouseMap) ProtoMessage() {}
+
+func (x *HouseMap) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HouseMap.ProtoReflect.Descriptor instead.
+func (*HouseMap) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *HouseMap) GetRooms() []*Room {
+	if x != nil {
+		return x.Rooms
+	}
+	return nil
+}
+
+func (x *HouseMap) GetFloors() []int32 {
+	if x != nil {
+		return x.Floors
+	}
+	return nil
+}
+
+type Room struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// What the room looks like from its furniture: KITCHEN, BATHROOM, BEDROOM,
+	// NURSERY, DINING, LIVING, STUDY, ROOM (unknown) or EMPTY.
+	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
+	// 2 for "Bedroom 2" when the house has several; 0 when it is the only one.
+	Number int32 `protobuf:"varint,3,opt,name=number,proto3" json:"number,omitempty"`
+	// Name the player gave the room, if any.
+	CustomName string `protobuf:"bytes,4,opt,name=custom_name,json=customName,proto3" json:"custom_name,omitempty"`
+	Floor      int32  `protobuf:"varint,5,opt,name=floor,proto3" json:"floor,omitempty"`
+	// Size in metres (one tile is one metre).
+	Width int32 `protobuf:"varint,6,opt,name=width,proto3" json:"width,omitempty"`
+	Depth int32 `protobuf:"varint,7,opt,name=depth,proto3" json:"depth,omitempty"`
+	Area  int32 `protobuf:"varint,8,opt,name=area,proto3" json:"area,omitempty"`
+	// Part of the floor the room is in: N, NE, E, SE, S, SW, W, NW or C (middle).
+	Part string `protobuf:"bytes,9,opt,name=part,proto3" json:"part,omitempty"`
+	// The controlled Sim is in this room.
+	Here bool `protobuf:"varint,10,opt,name=here,proto3" json:"here,omitempty"`
+	// From the controlled Sim, when on the same lot.
+	Distance int32       `protobuf:"varint,11,opt,name=distance,proto3" json:"distance,omitempty"`
+	Bearing  string      `protobuf:"bytes,12,opt,name=bearing,proto3" json:"bearing,omitempty"`
+	Links    []*RoomLink `protobuf:"bytes,13,rep,name=links,proto3" json:"links,omitempty"`
+	Items    []*RoomItem `protobuf:"bytes,14,rep,name=items,proto3" json:"items,omitempty"`
+	// First names of the Sims in the room.
+	Sims          []string `protobuf:"bytes,15,rep,name=sims,proto3" json:"sims,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Room) Reset() {
+	*x = Room{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Room) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Room) ProtoMessage() {}
+
+func (x *Room) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Room.ProtoReflect.Descriptor instead.
+func (*Room) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *Room) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Room) GetKind() string {
+	if x != nil {
+		return x.Kind
+	}
+	return ""
+}
+
+func (x *Room) GetNumber() int32 {
+	if x != nil {
+		return x.Number
+	}
+	return 0
+}
+
+func (x *Room) GetCustomName() string {
+	if x != nil {
+		return x.CustomName
+	}
+	return ""
+}
+
+func (x *Room) GetFloor() int32 {
+	if x != nil {
+		return x.Floor
+	}
+	return 0
+}
+
+func (x *Room) GetWidth() int32 {
+	if x != nil {
+		return x.Width
+	}
+	return 0
+}
+
+func (x *Room) GetDepth() int32 {
+	if x != nil {
+		return x.Depth
+	}
+	return 0
+}
+
+func (x *Room) GetArea() int32 {
+	if x != nil {
+		return x.Area
+	}
+	return 0
+}
+
+func (x *Room) GetPart() string {
+	if x != nil {
+		return x.Part
+	}
+	return ""
+}
+
+func (x *Room) GetHere() bool {
+	if x != nil {
+		return x.Here
+	}
+	return false
+}
+
+func (x *Room) GetDistance() int32 {
+	if x != nil {
+		return x.Distance
+	}
+	return 0
+}
+
+func (x *Room) GetBearing() string {
+	if x != nil {
+		return x.Bearing
+	}
+	return ""
+}
+
+func (x *Room) GetLinks() []*RoomLink {
+	if x != nil {
+		return x.Links
+	}
+	return nil
+}
+
+func (x *Room) GetItems() []*RoomItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+func (x *Room) GetSims() []string {
+	if x != nil {
+		return x.Sims
+	}
+	return nil
+}
+
+type RoomLink struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Room on the other side, "" for outside.
+	RoomId string `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	// A door between them; otherwise they only share a wall or an opening.
+	Door bool `protobuf:"varint,2,opt,name=door,proto3" json:"door,omitempty"`
+	// Side of this room the link is on: N, E, S, W...
+	Side          string `protobuf:"bytes,3,opt,name=side,proto3" json:"side,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RoomLink) Reset() {
+	*x = RoomLink{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RoomLink) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoomLink) ProtoMessage() {}
+
+func (x *RoomLink) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoomLink.ProtoReflect.Descriptor instead.
+func (*RoomLink) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *RoomLink) GetRoomId() string {
+	if x != nil {
+		return x.RoomId
+	}
+	return ""
+}
+
+func (x *RoomLink) GetDoor() bool {
+	if x != nil {
+		return x.Door
+	}
+	return false
+}
+
+func (x *RoomLink) GetSide() string {
+	if x != nil {
+		return x.Side
+	}
+	return ""
+}
+
+type RoomItem struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Target *Target                `protobuf:"bytes,1,opt,name=target,proto3" json:"target,omitempty"`
+	// Where in the room: N, NE... or C for the middle.
+	Side          string `protobuf:"bytes,2,opt,name=side,proto3" json:"side,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RoomItem) Reset() {
+	*x = RoomItem{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RoomItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoomItem) ProtoMessage() {}
+
+func (x *RoomItem) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoomItem.ProtoReflect.Descriptor instead.
+func (*RoomItem) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *RoomItem) GetTarget() *Target {
+	if x != nil {
+		return x.Target
+	}
+	return nil
+}
+
+func (x *RoomItem) GetSide() string {
+	if x != nil {
+		return x.Side
+	}
+	return ""
+}
+
 var File_ts4access_v1_game_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_game_proto_rawDesc = "" +
@@ -1260,7 +1595,35 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x06sim_id\x18\x04 \x01(\tR\x05simId\x12\x19\n" +
 	"\bsim_name\x18\x05 \x01(\tR\asimName\x12\x18\n" +
 	"\asubject\x18\x06 \x01(\tR\asubject\x12\x16\n" +
-	"\x06detail\x18\a \x01(\tR\x06detail*t\n" +
+	"\x06detail\x18\a \x01(\tR\x06detail\"L\n" +
+	"\bHouseMap\x12(\n" +
+	"\x05rooms\x18\x01 \x03(\v2\x12.ts4access.v1.RoomR\x05rooms\x12\x16\n" +
+	"\x06floors\x18\x02 \x03(\x05R\x06floors\"\x87\x03\n" +
+	"\x04Room\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x16\n" +
+	"\x06number\x18\x03 \x01(\x05R\x06number\x12\x1f\n" +
+	"\vcustom_name\x18\x04 \x01(\tR\n" +
+	"customName\x12\x14\n" +
+	"\x05floor\x18\x05 \x01(\x05R\x05floor\x12\x14\n" +
+	"\x05width\x18\x06 \x01(\x05R\x05width\x12\x14\n" +
+	"\x05depth\x18\a \x01(\x05R\x05depth\x12\x12\n" +
+	"\x04area\x18\b \x01(\x05R\x04area\x12\x12\n" +
+	"\x04part\x18\t \x01(\tR\x04part\x12\x12\n" +
+	"\x04here\x18\n" +
+	" \x01(\bR\x04here\x12\x1a\n" +
+	"\bdistance\x18\v \x01(\x05R\bdistance\x12\x18\n" +
+	"\abearing\x18\f \x01(\tR\abearing\x12,\n" +
+	"\x05links\x18\r \x03(\v2\x16.ts4access.v1.RoomLinkR\x05links\x12,\n" +
+	"\x05items\x18\x0e \x03(\v2\x16.ts4access.v1.RoomItemR\x05items\x12\x12\n" +
+	"\x04sims\x18\x0f \x03(\tR\x04sims\"K\n" +
+	"\bRoomLink\x12\x17\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x12\n" +
+	"\x04door\x18\x02 \x01(\bR\x04door\x12\x12\n" +
+	"\x04side\x18\x03 \x01(\tR\x04side\"L\n" +
+	"\bRoomItem\x12,\n" +
+	"\x06target\x18\x01 \x01(\v2\x14.ts4access.v1.TargetR\x06target\x12\x12\n" +
+	"\x04side\x18\x02 \x01(\tR\x04side*t\n" +
 	"\x05Speed\x12\x15\n" +
 	"\x11SPEED_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fSPEED_PAUSED\x10\x01\x12\x10\n" +
@@ -1309,7 +1672,7 @@ func file_ts4access_v1_game_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_game_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_ts4access_v1_game_proto_goTypes = []any{
 	(Speed)(0),          // 0: ts4access.v1.Speed
 	(NeedLevel)(0),      // 1: ts4access.v1.NeedLevel
@@ -1326,6 +1689,10 @@ var file_ts4access_v1_game_proto_goTypes = []any{
 	(*Target)(nil),      // 12: ts4access.v1.Target
 	(*Interaction)(nil), // 13: ts4access.v1.Interaction
 	(*Event)(nil),       // 14: ts4access.v1.Event
+	(*HouseMap)(nil),    // 15: ts4access.v1.HouseMap
+	(*Room)(nil),        // 16: ts4access.v1.Room
+	(*RoomLink)(nil),    // 17: ts4access.v1.RoomLink
+	(*RoomItem)(nil),    // 18: ts4access.v1.RoomItem
 }
 var file_ts4access_v1_game_proto_depIdxs = []int32{
 	0,  // 0: ts4access.v1.Clock.speed:type_name -> ts4access.v1.Speed
@@ -1339,11 +1706,15 @@ var file_ts4access_v1_game_proto_depIdxs = []int32{
 	9,  // 8: ts4access.v1.GameState.sims:type_name -> ts4access.v1.Sim
 	10, // 9: ts4access.v1.GameState.narration:type_name -> ts4access.v1.Narration
 	3,  // 10: ts4access.v1.Event.kind:type_name -> ts4access.v1.EventKind
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	16, // 11: ts4access.v1.HouseMap.rooms:type_name -> ts4access.v1.Room
+	17, // 12: ts4access.v1.Room.links:type_name -> ts4access.v1.RoomLink
+	18, // 13: ts4access.v1.Room.items:type_name -> ts4access.v1.RoomItem
+	12, // 14: ts4access.v1.RoomItem.target:type_name -> ts4access.v1.Target
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_game_proto_init() }
@@ -1357,7 +1728,7 @@ func file_ts4access_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_game_proto_rawDesc), len(file_ts4access_v1_game_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   11,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

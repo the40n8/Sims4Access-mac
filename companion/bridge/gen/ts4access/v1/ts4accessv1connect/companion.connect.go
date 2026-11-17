@@ -56,6 +56,9 @@ const (
 	// CompanionServiceRunInteractionProcedure is the fully-qualified name of the CompanionService's
 	// RunInteraction RPC.
 	CompanionServiceRunInteractionProcedure = "/ts4access.v1.CompanionService/RunInteraction"
+	// CompanionServiceGetHouseMapProcedure is the fully-qualified name of the CompanionService's
+	// GetHouseMap RPC.
+	CompanionServiceGetHouseMapProcedure = "/ts4access.v1.CompanionService/GetHouseMap"
 )
 
 // CompanionServiceClient is a client for the ts4access.v1.CompanionService service.
@@ -72,6 +75,8 @@ type CompanionServiceClient interface {
 	GetInteractions(context.Context, *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error)
 	// Queue an interaction from the last menu, as a click would.
 	RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error)
+	// The house room by room, with what is in each room.
+	GetHouseMap(context.Context, *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error)
 }
 
 // NewCompanionServiceClient constructs a client for the ts4access.v1.CompanionService service. By
@@ -133,6 +138,12 @@ func NewCompanionServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(companionServiceMethods.ByName("RunInteraction")),
 			connect.WithClientOptions(opts...),
 		),
+		getHouseMap: connect.NewClient[v1.GetHouseMapRequest, v1.GetHouseMapResponse](
+			httpClient,
+			baseURL+CompanionServiceGetHouseMapProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("GetHouseMap")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -146,6 +157,7 @@ type companionServiceClient struct {
 	listTargets     *connect.Client[v1.ListTargetsRequest, v1.ListTargetsResponse]
 	getInteractions *connect.Client[v1.GetInteractionsRequest, v1.GetInteractionsResponse]
 	runInteraction  *connect.Client[v1.RunInteractionRequest, v1.RunInteractionResponse]
+	getHouseMap     *connect.Client[v1.GetHouseMapRequest, v1.GetHouseMapResponse]
 }
 
 // Watch calls ts4access.v1.CompanionService.Watch.
@@ -188,6 +200,11 @@ func (c *companionServiceClient) RunInteraction(ctx context.Context, req *connec
 	return c.runInteraction.CallUnary(ctx, req)
 }
 
+// GetHouseMap calls ts4access.v1.CompanionService.GetHouseMap.
+func (c *companionServiceClient) GetHouseMap(ctx context.Context, req *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error) {
+	return c.getHouseMap.CallUnary(ctx, req)
+}
+
 // CompanionServiceHandler is an implementation of the ts4access.v1.CompanionService service.
 type CompanionServiceHandler interface {
 	// Current state first, then every change and event as it happens.
@@ -202,6 +219,8 @@ type CompanionServiceHandler interface {
 	GetInteractions(context.Context, *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error)
 	// Queue an interaction from the last menu, as a click would.
 	RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error)
+	// The house room by room, with what is in each room.
+	GetHouseMap(context.Context, *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error)
 }
 
 // NewCompanionServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -259,6 +278,12 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 		connect.WithSchema(companionServiceMethods.ByName("RunInteraction")),
 		connect.WithHandlerOptions(opts...),
 	)
+	companionServiceGetHouseMapHandler := connect.NewUnaryHandler(
+		CompanionServiceGetHouseMapProcedure,
+		svc.GetHouseMap,
+		connect.WithSchema(companionServiceMethods.ByName("GetHouseMap")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/ts4access.v1.CompanionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CompanionServiceWatchProcedure:
@@ -277,6 +302,8 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 			companionServiceGetInteractionsHandler.ServeHTTP(w, r)
 		case CompanionServiceRunInteractionProcedure:
 			companionServiceRunInteractionHandler.ServeHTTP(w, r)
+		case CompanionServiceGetHouseMapProcedure:
+			companionServiceGetHouseMapHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -316,4 +343,8 @@ func (UnimplementedCompanionServiceHandler) GetInteractions(context.Context, *co
 
 func (UnimplementedCompanionServiceHandler) RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.RunInteraction is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) GetHouseMap(context.Context, *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.GetHouseMap is not implemented"))
 }

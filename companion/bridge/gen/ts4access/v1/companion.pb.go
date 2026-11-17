@@ -860,6 +860,94 @@ func (x *CommandOutcome) GetReason() string {
 	return ""
 }
 
+type GetHouseMapRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetHouseMapRequest) Reset() {
+	*x = GetHouseMapRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetHouseMapRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetHouseMapRequest) ProtoMessage() {}
+
+func (x *GetHouseMapRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetHouseMapRequest.ProtoReflect.Descriptor instead.
+func (*GetHouseMapRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{17}
+}
+
+type GetHouseMapResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	Map           *HouseMap              `protobuf:"bytes,2,opt,name=map,proto3" json:"map,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetHouseMapResponse) Reset() {
+	*x = GetHouseMapResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetHouseMapResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetHouseMapResponse) ProtoMessage() {}
+
+func (x *GetHouseMapResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetHouseMapResponse.ProtoReflect.Descriptor instead.
+func (*GetHouseMapResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *GetHouseMapResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
+func (x *GetHouseMapResponse) GetMap() *HouseMap {
+	if x != nil {
+		return x.Map
+	}
+	return nil
+}
+
 var File_ts4access_v1_companion_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_companion_proto_rawDesc = "" +
@@ -905,7 +993,11 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"8\n" +
 	"\x0eCommandOutcome\x12\x0e\n" +
 	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x16\n" +
-	"\x06reason\x18\x02 \x01(\tR\x06reason2\xae\x05\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\"\x14\n" +
+	"\x12GetHouseMapRequest\"w\n" +
+	"\x13GetHouseMapResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12(\n" +
+	"\x03map\x18\x02 \x01(\v2\x16.ts4access.v1.HouseMapR\x03map2\x82\x06\n" +
 	"\x10CompanionService\x12B\n" +
 	"\x05Watch\x12\x1a.ts4access.v1.WatchRequest\x1a\x1b.ts4access.v1.WatchResponse0\x01\x12I\n" +
 	"\bSetSpeed\x12\x1d.ts4access.v1.SetSpeedRequest\x1a\x1e.ts4access.v1.SetSpeedResponse\x12L\n" +
@@ -914,7 +1006,8 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\fSetNarration\x12!.ts4access.v1.SetNarrationRequest\x1a\".ts4access.v1.SetNarrationResponse\x12R\n" +
 	"\vListTargets\x12 .ts4access.v1.ListTargetsRequest\x1a!.ts4access.v1.ListTargetsResponse\x12^\n" +
 	"\x0fGetInteractions\x12$.ts4access.v1.GetInteractionsRequest\x1a%.ts4access.v1.GetInteractionsResponse\x12[\n" +
-	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponseB\xc5\x01\n" +
+	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponse\x12R\n" +
+	"\vGetHouseMap\x12 .ts4access.v1.GetHouseMapRequest\x1a!.ts4access.v1.GetHouseMapResponseB\xc5\x01\n" +
 	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -929,7 +1022,7 @@ func file_ts4access_v1_companion_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_companion_proto_rawDescData
 }
 
-var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_ts4access_v1_companion_proto_goTypes = []any{
 	(*WatchRequest)(nil),            // 0: ts4access.v1.WatchRequest
 	(*WatchResponse)(nil),           // 1: ts4access.v1.WatchResponse
@@ -948,48 +1041,55 @@ var file_ts4access_v1_companion_proto_goTypes = []any{
 	(*RunInteractionRequest)(nil),   // 14: ts4access.v1.RunInteractionRequest
 	(*RunInteractionResponse)(nil),  // 15: ts4access.v1.RunInteractionResponse
 	(*CommandOutcome)(nil),          // 16: ts4access.v1.CommandOutcome
-	(*GameState)(nil),               // 17: ts4access.v1.GameState
-	(*Event)(nil),                   // 18: ts4access.v1.Event
-	(Speed)(0),                      // 19: ts4access.v1.Speed
-	(*Narration)(nil),               // 20: ts4access.v1.Narration
-	(*Target)(nil),                  // 21: ts4access.v1.Target
-	(*Interaction)(nil),             // 22: ts4access.v1.Interaction
+	(*GetHouseMapRequest)(nil),      // 17: ts4access.v1.GetHouseMapRequest
+	(*GetHouseMapResponse)(nil),     // 18: ts4access.v1.GetHouseMapResponse
+	(*GameState)(nil),               // 19: ts4access.v1.GameState
+	(*Event)(nil),                   // 20: ts4access.v1.Event
+	(Speed)(0),                      // 21: ts4access.v1.Speed
+	(*Narration)(nil),               // 22: ts4access.v1.Narration
+	(*Target)(nil),                  // 23: ts4access.v1.Target
+	(*Interaction)(nil),             // 24: ts4access.v1.Interaction
+	(*HouseMap)(nil),                // 25: ts4access.v1.HouseMap
 }
 var file_ts4access_v1_companion_proto_depIdxs = []int32{
-	17, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
-	18, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
-	19, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
-	20, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
+	19, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
+	20, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
+	21, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
+	22, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
 	16, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	21, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
+	23, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
 	16, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	22, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
+	24, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
 	16, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	0,  // 13: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
-	2,  // 14: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
-	3,  // 15: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
-	4,  // 16: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
-	5,  // 17: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
-	10, // 18: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
-	12, // 19: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
-	14, // 20: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
-	1,  // 21: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
-	6,  // 22: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
-	7,  // 23: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
-	8,  // 24: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
-	9,  // 25: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
-	11, // 26: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
-	13, // 27: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
-	15, // 28: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
-	21, // [21:29] is the sub-list for method output_type
-	13, // [13:21] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	16, // 13: ts4access.v1.GetHouseMapResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	25, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
+	0,  // 15: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
+	2,  // 16: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
+	3,  // 17: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
+	4,  // 18: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
+	5,  // 19: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
+	10, // 20: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
+	12, // 21: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
+	14, // 22: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
+	17, // 23: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
+	1,  // 24: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
+	6,  // 25: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
+	7,  // 26: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
+	8,  // 27: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
+	9,  // 28: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
+	11, // 29: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
+	13, // 30: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
+	15, // 31: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
+	18, // 32: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
+	24, // [24:33] is the sub-list for method output_type
+	15, // [15:24] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_companion_proto_init() }
@@ -1009,7 +1109,7 @@ func file_ts4access_v1_companion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_companion_proto_rawDesc), len(file_ts4access_v1_companion_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
