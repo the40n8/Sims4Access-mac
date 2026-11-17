@@ -909,7 +909,11 @@ type Target struct {
 	// Catalog group for objects (COMFORT, APPLIANCES, PLUMBING...), SIMS for Sims.
 	Group string `protobuf:"bytes,5,opt,name=group,proto3" json:"group,omitempty"`
 	// Metres from the controlled Sim.
-	Distance      int32 `protobuf:"varint,6,opt,name=distance,proto3" json:"distance,omitempty"`
+	Distance int32 `protobuf:"varint,6,opt,name=distance,proto3" json:"distance,omitempty"`
+	// Catalog type, game text ("Refrigerators", "Showers").
+	Kind string `protobuf:"bytes,7,opt,name=kind,proto3" json:"kind,omitempty"`
+	// Extra search words from the catalog tags ("Fridge Refrigerator").
+	Keywords      string `protobuf:"bytes,8,opt,name=keywords,proto3" json:"keywords,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -984,6 +988,20 @@ func (x *Target) GetDistance() int32 {
 		return x.Distance
 	}
 	return 0
+}
+
+func (x *Target) GetKind() string {
+	if x != nil {
+		return x.Kind
+	}
+	return ""
+}
+
+func (x *Target) GetKeywords() string {
+	if x != nil {
+		return x.Keywords
+	}
+	return ""
 }
 
 // One row of the game's pie menu for a target.
@@ -1219,14 +1237,16 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x05funds\x18\x04 \x01(\x03R\x05funds\x12%\n" +
 	"\x0ehousehold_name\x18\x05 \x01(\tR\rhouseholdName\x12%\n" +
 	"\x04sims\x18\x06 \x03(\v2\x11.ts4access.v1.SimR\x04sims\x125\n" +
-	"\tnarration\x18\a \x01(\v2\x17.ts4access.v1.NarrationR\tnarration\"\x8e\x01\n" +
+	"\tnarration\x18\a \x01(\v2\x17.ts4access.v1.NarrationR\tnarration\"\xbe\x01\n" +
 	"\x06Target\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x15\n" +
 	"\x06is_sim\x18\x03 \x01(\bR\x05isSim\x12\x17\n" +
 	"\ais_self\x18\x04 \x01(\bR\x06isSelf\x12\x14\n" +
 	"\x05group\x18\x05 \x01(\tR\x05group\x12\x1a\n" +
-	"\bdistance\x18\x06 \x01(\x05R\bdistance\"\x7f\n" +
+	"\bdistance\x18\x06 \x01(\x05R\bdistance\x12\x12\n" +
+	"\x04kind\x18\a \x01(\tR\x04kind\x12\x1a\n" +
+	"\bkeywords\x18\b \x01(\tR\bkeywords\"\x7f\n" +
 	"\vInteraction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +

@@ -336,6 +336,7 @@ def _loc_value(value):
 
 
 _TOKEN = re.compile(r'\{([MF])(\d+)\.([^}]*)\}')
+_PLURAL = re.compile(r'\{([SP])\.([^}]*)\}')
 _FIELD = re.compile(r'\{(\d+)\.(\w+)\}')
 
 
@@ -367,7 +368,9 @@ def _fill_tokens(template, tokens):
             return getattr(t, 'raw_text', '') or ''
         return ''
 
-    text = _TOKEN.sub(gender, template)
+    # {S.Cereal}{P.Bowls of Cereal}: one item, so the singular form.
+    text = _PLURAL.sub(lambda m: m.group(2) if m.group(1) == 'S' else '', template)
+    text = _TOKEN.sub(gender, text)
     text = _FIELD.sub(field, text)
     return re.sub(r'\{[^}]*\}', '', text).replace('  ', ' ').strip()
 
@@ -631,7 +634,7 @@ def _publish_state():
 # same tests, visibility, names, greyed reasons, social sub-menus), and the
 # chosen row run with test_and_execute, like the mod's phone list.
 
-MAX_OBJECTS = 120         # nearest objects listed
+MAX_OBJECTS = 600         # nearest objects listed (a big house has a few hundred)
 MAX_DISTANCE = 60.0       # metres
 _menus = {}               # target id -> {option id: (aop, context)}
 
@@ -663,15 +666,36 @@ def _object_name(obj):
     if cached is None:
         _loc_wanted.add(key)
         return fallback
-    return cached or fallback
+    return _fill_tokens(cached, []) or fallback
 
 
-def _group(obj):
+def _loc_key_text(key):
+    """Game text for a string-table key, '' until the UI resolves it."""
+    if not key:
+        return ''
+    cached = _loc_cache().get(key)
+    if cached is None:
+        _loc_wanted.add(key)
+        return ''
+    return _fill_tokens(cached, [])
+
+
+def _classify(obj):
+    """(group, kind, keywords) from the scanner's catalog classification."""
     scanner = sys.modules.get('tyjokr_a11y_scanner')
+    buycat = sys.modules.get('tyjokr_a11y_buycat')
     try:
-        return scanner._classification(obj, time.monotonic())[1]
+        sub, group, names, _flags = scanner._classification(obj, time.monotonic())
     except Exception:
-        return 'MISC'
+        return 'MISC', '', ''
+    kind = ''
+    if buycat is not None:
+        kind = _loc_key_text(buycat.TAG_LABEL_HASH.get(sub, 0))
+    words = set()
+    for name in names or ():
+        if name.startswith(('BuyCat', 'Func_')):
+            words.add(_pretty(re.sub(r'^(BuyCat[A-Z]*_|Func_)', '', name)))
+    return group, kind, ' '.join(sorted(words))
 
 
 def list_targets():
@@ -717,8 +741,9 @@ def list_targets():
     objects.sort(key=lambda pair: pair[0])
     for d, obj in objects[:MAX_OBJECTS]:
         try:
-            targets.append({'id': str(obj.id), 'name': _object_name(obj), 'group': _group(obj),
-                            'distance': int(round(d))})
+            group, kind, keywords = _classify(obj)
+            targets.append({'id': str(obj.id), 'name': _object_name(obj), 'group': group,
+                            'kind': kind, 'keywords': keywords, 'distance': int(round(d))})
         except Exception:
             continue
     return targets

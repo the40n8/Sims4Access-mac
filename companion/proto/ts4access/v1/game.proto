@@ -141,6 +141,10 @@ message Target {
   string group = 5;
   // Metres from the controlled Sim.
   int32 distance = 6;
+  // Catalog type, game text ("Refrigerators", "Showers").
+  string kind = 7;
+  // Extra search words from the catalog tags ("Fridge Refrigerator").
+  string keywords = 8;
 }
 
 // One row of the game's pie menu for a target.

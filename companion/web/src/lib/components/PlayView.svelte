@@ -62,9 +62,38 @@
 		return typeof fn === 'function' ? fn() : t.group;
 	}
 
+	// Things a player uses most first; lights, decorations and doors last.
+	const GROUP_ORDER = [
+		'SELF',
+		'SIMS',
+		'APPLIANCES',
+		'PLUMBING',
+		'COMFORT',
+		'SURFACE',
+		'ELECTRONICS',
+		'ENTERTAINMENT',
+		'KIDS',
+		'STORAGE',
+		'PETS',
+		'VEHICLE',
+		'MISC',
+		'DECOR',
+		'LIGHTING',
+		'BUILD'
+	];
+	const rank = (t: Target) => {
+		const i = GROUP_ORDER.indexOf(t.isSelf ? 'SELF' : t.group);
+		return i < 0 ? GROUP_ORDER.length : i;
+	};
+
+	function matches(t: Target, words: string[]): boolean {
+		const hay = `${t.name} ${t.kind} ${t.keywords} ${groupLabel(t)}`.toLocaleLowerCase();
+		return words.every((w) => hay.includes(w));
+	}
+
 	const groups = $derived.by(() => {
-		const q = query.trim().toLocaleLowerCase();
-		const list = (targets ?? []).filter((t) => !q || t.name.toLocaleLowerCase().includes(q));
+		const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+		const list = (targets ?? []).filter((t) => matches(t, words)).sort((a, b) => rank(a) - rank(b));
 		const out: { label: string; items: Target[] }[] = [];
 		for (const t of list) {
 			const label = groupLabel(t);
@@ -136,7 +165,8 @@
 
 	function targetLabel(t: Target): string {
 		if (t.isSelf) return m.target_self({ name: t.name });
-		return t.distance > 0 ? m.target_distance({ name: t.name, meters: t.distance }) : t.name;
+		const name = t.kind ? `${t.kind}: ${t.name}` : t.name;
+		return t.distance > 0 ? m.target_distance({ name, meters: t.distance }) : name;
 	}
 </script>
 
