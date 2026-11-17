@@ -7,6 +7,8 @@ export default defineConfig({
 		// `pnpm dev`: proxy the API to a bridge on this Mac
 		// (game running, or `ts4access-bridge --demo`).
 		host: true,
+		// The phone reaches the Mac by its Bonjour name (mac/dev.sh web).
+		allowedHosts: ['.local'],
 		proxy: { '/ts4access.v1.CompanionService': 'http://127.0.0.1:47800' }
 	}
 });

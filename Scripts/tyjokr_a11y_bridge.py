@@ -34,6 +34,9 @@ POLL_INTERVAL = 0.1       # seconds between command polls
 LOC_PER_TICK = 20         # string-table keys requested from the UI per poll
 
 _proc = None
+_voice = None             # last voice settings, re-sent to a restarted bridge
+_last_spawn = 0.0
+RESPAWN_DELAY = 2.0       # seconds before restarting a bridge that exited
 _write_lock = threading.Lock()
 _read_buf = b''
 _last_state_json = None
@@ -57,10 +60,20 @@ def _find(name):
 
 
 def start():
-    """Start the bridge once. Returns True when it is running."""
-    global _proc
+    """Start the bridge if needed. Returns True when it is running."""
+    global _proc, _last_spawn, _read_buf, _last_state_json
     if _proc is not None:
-        return _proc.poll() is None
+        if _proc.poll() is None:
+            return True
+        # It exited (crash, or replaced during development): start it again,
+        # at most every RESPAWN_DELAY seconds.
+        if time.monotonic() - _last_spawn < RESPAWN_DELAY:
+            return False
+        log('restarting (previous one exited with {})'.format(_proc.returncode))
+        _proc = None
+        _read_buf = b''
+        _last_state_json = None   # the new bridge needs a full state
+    _last_spawn = time.monotonic()
     path = _find(BRIDGE)
     if not IS_MAC or subprocess is None or path is None:
         return False
@@ -78,6 +91,8 @@ def start():
         return False
     log('started (pid {})'.format(_proc.pid))
     send({'hello': {'modVersion': 'mac', 'gameVersion': _game_version()}})
+    if _voice is not None:
+        send({'voice': _voice})
     return True
 
 
@@ -104,7 +119,9 @@ def send(message):
 
 
 def set_voice(rate, volume, name, lang):
-    send({'voice': {'rate': int(rate), 'volume': int(volume), 'name': name or '', 'lang': lang or ''}})
+    global _voice
+    _voice = {'rate': int(rate), 'volume': int(volume), 'name': name or '', 'lang': lang or ''}
+    send({'voice': _voice})
 
 
 class SpeechPipe(object):
@@ -146,7 +163,7 @@ def _game_version():
 def _tick():
     """Runs on the game's tick (simulation thread), every frame."""
     global _last_poll, _last_state_time
-    if not alive():
+    if not alive() and not start():
         return
     now = time.monotonic()
     if now - _last_poll >= POLL_INTERVAL:

@@ -100,6 +100,9 @@ flash/, tools/, docs/ upstream UI sources, tests and developer docs (reference)
 - Phone app without the game: `go run ./cmd/ts4access-bridge --demo` in
   `companion/bridge` (fake household on port 47800, link printed), then
   `pnpm dev` in `companion/web` (proxies the API to it).
+- While the game runs: `mac/dev.sh web` (phone app with live reload),
+  `mac/dev.sh bridge`, `mac/dev.sh speaker` (rebuilt and swapped in; the mod
+  restarts the bridge if it exits). Python changes need a game restart.
 - After changing `companion/proto`: `buf generate` in `companion/bridge` and
   `pnpm generate` in `companion/web`.
 - Checks: `go vet ./... && go test ./...` (bridge), `pnpm verify` (web).
