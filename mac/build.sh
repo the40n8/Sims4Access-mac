@@ -72,7 +72,8 @@ for arch in arm64 amd64; do
 done
 lipo -create -output "$DIST/cloudflared" "$CACHE/cf-arm64/cloudflared" "$CACHE/cf-amd64/cloudflared"
 codesign --verify --strict --all-architectures "$DIST/cloudflared"
-codesign -dv "$DIST/cloudflared" 2>&1 | grep -q "TeamIdentifier=$CF_TEAM" || { echo "cloudflared is not signed by Cloudflare"; exit 1; }
+CF_SIG=$(codesign -dv "$DIST/cloudflared" 2>&1)   # captured: grep -q on a pipe can fail it (pipefail)
+[[ "$CF_SIG" == *"TeamIdentifier=$CF_TEAM"* ]] || { echo "cloudflared is not signed by Cloudflare"; exit 1; }
 [[ -f "$CACHE/cloudflared-LICENSE-$CF_VER" ]] || curl -fsSL -o "$CACHE/cloudflared-LICENSE-$CF_VER" "https://raw.githubusercontent.com/cloudflare/cloudflared/$CF_VER/LICENSE"
 cp "$CACHE/cloudflared-LICENSE-$CF_VER" "$DIST/cloudflared-LICENSE.txt"
 
