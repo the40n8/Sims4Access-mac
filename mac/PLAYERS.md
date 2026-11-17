@@ -26,6 +26,15 @@ Voice: edit `Mods/TS4_Access/TS4_Access.cfg`, section `[voice]`:
 `Mods/TS4_Access/ts4access-say --list-voices`.
 Better voices: System Settings > Accessibility > Spoken Content > System voice > Manage Voices.
 
+## Phone companion
+
+While the game runs, a phone on the same Wi-Fi can follow and control it:
+household status, a live feed read by VoiceOver, game speed, controlled
+Sim, cancelling actions. On the Mac, run `mac/phone-link.sh` (from the
+TS4 Access for macOS folder) to copy the link, send it to the phone, open it
+in Safari and add it to the Home Screen. Language follows the phone
+(French, English, Spanish) and can be changed in Settings.
+
 ## Mac defaults (shared play, sighted player on the mouse)
 
 Keyboard navigation, simplified menus, scanner, travel list and build

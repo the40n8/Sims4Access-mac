@@ -1,0 +1,17 @@
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/the40n8/Sims4Access-mac/companion/bridge/gen
+inputs:
+  - directory: ../proto
+# Plugins are pinned as Go tools in go.mod: reproducible, no network needed.
+plugins:
+  - local: [go, tool, protoc-gen-go]
+    out: gen
+    opt: paths=source_relative
+  - local: [go, tool, protoc-gen-connect-go]
+    out: gen
+    opt: paths=source_relative

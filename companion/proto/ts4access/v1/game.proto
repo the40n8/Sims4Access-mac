@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package ts4access.v1;
+
+// Game state and events, shared by the phone API and the game <-> bridge pipe.
+// Sim and interaction ids are game uint64 values carried as strings so they
+// survive JavaScript numbers.
+
+enum Speed {
+  SPEED_UNSPECIFIED = 0;
+  SPEED_PAUSED = 1;
+  SPEED_NORMAL = 2;
+  SPEED_FAST = 3;
+  SPEED_ULTRA = 4;
+  // Game-chosen: everyone asleep or away. Not settable from the phone.
+  SPEED_SUPER = 5;
+}
+
+enum NeedLevel {
+  NEED_LEVEL_UNSPECIFIED = 0;
+  NEED_LEVEL_GOOD = 1;
+  NEED_LEVEL_OKAY = 2;
+  NEED_LEVEL_LOW = 3;
+  NEED_LEVEL_CRITICAL = 4;
+}
+
+enum ActionState {
+  ACTION_STATE_UNSPECIFIED = 0;
+  ACTION_STATE_RUNNING = 1;
+  ACTION_STATE_QUEUED = 2;
+}
+
+message Clock {
+  // Localized by the game where possible ("Monday", "14:05").
+  string day = 1;
+  string time = 2;
+  Speed speed = 3;
+}
+
+message Need {
+  // Stable key for the app to label and order: hunger, bladder, energy,
+  // hygiene, fun, social.
+  string key = 1;
+  int32 percent = 2;
+  NeedLevel level = 3;
+}
+
+message Mood {
+  // Stable key from the game's mood tuning (e.g. "happy", "tense").
+  string key = 1;
+  // Game text in the player's language when available ("Very Happy").
+  string name = 2;
+  int32 intensity = 3;
+}
+
+message Moodlet {
+  string name = 1;
+  string description = 2;
+  // Mood key the moodlet pushes toward, empty for none.
+  string mood_key = 3;
+  int32 weight = 4;
+  // Sim minutes left, -1 when it does not expire.
+  int32 minutes_left = 5;
+  // Stable id (the game's tuning name), for telling moodlets apart while
+  // their display name is still being localized.
+  string key = 6;
+}
+
+message Action {
+  string id = 1;
+  string name = 2;
+  ActionState state = 3;
+  bool cancelable = 4;
+}
+
+message Sim {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  bool active = 4;
+  // On the current lot (needs and actions only exist for instanced Sims).
+  bool here = 5;
+  Mood mood = 6;
+  repeated Need needs = 7;
+  repeated Moodlet moodlets = 8;
+  repeated Action actions = 9;
+}
+
+message Narration {
+  // The Mac voice speaks automatic narration (hover, Sim actions).
+  bool mac_voice = 1;
+  bool sim_actions = 2;
+}
+
+message GameState {
+  uint64 seq = 1;
+  // False at the main menu, in Create a Sim, or while loading.
+  bool in_game = 2;
+  Clock clock = 3;
+  int64 funds = 4;
+  string household_name = 5;
+  repeated Sim sims = 6;
+  Narration narration = 7;
+}
+
+enum EventKind {
+  EVENT_KIND_UNSPECIFIED = 0;
+  EVENT_KIND_MOOD = 1;
+  EVENT_KIND_MOODLET_ADDED = 2;
+  EVENT_KIND_MOODLET_REMOVED = 3;
+  EVENT_KIND_NEED = 4;
+  EVENT_KIND_ACTION_STARTED = 5;
+  EVENT_KIND_ACTION_QUEUED = 6;
+  EVENT_KIND_ACTIVE_SIM = 7;
+  EVENT_KIND_SPEED = 8;
+  EVENT_KIND_FUNDS = 9;
+  // A line the mod spoke on the Mac (hover, tooltips, dialogs).
+  EVENT_KIND_SPOKEN = 10;
+}
+
+message Event {
+  uint64 seq = 1;
+  // Unix milliseconds, set by the bridge.
+  int64 at = 2;
+  EventKind kind = 3;
+  string sim_id = 4;
+  string sim_name = 5;
+  // Kind-specific value: mood key, moodlet name, need key, action name...
+  string subject = 6;
+  // Kind-specific detail: need level name, moodlet description, funds delta...
+  string detail = 7;
+}

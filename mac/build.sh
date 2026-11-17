@@ -1,19 +1,24 @@
 #!/bin/zsh
 # Build the macOS mod into dist/TS4_Access:
 #   TS4_Access.ts4script   compiled from Scripts/ with Python 3.7
-#   ts4access-say          speech companion (universal: Apple Silicon + Intel)
+#   ts4access-bridge       phone companion: web app + API (Go, universal)
+#   ts4access-say          speech companion (Swift, universal)
 #   TS4_Access_UI.package  from the pinned upstream release (checksum verified)
 # Env: PY37 = a Python 3.7 interpreter (default: micromamba env below).
+# Needs: swiftc (Xcode Command Line Tools), go, pnpm.
 set -euo pipefail
 
 ROOT="${0:A:h:h}"
 MAC="$ROOT/mac"
+COMP="$ROOT/companion"
 DIST="$ROOT/dist/TS4_Access"
 CACHE="$MAC/.cache"
 PY37="${PY37:-$HOME/.local/micromamba/envs/py37/bin/python}"
 
 [[ -x "$PY37" ]] || { echo "Python 3.7 not found at $PY37 (set PY37=...). See .github/README.md"; exit 1; }
-command -v swiftc >/dev/null || { echo "swiftc not found: xcode-select --install"; exit 1; }
+for tool in swiftc go pnpm; do
+  command -v $tool >/dev/null || { echo "$tool not found. See .github/README.md"; exit 1; }
+done
 mkdir -p "$DIST" "$CACHE"
 
 echo "== Python mod"
@@ -21,10 +26,22 @@ echo "== Python mod"
 
 echo "== Speech companion"
 for arch in arm64 x86_64; do
-  swiftc -O -target "$arch-apple-macos13" -o "$CACHE/ts4access-say-$arch" "$MAC/companion/TS4AccessSay.swift"
+  swiftc -O -target "$arch-apple-macos13" -o "$CACHE/ts4access-say-$arch" "$COMP/speaker/TS4AccessSay.swift"
 done
 lipo -create -output "$DIST/ts4access-say" "$CACHE/ts4access-say-arm64" "$CACHE/ts4access-say-x86_64"
-chmod +x "$DIST/ts4access-say"
+
+echo "== Phone app"
+(cd "$COMP/web" && pnpm install --frozen-lockfile --silent && pnpm build >/dev/null)
+rm -rf "$COMP/bridge/internal/webui/dist"
+cp -R "$COMP/web/build" "$COMP/bridge/internal/webui/dist"
+
+echo "== Bridge"
+for arch in arm64 amd64; do
+  (cd "$COMP/bridge" && CGO_ENABLED=0 GOOS=darwin GOARCH=$arch \
+    go build -trimpath -ldflags "-s -w" -o "$CACHE/ts4access-bridge-$arch" ./cmd/ts4access-bridge)
+done
+lipo -create -output "$DIST/ts4access-bridge" "$CACHE/ts4access-bridge-arm64" "$CACHE/ts4access-bridge-amd64"
+chmod +x "$DIST/ts4access-say" "$DIST/ts4access-bridge"
 
 echo "== UI package (upstream release)"
 read -r REPO RELEASE ASSET SHA < <(python3 -I -c '

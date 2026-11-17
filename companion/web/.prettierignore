@@ -1,0 +1,7 @@
+build/
+.svelte-kit/
+src/lib/gen/
+node_modules/
+pnpm-lock.yaml
+src/lib/i18n/paraglide/
+project.inlang/

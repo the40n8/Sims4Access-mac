@@ -198,10 +198,6 @@ def _mac_lang():
 
 def _try_init_mac_say():
     global _sapi_proc
-    path = _mac_say_path()
-    if subprocess is None or path is None:
-        log_line('macOS speech companion missing (ts4access-say)')
-        return False
     try:
         import tyjokr_a11y_settings as _s
         rate = max(-10, min(10, int(_s.get('sapi_rate'))))
@@ -209,10 +205,24 @@ def _try_init_mac_say():
         voice = str(_s.get('sapi_voice') or '')
     except Exception:
         rate, volume, voice = 3, 70, ''
-    args = [path, '--rate', str(rate), '--volume', str(volume)]
-    if voice and voice.lower() != 'zira':   # Zira is the Windows default
-        args += ['--voice', voice]
+    if voice.lower() == 'zira':   # the Windows default voice
+        voice = ''
     lang = _mac_lang()
+    # Through the companion bridge when it runs (phone app); the game already
+    # imported it at load, so this never imports from a speech timer thread.
+    bridge = sys.modules.get('tyjokr_a11y_bridge')
+    if bridge is not None and bridge.start():
+        bridge.set_voice(rate, volume, voice, lang)
+        _sapi_proc = bridge.SpeechPipe()
+        log_line('speech through the companion bridge')
+        return True
+    path = _mac_say_path()
+    if subprocess is None or path is None:
+        log_line('macOS speech companion missing (ts4access-say)')
+        return False
+    args = [path, '--rate', str(rate), '--volume', str(volume)]
+    if voice:
+        args += ['--voice', voice]
     if lang:
         args += ['--lang', lang]
     try:

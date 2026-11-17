@@ -28,10 +28,10 @@ echo "Backup: $BACKUP"
 
 mkdir -p "$DEST"
 # Keep the user's TS4_Access.cfg (settings) if one exists.
-for f in TS4_Access.ts4script TS4_Access_UI.package ts4access-say README.txt CONTROLS.txt CHEATS.txt LICENSE.txt README-MAC.md; do
+for f in TS4_Access.ts4script TS4_Access_UI.package ts4access-say ts4access-bridge README.txt CONTROLS.txt CHEATS.txt LICENSE.txt README-MAC.md; do
   cp -p "$SRC/$f" "$DEST/$f"
 done
-chmod +x "$DEST/ts4access-say"
+chmod +x "$DEST/ts4access-say" "$DEST/ts4access-bridge"
 
 # Same change the Windows TS4 Access Helper makes: allow mods and script mods.
 sed -i '' -E 's/^([[:space:]]*scriptmodsenabled[[:space:]]*=[[:space:]]*)[0-9]+/\11/; s/^([[:space:]]*modsdisabled[[:space:]]*=[[:space:]]*)[0-9]+/\10/' "$USERDIR/Options.ini"

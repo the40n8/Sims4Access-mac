@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package ts4access.v1;
+
+import "ts4access/v1/game.proto";
+
+// Phone <-> bridge API (Connect). Every call needs the pairing token
+// ("Authorization: Bearer <token>").
+service CompanionService {
+  // Current state first, then every change and event as it happens.
+  rpc Watch(WatchRequest) returns (stream WatchResponse);
+
+  rpc SetSpeed(SetSpeedRequest) returns (SetSpeedResponse);
+  rpc SelectSim(SelectSimRequest) returns (SelectSimResponse);
+  rpc CancelAction(CancelActionRequest) returns (CancelActionResponse);
+  rpc SetNarration(SetNarrationRequest) returns (SetNarrationResponse);
+}
+
+message WatchRequest {}
+
+message WatchResponse {
+  oneof payload {
+    GameState state = 1;
+    Event event = 2;
+    // The game is running and connected to the bridge (false while the
+    // bridge has no game, e.g. demo shutting down).
+    bool game_connected = 3;
+  }
+}
+
+message SetSpeedRequest {
+  Speed speed = 1;
+}
+
+message SelectSimRequest {
+  string sim_id = 1;
+}
+
+message CancelActionRequest {
+  string sim_id = 1;
+  string action_id = 2;
+}
+
+message SetNarrationRequest {
+  Narration narration = 1;
+}
+
+message SetSpeedResponse {
+  CommandOutcome outcome = 1;
+}
+
+message SelectSimResponse {
+  CommandOutcome outcome = 1;
+}
+
+message CancelActionResponse {
+  CommandOutcome outcome = 1;
+}
+
+message SetNarrationResponse {
+  CommandOutcome outcome = 1;
+}
+
+message CommandOutcome {
+  bool ok = 1;
+  // Stable reason key when ok is false (e.g. "sim_unavailable",
+  // "not_cancelable", "not_in_game", "timeout").
+  string reason = 2;
+}

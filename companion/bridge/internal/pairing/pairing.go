@@ -1,0 +1,134 @@
+// Package pairing keeps the phone link stable across game sessions: a
+// random token and port stored on the Mac, and the link written to a file
+// the player can copy (mac/phone-link.sh).
+package pairing
+
+import (
+	"crypto/rand"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/fs"
+	"net"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"sort"
+	"strings"
+)
+
+const DefaultPort = 47800
+
+type Config struct {
+	Token string `json:"token"`
+	Port  int    `json:"port"`
+}
+
+// Load reads dir/config.json, creating it with a fresh token if missing.
+func Load(dir string) (*Config, error) {
+	path := filepath.Join(dir, "config.json")
+	var cfg Config
+	b, err := os.ReadFile(path)
+	switch {
+	case err == nil:
+		if err := json.Unmarshal(b, &cfg); err != nil {
+			return nil, fmt.Errorf("read %s: %w", path, err)
+		}
+	case errors.Is(err, fs.ErrNotExist):
+	default:
+		return nil, err
+	}
+	changed := false
+	if len(cfg.Token) < 20 {
+		cfg.Token = NewToken()
+		changed = true
+	}
+	if cfg.Port == 0 {
+		cfg.Port = DefaultPort
+		changed = true
+	}
+	if changed {
+		if err := cfg.save(path); err != nil {
+			return nil, err
+		}
+	}
+	return &cfg, nil
+}
+
+// NewToken returns 24 random bytes, URL-safe base64.
+func NewToken() string {
+	b := make([]byte, 24)
+	if _, err := rand.Read(b); err != nil {
+		panic(err) // crypto/rand never fails on macOS
+	}
+	return base64.RawURLEncoding.EncodeToString(b)
+}
+
+func (c *Config) save(path string) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+		return err
+	}
+	b, _ := json.MarshalIndent(c, "", "  ")
+	return os.WriteFile(path, append(b, '\n'), 0o600)
+}
+
+// Links returns phone links: the Mac's Bonjour name first (stable when the
+// IP changes), then each LAN IPv4 address. The token is in the fragment, so
+// it never appears in request lines or logs.
+func (c *Config) Links() []string {
+	var hosts []string
+	if out, err := exec.Command("/usr/sbin/scutil", "--get", "LocalHostName").Output(); err == nil {
+		if name := strings.TrimSpace(string(out)); name != "" {
+			hosts = append(hosts, name+".local")
+		}
+	}
+	hosts = append(hosts, lanIPs()...)
+	links := make([]string, 0, len(hosts))
+	for _, h := range hosts {
+		links = append(links, fmt.Sprintf("http://%s:%d/#k=%s", h, c.Port, c.Token))
+	}
+	return links
+}
+
+// defaultInterface is the interface of the default route (the home Wi-Fi or
+// Ethernet), so its address is listed before VPNs and virtual networks.
+func defaultInterface() string {
+	out, err := exec.Command("/sbin/route", "-n", "get", "default").Output()
+	if err != nil {
+		return ""
+	}
+	for _, line := range strings.Split(string(out), "\n") {
+		if name, ok := strings.CutPrefix(strings.TrimSpace(line), "interface:"); ok {
+			return strings.TrimSpace(name)
+		}
+	}
+	return ""
+}
+
+func lanIPs() []string {
+	var ips []string
+	ifaces, _ := net.Interfaces()
+	primary := defaultInterface()
+	sort.SliceStable(ifaces, func(i, j int) bool {
+		return ifaces[i].Name == primary && ifaces[j].Name != primary
+	})
+	for _, iface := range ifaces {
+		if iface.Flags&net.FlagUp == 0 || iface.Flags&net.FlagLoopback != 0 {
+			continue
+		}
+		addrs, _ := iface.Addrs()
+		for _, a := range addrs {
+			if n, ok := a.(*net.IPNet); ok && n.IP.To4() != nil && n.IP.IsPrivate() {
+				ips = append(ips, n.IP.String())
+			}
+		}
+	}
+	return ips
+}
+
+// WriteLinkFile writes the links to dir/phone-link.txt (first line = best).
+func (c *Config) WriteLinkFile(dir string) (string, error) {
+	path := filepath.Join(dir, "phone-link.txt")
+	return path, os.WriteFile(path, []byte(strings.Join(c.Links(), "\n")+"\n"), 0o600)
+}
