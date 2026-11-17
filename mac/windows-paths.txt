@@ -1,0 +1,15 @@
+# Paths removed from the macOS fork. mac/sync-upstream.sh deletes them again
+# after every upstream merge, so upstream changes to them never need handling.
+# One git pathspec per line.
+helper
+prism
+README-SpeechPack.txt
+Dev.ps1
+release-assets
+Scripts/ctypes
+Scripts/tyjokr_a11y_prism.py
+flash/*.ps1
+tools/*.ps1
+tools/build_updater*
+tools/build_prelaunch_helper*
+tools/publish_github_release*
