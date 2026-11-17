@@ -204,5 +204,8 @@
 	"in_room": "In this room",
 	"room_nothing": "Nothing to use here.",
 	"minor_items": "Decorations and lights ({count})",
-	"back_to_house": "Back to the house"
+	"back_to_house": "Back to the house",
+	"voice_on": "On",
+	"voice_off": "Off",
+	"voice_shortcut": "On the Mac: Option+Command+S"
 }

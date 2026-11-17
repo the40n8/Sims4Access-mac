@@ -182,6 +182,11 @@ func run() error {
 	h.SetSender(p.Send)
 	h.SetConnected(true)
 	defer h.SetConnected(false)
+	spk.Listen(func(name string) {
+		if name == "voice" {
+			go toggleVoice(h)
+		}
+	})
 
 	done := make(chan error, 1)
 	go func() {
@@ -205,6 +210,20 @@ func run() error {
 		return nil
 	case <-ctx.Done():
 		return nil
+	}
+}
+
+// toggleVoice is the Option+Command+S shortcut: the mod's speech on or off
+// (the mod itself says "Speech on." or "Speech off.").
+func toggleVoice(h *hub.Hub) {
+	n := h.State().GetNarration()
+	ctx, cancel := context.WithTimeout(context.Background(), hub.CommandTimeout+time.Second)
+	defer cancel()
+	out := h.Command(ctx, &v1.ToGame{Command: &v1.ToGame_SetNarration{SetNarration: &v1.SetNarrationRequest{
+		Narration: &v1.Narration{MacVoice: !n.GetMacVoice(), SimActions: n.GetSimActions()},
+	}}})
+	if !out.GetOk() {
+		slog.Warn("speech toggle failed", "reason", out.GetReason())
 	}
 }
 

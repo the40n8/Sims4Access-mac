@@ -40,6 +40,14 @@ with a QR code opens on the Mac. Scan it with the phone, then in Safari:
 Share > Add to Home Screen. The address changes each game session. Language follows the phone
 (French, English, Spanish) and can be changed in Settings.
 
+## Speech on and off
+
+Press **Option+Command+S** at any time while the game runs (no need to leave
+the game) to turn the accessibility speech off or back on; the Mac says
+"Speech off." or "Speech on.". The phone has the same switch at the top of
+Live and Play. While the game runs, this shortcut belongs to TS4 Access in
+every app.
+
 ## Mac defaults (shared play, sighted player on the mouse)
 
 Keyboard navigation, simplified menus, scanner, travel list and build

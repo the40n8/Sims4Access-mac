@@ -4,12 +4,14 @@
 	import { money, simSummary, speedName } from '$lib/text.js';
 	import { Speed } from '$lib/gen/ts4access/v1/game_pb.js';
 	import Feed from './Feed.svelte';
+	import VoiceToggle from './VoiceToggle.svelte';
 
 	let { onSeeAll }: { onSeeAll: () => void } = $props();
 	const game = $derived(live.state);
 </script>
 
 {#if game?.inGame}
+	<section class="card"><VoiceToggle /></section>
 	<section class="card stack" aria-labelledby="household">
 		<h2 id="household">{m.household_title({ name: game.householdName })}</h2>
 		<p>

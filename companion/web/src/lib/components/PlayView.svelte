@@ -9,6 +9,7 @@
 	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
 	import { announce } from './Announcer.svelte';
 	import InteractionMenu from './InteractionMenu.svelte';
+	import VoiceToggle from './VoiceToggle.svelte';
 
 	const game = $derived(live.state);
 	// Buttons say what they do ("Play"); the status line says the state ("Normal speed").
@@ -89,6 +90,8 @@
 	{#if selected}
 		<InteractionMenu target={selected} onBack={back} />
 	{:else}
+		<section class="card"><VoiceToggle /></section>
+
 		<section class="card stack" aria-labelledby="speed">
 			<h2 id="speed">{m.speed_title()}</h2>
 			<div class="grid" role="group" aria-labelledby="speed">

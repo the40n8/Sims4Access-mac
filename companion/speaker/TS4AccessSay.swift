@@ -7,11 +7,17 @@
 //   I                     stop speaking (used by the mod's stop key)
 // The process exits when stdin closes, so it never outlives the game.
 //
+// With --hotkey, Option+Command+S anywhere (also while the game has focus)
+// prints "K voice" on stdout: the bridge turns the mod's speech on or off.
+// A system hot key: no Accessibility permission needed.
+//
 // Options: --voice <name or identifier substring>  --lang <bcp47, e.g. fr-FR>
-//          --rate <-10..10, SAPI scale>  --volume <0..100>  --list-voices
+//          --rate <-10..10, SAPI scale>  --volume <0..100>  --list-voices  --hotkey
 //
 // MIT licence, like TS4 Access.
 import AVFoundation
+import AppKit
+import Carbon.HIToolbox
 import Foundation
 
 final class Speaker: NSObject {
@@ -88,4 +94,24 @@ let stdinThread = Thread {
     }
 }
 stdinThread.start()
-RunLoop.main.run()
+
+var hotKey: EventHotKeyRef?
+if CommandLine.arguments.contains("--hotkey") {
+    var pressed = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
+    InstallEventHandler(GetApplicationEventTarget(), { _, _, _ in
+        print("K voice")
+        fflush(stdout)
+        return noErr
+    }, 1, &pressed, nil, nil)
+    let status = RegisterEventHotKey(UInt32(kVK_ANSI_S), UInt32(optionKey | cmdKey),
+                                     EventHotKeyID(signature: 0x5453_4141, id: 1), // "TSAA"
+                                     GetApplicationEventTarget(), 0, &hotKey)
+    if status != noErr {
+        FileHandle.standardError.write("hot key unavailable (\(status))\n".data(using: .utf8)!)
+    }
+}
+
+// An app event loop (hot keys need it) without a Dock icon or menu bar.
+let app = NSApplication.shared
+app.setActivationPolicy(.prohibited)
+app.run()
