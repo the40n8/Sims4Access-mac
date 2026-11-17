@@ -106,5 +106,19 @@
 	"mood_dazed": "dazed",
 	"mood_scared": "scared",
 	"mood_sleeping": "asleep",
-	"mood_line": "Mood: {mood}"
+	"mood_line": "Mood: {mood}",
+	"summary_at_work": "{name} is at work until {time}.",
+	"summary_at_work_now": "{name} is at work.",
+	"summary_at_school": "{name} is at school until {time}.",
+	"summary_at_school_now": "{name} is at school.",
+	"career_line": "Job: {career}",
+	"next_shift": "next shift {when}",
+	"ev_left_work": "{sim} left for work.",
+	"ev_back_work": "{sim} is back from work.",
+	"ev_left_school": "{sim} left for school.",
+	"ev_back_school": "{sim} is back from school.",
+	"btn_pause": "Pause",
+	"btn_play": "Play",
+	"btn_fast": "Fast",
+	"btn_ultra": "Ultra fast"
 }

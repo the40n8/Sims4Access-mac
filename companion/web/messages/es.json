@@ -106,5 +106,19 @@
 	"mood_dazed": "aturdido",
 	"mood_scared": "asustado",
 	"mood_sleeping": "dormido",
-	"mood_line": "Ánimo: {mood}"
+	"mood_line": "Ánimo: {mood}",
+	"summary_at_work": "{name} está en el trabajo hasta las {time}.",
+	"summary_at_work_now": "{name} está en el trabajo.",
+	"summary_at_school": "{name} está en la escuela hasta las {time}.",
+	"summary_at_school_now": "{name} está en la escuela.",
+	"career_line": "Trabajo: {career}",
+	"next_shift": "próximo turno {when}",
+	"ev_left_work": "{sim} se va al trabajo.",
+	"ev_back_work": "{sim} volvió del trabajo.",
+	"ev_left_school": "{sim} se va a la escuela.",
+	"ev_back_school": "{sim} volvió de la escuela.",
+	"btn_pause": "Pausa",
+	"btn_play": "Jugar",
+	"btn_fast": "Rápido",
+	"btn_ultra": "Ultrarrápido"
 }

@@ -84,6 +84,14 @@ message Sim {
   repeated Need needs = 7;
   repeated Moodlet moodlets = 8;
   repeated Action actions = 9;
+  // Where a Sim who is not here is: "work", "school", or empty (elsewhere).
+  string away_at = 10;
+  // Job or school title, game text ("Line Cook").
+  string career = 11;
+  // While at work or school: when it ends ("5:00 PM").
+  string until = 12;
+  // Otherwise: when the next shift starts ("Wed 9:00 AM").
+  string next_shift = 13;
 }
 
 message Narration {
@@ -116,6 +124,10 @@ enum EventKind {
   EVENT_KIND_FUNDS = 9;
   // A line the mod spoke on the Mac (hover, tooltips, dialogs).
   EVENT_KIND_SPOKEN = 10;
+  // Left for work or school (subject: "work" or "school").
+  EVENT_KIND_AWAY_STARTED = 11;
+  // Back from work or school (subject: where from).
+  EVENT_KIND_AWAY_ENDED = 12;
 }
 
 message Event {

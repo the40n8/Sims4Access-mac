@@ -96,10 +96,20 @@ export function simName(sim: Sim): string {
 	return sim.firstName || sim.lastName;
 }
 
+/** Where a Sim who is not on the lot is: work, school, or elsewhere. */
+export function awaySentence(sim: Sim): string {
+	const name = simName(sim);
+	if (sim.awayAt === 'work')
+		return sim.until ? m.summary_at_work({ name, time: sim.until }) : m.summary_at_work_now({ name });
+	if (sim.awayAt === 'school')
+		return sim.until ? m.summary_at_school({ name, time: sim.until }) : m.summary_at_school_now({ name });
+	return m.summary_away({ name });
+}
+
 /** One sentence per Sim for the top of the Live screen. */
 export function simSummary(sim: Sim): string {
 	const name = simName(sim);
-	if (!sim.here) return m.summary_away({ name });
+	if (!sim.here) return awaySentence(sim);
 	const mood = moodName(sim.mood);
 	const running = sim.actions.find((a) => a.state === ActionState.RUNNING) ?? sim.actions[0];
 	let text: string = running
@@ -147,6 +157,10 @@ export function eventText(e: Event): string {
 			return m.ev_funds({ amount: e.subject });
 		case EventKind.SPOKEN:
 			return m.ev_spoken({ text: e.subject });
+		case EventKind.AWAY_STARTED:
+			return e.subject === 'school' ? m.ev_left_school({ sim }) : m.ev_left_work({ sim });
+		case EventKind.AWAY_ENDED:
+			return e.subject === 'school' ? m.ev_back_school({ sim }) : m.ev_back_work({ sim });
 		default:
 			return e.subject;
 	}

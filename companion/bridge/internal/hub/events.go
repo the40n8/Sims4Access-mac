@@ -42,6 +42,13 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 		if s.GetActive() && !prev.GetActive() {
 			add(v1.EventKind_EVENT_KIND_ACTIVE_SIM, s, "", "")
 		}
+		if was, now := prev.GetAwayAt(), s.GetAwayAt(); was != now {
+			if now != "" {
+				add(v1.EventKind_EVENT_KIND_AWAY_STARTED, s, now, s.GetUntil())
+			} else {
+				add(v1.EventKind_EVENT_KIND_AWAY_ENDED, s, was, "")
+			}
+		}
 		if !s.GetHere() || !prev.GetHere() {
 			continue
 		}

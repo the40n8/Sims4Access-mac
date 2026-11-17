@@ -2,7 +2,7 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
-	import { duration, levelName, moodName, needName, reasonText, simName } from '$lib/text.js';
+	import { awaySentence, duration, levelName, moodName, needName, reasonText, simName } from '$lib/text.js';
 	import { ActionState, NeedLevel, type Action, type Sim } from '$lib/gen/ts4access/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
 
@@ -20,8 +20,15 @@
 			{simName(sim)}
 			{#if sim.active}<span class="muted">· {m.active_badge()}</span>{/if}
 		</h2>
+		{#if sim.career}
+			<p>
+				{m.career_line({ career: sim.career })}
+				{#if sim.nextShift && !sim.awayAt}<span class="muted">· {m.next_shift({ when: sim.nextShift })}</span
+					>{/if}
+			</p>
+		{/if}
 		{#if !sim.here}
-			<p class="muted">{m.summary_away({ name: simName(sim) })}</p>
+			<p class="muted">{awaySentence(sim)}</p>
 		{:else}
 			<p>{m.mood_line({ mood: moodName(sim.mood) })}</p>
 

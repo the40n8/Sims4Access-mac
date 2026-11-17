@@ -515,10 +515,51 @@ def _clock():
     return clock
 
 
+def _career(info, entry):
+    """Job or school, whether the Sim is there now, until when, next shift."""
+    import services
+    import tyjokr_a11y_plus_time as t
+    tracker = getattr(info, 'career_tracker', None)
+    if tracker is None:
+        return
+    for career in list(tracker.careers.values()):
+        word = t._career_word(career)
+        title = ''
+        try:
+            title = text_of(career.current_level_tuning.get_title(info))
+        except Exception:
+            pass
+        if not title:
+            try:
+                title = text_of(career.display_name(info))
+            except Exception:
+                title = ''
+        entry['career'] = title or _pretty(type(career).__name__, ('career_',))
+        now = services.time_service().sim_now
+        if career.currently_at_work:
+            entry['awayAt'] = word
+            try:
+                entry['until'] = t.clock_text(now + career.time_until_end_of_work())
+            except Exception:
+                pass
+            return
+        try:
+            span, start, _end = career.get_next_work_time()
+            if start is not None:
+                entry['nextShift'] = '{} {}'.format(t.day_text(start), t.clock_text(start))
+        except Exception:
+            pass
+        return
+
+
 def _sim(info, client):
     sim = info.get_sim_instance()
     entry = {'id': str(info.sim_id), 'firstName': info.first_name or '', 'lastName': info.last_name or '',
              'active': client is not None and client.active_sim_info is info, 'here': sim is not None}
+    try:
+        _career(info, entry)
+    except Exception as ex:
+        log('career of {} unavailable: {!r}'.format(info.first_name, ex))
     for key, fn in (('mood', lambda: _mood(info)), ('needs', lambda: _needs(info)),
                     ('moodlets', lambda: _moodlets(info)), ('actions', lambda: _actions(sim) if sim else [])):
         if key != 'mood' and sim is None:

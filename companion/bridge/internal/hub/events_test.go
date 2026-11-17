@@ -84,6 +84,18 @@ func TestDiffChanges(t *testing.T) {
 	}
 }
 
+func TestDiffWorkAndBack(t *testing.T) {
+	home := base()
+	work := base()
+	work.Sims[0].Here, work.Sims[0].AwayAt, work.Sims[0].Until = false, "work", "5:00 PM"
+	if got := kinds(Diff(home, work)); len(got) != 1 || got[0] != v1.EventKind_EVENT_KIND_AWAY_STARTED {
+		t.Fatalf("leaving for work: got %v", got)
+	}
+	if got := kinds(Diff(work, home)); len(got) != 1 || got[0] != v1.EventKind_EVENT_KIND_AWAY_ENDED {
+		t.Fatalf("back from work: got %v", got)
+	}
+}
+
 func TestDiffNeedRecoveringIsQuiet(t *testing.T) {
 	old := base()
 	old.Sims[0].Needs[0].Level = v1.NeedLevel_NEED_LEVEL_CRITICAL

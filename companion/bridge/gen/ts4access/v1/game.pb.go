@@ -199,6 +199,10 @@ const (
 	EventKind_EVENT_KIND_FUNDS           EventKind = 9
 	// A line the mod spoke on the Mac (hover, tooltips, dialogs).
 	EventKind_EVENT_KIND_SPOKEN EventKind = 10
+	// Left for work or school (subject: "work" or "school").
+	EventKind_EVENT_KIND_AWAY_STARTED EventKind = 11
+	// Back from work or school (subject: where from).
+	EventKind_EVENT_KIND_AWAY_ENDED EventKind = 12
 )
 
 // Enum value maps for EventKind.
@@ -215,6 +219,8 @@ var (
 		8:  "EVENT_KIND_SPEED",
 		9:  "EVENT_KIND_FUNDS",
 		10: "EVENT_KIND_SPOKEN",
+		11: "EVENT_KIND_AWAY_STARTED",
+		12: "EVENT_KIND_AWAY_ENDED",
 	}
 	EventKind_value = map[string]int32{
 		"EVENT_KIND_UNSPECIFIED":     0,
@@ -228,6 +234,8 @@ var (
 		"EVENT_KIND_SPEED":           8,
 		"EVENT_KIND_FUNDS":           9,
 		"EVENT_KIND_SPOKEN":          10,
+		"EVENT_KIND_AWAY_STARTED":    11,
+		"EVENT_KIND_AWAY_ENDED":      12,
 	}
 )
 
@@ -606,11 +614,19 @@ type Sim struct {
 	LastName  string                 `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
 	Active    bool                   `protobuf:"varint,4,opt,name=active,proto3" json:"active,omitempty"`
 	// On the current lot (needs and actions only exist for instanced Sims).
-	Here          bool       `protobuf:"varint,5,opt,name=here,proto3" json:"here,omitempty"`
-	Mood          *Mood      `protobuf:"bytes,6,opt,name=mood,proto3" json:"mood,omitempty"`
-	Needs         []*Need    `protobuf:"bytes,7,rep,name=needs,proto3" json:"needs,omitempty"`
-	Moodlets      []*Moodlet `protobuf:"bytes,8,rep,name=moodlets,proto3" json:"moodlets,omitempty"`
-	Actions       []*Action  `protobuf:"bytes,9,rep,name=actions,proto3" json:"actions,omitempty"`
+	Here     bool       `protobuf:"varint,5,opt,name=here,proto3" json:"here,omitempty"`
+	Mood     *Mood      `protobuf:"bytes,6,opt,name=mood,proto3" json:"mood,omitempty"`
+	Needs    []*Need    `protobuf:"bytes,7,rep,name=needs,proto3" json:"needs,omitempty"`
+	Moodlets []*Moodlet `protobuf:"bytes,8,rep,name=moodlets,proto3" json:"moodlets,omitempty"`
+	Actions  []*Action  `protobuf:"bytes,9,rep,name=actions,proto3" json:"actions,omitempty"`
+	// Where a Sim who is not here is: "work", "school", or empty (elsewhere).
+	AwayAt string `protobuf:"bytes,10,opt,name=away_at,json=awayAt,proto3" json:"away_at,omitempty"`
+	// Job or school title, game text ("Line Cook").
+	Career string `protobuf:"bytes,11,opt,name=career,proto3" json:"career,omitempty"`
+	// While at work or school: when it ends ("5:00 PM").
+	Until string `protobuf:"bytes,12,opt,name=until,proto3" json:"until,omitempty"`
+	// Otherwise: when the next shift starts ("Wed 9:00 AM").
+	NextShift     string `protobuf:"bytes,13,opt,name=next_shift,json=nextShift,proto3" json:"next_shift,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -706,6 +722,34 @@ func (x *Sim) GetActions() []*Action {
 		return x.Actions
 	}
 	return nil
+}
+
+func (x *Sim) GetAwayAt() string {
+	if x != nil {
+		return x.AwayAt
+	}
+	return ""
+}
+
+func (x *Sim) GetCareer() string {
+	if x != nil {
+		return x.Career
+	}
+	return ""
+}
+
+func (x *Sim) GetUntil() string {
+	if x != nil {
+		return x.Until
+	}
+	return ""
+}
+
+func (x *Sim) GetNextShift() string {
+	if x != nil {
+		return x.NextShift
+	}
+	return ""
 }
 
 type Narration struct {
@@ -979,7 +1023,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x05state\x18\x03 \x01(\x0e2\x19.ts4access.v1.ActionStateR\x05state\x12\x1e\n" +
 	"\n" +
 	"cancelable\x18\x04 \x01(\bR\n" +
-	"cancelable\"\xb2\x02\n" +
+	"cancelable\"\x98\x03\n" +
 	"\x03Sim\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -990,7 +1034,13 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x04mood\x18\x06 \x01(\v2\x12.ts4access.v1.MoodR\x04mood\x12(\n" +
 	"\x05needs\x18\a \x03(\v2\x12.ts4access.v1.NeedR\x05needs\x121\n" +
 	"\bmoodlets\x18\b \x03(\v2\x15.ts4access.v1.MoodletR\bmoodlets\x12.\n" +
-	"\aactions\x18\t \x03(\v2\x14.ts4access.v1.ActionR\aactions\"I\n" +
+	"\aactions\x18\t \x03(\v2\x14.ts4access.v1.ActionR\aactions\x12\x17\n" +
+	"\aaway_at\x18\n" +
+	" \x01(\tR\x06awayAt\x12\x16\n" +
+	"\x06career\x18\v \x01(\tR\x06career\x12\x14\n" +
+	"\x05until\x18\f \x01(\tR\x05until\x12\x1d\n" +
+	"\n" +
+	"next_shift\x18\r \x01(\tR\tnextShift\"I\n" +
 	"\tNarration\x12\x1b\n" +
 	"\tmac_voice\x18\x01 \x01(\bR\bmacVoice\x12\x1f\n" +
 	"\vsim_actions\x18\x02 \x01(\bR\n" +
@@ -1028,7 +1078,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\vActionState\x12\x1c\n" +
 	"\x18ACTION_STATE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14ACTION_STATE_RUNNING\x10\x01\x12\x17\n" +
-	"\x13ACTION_STATE_QUEUED\x10\x02*\xaa\x02\n" +
+	"\x13ACTION_STATE_QUEUED\x10\x02*\xe2\x02\n" +
 	"\tEventKind\x12\x1a\n" +
 	"\x16EVENT_KIND_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fEVENT_KIND_MOOD\x10\x01\x12\x1c\n" +
@@ -1041,7 +1091,9 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x10EVENT_KIND_SPEED\x10\b\x12\x14\n" +
 	"\x10EVENT_KIND_FUNDS\x10\t\x12\x15\n" +
 	"\x11EVENT_KIND_SPOKEN\x10\n" +
-	"B\xc0\x01\n" +
+	"\x12\x1b\n" +
+	"\x17EVENT_KIND_AWAY_STARTED\x10\v\x12\x19\n" +
+	"\x15EVENT_KIND_AWAY_ENDED\x10\fB\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tGameProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (

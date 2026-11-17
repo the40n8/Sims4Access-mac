@@ -18,6 +18,8 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 		case EventKind.ACTION_QUEUED:
 			return 'action';
 		case EventKind.ACTIVE_SIM:
+		case EventKind.AWAY_STARTED:
+		case EventKind.AWAY_ENDED:
 		case EventKind.SPEED:
 		case EventKind.FUNDS:
 			return 'game';

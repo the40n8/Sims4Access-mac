@@ -2,13 +2,19 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
-	import { reasonText, simName, speedName } from '$lib/text.js';
+	import { reasonText, simName } from '$lib/text.js';
 	import { Speed, type Narration } from '$lib/gen/ts4access/v1/game_pb.js';
 	import type { CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
 	import { announce } from './Announcer.svelte';
 
 	const game = $derived(live.state);
-	const speeds = [Speed.PAUSED, Speed.NORMAL, Speed.FAST, Speed.ULTRA];
+	// Buttons say what they do ("Play"); the status line says the state ("Normal speed").
+	const speeds: { speed: Speed; label: () => string }[] = [
+		{ speed: Speed.PAUSED, label: m.btn_pause },
+		{ speed: Speed.NORMAL, label: m.btn_play },
+		{ speed: Speed.FAST, label: m.btn_fast },
+		{ speed: Speed.ULTRA, label: m.btn_ultra }
+	];
 	let busy = $state(false);
 
 	async function act(call: () => Promise<CommandOutcome>) {
@@ -31,12 +37,12 @@
 	<section class="card stack" aria-labelledby="speed">
 		<h2 id="speed">{m.speed_title()}</h2>
 		<div class="row" role="group" aria-labelledby="speed">
-			{#each speeds as speed (speed)}
+			{#each speeds as { speed, label } (speed)}
 				<button
 					type="button"
 					aria-pressed={game.clock?.speed === speed}
 					disabled={busy}
-					onclick={() => setSpeed(speed)}>{speedName(speed)}</button
+					onclick={() => setSpeed(speed)}>{label()}</button
 				>
 			{/each}
 		</div>
