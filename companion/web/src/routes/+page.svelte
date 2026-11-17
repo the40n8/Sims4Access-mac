@@ -9,14 +9,16 @@
 	import StatusBanner from '$lib/components/StatusBanner.svelte';
 	import LiveView from '$lib/components/LiveView.svelte';
 	import SimsView from '$lib/components/SimsView.svelte';
-	import ActView from '$lib/components/ActView.svelte';
+	import PlayView from '$lib/components/PlayView.svelte';
 	import SettingsView from '$lib/components/SettingsView.svelte';
+	import Feed from '$lib/components/Feed.svelte';
 
-	type Tab = 'live' | 'sims' | 'act' | 'settings';
+	type Tab = 'live' | 'play' | 'sims' | 'history' | 'settings';
 	const TABS: { id: Tab; label: () => string }[] = [
 		{ id: 'live', label: m.tab_live },
+		{ id: 'play', label: m.tab_play },
 		{ id: 'sims', label: m.tab_sims },
-		{ id: 'act', label: m.tab_act },
+		{ id: 'history', label: m.tab_history },
 		{ id: 'settings', label: m.tab_settings }
 	];
 	const TAB_KEY = 'ts4access.tab';
@@ -72,20 +74,7 @@
 		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
 	</main>
 {:else}
-	<main class="page stack" aria-labelledby="title">
-		<h1 id="title" tabindex="-1" bind:this={heading}>{title}</h1>
-		<StatusBanner />
-		{#if tab === 'live'}
-			<LiveView />
-		{:else if tab === 'sims'}
-			<SimsView />
-		{:else if tab === 'act'}
-			<ActView />
-		{:else}
-			<SettingsView />
-		{/if}
-	</main>
-
+	<!-- First in reading order so VoiceOver reaches the tabs at once; drawn at the bottom. -->
 	<nav aria-label={m.nav_label()}>
 		{#each TABS as t (t.id)}
 			<button type="button" aria-current={tab === t.id ? 'page' : undefined} onclick={() => show(t.id)}>
@@ -93,6 +82,22 @@
 			</button>
 		{/each}
 	</nav>
+
+	<main class="page stack" aria-labelledby="title">
+		<h1 id="title" tabindex="-1" bind:this={heading}>{title}</h1>
+		<StatusBanner />
+		{#if tab === 'live'}
+			<LiveView onSeeAll={() => show('history')} />
+		{:else if tab === 'play'}
+			<PlayView />
+		{:else if tab === 'sims'}
+			<SimsView />
+		{:else if tab === 'history'}
+			<Feed />
+		{:else}
+			<SettingsView />
+		{/if}
+	</main>
 {/if}
 
 <style>
@@ -108,7 +113,7 @@
 		position: fixed;
 		inset: auto 0 0 0;
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(5, 1fr);
 		gap: 0.25rem;
 		padding: 0.5rem 0.5rem calc(env(safe-area-inset-bottom) + 0.5rem);
 		background: var(--surface);

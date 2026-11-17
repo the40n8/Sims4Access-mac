@@ -130,6 +130,30 @@ enum EventKind {
   EVENT_KIND_AWAY_ENDED = 12;
 }
 
+// Something the controlled Sim can interact with.
+message Target {
+  string id = 1;
+  string name = 2;
+  bool is_sim = 3;
+  // The controlled Sim itself: its own interactions (self-care, phone...).
+  bool is_self = 4;
+  // Catalog group for objects (COMFORT, APPLIANCES, PLUMBING...), SIMS for Sims.
+  string group = 5;
+  // Metres from the controlled Sim.
+  int32 distance = 6;
+}
+
+// One row of the game's pie menu for a target.
+message Interaction {
+  string id = 1;
+  string name = 2;
+  // Pie menu category, game text ("Friendly", "Romance"), empty at the top level.
+  string category = 3;
+  bool enabled = 4;
+  // Why it is greyed out, game text.
+  string reason = 5;
+}
+
 message Event {
   uint64 seq = 1;
   // Unix milliseconds, set by the bridge.

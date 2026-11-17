@@ -77,6 +77,28 @@ func (s *service) SetNarration(ctx context.Context, req *connect.Request[v1.SetN
 	return connect.NewResponse(&v1.SetNarrationResponse{Outcome: out}), nil
 }
 
+func (s *service) ListTargets(ctx context.Context, req *connect.Request[v1.ListTargetsRequest]) (*connect.Response[v1.ListTargetsResponse], error) {
+	res := s.hub.Call(ctx, &v1.ToGame{Command: &v1.ToGame_ListTargets{ListTargets: req.Msg}})
+	return connect.NewResponse(&v1.ListTargetsResponse{Outcome: res.GetOutcome(), Targets: res.GetTargets()}), nil
+}
+
+func (s *service) GetInteractions(ctx context.Context, req *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error) {
+	if req.Msg.GetTargetId() == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("target_id is required"))
+	}
+	res := s.hub.Call(ctx, &v1.ToGame{Command: &v1.ToGame_GetInteractions{GetInteractions: req.Msg}})
+	return connect.NewResponse(&v1.GetInteractionsResponse{Outcome: res.GetOutcome(),
+		Interactions: res.GetInteractions(), NamesPending: res.GetNamesPending()}), nil
+}
+
+func (s *service) RunInteraction(ctx context.Context, req *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error) {
+	if req.Msg.GetTargetId() == "" || req.Msg.GetInteractionId() == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("target_id and interaction_id are required"))
+	}
+	out := s.hub.Command(ctx, &v1.ToGame{Command: &v1.ToGame_RunInteraction{RunInteraction: req.Msg}})
+	return connect.NewResponse(&v1.RunInteractionResponse{Outcome: out}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

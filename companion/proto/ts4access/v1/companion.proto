@@ -14,6 +14,13 @@ service CompanionService {
   rpc SelectSim(SelectSimRequest) returns (SelectSimResponse);
   rpc CancelAction(CancelActionRequest) returns (CancelActionResponse);
   rpc SetNarration(SetNarrationRequest) returns (SetNarrationResponse);
+
+  // Sims and objects the controlled Sim can interact with, nearest first.
+  rpc ListTargets(ListTargetsRequest) returns (ListTargetsResponse);
+  // The game's pie menu for one target.
+  rpc GetInteractions(GetInteractionsRequest) returns (GetInteractionsResponse);
+  // Queue an interaction from the last menu, as a click would.
+  rpc RunInteraction(RunInteractionRequest) returns (RunInteractionResponse);
 }
 
 message WatchRequest {}
@@ -58,6 +65,33 @@ message CancelActionResponse {
 }
 
 message SetNarrationResponse {
+  CommandOutcome outcome = 1;
+}
+
+message ListTargetsRequest {}
+
+message ListTargetsResponse {
+  CommandOutcome outcome = 1;
+  repeated Target targets = 2;
+}
+
+message GetInteractionsRequest {
+  string target_id = 1;
+}
+
+message GetInteractionsResponse {
+  CommandOutcome outcome = 1;
+  repeated Interaction interactions = 2;
+  // Some names are still being localized by the game: ask again shortly.
+  bool names_pending = 3;
+}
+
+message RunInteractionRequest {
+  string target_id = 1;
+  string interaction_id = 2;
+}
+
+message RunInteractionResponse {
   CommandOutcome outcome = 1;
 }
 

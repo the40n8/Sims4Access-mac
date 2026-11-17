@@ -4,7 +4,7 @@
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Event, GameState, Narration, Speed } from "./game_pb.js";
+import type { Event, GameState, Interaction, Narration, Speed, Target } from "./game_pb.js";
 import { file_ts4access_v1_game } from "./game_pb.js";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/companion.proto.
  */
 export const file_ts4access_v1_companion: GenFile = /*@__PURE__*/
-  fileDesc("Chx0czRhY2Nlc3MvdjEvY29tcGFuaW9uLnByb3RvEgx0czRhY2Nlc3MudjEiDgoMV2F0Y2hSZXF1ZXN0IoQBCg1XYXRjaFJlc3BvbnNlEigKBXN0YXRlGAEgASgLMhcudHM0YWNjZXNzLnYxLkdhbWVTdGF0ZUgAEiQKBWV2ZW50GAIgASgLMhMudHM0YWNjZXNzLnYxLkV2ZW50SAASGAoOZ2FtZV9jb25uZWN0ZWQYAyABKAhIAEIJCgdwYXlsb2FkIjUKD1NldFNwZWVkUmVxdWVzdBIiCgVzcGVlZBgBIAEoDjITLnRzNGFjY2Vzcy52MS5TcGVlZCIiChBTZWxlY3RTaW1SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCSI4ChNDYW5jZWxBY3Rpb25SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCRIRCglhY3Rpb25faWQYAiABKAkiQQoTU2V0TmFycmF0aW9uUmVxdWVzdBIqCgluYXJyYXRpb24YASABKAsyFy50czRhY2Nlc3MudjEuTmFycmF0aW9uIkEKEFNldFNwZWVkUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSJCChFTZWxlY3RTaW1SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIkUKFENhbmNlbEFjdGlvblJlc3BvbnNlEi0KB291dGNvbWUYASABKAsyHC50czRhY2Nlc3MudjEuQ29tbWFuZE91dGNvbWUiRQoUU2V0TmFycmF0aW9uUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSIsCg5Db21tYW5kT3V0Y29tZRIKCgJvaxgBIAEoCBIOCgZyZWFzb24YAiABKAkynQMKEENvbXBhbmlvblNlcnZpY2USQgoFV2F0Y2gSGi50czRhY2Nlc3MudjEuV2F0Y2hSZXF1ZXN0GhsudHM0YWNjZXNzLnYxLldhdGNoUmVzcG9uc2UwARJJCghTZXRTcGVlZBIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3QaHi50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXNwb25zZRJMCglTZWxlY3RTaW0SHi50czRhY2Nlc3MudjEuU2VsZWN0U2ltUmVxdWVzdBofLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXNwb25zZRJVCgxDYW5jZWxBY3Rpb24SIS50czRhY2Nlc3MudjEuQ2FuY2VsQWN0aW9uUmVxdWVzdBoiLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXNwb25zZRJVCgxTZXROYXJyYXRpb24SIS50czRhY2Nlc3MudjEuU2V0TmFycmF0aW9uUmVxdWVzdBoiLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXNwb25zZWIGcHJvdG8z", [file_ts4access_v1_game]);
+  fileDesc("Chx0czRhY2Nlc3MvdjEvY29tcGFuaW9uLnByb3RvEgx0czRhY2Nlc3MudjEiDgoMV2F0Y2hSZXF1ZXN0IoQBCg1XYXRjaFJlc3BvbnNlEigKBXN0YXRlGAEgASgLMhcudHM0YWNjZXNzLnYxLkdhbWVTdGF0ZUgAEiQKBWV2ZW50GAIgASgLMhMudHM0YWNjZXNzLnYxLkV2ZW50SAASGAoOZ2FtZV9jb25uZWN0ZWQYAyABKAhIAEIJCgdwYXlsb2FkIjUKD1NldFNwZWVkUmVxdWVzdBIiCgVzcGVlZBgBIAEoDjITLnRzNGFjY2Vzcy52MS5TcGVlZCIiChBTZWxlY3RTaW1SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCSI4ChNDYW5jZWxBY3Rpb25SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCRIRCglhY3Rpb25faWQYAiABKAkiQQoTU2V0TmFycmF0aW9uUmVxdWVzdBIqCgluYXJyYXRpb24YASABKAsyFy50czRhY2Nlc3MudjEuTmFycmF0aW9uIkEKEFNldFNwZWVkUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSJCChFTZWxlY3RTaW1SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIkUKFENhbmNlbEFjdGlvblJlc3BvbnNlEi0KB291dGNvbWUYASABKAsyHC50czRhY2Nlc3MudjEuQ29tbWFuZE91dGNvbWUiRQoUU2V0TmFycmF0aW9uUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSIUChJMaXN0VGFyZ2V0c1JlcXVlc3QiawoTTGlzdFRhcmdldHNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEiUKB3RhcmdldHMYAiADKAsyFC50czRhY2Nlc3MudjEuVGFyZ2V0IisKFkdldEludGVyYWN0aW9uc1JlcXVlc3QSEQoJdGFyZ2V0X2lkGAEgASgJIpABChdHZXRJbnRlcmFjdGlvbnNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEi8KDGludGVyYWN0aW9ucxgCIAMoCzIZLnRzNGFjY2Vzcy52MS5JbnRlcmFjdGlvbhIVCg1uYW1lc19wZW5kaW5nGAMgASgIIkIKFVJ1bkludGVyYWN0aW9uUmVxdWVzdBIRCgl0YXJnZXRfaWQYASABKAkSFgoOaW50ZXJhY3Rpb25faWQYAiABKAkiRwoWUnVuSW50ZXJhY3Rpb25SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIiwKDkNvbW1hbmRPdXRjb21lEgoKAm9rGAEgASgIEg4KBnJlYXNvbhgCIAEoCTKuBQoQQ29tcGFuaW9uU2VydmljZRJCCgVXYXRjaBIaLnRzNGFjY2Vzcy52MS5XYXRjaFJlcXVlc3QaGy50czRhY2Nlc3MudjEuV2F0Y2hSZXNwb25zZTABEkkKCFNldFNwZWVkEh0udHM0YWNjZXNzLnYxLlNldFNwZWVkUmVxdWVzdBoeLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlc3BvbnNlEkwKCVNlbGVjdFNpbRIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0Gh8udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlc3BvbnNlElUKDENhbmNlbEFjdGlvbhIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0GiIudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlc3BvbnNlElUKDFNldE5hcnJhdGlvbhIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0GiIudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlc3BvbnNlElIKC0xpc3RUYXJnZXRzEiAudHM0YWNjZXNzLnYxLkxpc3RUYXJnZXRzUmVxdWVzdBohLnRzNGFjY2Vzcy52MS5MaXN0VGFyZ2V0c1Jlc3BvbnNlEl4KD0dldEludGVyYWN0aW9ucxIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0GiUudHM0YWNjZXNzLnYxLkdldEludGVyYWN0aW9uc1Jlc3BvbnNlElsKDlJ1bkludGVyYWN0aW9uEiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdBokLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlc3BvbnNlYgZwcm90bzM", [file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.WatchRequest
@@ -207,6 +207,126 @@ export const SetNarrationResponseSchema: GenMessage<SetNarrationResponse> = /*@_
   messageDesc(file_ts4access_v1_companion, 9);
 
 /**
+ * @generated from message ts4access.v1.ListTargetsRequest
+ */
+export type ListTargetsRequest = Message<"ts4access.v1.ListTargetsRequest"> & {
+};
+
+/**
+ * Describes the message ts4access.v1.ListTargetsRequest.
+ * Use `create(ListTargetsRequestSchema)` to create a new message.
+ */
+export const ListTargetsRequestSchema: GenMessage<ListTargetsRequest> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 10);
+
+/**
+ * @generated from message ts4access.v1.ListTargetsResponse
+ */
+export type ListTargetsResponse = Message<"ts4access.v1.ListTargetsResponse"> & {
+  /**
+   * @generated from field: ts4access.v1.CommandOutcome outcome = 1;
+   */
+  outcome?: CommandOutcome | undefined;
+
+  /**
+   * @generated from field: repeated ts4access.v1.Target targets = 2;
+   */
+  targets: Target[];
+};
+
+/**
+ * Describes the message ts4access.v1.ListTargetsResponse.
+ * Use `create(ListTargetsResponseSchema)` to create a new message.
+ */
+export const ListTargetsResponseSchema: GenMessage<ListTargetsResponse> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 11);
+
+/**
+ * @generated from message ts4access.v1.GetInteractionsRequest
+ */
+export type GetInteractionsRequest = Message<"ts4access.v1.GetInteractionsRequest"> & {
+  /**
+   * @generated from field: string target_id = 1;
+   */
+  targetId: string;
+};
+
+/**
+ * Describes the message ts4access.v1.GetInteractionsRequest.
+ * Use `create(GetInteractionsRequestSchema)` to create a new message.
+ */
+export const GetInteractionsRequestSchema: GenMessage<GetInteractionsRequest> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 12);
+
+/**
+ * @generated from message ts4access.v1.GetInteractionsResponse
+ */
+export type GetInteractionsResponse = Message<"ts4access.v1.GetInteractionsResponse"> & {
+  /**
+   * @generated from field: ts4access.v1.CommandOutcome outcome = 1;
+   */
+  outcome?: CommandOutcome | undefined;
+
+  /**
+   * @generated from field: repeated ts4access.v1.Interaction interactions = 2;
+   */
+  interactions: Interaction[];
+
+  /**
+   * Some names are still being localized by the game: ask again shortly.
+   *
+   * @generated from field: bool names_pending = 3;
+   */
+  namesPending: boolean;
+};
+
+/**
+ * Describes the message ts4access.v1.GetInteractionsResponse.
+ * Use `create(GetInteractionsResponseSchema)` to create a new message.
+ */
+export const GetInteractionsResponseSchema: GenMessage<GetInteractionsResponse> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 13);
+
+/**
+ * @generated from message ts4access.v1.RunInteractionRequest
+ */
+export type RunInteractionRequest = Message<"ts4access.v1.RunInteractionRequest"> & {
+  /**
+   * @generated from field: string target_id = 1;
+   */
+  targetId: string;
+
+  /**
+   * @generated from field: string interaction_id = 2;
+   */
+  interactionId: string;
+};
+
+/**
+ * Describes the message ts4access.v1.RunInteractionRequest.
+ * Use `create(RunInteractionRequestSchema)` to create a new message.
+ */
+export const RunInteractionRequestSchema: GenMessage<RunInteractionRequest> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 14);
+
+/**
+ * @generated from message ts4access.v1.RunInteractionResponse
+ */
+export type RunInteractionResponse = Message<"ts4access.v1.RunInteractionResponse"> & {
+  /**
+   * @generated from field: ts4access.v1.CommandOutcome outcome = 1;
+   */
+  outcome?: CommandOutcome | undefined;
+};
+
+/**
+ * Describes the message ts4access.v1.RunInteractionResponse.
+ * Use `create(RunInteractionResponseSchema)` to create a new message.
+ */
+export const RunInteractionResponseSchema: GenMessage<RunInteractionResponse> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 15);
+
+/**
  * @generated from message ts4access.v1.CommandOutcome
  */
 export type CommandOutcome = Message<"ts4access.v1.CommandOutcome"> & {
@@ -229,7 +349,7 @@ export type CommandOutcome = Message<"ts4access.v1.CommandOutcome"> & {
  * Use `create(CommandOutcomeSchema)` to create a new message.
  */
 export const CommandOutcomeSchema: GenMessage<CommandOutcome> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_companion, 10);
+  messageDesc(file_ts4access_v1_companion, 16);
 
 /**
  * Phone <-> bridge API (Connect). Every call needs the pairing token
@@ -279,6 +399,36 @@ export const CompanionService: GenService<{
     methodKind: "unary";
     input: typeof SetNarrationRequestSchema;
     output: typeof SetNarrationResponseSchema;
+  },
+  /**
+   * Sims and objects the controlled Sim can interact with, nearest first.
+   *
+   * @generated from rpc ts4access.v1.CompanionService.ListTargets
+   */
+  listTargets: {
+    methodKind: "unary";
+    input: typeof ListTargetsRequestSchema;
+    output: typeof ListTargetsResponseSchema;
+  },
+  /**
+   * The game's pie menu for one target.
+   *
+   * @generated from rpc ts4access.v1.CompanionService.GetInteractions
+   */
+  getInteractions: {
+    methodKind: "unary";
+    input: typeof GetInteractionsRequestSchema;
+    output: typeof GetInteractionsResponseSchema;
+  },
+  /**
+   * Queue an interaction from the last menu, as a click would.
+   *
+   * @generated from rpc ts4access.v1.CompanionService.RunInteraction
+   */
+  runInteraction: {
+    methodKind: "unary";
+    input: typeof RunInteractionRequestSchema;
+    output: typeof RunInteractionResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_ts4access_v1_companion, 0);

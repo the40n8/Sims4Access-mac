@@ -4,9 +4,9 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
-import type { CancelActionRequest, CommandOutcome, SelectSimRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
+import type { CancelActionRequest, CommandOutcome, GetInteractionsRequest, ListTargetsRequest, RunInteractionRequest, SelectSimRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
 import { file_ts4access_v1_companion } from "./companion_pb.js";
-import type { Event, GameState } from "./game_pb.js";
+import type { Event, GameState, Interaction, Target } from "./game_pb.js";
 import { file_ts4access_v1_game } from "./game_pb.js";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/pipe.proto.
  */
 export const file_ts4access_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAkiSgoNQ29tbWFuZFJlc3VsdBIKCgJpZBgBIAEoCRItCgdvdXRjb21lGAIgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIuABCghUb0JyaWRnZRIkCgVoZWxsbxgBIAEoCzITLnRzNGFjY2Vzcy52MS5IZWxsb0gAEigKBXN0YXRlGAIgASgLMhcudHM0YWNjZXNzLnYxLkdhbWVTdGF0ZUgAEiQKBWV2ZW50GAMgASgLMhMudHM0YWNjZXNzLnYxLkV2ZW50SAASLQoGcmVzdWx0GAQgASgLMhsudHM0YWNjZXNzLnYxLkNvbW1hbmRSZXN1bHRIABIkCgV2b2ljZRgFIAEoCzITLnRzNGFjY2Vzcy52MS5Wb2ljZUgAQgkKB3BheWxvYWQigQIKBlRvR2FtZRIKCgJpZBgBIAEoCRIyCglzZXRfc3BlZWQYAiABKAsyHS50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXF1ZXN0SAASNAoKc2VsZWN0X3NpbRgDIAEoCzIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOgoNY2FuY2VsX2FjdGlvbhgEIAEoCzIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0SAASOgoNc2V0X25hcnJhdGlvbhgFIAEoCzIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0SABCCQoHY29tbWFuZGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
+  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAkiuQEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCCLgAQoIVG9CcmlkZ2USJAoFaGVsbG8YASABKAsyEy50czRhY2Nlc3MudjEuSGVsbG9IABIoCgVzdGF0ZRgCIAEoCzIXLnRzNGFjY2Vzcy52MS5HYW1lU3RhdGVIABIkCgVldmVudBgDIAEoCzITLnRzNGFjY2Vzcy52MS5FdmVudEgAEi0KBnJlc3VsdBgEIAEoCzIbLnRzNGFjY2Vzcy52MS5Db21tYW5kUmVzdWx0SAASJAoFdm9pY2UYBSABKAsyEy50czRhY2Nlc3MudjEuVm9pY2VIAEIJCgdwYXlsb2FkIr0DCgZUb0dhbWUSCgoCaWQYASABKAkSMgoJc2V0X3NwZWVkGAIgASgLMh0udHM0YWNjZXNzLnYxLlNldFNwZWVkUmVxdWVzdEgAEjQKCnNlbGVjdF9zaW0YAyABKAsyHi50czRhY2Nlc3MudjEuU2VsZWN0U2ltUmVxdWVzdEgAEjoKDWNhbmNlbF9hY3Rpb24YBCABKAsyIS50czRhY2Nlc3MudjEuQ2FuY2VsQWN0aW9uUmVxdWVzdEgAEjoKDXNldF9uYXJyYXRpb24YBSABKAsyIS50czRhY2Nlc3MudjEuU2V0TmFycmF0aW9uUmVxdWVzdEgAEjgKDGxpc3RfdGFyZ2V0cxgGIAEoCzIgLnRzNGFjY2Vzcy52MS5MaXN0VGFyZ2V0c1JlcXVlc3RIABJAChBnZXRfaW50ZXJhY3Rpb25zGAcgASgLMiQudHM0YWNjZXNzLnYxLkdldEludGVyYWN0aW9uc1JlcXVlc3RIABI+Cg9ydW5faW50ZXJhY3Rpb24YCCABKAsyIy50czRhY2Nlc3MudjEuUnVuSW50ZXJhY3Rpb25SZXF1ZXN0SABCCQoHY29tbWFuZGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.Voice
@@ -91,6 +91,23 @@ export type CommandResult = Message<"ts4access.v1.CommandResult"> & {
    * @generated from field: ts4access.v1.CommandOutcome outcome = 2;
    */
   outcome?: CommandOutcome | undefined;
+
+  /**
+   * Data some commands return.
+   *
+   * @generated from field: repeated ts4access.v1.Target targets = 3;
+   */
+  targets: Target[];
+
+  /**
+   * @generated from field: repeated ts4access.v1.Interaction interactions = 4;
+   */
+  interactions: Interaction[];
+
+  /**
+   * @generated from field: bool names_pending = 5;
+   */
+  namesPending: boolean;
 };
 
 /**
@@ -183,6 +200,24 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
      */
     value: SetNarrationRequest;
     case: "setNarration";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.ListTargetsRequest list_targets = 6;
+     */
+    value: ListTargetsRequest;
+    case: "listTargets";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.GetInteractionsRequest get_interactions = 7;
+     */
+    value: GetInteractionsRequest;
+    case: "getInteractions";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.RunInteractionRequest run_interaction = 8;
+     */
+    value: RunInteractionRequest;
+    case: "runInteraction";
   } | { case: undefined; value?: undefined };
 };
 

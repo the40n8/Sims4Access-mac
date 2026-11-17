@@ -27,6 +27,10 @@ message Hello {
 message CommandResult {
   string id = 1;
   CommandOutcome outcome = 2;
+  // Data some commands return.
+  repeated Target targets = 3;
+  repeated Interaction interactions = 4;
+  bool names_pending = 5;
 }
 
 message ToBridge {
@@ -46,5 +50,8 @@ message ToGame {
     SelectSimRequest select_sim = 3;
     CancelActionRequest cancel_action = 4;
     SetNarrationRequest set_narration = 5;
+    ListTargetsRequest list_targets = 6;
+    GetInteractionsRequest get_interactions = 7;
+    RunInteractionRequest run_interaction = 8;
   }
 }

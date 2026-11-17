@@ -218,13 +218,19 @@ def _handle(line):
         log('bad command: {!r}'.format(ex))
         return
     cmd_id = cmd.get('id', '')
+    extra = {}
     try:
-        ok, reason = _run(cmd)
+        answer = _run(cmd)
+        ok, reason = answer[0], answer[1]
+        if len(answer) > 2:
+            extra = answer[2]
     except Exception as ex:
         log('command failed: {!r}'.format(ex))
         ok, reason = False, 'error'
     outcome = {'ok': True} if ok else {'reason': reason}
-    send({'result': {'id': cmd_id, 'outcome': outcome}})
+    result = {'id': cmd_id, 'outcome': outcome}
+    result.update(extra)
+    send({'result': result})
     # Let the phone see the effect right away.
     global _last_state_time
     _last_state_time = 0.0
@@ -257,6 +263,13 @@ def _run(cmd):
     if 'selectSim' in cmd:
         import tyjokr_a11y_hub as hub
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
+    if 'listTargets' in cmd:
+        return True, '', {'targets': list_targets()}
+    if 'getInteractions' in cmd:
+        return get_interactions(cmd['getInteractions'].get('targetId', ''))
+    if 'runInteraction' in cmd:
+        c = cmd['runInteraction']
+        return run_interaction(c.get('targetId', ''), c.get('interactionId', ''))
     if 'cancelAction' in cmd:
         import services
         import tyjokr_a11y_hub as hub
@@ -611,6 +624,208 @@ def _publish_state():
     _seq += 1
     state['seq'] = str(_seq)
     send({'state': state})
+
+
+# ---------------------------------------------------------------- playing from the phone
+# Targets and pie menus as the game builds them for a click (EA's ChoiceMenu:
+# same tests, visibility, names, greyed reasons, social sub-menus), and the
+# chosen row run with test_and_execute, like the mod's phone list.
+
+MAX_OBJECTS = 120         # nearest objects listed
+MAX_DISTANCE = 60.0       # metres
+_menus = {}               # target id -> {option id: (aop, context)}
+
+
+def _sim_and_client():
+    import services
+    sim = services.get_active_sim()
+    client = services.client_manager().get_first_client()
+    return sim, client
+
+
+def _object_name(obj):
+    try:
+        if obj.has_custom_name():
+            custom = str(obj.custom_name or '')
+            if custom:
+                return custom
+    except Exception:
+        pass
+    fallback = _pretty(getattr(obj.definition, 'name', '') or type(obj).__name__)
+    try:
+        raw = obj.catalog_name
+        key = int(getattr(raw, 'hash', raw)) & 0xFFFFFFFF
+    except Exception:
+        key = 0
+    if not key:
+        return fallback
+    cached = _loc_cache().get(key)
+    if cached is None:
+        _loc_wanted.add(key)
+        return fallback
+    return cached or fallback
+
+
+def _group(obj):
+    scanner = sys.modules.get('tyjokr_a11y_scanner')
+    try:
+        return scanner._classification(obj, time.monotonic())[1]
+    except Exception:
+        return 'MISC'
+
+
+def list_targets():
+    import services
+    sim, _client = _sim_and_client()
+    if sim is None:
+        return []
+    origin = sim.position
+
+    def distance(obj):
+        pos = obj.position
+        return ((float(pos.x) - float(origin.x)) ** 2 + (float(pos.z) - float(origin.z)) ** 2) ** 0.5
+
+    targets = [{'id': str(sim.id), 'name': '{} {}'.format(sim.sim_info.first_name, sim.sim_info.last_name).strip(),
+                'isSim': True, 'isSelf': True, 'group': 'SIMS', 'distance': 0}]
+    others = []
+    for other in services.sim_info_manager().instanced_sims_gen():
+        if other is sim:
+            continue
+        try:
+            others.append((distance(other), other))
+        except Exception:
+            continue
+    for d, other in sorted(others, key=lambda pair: pair[0]):
+        info = other.sim_info
+        targets.append({'id': str(other.id), 'name': '{} {}'.format(info.first_name, info.last_name).strip(),
+                        'isSim': True, 'group': 'SIMS', 'distance': int(round(d))})
+    objects = []
+    for obj in services.object_manager().get_valid_objects_gen():
+        try:
+            if getattr(obj, 'is_sim', False) or getattr(obj, 'is_terrain', False) or obj.is_hidden():
+                continue
+            checker = getattr(obj, 'is_in_inventory', None)
+            if checker is not None and checker():
+                continue
+            if not list(obj.super_affordances()):
+                continue
+            d = distance(obj)
+            if d <= MAX_DISTANCE:
+                objects.append((d, obj))
+        except Exception:
+            continue
+    objects.sort(key=lambda pair: pair[0])
+    for d, obj in objects[:MAX_OBJECTS]:
+        try:
+            targets.append({'id': str(obj.id), 'name': _object_name(obj), 'group': _group(obj),
+                            'distance': int(round(d))})
+        except Exception:
+            continue
+    return targets
+
+
+def _target(target_id, sim):
+    import services
+    try:
+        key = int(target_id)
+    except ValueError:
+        return None
+    if key == sim.id:
+        return sim
+    return services.object_manager().get(key)
+
+
+def _category_root(category):
+    depth = 0
+    while category is not None and getattr(category, '_parent', None) is not None and depth < 8:
+        category = category._parent
+        depth += 1
+    return category
+
+
+def get_interactions(target_id):
+    import services
+    import sims4.resources
+    from interactions.choices import ChoiceMenu
+    from server.pick_info import PickInfo, PickType
+    sim, client = _sim_and_client()
+    if sim is None or client is None:
+        return False, 'sim_unavailable'
+    obj = _target(target_id, sim)
+    if obj is None:
+        return False, 'target_unavailable'
+    parameters = client.get_interaction_parameters() or {}
+    try:
+        lot_id = int(services.active_lot().lot_id)
+    except Exception:
+        lot_id = 0
+    try:
+        level = int(obj.level)
+    except Exception:
+        level = 0
+    pick_type = PickType.PICK_SIM if getattr(obj, 'is_sim', False) else PickType.PICK_OBJECT
+    menu = ChoiceMenu(sim)
+    targets = [obj] + [t for t in (getattr(obj, 'forwarded_pick_targets', None) or ()) if t is not None and t is not obj]
+    for target in targets:
+        pick = PickInfo(pick_type=pick_type, target=target, location=obj.position,
+                        routing_surface=obj.routing_surface, lot_id=lot_id, level=level)
+        context = client.create_interaction_context(sim, pick=pick)
+        context.add_preferred_objects((obj,))
+        menu.add_potential_aops(target, context, target.potential_interactions(context, **parameters))
+        if getattr(target, 'is_sim', False) and target is not sim:
+            try:
+                sim.fill_choices_menu_with_si_state_aops(target, context, menu)
+            except Exception as ex:
+                log('social rows unavailable: {!r}'.format(ex))
+    categories = services.get_instance_manager(sims4.resources.Types.PIE_MENU_CATEGORY)
+    tutorial = services.get_tutorial_service()
+    rows, options = [], {}
+    pending = False
+    for option_id, item in menu:
+        aop = item.aop
+        affordance = aop.affordance
+        try:
+            if tutorial is not None and not tutorial.is_affordance_visible(affordance):
+                continue
+            visible, _suppression = sim.test_pie_menu_modifiers(affordance)
+            if not visible:
+                continue
+            modifier_tooltip = sim.apply_forbid_by_object_tags_pie_menu_modifiers(aop)
+            fallback = _pretty(getattr(affordance, '__name__', ''), ('sim-', 'si_', 'mixer_'))
+            name = text_of(affordance.get_name(aop.target, item.context, **aop.interaction_parameters), '')
+            pending = pending or not name
+            tooltip = modifier_tooltip or item.result.tooltip
+            reason = ''
+            if tooltip is not None:
+                reason = text_of(affordance.create_localized_string(
+                    tooltip, context=item.context, target=aop.target, **aop.interaction_parameters))
+            category = categories.get(item.category_key) if item.category_key else None
+            root = _category_root(category)
+            category_name = text_of(root._display_name(sim)) if root is not None else ''
+            rows.append({'id': str(option_id), 'name': name or fallback, 'category': category_name,
+                         'enabled': bool(item.result) and not modifier_tooltip, 'reason': reason})
+            options[str(option_id)] = (aop, item.context)
+        except Exception as ex:
+            log('menu row skipped: {!r}'.format(ex))
+    _menus.clear()            # only the latest menu can be run
+    _menus[str(target_id)] = options
+    return True, '', {'interactions': rows, 'namesPending': pending}
+
+
+def run_interaction(target_id, option_id):
+    entry = _menus.get(str(target_id), {}).get(str(option_id))
+    if entry is None:
+        return False, 'menu_expired'
+    aop, context = entry
+    try:
+        result = aop.test_and_execute(context)
+    except Exception as ex:
+        log('interaction failed: {!r}'.format(ex))
+        return False, 'error'
+    if not result:
+        log('interaction refused: {}'.format(result))
+        return False, 'refused'
+    return True, ''
 
 
 # ---------------------------------------------------------------- pairing page

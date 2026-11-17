@@ -898,6 +898,173 @@ func (x *GameState) GetNarration() *Narration {
 	return nil
 }
 
+// Something the controlled Sim can interact with.
+type Target struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name  string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	IsSim bool                   `protobuf:"varint,3,opt,name=is_sim,json=isSim,proto3" json:"is_sim,omitempty"`
+	// The controlled Sim itself: its own interactions (self-care, phone...).
+	IsSelf bool `protobuf:"varint,4,opt,name=is_self,json=isSelf,proto3" json:"is_self,omitempty"`
+	// Catalog group for objects (COMFORT, APPLIANCES, PLUMBING...), SIMS for Sims.
+	Group string `protobuf:"bytes,5,opt,name=group,proto3" json:"group,omitempty"`
+	// Metres from the controlled Sim.
+	Distance      int32 `protobuf:"varint,6,opt,name=distance,proto3" json:"distance,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Target) Reset() {
+	*x = Target{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Target) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Target) ProtoMessage() {}
+
+func (x *Target) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Target.ProtoReflect.Descriptor instead.
+func (*Target) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Target) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Target) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Target) GetIsSim() bool {
+	if x != nil {
+		return x.IsSim
+	}
+	return false
+}
+
+func (x *Target) GetIsSelf() bool {
+	if x != nil {
+		return x.IsSelf
+	}
+	return false
+}
+
+func (x *Target) GetGroup() string {
+	if x != nil {
+		return x.Group
+	}
+	return ""
+}
+
+func (x *Target) GetDistance() int32 {
+	if x != nil {
+		return x.Distance
+	}
+	return 0
+}
+
+// One row of the game's pie menu for a target.
+type Interaction struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name  string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Pie menu category, game text ("Friendly", "Romance"), empty at the top level.
+	Category string `protobuf:"bytes,3,opt,name=category,proto3" json:"category,omitempty"`
+	Enabled  bool   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Why it is greyed out, game text.
+	Reason        string `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Interaction) Reset() {
+	*x = Interaction{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Interaction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Interaction) ProtoMessage() {}
+
+func (x *Interaction) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Interaction.ProtoReflect.Descriptor instead.
+func (*Interaction) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *Interaction) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Interaction) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Interaction) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+func (x *Interaction) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *Interaction) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
 type Event struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Seq   uint64                 `protobuf:"varint,1,opt,name=seq,proto3" json:"seq,omitempty"`
@@ -916,7 +1083,7 @@ type Event struct {
 
 func (x *Event) Reset() {
 	*x = Event{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	mi := &file_ts4access_v1_game_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -928,7 +1095,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	mi := &file_ts4access_v1_game_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -941,7 +1108,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{8}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Event) GetSeq() uint64 {
@@ -1052,7 +1219,20 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x05funds\x18\x04 \x01(\x03R\x05funds\x12%\n" +
 	"\x0ehousehold_name\x18\x05 \x01(\tR\rhouseholdName\x12%\n" +
 	"\x04sims\x18\x06 \x03(\v2\x11.ts4access.v1.SimR\x04sims\x125\n" +
-	"\tnarration\x18\a \x01(\v2\x17.ts4access.v1.NarrationR\tnarration\"\xba\x01\n" +
+	"\tnarration\x18\a \x01(\v2\x17.ts4access.v1.NarrationR\tnarration\"\x8e\x01\n" +
+	"\x06Target\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x15\n" +
+	"\x06is_sim\x18\x03 \x01(\bR\x05isSim\x12\x17\n" +
+	"\ais_self\x18\x04 \x01(\bR\x06isSelf\x12\x14\n" +
+	"\x05group\x18\x05 \x01(\tR\x05group\x12\x1a\n" +
+	"\bdistance\x18\x06 \x01(\x05R\bdistance\"\x7f\n" +
+	"\vInteraction\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
+	"\bcategory\x18\x03 \x01(\tR\bcategory\x12\x18\n" +
+	"\aenabled\x18\x04 \x01(\bR\aenabled\x12\x16\n" +
+	"\x06reason\x18\x05 \x01(\tR\x06reason\"\xba\x01\n" +
 	"\x05Event\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x04R\x03seq\x12\x0e\n" +
 	"\x02at\x18\x02 \x01(\x03R\x02at\x12+\n" +
@@ -1109,21 +1289,23 @@ func file_ts4access_v1_game_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_game_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_ts4access_v1_game_proto_goTypes = []any{
-	(Speed)(0),        // 0: ts4access.v1.Speed
-	(NeedLevel)(0),    // 1: ts4access.v1.NeedLevel
-	(ActionState)(0),  // 2: ts4access.v1.ActionState
-	(EventKind)(0),    // 3: ts4access.v1.EventKind
-	(*Clock)(nil),     // 4: ts4access.v1.Clock
-	(*Need)(nil),      // 5: ts4access.v1.Need
-	(*Mood)(nil),      // 6: ts4access.v1.Mood
-	(*Moodlet)(nil),   // 7: ts4access.v1.Moodlet
-	(*Action)(nil),    // 8: ts4access.v1.Action
-	(*Sim)(nil),       // 9: ts4access.v1.Sim
-	(*Narration)(nil), // 10: ts4access.v1.Narration
-	(*GameState)(nil), // 11: ts4access.v1.GameState
-	(*Event)(nil),     // 12: ts4access.v1.Event
+	(Speed)(0),          // 0: ts4access.v1.Speed
+	(NeedLevel)(0),      // 1: ts4access.v1.NeedLevel
+	(ActionState)(0),    // 2: ts4access.v1.ActionState
+	(EventKind)(0),      // 3: ts4access.v1.EventKind
+	(*Clock)(nil),       // 4: ts4access.v1.Clock
+	(*Need)(nil),        // 5: ts4access.v1.Need
+	(*Mood)(nil),        // 6: ts4access.v1.Mood
+	(*Moodlet)(nil),     // 7: ts4access.v1.Moodlet
+	(*Action)(nil),      // 8: ts4access.v1.Action
+	(*Sim)(nil),         // 9: ts4access.v1.Sim
+	(*Narration)(nil),   // 10: ts4access.v1.Narration
+	(*GameState)(nil),   // 11: ts4access.v1.GameState
+	(*Target)(nil),      // 12: ts4access.v1.Target
+	(*Interaction)(nil), // 13: ts4access.v1.Interaction
+	(*Event)(nil),       // 14: ts4access.v1.Event
 }
 var file_ts4access_v1_game_proto_depIdxs = []int32{
 	0,  // 0: ts4access.v1.Clock.speed:type_name -> ts4access.v1.Speed
@@ -1155,7 +1337,7 @@ func file_ts4access_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_game_proto_rawDesc), len(file_ts4access_v1_game_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

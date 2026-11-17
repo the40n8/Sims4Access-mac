@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
-	import { groupOf, prefs } from '$lib/prefs.svelte.js';
-	import { eventText, money, simSummary, speedName } from '$lib/text.js';
+	import { money, simSummary, speedName } from '$lib/text.js';
 	import { Speed } from '$lib/gen/ts4access/v1/game_pb.js';
+	import Feed from './Feed.svelte';
 
+	let { onSeeAll }: { onSeeAll: () => void } = $props();
 	const game = $derived(live.state);
-	const feed = $derived(live.feed.filter((e) => prefs.showSpoken || groupOf(e.kind) !== 'spoken'));
-	const time = (at: bigint) =>
-		new Date(Number(at)).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 </script>
 
 {#if game?.inGame}
@@ -34,19 +32,9 @@
 {/if}
 
 <section class="stack" aria-labelledby="feed">
-	<h2 id="feed">{m.feed_title()}</h2>
-	{#if feed.length === 0}
-		<p class="muted">{m.feed_empty()}</p>
-	{:else}
-		<ol class="feed">
-			{#each feed as e (e.seq)}
-				<li>
-					<span class="muted num">{time(e.at)}</span>
-					{eventText(e)}
-				</li>
-			{/each}
-		</ol>
-	{/if}
+	<h2 id="feed">{m.recent_title()}</h2>
+	<Feed limit={5} />
+	<button type="button" onclick={onSeeAll}>{m.see_all()}</button>
 </section>
 
 <style>
@@ -61,12 +49,5 @@
 		background: var(--accent);
 		color: var(--accent-ink);
 		font-size: 0.85em;
-	}
-	.feed li {
-		padding: 0.6rem 0;
-		border-bottom: 1px solid var(--line);
-	}
-	.feed .muted {
-		margin-inline-end: 0.5rem;
 	}
 </style>

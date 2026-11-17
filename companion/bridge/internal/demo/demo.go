@@ -47,7 +47,9 @@ func Run(ctx context.Context, h *hub.Hub) {
 		case <-ctx.Done():
 			return
 		case c := <-g.cmds:
-			h.Resolve(&v1.CommandResult{Id: c.GetId(), Outcome: g.apply(c)})
+			res := g.call(c)
+			res.Id = c.GetId()
+			h.Resolve(res)
 			g.publish()
 		case <-tick.C:
 			g.step()
@@ -135,6 +137,54 @@ func (g *game) find(id string) *v1.Sim {
 		}
 	}
 	return nil
+}
+
+var demoTargets = []*v1.Target{
+	{Id: "o1", Name: "Fridge", Group: "APPLIANCES", Distance: 3},
+	{Id: "o2", Name: "Sofa", Group: "COMFORT", Distance: 5},
+	{Id: "o3", Name: "Shower", Group: "PLUMBING", Distance: 8},
+	{Id: "o4", Name: "Computer", Group: "ELECTRONICS", Distance: 9},
+}
+
+var demoMenus = map[string][]*v1.Interaction{
+	"self": {{Id: "1", Name: "Check Mood", Enabled: true}, {Id: "2", Name: "Call Someone", Category: "Phone", Enabled: true}},
+	"sim":  {{Id: "1", Name: "Chat", Category: "Friendly", Enabled: true}, {Id: "2", Name: "Tell Joke", Category: "Funny", Enabled: true}, {Id: "3", Name: "Ask to Be Boyfriend", Category: "Romance", Reason: "Relationship too low"}},
+	"o1":   {{Id: "1", Name: "Quick Meal", Category: "Grab", Enabled: true}, {Id: "2", Name: "Cook", Enabled: true}},
+	"o2":   {{Id: "1", Name: "Sit", Enabled: true}, {Id: "2", Name: "Nap", Enabled: true}},
+	"o3":   {{Id: "1", Name: "Take Shower", Enabled: true}},
+	"o4":   {{Id: "1", Name: "Play Games", Enabled: true}, {Id: "2", Name: "Browse Web", Enabled: true}},
+}
+
+func (g *game) call(c *v1.ToGame) *v1.CommandResult {
+	switch cmd := c.Command.(type) {
+	case *v1.ToGame_ListTargets:
+		var targets []*v1.Target
+		for _, s := range g.state.Sims {
+			targets = append(targets, &v1.Target{Id: s.Id, Name: s.FirstName + " " + s.LastName, IsSim: true, IsSelf: s.Active, Group: "SIMS", Distance: 2})
+		}
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Targets: append(targets, demoTargets...)}
+	case *v1.ToGame_GetInteractions:
+		key := cmd.GetInteractions.GetTargetId()
+		if s := g.find(key); s != nil {
+			key = "sim"
+			if s.Active {
+				key = "self"
+			}
+		}
+		menu, ok := demoMenus[key]
+		if !ok {
+			return &v1.CommandResult{Outcome: &v1.CommandOutcome{Reason: "target_unavailable"}}
+		}
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Interactions: menu}
+	case *v1.ToGame_RunInteraction:
+		for _, s := range g.state.Sims {
+			if s.Active {
+				g.addAction(s, "Interaction "+cmd.RunInteraction.GetInteractionId())
+			}
+		}
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
+	}
+	return &v1.CommandResult{Outcome: g.apply(c)}
 }
 
 func (g *game) apply(c *v1.ToGame) *v1.CommandOutcome {

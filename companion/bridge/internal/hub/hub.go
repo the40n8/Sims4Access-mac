@@ -17,7 +17,7 @@ import (
 const recentEvents = 50
 
 // CommandTimeout bounds how long a phone waits for the game to answer.
-const CommandTimeout = 3 * time.Second
+const CommandTimeout = 5 * time.Second
 
 // Sender delivers a command to the game. It must be safe for concurrent use.
 type Sender func(*v1.ToGame) error
@@ -32,7 +32,7 @@ type Hub struct {
 
 	send    Sender
 	nextID  atomic.Uint64
-	pending sync.Map // id -> chan *v1.CommandOutcome
+	pending sync.Map // id -> chan *v1.CommandResult
 }
 
 func New(send Sender) *Hub {
@@ -140,38 +140,46 @@ func (h *Hub) addEventLocked(e *v1.Event) {
 	h.broadcast(&v1.WatchResponse{Payload: &v1.WatchResponse_Event{Event: e}})
 }
 
-// Command sends cmd to the game and waits for its result.
+// Command sends cmd to the game and waits for its outcome.
 func (h *Hub) Command(ctx context.Context, cmd *v1.ToGame) *v1.CommandOutcome {
+	return h.Call(ctx, cmd).GetOutcome()
+}
+
+// Call sends cmd to the game and waits for its full result (outcome and
+// any data, e.g. targets or interactions). The outcome is never nil.
+func (h *Hub) Call(ctx context.Context, cmd *v1.ToGame) *v1.CommandResult {
+	failed := func(reason string) *v1.CommandResult {
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Reason: reason}}
+	}
 	h.mu.Lock()
 	connected, send := h.connected, h.send
 	h.mu.Unlock()
 	if !connected || send == nil {
-		return &v1.CommandOutcome{Reason: "not_connected"}
+		return failed("not_connected")
 	}
 	cmd.Id = strconv.FormatUint(h.nextID.Add(1), 10)
-	done := make(chan *v1.CommandOutcome, 1)
+	done := make(chan *v1.CommandResult, 1)
 	h.pending.Store(cmd.Id, done)
 	defer h.pending.Delete(cmd.Id)
 	if err := send(cmd); err != nil {
-		return &v1.CommandOutcome{Reason: "not_connected"}
+		return failed("not_connected")
 	}
 	ctx, cancel := context.WithTimeout(ctx, CommandTimeout)
 	defer cancel()
 	select {
-	case out := <-done:
-		return out
+	case res := <-done:
+		return res
 	case <-ctx.Done():
-		return &v1.CommandOutcome{Reason: "timeout"}
+		return failed("timeout")
 	}
 }
 
 // Resolve delivers the game's answer to a waiting Command.
 func (h *Hub) Resolve(r *v1.CommandResult) {
 	if ch, ok := h.pending.Load(r.GetId()); ok {
-		out := r.GetOutcome()
-		if out == nil {
-			out = &v1.CommandOutcome{Reason: "no_outcome"}
+		if r.GetOutcome() == nil {
+			r.Outcome = &v1.CommandOutcome{Reason: "no_outcome"}
 		}
-		ch.(chan *v1.CommandOutcome) <- out
+		ch.(chan *v1.CommandResult) <- r
 	}
 }

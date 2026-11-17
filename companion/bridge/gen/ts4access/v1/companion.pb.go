@@ -517,6 +517,295 @@ func (x *SetNarrationResponse) GetOutcome() *CommandOutcome {
 	return nil
 }
 
+type ListTargetsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTargetsRequest) Reset() {
+	*x = ListTargetsRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTargetsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTargetsRequest) ProtoMessage() {}
+
+func (x *ListTargetsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTargetsRequest.ProtoReflect.Descriptor instead.
+func (*ListTargetsRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{10}
+}
+
+type ListTargetsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	Targets       []*Target              `protobuf:"bytes,2,rep,name=targets,proto3" json:"targets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTargetsResponse) Reset() {
+	*x = ListTargetsResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTargetsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTargetsResponse) ProtoMessage() {}
+
+func (x *ListTargetsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTargetsResponse.ProtoReflect.Descriptor instead.
+func (*ListTargetsResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ListTargetsResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
+func (x *ListTargetsResponse) GetTargets() []*Target {
+	if x != nil {
+		return x.Targets
+	}
+	return nil
+}
+
+type GetInteractionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetInteractionsRequest) Reset() {
+	*x = GetInteractionsRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInteractionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInteractionsRequest) ProtoMessage() {}
+
+func (x *GetInteractionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInteractionsRequest.ProtoReflect.Descriptor instead.
+func (*GetInteractionsRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetInteractionsRequest) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
+}
+
+type GetInteractionsResponse struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Outcome      *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	Interactions []*Interaction         `protobuf:"bytes,2,rep,name=interactions,proto3" json:"interactions,omitempty"`
+	// Some names are still being localized by the game: ask again shortly.
+	NamesPending  bool `protobuf:"varint,3,opt,name=names_pending,json=namesPending,proto3" json:"names_pending,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetInteractionsResponse) Reset() {
+	*x = GetInteractionsResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInteractionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInteractionsResponse) ProtoMessage() {}
+
+func (x *GetInteractionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInteractionsResponse.ProtoReflect.Descriptor instead.
+func (*GetInteractionsResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetInteractionsResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
+func (x *GetInteractionsResponse) GetInteractions() []*Interaction {
+	if x != nil {
+		return x.Interactions
+	}
+	return nil
+}
+
+func (x *GetInteractionsResponse) GetNamesPending() bool {
+	if x != nil {
+		return x.NamesPending
+	}
+	return false
+}
+
+type RunInteractionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	InteractionId string                 `protobuf:"bytes,2,opt,name=interaction_id,json=interactionId,proto3" json:"interaction_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunInteractionRequest) Reset() {
+	*x = RunInteractionRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunInteractionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunInteractionRequest) ProtoMessage() {}
+
+func (x *RunInteractionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunInteractionRequest.ProtoReflect.Descriptor instead.
+func (*RunInteractionRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *RunInteractionRequest) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
+}
+
+func (x *RunInteractionRequest) GetInteractionId() string {
+	if x != nil {
+		return x.InteractionId
+	}
+	return ""
+}
+
+type RunInteractionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunInteractionResponse) Reset() {
+	*x = RunInteractionResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunInteractionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunInteractionResponse) ProtoMessage() {}
+
+func (x *RunInteractionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunInteractionResponse.ProtoReflect.Descriptor instead.
+func (*RunInteractionResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *RunInteractionResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
 type CommandOutcome struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Ok    bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
@@ -529,7 +818,7 @@ type CommandOutcome struct {
 
 func (x *CommandOutcome) Reset() {
 	*x = CommandOutcome{}
-	mi := &file_ts4access_v1_companion_proto_msgTypes[10]
+	mi := &file_ts4access_v1_companion_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -541,7 +830,7 @@ func (x *CommandOutcome) String() string {
 func (*CommandOutcome) ProtoMessage() {}
 
 func (x *CommandOutcome) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_companion_proto_msgTypes[10]
+	mi := &file_ts4access_v1_companion_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -554,7 +843,7 @@ func (x *CommandOutcome) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommandOutcome.ProtoReflect.Descriptor instead.
 func (*CommandOutcome) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{10}
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CommandOutcome) GetOk() bool {
@@ -598,16 +887,34 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\x14CancelActionResponse\x126\n" +
 	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"N\n" +
 	"\x14SetNarrationResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"\x14\n" +
+	"\x12ListTargetsRequest\"}\n" +
+	"\x13ListTargetsResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12.\n" +
+	"\atargets\x18\x02 \x03(\v2\x14.ts4access.v1.TargetR\atargets\"5\n" +
+	"\x16GetInteractionsRequest\x12\x1b\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"\xb5\x01\n" +
+	"\x17GetInteractionsResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12=\n" +
+	"\finteractions\x18\x02 \x03(\v2\x19.ts4access.v1.InteractionR\finteractions\x12#\n" +
+	"\rnames_pending\x18\x03 \x01(\bR\fnamesPending\"[\n" +
+	"\x15RunInteractionRequest\x12\x1b\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12%\n" +
+	"\x0einteraction_id\x18\x02 \x01(\tR\rinteractionId\"P\n" +
+	"\x16RunInteractionResponse\x126\n" +
 	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"8\n" +
 	"\x0eCommandOutcome\x12\x0e\n" +
 	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x16\n" +
-	"\x06reason\x18\x02 \x01(\tR\x06reason2\x9d\x03\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason2\xae\x05\n" +
 	"\x10CompanionService\x12B\n" +
 	"\x05Watch\x12\x1a.ts4access.v1.WatchRequest\x1a\x1b.ts4access.v1.WatchResponse0\x01\x12I\n" +
 	"\bSetSpeed\x12\x1d.ts4access.v1.SetSpeedRequest\x1a\x1e.ts4access.v1.SetSpeedResponse\x12L\n" +
 	"\tSelectSim\x12\x1e.ts4access.v1.SelectSimRequest\x1a\x1f.ts4access.v1.SelectSimResponse\x12U\n" +
 	"\fCancelAction\x12!.ts4access.v1.CancelActionRequest\x1a\".ts4access.v1.CancelActionResponse\x12U\n" +
-	"\fSetNarration\x12!.ts4access.v1.SetNarrationRequest\x1a\".ts4access.v1.SetNarrationResponseB\xc5\x01\n" +
+	"\fSetNarration\x12!.ts4access.v1.SetNarrationRequest\x1a\".ts4access.v1.SetNarrationResponse\x12R\n" +
+	"\vListTargets\x12 .ts4access.v1.ListTargetsRequest\x1a!.ts4access.v1.ListTargetsResponse\x12^\n" +
+	"\x0fGetInteractions\x12$.ts4access.v1.GetInteractionsRequest\x1a%.ts4access.v1.GetInteractionsResponse\x12[\n" +
+	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponseB\xc5\x01\n" +
 	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -622,48 +929,67 @@ func file_ts4access_v1_companion_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_companion_proto_rawDescData
 }
 
-var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_ts4access_v1_companion_proto_goTypes = []any{
-	(*WatchRequest)(nil),         // 0: ts4access.v1.WatchRequest
-	(*WatchResponse)(nil),        // 1: ts4access.v1.WatchResponse
-	(*SetSpeedRequest)(nil),      // 2: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),     // 3: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),  // 4: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),  // 5: ts4access.v1.SetNarrationRequest
-	(*SetSpeedResponse)(nil),     // 6: ts4access.v1.SetSpeedResponse
-	(*SelectSimResponse)(nil),    // 7: ts4access.v1.SelectSimResponse
-	(*CancelActionResponse)(nil), // 8: ts4access.v1.CancelActionResponse
-	(*SetNarrationResponse)(nil), // 9: ts4access.v1.SetNarrationResponse
-	(*CommandOutcome)(nil),       // 10: ts4access.v1.CommandOutcome
-	(*GameState)(nil),            // 11: ts4access.v1.GameState
-	(*Event)(nil),                // 12: ts4access.v1.Event
-	(Speed)(0),                   // 13: ts4access.v1.Speed
-	(*Narration)(nil),            // 14: ts4access.v1.Narration
+	(*WatchRequest)(nil),            // 0: ts4access.v1.WatchRequest
+	(*WatchResponse)(nil),           // 1: ts4access.v1.WatchResponse
+	(*SetSpeedRequest)(nil),         // 2: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),        // 3: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),     // 4: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),     // 5: ts4access.v1.SetNarrationRequest
+	(*SetSpeedResponse)(nil),        // 6: ts4access.v1.SetSpeedResponse
+	(*SelectSimResponse)(nil),       // 7: ts4access.v1.SelectSimResponse
+	(*CancelActionResponse)(nil),    // 8: ts4access.v1.CancelActionResponse
+	(*SetNarrationResponse)(nil),    // 9: ts4access.v1.SetNarrationResponse
+	(*ListTargetsRequest)(nil),      // 10: ts4access.v1.ListTargetsRequest
+	(*ListTargetsResponse)(nil),     // 11: ts4access.v1.ListTargetsResponse
+	(*GetInteractionsRequest)(nil),  // 12: ts4access.v1.GetInteractionsRequest
+	(*GetInteractionsResponse)(nil), // 13: ts4access.v1.GetInteractionsResponse
+	(*RunInteractionRequest)(nil),   // 14: ts4access.v1.RunInteractionRequest
+	(*RunInteractionResponse)(nil),  // 15: ts4access.v1.RunInteractionResponse
+	(*CommandOutcome)(nil),          // 16: ts4access.v1.CommandOutcome
+	(*GameState)(nil),               // 17: ts4access.v1.GameState
+	(*Event)(nil),                   // 18: ts4access.v1.Event
+	(Speed)(0),                      // 19: ts4access.v1.Speed
+	(*Narration)(nil),               // 20: ts4access.v1.Narration
+	(*Target)(nil),                  // 21: ts4access.v1.Target
+	(*Interaction)(nil),             // 22: ts4access.v1.Interaction
 }
 var file_ts4access_v1_companion_proto_depIdxs = []int32{
-	11, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
-	12, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
-	13, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
-	14, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
-	10, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	10, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	10, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	10, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	0,  // 8: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
-	2,  // 9: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
-	3,  // 10: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
-	4,  // 11: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
-	5,  // 12: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
-	1,  // 13: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
-	6,  // 14: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
-	7,  // 15: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
-	8,  // 16: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
-	9,  // 17: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	17, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
+	18, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
+	19, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
+	20, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
+	16, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	16, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	16, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	16, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	16, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	21, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
+	16, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	22, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
+	16, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	0,  // 13: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
+	2,  // 14: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
+	3,  // 15: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
+	4,  // 16: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
+	5,  // 17: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
+	10, // 18: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
+	12, // 19: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
+	14, // 20: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
+	1,  // 21: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
+	6,  // 22: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
+	7,  // 23: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
+	8,  // 24: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
+	9,  // 25: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
+	11, // 26: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
+	13, // 27: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
+	15, // 28: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
+	21, // [21:29] is the sub-list for method output_type
+	13, // [13:21] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_companion_proto_init() }
@@ -683,7 +1009,7 @@ func file_ts4access_v1_companion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_companion_proto_rawDesc), len(file_ts4access_v1_companion_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

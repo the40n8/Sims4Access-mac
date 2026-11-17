@@ -47,6 +47,15 @@ const (
 	// CompanionServiceSetNarrationProcedure is the fully-qualified name of the CompanionService's
 	// SetNarration RPC.
 	CompanionServiceSetNarrationProcedure = "/ts4access.v1.CompanionService/SetNarration"
+	// CompanionServiceListTargetsProcedure is the fully-qualified name of the CompanionService's
+	// ListTargets RPC.
+	CompanionServiceListTargetsProcedure = "/ts4access.v1.CompanionService/ListTargets"
+	// CompanionServiceGetInteractionsProcedure is the fully-qualified name of the CompanionService's
+	// GetInteractions RPC.
+	CompanionServiceGetInteractionsProcedure = "/ts4access.v1.CompanionService/GetInteractions"
+	// CompanionServiceRunInteractionProcedure is the fully-qualified name of the CompanionService's
+	// RunInteraction RPC.
+	CompanionServiceRunInteractionProcedure = "/ts4access.v1.CompanionService/RunInteraction"
 )
 
 // CompanionServiceClient is a client for the ts4access.v1.CompanionService service.
@@ -57,6 +66,12 @@ type CompanionServiceClient interface {
 	SelectSim(context.Context, *connect.Request[v1.SelectSimRequest]) (*connect.Response[v1.SelectSimResponse], error)
 	CancelAction(context.Context, *connect.Request[v1.CancelActionRequest]) (*connect.Response[v1.CancelActionResponse], error)
 	SetNarration(context.Context, *connect.Request[v1.SetNarrationRequest]) (*connect.Response[v1.SetNarrationResponse], error)
+	// Sims and objects the controlled Sim can interact with, nearest first.
+	ListTargets(context.Context, *connect.Request[v1.ListTargetsRequest]) (*connect.Response[v1.ListTargetsResponse], error)
+	// The game's pie menu for one target.
+	GetInteractions(context.Context, *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error)
+	// Queue an interaction from the last menu, as a click would.
+	RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error)
 }
 
 // NewCompanionServiceClient constructs a client for the ts4access.v1.CompanionService service. By
@@ -100,16 +115,37 @@ func NewCompanionServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(companionServiceMethods.ByName("SetNarration")),
 			connect.WithClientOptions(opts...),
 		),
+		listTargets: connect.NewClient[v1.ListTargetsRequest, v1.ListTargetsResponse](
+			httpClient,
+			baseURL+CompanionServiceListTargetsProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("ListTargets")),
+			connect.WithClientOptions(opts...),
+		),
+		getInteractions: connect.NewClient[v1.GetInteractionsRequest, v1.GetInteractionsResponse](
+			httpClient,
+			baseURL+CompanionServiceGetInteractionsProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("GetInteractions")),
+			connect.WithClientOptions(opts...),
+		),
+		runInteraction: connect.NewClient[v1.RunInteractionRequest, v1.RunInteractionResponse](
+			httpClient,
+			baseURL+CompanionServiceRunInteractionProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("RunInteraction")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // companionServiceClient implements CompanionServiceClient.
 type companionServiceClient struct {
-	watch        *connect.Client[v1.WatchRequest, v1.WatchResponse]
-	setSpeed     *connect.Client[v1.SetSpeedRequest, v1.SetSpeedResponse]
-	selectSim    *connect.Client[v1.SelectSimRequest, v1.SelectSimResponse]
-	cancelAction *connect.Client[v1.CancelActionRequest, v1.CancelActionResponse]
-	setNarration *connect.Client[v1.SetNarrationRequest, v1.SetNarrationResponse]
+	watch           *connect.Client[v1.WatchRequest, v1.WatchResponse]
+	setSpeed        *connect.Client[v1.SetSpeedRequest, v1.SetSpeedResponse]
+	selectSim       *connect.Client[v1.SelectSimRequest, v1.SelectSimResponse]
+	cancelAction    *connect.Client[v1.CancelActionRequest, v1.CancelActionResponse]
+	setNarration    *connect.Client[v1.SetNarrationRequest, v1.SetNarrationResponse]
+	listTargets     *connect.Client[v1.ListTargetsRequest, v1.ListTargetsResponse]
+	getInteractions *connect.Client[v1.GetInteractionsRequest, v1.GetInteractionsResponse]
+	runInteraction  *connect.Client[v1.RunInteractionRequest, v1.RunInteractionResponse]
 }
 
 // Watch calls ts4access.v1.CompanionService.Watch.
@@ -137,6 +173,21 @@ func (c *companionServiceClient) SetNarration(ctx context.Context, req *connect.
 	return c.setNarration.CallUnary(ctx, req)
 }
 
+// ListTargets calls ts4access.v1.CompanionService.ListTargets.
+func (c *companionServiceClient) ListTargets(ctx context.Context, req *connect.Request[v1.ListTargetsRequest]) (*connect.Response[v1.ListTargetsResponse], error) {
+	return c.listTargets.CallUnary(ctx, req)
+}
+
+// GetInteractions calls ts4access.v1.CompanionService.GetInteractions.
+func (c *companionServiceClient) GetInteractions(ctx context.Context, req *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error) {
+	return c.getInteractions.CallUnary(ctx, req)
+}
+
+// RunInteraction calls ts4access.v1.CompanionService.RunInteraction.
+func (c *companionServiceClient) RunInteraction(ctx context.Context, req *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error) {
+	return c.runInteraction.CallUnary(ctx, req)
+}
+
 // CompanionServiceHandler is an implementation of the ts4access.v1.CompanionService service.
 type CompanionServiceHandler interface {
 	// Current state first, then every change and event as it happens.
@@ -145,6 +196,12 @@ type CompanionServiceHandler interface {
 	SelectSim(context.Context, *connect.Request[v1.SelectSimRequest]) (*connect.Response[v1.SelectSimResponse], error)
 	CancelAction(context.Context, *connect.Request[v1.CancelActionRequest]) (*connect.Response[v1.CancelActionResponse], error)
 	SetNarration(context.Context, *connect.Request[v1.SetNarrationRequest]) (*connect.Response[v1.SetNarrationResponse], error)
+	// Sims and objects the controlled Sim can interact with, nearest first.
+	ListTargets(context.Context, *connect.Request[v1.ListTargetsRequest]) (*connect.Response[v1.ListTargetsResponse], error)
+	// The game's pie menu for one target.
+	GetInteractions(context.Context, *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error)
+	// Queue an interaction from the last menu, as a click would.
+	RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error)
 }
 
 // NewCompanionServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -184,6 +241,24 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 		connect.WithSchema(companionServiceMethods.ByName("SetNarration")),
 		connect.WithHandlerOptions(opts...),
 	)
+	companionServiceListTargetsHandler := connect.NewUnaryHandler(
+		CompanionServiceListTargetsProcedure,
+		svc.ListTargets,
+		connect.WithSchema(companionServiceMethods.ByName("ListTargets")),
+		connect.WithHandlerOptions(opts...),
+	)
+	companionServiceGetInteractionsHandler := connect.NewUnaryHandler(
+		CompanionServiceGetInteractionsProcedure,
+		svc.GetInteractions,
+		connect.WithSchema(companionServiceMethods.ByName("GetInteractions")),
+		connect.WithHandlerOptions(opts...),
+	)
+	companionServiceRunInteractionHandler := connect.NewUnaryHandler(
+		CompanionServiceRunInteractionProcedure,
+		svc.RunInteraction,
+		connect.WithSchema(companionServiceMethods.ByName("RunInteraction")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/ts4access.v1.CompanionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CompanionServiceWatchProcedure:
@@ -196,6 +271,12 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 			companionServiceCancelActionHandler.ServeHTTP(w, r)
 		case CompanionServiceSetNarrationProcedure:
 			companionServiceSetNarrationHandler.ServeHTTP(w, r)
+		case CompanionServiceListTargetsProcedure:
+			companionServiceListTargetsHandler.ServeHTTP(w, r)
+		case CompanionServiceGetInteractionsProcedure:
+			companionServiceGetInteractionsHandler.ServeHTTP(w, r)
+		case CompanionServiceRunInteractionProcedure:
+			companionServiceRunInteractionHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -223,4 +304,16 @@ func (UnimplementedCompanionServiceHandler) CancelAction(context.Context, *conne
 
 func (UnimplementedCompanionServiceHandler) SetNarration(context.Context, *connect.Request[v1.SetNarrationRequest]) (*connect.Response[v1.SetNarrationResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.SetNarration is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) ListTargets(context.Context, *connect.Request[v1.ListTargetsRequest]) (*connect.Response[v1.ListTargetsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.ListTargets is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) GetInteractions(context.Context, *connect.Request[v1.GetInteractionsRequest]) (*connect.Response[v1.GetInteractionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.GetInteractions is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) RunInteraction(context.Context, *connect.Request[v1.RunInteractionRequest]) (*connect.Response[v1.RunInteractionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.RunInteraction is not implemented"))
 }

@@ -142,9 +142,13 @@ func (x *Hello) GetGameVersion() string {
 }
 
 type CommandResult struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Outcome       *CommandOutcome        `protobuf:"bytes,2,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Id      string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Outcome *CommandOutcome        `protobuf:"bytes,2,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	// Data some commands return.
+	Targets       []*Target      `protobuf:"bytes,3,rep,name=targets,proto3" json:"targets,omitempty"`
+	Interactions  []*Interaction `protobuf:"bytes,4,rep,name=interactions,proto3" json:"interactions,omitempty"`
+	NamesPending  bool           `protobuf:"varint,5,opt,name=names_pending,json=namesPending,proto3" json:"names_pending,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -191,6 +195,27 @@ func (x *CommandResult) GetOutcome() *CommandOutcome {
 		return x.Outcome
 	}
 	return nil
+}
+
+func (x *CommandResult) GetTargets() []*Target {
+	if x != nil {
+		return x.Targets
+	}
+	return nil
+}
+
+func (x *CommandResult) GetInteractions() []*Interaction {
+	if x != nil {
+		return x.Interactions
+	}
+	return nil
+}
+
+func (x *CommandResult) GetNamesPending() bool {
+	if x != nil {
+		return x.NamesPending
+	}
+	return false
 }
 
 type ToBridge struct {
@@ -332,6 +357,9 @@ type ToGame struct {
 	//	*ToGame_SelectSim
 	//	*ToGame_CancelAction
 	//	*ToGame_SetNarration
+	//	*ToGame_ListTargets
+	//	*ToGame_GetInteractions
+	//	*ToGame_RunInteraction
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -417,6 +445,33 @@ func (x *ToGame) GetSetNarration() *SetNarrationRequest {
 	return nil
 }
 
+func (x *ToGame) GetListTargets() *ListTargetsRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_ListTargets); ok {
+			return x.ListTargets
+		}
+	}
+	return nil
+}
+
+func (x *ToGame) GetGetInteractions() *GetInteractionsRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_GetInteractions); ok {
+			return x.GetInteractions
+		}
+	}
+	return nil
+}
+
+func (x *ToGame) GetRunInteraction() *RunInteractionRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_RunInteraction); ok {
+			return x.RunInteraction
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -437,6 +492,18 @@ type ToGame_SetNarration struct {
 	SetNarration *SetNarrationRequest `protobuf:"bytes,5,opt,name=set_narration,json=setNarration,proto3,oneof"`
 }
 
+type ToGame_ListTargets struct {
+	ListTargets *ListTargetsRequest `protobuf:"bytes,6,opt,name=list_targets,json=listTargets,proto3,oneof"`
+}
+
+type ToGame_GetInteractions struct {
+	GetInteractions *GetInteractionsRequest `protobuf:"bytes,7,opt,name=get_interactions,json=getInteractions,proto3,oneof"`
+}
+
+type ToGame_RunInteraction struct {
+	RunInteraction *RunInteractionRequest `protobuf:"bytes,8,opt,name=run_interaction,json=runInteraction,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -444,6 +511,12 @@ func (*ToGame_SelectSim) isToGame_Command() {}
 func (*ToGame_CancelAction) isToGame_Command() {}
 
 func (*ToGame_SetNarration) isToGame_Command() {}
+
+func (*ToGame_ListTargets) isToGame_Command() {}
+
+func (*ToGame_GetInteractions) isToGame_Command() {}
+
+func (*ToGame_RunInteraction) isToGame_Command() {}
 
 var File_ts4access_v1_pipe_proto protoreflect.FileDescriptor
 
@@ -458,24 +531,30 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x05Hello\x12\x1f\n" +
 	"\vmod_version\x18\x01 \x01(\tR\n" +
 	"modVersion\x12!\n" +
-	"\fgame_version\x18\x02 \x01(\tR\vgameVersion\"W\n" +
+	"\fgame_version\x18\x02 \x01(\tR\vgameVersion\"\xeb\x01\n" +
 	"\rCommandResult\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x126\n" +
-	"\aoutcome\x18\x02 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"\x84\x02\n" +
+	"\aoutcome\x18\x02 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12.\n" +
+	"\atargets\x18\x03 \x03(\v2\x14.ts4access.v1.TargetR\atargets\x12=\n" +
+	"\finteractions\x18\x04 \x03(\v2\x19.ts4access.v1.InteractionR\finteractions\x12#\n" +
+	"\rnames_pending\x18\x05 \x01(\bR\fnamesPending\"\x84\x02\n" +
 	"\bToBridge\x12+\n" +
 	"\x05hello\x18\x01 \x01(\v2\x13.ts4access.v1.HelloH\x00R\x05hello\x12/\n" +
 	"\x05state\x18\x02 \x01(\v2\x17.ts4access.v1.GameStateH\x00R\x05state\x12+\n" +
 	"\x05event\x18\x03 \x01(\v2\x13.ts4access.v1.EventH\x00R\x05event\x125\n" +
 	"\x06result\x18\x04 \x01(\v2\x1b.ts4access.v1.CommandResultH\x00R\x06result\x12+\n" +
 	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voiceB\t\n" +
-	"\apayload\"\xb6\x02\n" +
+	"\apayload\"\xa0\x04\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1d.ts4access.v1.SetSpeedRequestH\x00R\bsetSpeed\x12?\n" +
 	"\n" +
 	"select_sim\x18\x03 \x01(\v2\x1e.ts4access.v1.SelectSimRequestH\x00R\tselectSim\x12H\n" +
 	"\rcancel_action\x18\x04 \x01(\v2!.ts4access.v1.CancelActionRequestH\x00R\fcancelAction\x12H\n" +
-	"\rset_narration\x18\x05 \x01(\v2!.ts4access.v1.SetNarrationRequestH\x00R\fsetNarrationB\t\n" +
+	"\rset_narration\x18\x05 \x01(\v2!.ts4access.v1.SetNarrationRequestH\x00R\fsetNarration\x12E\n" +
+	"\flist_targets\x18\x06 \x01(\v2 .ts4access.v1.ListTargetsRequestH\x00R\vlistTargets\x12Q\n" +
+	"\x10get_interactions\x18\a \x01(\v2$.ts4access.v1.GetInteractionsRequestH\x00R\x0fgetInteractions\x12N\n" +
+	"\x0frun_interaction\x18\b \x01(\v2#.ts4access.v1.RunInteractionRequestH\x00R\x0erunInteractionB\t\n" +
 	"\acommandB\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tPipeProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
@@ -493,35 +572,45 @@ func file_ts4access_v1_pipe_proto_rawDescGZIP() []byte {
 
 var file_ts4access_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_ts4access_v1_pipe_proto_goTypes = []any{
-	(*Voice)(nil),               // 0: ts4access.v1.Voice
-	(*Hello)(nil),               // 1: ts4access.v1.Hello
-	(*CommandResult)(nil),       // 2: ts4access.v1.CommandResult
-	(*ToBridge)(nil),            // 3: ts4access.v1.ToBridge
-	(*ToGame)(nil),              // 4: ts4access.v1.ToGame
-	(*CommandOutcome)(nil),      // 5: ts4access.v1.CommandOutcome
-	(*GameState)(nil),           // 6: ts4access.v1.GameState
-	(*Event)(nil),               // 7: ts4access.v1.Event
-	(*SetSpeedRequest)(nil),     // 8: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),    // 9: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil), // 10: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil), // 11: ts4access.v1.SetNarrationRequest
+	(*Voice)(nil),                  // 0: ts4access.v1.Voice
+	(*Hello)(nil),                  // 1: ts4access.v1.Hello
+	(*CommandResult)(nil),          // 2: ts4access.v1.CommandResult
+	(*ToBridge)(nil),               // 3: ts4access.v1.ToBridge
+	(*ToGame)(nil),                 // 4: ts4access.v1.ToGame
+	(*CommandOutcome)(nil),         // 5: ts4access.v1.CommandOutcome
+	(*Target)(nil),                 // 6: ts4access.v1.Target
+	(*Interaction)(nil),            // 7: ts4access.v1.Interaction
+	(*GameState)(nil),              // 8: ts4access.v1.GameState
+	(*Event)(nil),                  // 9: ts4access.v1.Event
+	(*SetSpeedRequest)(nil),        // 10: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),       // 11: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),    // 12: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),    // 13: ts4access.v1.SetNarrationRequest
+	(*ListTargetsRequest)(nil),     // 14: ts4access.v1.ListTargetsRequest
+	(*GetInteractionsRequest)(nil), // 15: ts4access.v1.GetInteractionsRequest
+	(*RunInteractionRequest)(nil),  // 16: ts4access.v1.RunInteractionRequest
 }
 var file_ts4access_v1_pipe_proto_depIdxs = []int32{
 	5,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
-	1,  // 1: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
-	6,  // 2: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
-	7,  // 3: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
-	2,  // 4: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
-	0,  // 5: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
-	8,  // 6: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
-	9,  // 7: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
-	10, // 8: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
-	11, // 9: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	6,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
+	7,  // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
+	1,  // 3: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
+	8,  // 4: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
+	9,  // 5: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
+	2,  // 6: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
+	0,  // 7: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
+	10, // 8: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
+	11, // 9: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
+	12, // 10: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
+	13, // 11: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
+	14, // 12: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
+	15, // 13: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
+	16, // 14: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_pipe_proto_init() }
@@ -543,6 +632,9 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToGame_SelectSim)(nil),
 		(*ToGame_CancelAction)(nil),
 		(*ToGame_SetNarration)(nil),
+		(*ToGame_ListTargets)(nil),
+		(*ToGame_GetInteractions)(nil),
+		(*ToGame_RunInteraction)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
