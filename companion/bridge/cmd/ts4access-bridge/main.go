@@ -179,6 +179,7 @@ func printLink(args []string) error {
 	all := fs.Bool("all", false, "list every address")
 	invert := fs.Bool("invert", false, "QR for terminals with a light background")
 	port := fs.Int("port", 0, "link to a different port (e.g. 5173 for the live-reload dev server)")
+	base := fs.String("base", "", "public address to link to instead of the Mac's (e.g. a tunnel URL)")
 	_ = fs.Parse(args)
 
 	cfg, err := pairing.Load(*dataDir)
@@ -189,6 +190,9 @@ func printLink(args []string) error {
 		cfg.Port = *port
 	}
 	links := cfg.Links()
+	if *base != "" {
+		links = []string{strings.TrimRight(*base, "/") + "/#k=" + cfg.Token}
+	}
 	if len(links) == 0 {
 		return errors.New("no network address: is the Mac on Wi-Fi?")
 	}

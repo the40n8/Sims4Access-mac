@@ -61,6 +61,9 @@ speed, controlled Sim, cancel an action, Mac voice on/off). Nothing leaves
 the local network.
 
 1. Start the game once with the mod installed.
+   If the phone cannot reach the Mac on your Wi-Fi, run `mac/phone-tunnel.sh`
+   instead: a Cloudflare quick tunnel with a random https address (no
+   account), shown as a QR code; it lasts while the script runs.
 2. `mac/phone-link.sh` copies the link; send it to the phone (AirDrop,
    Messages) and open it in Safari, then Share > Add to Home Screen.
 3. The link stays valid across sessions. To revoke it, delete

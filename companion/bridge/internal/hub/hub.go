@@ -82,6 +82,13 @@ func (h *Hub) broadcast(msg *v1.WatchResponse) {
 	}
 }
 
+// Connected reports whether a game is attached.
+func (h *Hub) Connected() bool {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.connected
+}
+
 func (h *Hub) SetConnected(connected bool) {
 	h.mu.Lock()
 	defer h.mu.Unlock()

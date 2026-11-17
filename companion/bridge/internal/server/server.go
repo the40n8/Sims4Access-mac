@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"net/http"
 	"strings"
+	"time"
 
 	"connectrpc.com/connect"
 	v1 "github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1"
@@ -22,13 +23,30 @@ type service struct {
 
 var _ ts4accessv1connect.CompanionServiceHandler = (*service)(nil)
 
+// heartbeat keeps quiet streams alive through proxies and tunnels that cut
+// idle connections (Cloudflare: about 100 s), e.g. while the game is paused.
+const heartbeat = 30 * time.Second
+
 func (s *service) Watch(ctx context.Context, _ *connect.Request[v1.WatchRequest], stream *connect.ServerStream[v1.WatchResponse]) error {
-	for msg := range s.hub.Subscribe(ctx) {
-		if err := stream.Send(msg); err != nil {
-			return err
+	msgs := s.hub.Subscribe(ctx)
+	tick := time.NewTicker(heartbeat)
+	defer tick.Stop()
+	for {
+		select {
+		case msg, ok := <-msgs:
+			if !ok {
+				return nil
+			}
+			if err := stream.Send(msg); err != nil {
+				return err
+			}
+		case <-tick.C:
+			// Repeats the connection flag: harmless for the app, keeps bytes flowing.
+			if err := stream.Send(&v1.WatchResponse{Payload: &v1.WatchResponse_GameConnected{GameConnected: s.hub.Connected()}}); err != nil {
+				return err
+			}
 		}
 	}
-	return nil
 }
 
 func (s *service) SetSpeed(ctx context.Context, req *connect.Request[v1.SetSpeedRequest]) (*connect.Response[v1.SetSpeedResponse], error) {

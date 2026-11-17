@@ -450,13 +450,22 @@ def _moodlets(info):
     for buff in buffs:
         if not getattr(buff, 'visible', False):
             continue
-        tuning = type(buff).__name__
+        # Buff instances share the Buff class; the tuning (name, mood, text)
+        # is on buff_type.
+        btype = getattr(buff, 'buff_type', None) or type(buff)
+        tuning = getattr(btype, '__name__', '') or 'Buff'
+
+        def tuned(attr):
+            value = getattr(btype, attr, None)
+            return value if value is not None else getattr(buff, attr, None)
+
+        mood_type = tuned('mood_type')
         moodlet = {
             'key': tuning,
-            'name': text_of(getattr(buff, 'buff_name', None), _pretty(tuning, ('buff_',))),
-            'description': text_of(getattr(buff, 'buff_description', None)),
-            'moodKey': _mood_key(getattr(buff, 'mood_type', None)) if getattr(buff, 'mood_type', None) else '',
-            'weight': int(getattr(buff, 'mood_weight', 0) or 0),
+            'name': text_of(tuned('buff_name'), _pretty(tuning, ('buff_',))),
+            'description': text_of(tuned('buff_description')),
+            'moodKey': _mood_key(mood_type) if mood_type else '',
+            'weight': int(tuned('mood_weight') or 0),
             'minutesLeft': -1,
         }
         try:
