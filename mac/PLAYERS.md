@@ -30,9 +30,11 @@ Better voices: System Settings > Accessibility > Spoken Content > System voice >
 
 While the game runs, a phone on the same Wi-Fi can follow and control it:
 household status, a live feed read by VoiceOver, game speed, controlled
-Sim, cancelling actions. On the Mac, run `mac/phone-link.sh` (from the
-TS4 Access for macOS folder) to copy the link, send it to the phone, open it
-in Safari and add it to the Home Screen. Language follows the phone
+Sim, cancelling actions. When the game starts, the Mac voice says "Phone
+link ready". Open the cheat console (Cmd+Shift+C) and type `a11y.companion`
+(or open the accessibility menu with `a11y.hub` > phone companion): a page
+with a QR code opens on the Mac. Scan it with the phone, then in Safari:
+Share > Add to Home Screen. The address changes each game session. Language follows the phone
 (French, English, Spanish) and can be changed in Settings.
 
 ## Mac defaults (shared play, sighted player on the mouse)

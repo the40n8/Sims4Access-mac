@@ -18,11 +18,13 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"time"
 
@@ -33,6 +35,7 @@ import (
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pipe"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/server"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/speaker"
+	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/tunnel"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/webui"
 )
 
@@ -62,6 +65,7 @@ func run() error {
 		webDir      = flag.String("web", "", "serve the phone app from this folder instead of the embedded build (development)")
 		port        = flag.Int("port", 0, "listen port (default: saved port, 47800)")
 		demoMode    = flag.Bool("demo", false, "run a fake game instead of reading the mod's pipe")
+		useTunnel   = flag.Bool("tunnel", true, "open a Cloudflare quick tunnel for the phone when cloudflared is available")
 	)
 	flag.Parse()
 
@@ -107,13 +111,44 @@ func run() error {
 	defer stop()
 
 	h := hub.New(nil)
+
+	// Phone link: the Cloudflare tunnel when it is up (reachable from any
+	// network), else the Mac's local address. Shown at http://127.0.0.1:<port>/pair.
+	var tun *tunnel.Tunnel
+	var onTunnelReady atomic.Pointer[func(url string)] // set once the speaker exists
+	links := func() (string, string) {
+		if tun != nil {
+			if url, status := tun.URL(); url != "" {
+				return url + "/#k=" + cfg.Token, "ready"
+			} else if status == "starting" {
+				return "", "Opening a Cloudflare tunnel for the phone… this page refreshes by itself."
+			}
+		}
+		if l := cfg.Links(); len(l) > 0 {
+			return l[0], "local"
+		}
+		return "", "No network address: is the Mac on Wi-Fi?"
+	}
+	if bin := tunnel.Find(); *useTunnel && bin != "" {
+		tun = tunnel.New(bin, cfg.Port, func(url string) {
+			link := url + "/#k=" + cfg.Token
+			path := filepath.Join(*dataDir, "phone-link.txt")
+			_ = os.WriteFile(path, []byte(link+"\n"+strings.Join(cfg.Links(), "\n")+"\n"), 0o600)
+			if f := onTunnelReady.Load(); f != nil {
+				(*f)(url)
+			}
+		})
+		go tun.Run(ctx)
+	} else if *useTunnel {
+		slog.Info("no cloudflared: phone link on the local network only")
+	}
 	ln, err := net.Listen("tcp", ":"+strconv.Itoa(cfg.Port))
 	if err != nil {
 		// Another game session or bridge holds the port: keep speech working.
 		slog.Error("phone server unavailable", "port", cfg.Port, "err", err)
 	} else {
 		srv := &http.Server{
-			Handler:           server.Handler(h, cfg.Token, web),
+			Handler:           server.Handler(h, cfg.Token, web, links),
 			ReadHeaderTimeout: 10 * time.Second,
 		}
 		go func() {
@@ -139,6 +174,8 @@ func run() error {
 		*speakerPath = filepath.Join(filepath.Dir(exe), "ts4access-say")
 	}
 	spk := speaker.New(*speakerPath, &v1.Voice{Rate: int32(*rate), Volume: int32(*volume), Name: *voiceName, Lang: *lang})
+	announce := func(string) { spk.Line("Q" + url.PathEscape("Phone link ready.")) }
+	onTunnelReady.Store(&announce)
 	defer spk.Close()
 
 	p := pipe.New(os.Stdin, os.Stdout)

@@ -702,10 +702,20 @@ def open_hub():
              ('known contacts', contacts.open_contacts)) + build_rows +
             (('waiting call or text', phone.open_waiting),) +
             ((('phone', phone.open_list),) if phone.simplified() else ()) +
+            _companion_rows() +
             (('keyboard shortcuts', scanner_help),
              ('settings menu', menu._show_settings_window))):
         rows.append((menu._raw(lang.t(label)), None, callback))
     return _window('accessibility menu', 'accessibility menu instructions', rows)
+
+
+def _companion_rows():
+    """macOS fork: the phone companion's QR code page."""
+    import sys
+    bridge = sys.modules.get('tyjokr_a11y_bridge')
+    if sys.platform != 'darwin' or bridge is None:
+        return ()
+    return (('phone companion', bridge.open_pairing_page),)
 
 
 @sims4.commands.Command('a11y.hub', command_type=sims4.commands.CommandType.Live)

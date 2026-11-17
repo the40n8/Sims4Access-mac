@@ -60,14 +60,17 @@ money), a feed of what happens (announced by VoiceOver), and controls (game
 speed, controlled Sim, cancel an action, Mac voice on/off). Nothing leaves
 the local network.
 
-1. Start the game once with the mod installed.
-   If the phone cannot reach the Mac on your Wi-Fi, run `mac/phone-tunnel.sh`
-   instead: a Cloudflare quick tunnel with a random https address (no
-   account), shown as a QR code; it lasts while the script runs.
-2. `mac/phone-link.sh` copies the link; send it to the phone (AirDrop,
-   Messages) and open it in Safari, then Share > Add to Home Screen.
-3. The link stays valid across sessions. To revoke it, delete
+1. Start the game. The bridge opens a Cloudflare quick tunnel by itself
+   (bundled `cloudflared`, no account) so the phone works from any network;
+   the Mac voice says "Phone link ready".
+2. Show the QR code: in game, accessibility menu (`a11y.hub` in the cheat
+   console) > phone companion, or `a11y.companion`; from a terminal,
+   `mac/phone-link.sh`. Both open http://127.0.0.1:47800/pair (this Mac only).
+3. Scan it with the phone, then in Safari: Share > Add to Home Screen. The
+   tunnel address changes each game session, so scan again next time.
+4. To revoke the pairing token, delete
    `~/Library/Application Support/TS4AccessCompanion/config.json`.
+   `ts4access-bridge --tunnel=false` keeps everything on the local network.
 
 The first time, macOS may ask whether `ts4access-bridge` may accept incoming
 connections: allow it, or the phone cannot connect.

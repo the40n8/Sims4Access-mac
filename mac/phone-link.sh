@@ -8,6 +8,14 @@
 #   mac/phone-link.sh --port 5173   link to the live-reload dev server (mac/dev.sh web)
 set -euo pipefail
 ROOT="${0:A:h:h}"
+
+# With the game running, its bridge shows the current link (Cloudflare tunnel
+# or local) as a QR code on a page: open that unless options were given.
+if [[ $# -eq 0 ]] && curl -s -o /dev/null --max-time 2 http://127.0.0.1:47800/pair; then
+  open http://127.0.0.1:47800/pair
+  echo "Opened the phone link page (QR code) in your browser."
+  exit 0
+fi
 BRIDGE=""
 for b in "$ROOT/dist/TS4_Access/ts4access-bridge" \
          "$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/ts4access-bridge"; do

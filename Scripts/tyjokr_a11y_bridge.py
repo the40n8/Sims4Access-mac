@@ -613,6 +613,36 @@ def _publish_state():
     send({'state': state})
 
 
+# ---------------------------------------------------------------- pairing page
+
+PAIR_URL = 'http://127.0.0.1:47800/pair'
+
+
+def open_pairing_page():
+    """Show the phone link's QR code in the Mac's browser (in front of the game)."""
+    if not IS_MAC or subprocess is None:
+        return False
+    try:
+        subprocess.Popen(['/usr/bin/open', PAIR_URL], stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL, close_fds=True)
+        speech.speak('Phone link opened on the Mac.', explicit=True)
+        return True
+    except Exception as ex:
+        log('open pairing page failed: {!r}'.format(ex))
+        return False
+
+
+try:
+    import sims4.commands
+
+    @sims4.commands.Command('a11y.companion', command_type=sims4.commands.CommandType.Live)
+    def a11y_companion(_connection=None):
+        """Open the phone companion's QR code on the Mac."""
+        return open_pairing_page()
+except Exception as _ex:
+    log('companion command unavailable: {!r}'.format(_ex))
+
+
 # ---------------------------------------------------------------- startup
 
 if IS_MAC:
