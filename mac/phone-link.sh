@@ -1,16 +1,23 @@
 #!/bin/zsh
-# Copy the phone link to the clipboard (and print where to send it).
-# The link is written by the bridge each time the game starts; it stays the
-# same across sessions, so the phone can keep it as a home-screen app.
-#   mac/phone-link.sh          copy the best link
-#   mac/phone-link.sh --all    list every address (if the first does not open)
+# Show the phone link as a QR code (scan it with the phone's camera) and
+# copy it to the clipboard. The link stays the same across sessions, so the
+# phone can keep it as a Home Screen app.
+#   mac/phone-link.sh            QR + copy
+#   mac/phone-link.sh --all      also list other addresses
+#   mac/phone-link.sh --invert   QR for a light terminal background
+#   mac/phone-link.sh --port 5173   link to the live-reload dev server (mac/dev.sh web)
 set -euo pipefail
-FILE="$HOME/Library/Application Support/TS4AccessCompanion/phone-link.txt"
-[[ -f "$FILE" ]] || { echo "No link yet: start The Sims 4 once with the mod installed."; exit 1; }
-if [[ "${1:-}" == "--all" ]]; then
-  cat "$FILE"
-  exit 0
-fi
-head -1 "$FILE" | tr -d '\n' | pbcopy
-echo "Phone link copied. Send it to the phone (AirDrop, Messages) and open it in Safari."
-echo "Then: Share > Add to Home Screen. The phone must be on the same Wi-Fi as this Mac."
+ROOT="${0:A:h:h}"
+BRIDGE=""
+for b in "$ROOT/dist/TS4_Access/ts4access-bridge" \
+         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/ts4access-bridge"; do
+  # Feature check without running it (an old bridge would start serving).
+  if [[ -x "$b" ]] && grep -qa "QR for terminals with a light background" "$b"; then BRIDGE="$b"; break; fi
+done
+[[ -n "$BRIDGE" ]] || { echo "No bridge with QR support: run mac/build.sh first."; exit 1; }
+OUT=$("$BRIDGE" link "$@")
+print -r -- "$OUT"
+print -r -- "$OUT" | grep -m1 '^http' | tr -d '\n' | pbcopy
+echo
+echo "Scan with the phone's camera (same Wi-Fi as this Mac), or paste the copied link."
+echo "Then in Safari: Share > Add to Home Screen."

@@ -11,3 +11,5 @@ require (
 	connectrpc.com/connect v1.21.1
 	google.golang.org/protobuf v1.36.12
 )
+
+require rsc.io/qr v0.2.0

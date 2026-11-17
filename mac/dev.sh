@@ -21,7 +21,7 @@ case "${1:-}" in
     [[ -f "$LINKS" ]] || { echo "Start the game first (the bridge writes the link)."; exit 1; }
     LINK=$(head -1 "$LINKS")
     echo "On the phone, open (live reload, same pairing token):"
-    echo "  ${LINK/:47800\//:5173/}"
+    "$0:A:h/phone-link.sh" --port 5173 || echo "  ${LINK/:47800\//:5173/}"
     cd "$COMP/web" && exec pnpm dev
     ;;
   bridge)

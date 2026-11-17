@@ -73,17 +73,24 @@ func (c *Config) save(path string) error {
 	return os.WriteFile(path, append(b, '\n'), 0o600)
 }
 
-// Links returns phone links: the Mac's Bonjour name first (stable when the
-// IP changes), then each LAN IPv4 address. The token is in the fragment, so
-// it never appears in request lines or logs.
+// Links returns phone links: the home network's IPv4 address first (what
+// phones open most reliably), then the Mac's Bonjour name (survives an IP
+// change), then other private addresses (VPNs, virtual networks). The token
+// is in the fragment, so it never appears in request lines or logs.
 func (c *Config) Links() []string {
+	ips := lanIPs()
 	var hosts []string
+	if len(ips) > 0 {
+		hosts = append(hosts, ips[0])
+	}
 	if out, err := exec.Command("/usr/sbin/scutil", "--get", "LocalHostName").Output(); err == nil {
 		if name := strings.TrimSpace(string(out)); name != "" {
 			hosts = append(hosts, name+".local")
 		}
 	}
-	hosts = append(hosts, lanIPs()...)
+	if len(ips) > 1 {
+		hosts = append(hosts, ips[1:]...)
+	}
 	links := make([]string, 0, len(hosts))
 	for _, h := range hosts {
 		links = append(links, fmt.Sprintf("http://%s:%d/#k=%s", h, c.Port, c.Token))

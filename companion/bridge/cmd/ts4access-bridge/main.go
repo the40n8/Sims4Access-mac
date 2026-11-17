@@ -6,6 +6,7 @@
 //
 //	ts4access-bridge --speaker /path/ts4access-say [--rate 3 --volume 70 --voice Thomas --lang fr-FR]
 //	ts4access-bridge --demo   # fake game, for developing the phone app
+//	ts4access-bridge link     # print the phone link and its QR code
 package main
 
 import (
@@ -21,6 +22,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -35,6 +37,13 @@ import (
 )
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "link" {
+		if err := printLink(os.Args[2:]); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	if err := run(); err != nil {
 		slog.Error("bridge stopped", "err", err)
 		os.Exit(1)
@@ -160,4 +169,43 @@ func run() error {
 	case <-ctx.Done():
 		return nil
 	}
+}
+
+// printLink shows the phone link as text and as a QR code to scan.
+func printLink(args []string) error {
+	home, _ := os.UserHomeDir()
+	fs := flag.NewFlagSet("link", flag.ExitOnError)
+	dataDir := fs.String("data", filepath.Join(home, "Library", "Application Support", "TS4AccessCompanion"), "pairing folder")
+	all := fs.Bool("all", false, "list every address")
+	invert := fs.Bool("invert", false, "QR for terminals with a light background")
+	port := fs.Int("port", 0, "link to a different port (e.g. 5173 for the live-reload dev server)")
+	_ = fs.Parse(args)
+
+	cfg, err := pairing.Load(*dataDir)
+	if err != nil {
+		return err
+	}
+	if *port != 0 {
+		cfg.Port = *port
+	}
+	links := cfg.Links()
+	if len(links) == 0 {
+		return errors.New("no network address: is the Mac on Wi-Fi?")
+	}
+	code, err := pairing.TerminalQR(links[0])
+	if err != nil {
+		return err
+	}
+	if *invert {
+		code = strings.NewReplacer("█", " ", " ", "█", "▀", "▄", "▄", "▀").Replace(code)
+	}
+	fmt.Print(code)
+	fmt.Println(links[0])
+	if *all {
+		fmt.Println("\nOther addresses, if that one does not open:")
+		for _, l := range links[1:] {
+			fmt.Println(l)
+		}
+	}
+	return nil
 }
