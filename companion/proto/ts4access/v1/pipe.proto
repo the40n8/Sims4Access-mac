@@ -55,5 +55,13 @@ message ToGame {
     GetInteractionsRequest get_interactions = 7;
     RunInteractionRequest run_interaction = 8;
     GetHouseMapRequest get_house_map = 9;
+    OpenMenuRequest open_menu = 10;
   }
+}
+
+// Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
+// menu bar icon, not from the phone).
+message OpenMenuRequest {
+  // "hub": the TS4 Access menu (a11y.hub).
+  string menu = 1;
 }

@@ -20,6 +20,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"strconv"
@@ -182,9 +183,17 @@ func run() error {
 	h.SetSender(p.Send)
 	h.SetConnected(true)
 	defer h.SetConnected(false)
+	pairPage := "http://127.0.0.1:" + strconv.Itoa(cfg.Port) + "/pair"
 	spk.Listen(func(name string) {
-		if name == "voice" {
+		switch name {
+		case "voice":
 			go toggleVoice(h)
+		case "hub":
+			go openMenu(h, "hub")
+		case "phone":
+			if err := exec.Command("/usr/bin/open", pairPage).Run(); err != nil {
+				slog.Warn("open pairing page failed", "err", err)
+			}
 		}
 	})
 
@@ -224,6 +233,16 @@ func toggleVoice(h *hub.Hub) {
 	}}})
 	if !out.GetOk() {
 		slog.Warn("speech toggle failed", "reason", out.GetReason())
+	}
+}
+
+// openMenu opens one of the mod's menus in the game (Option+Command+A, menu bar).
+func openMenu(h *hub.Hub, menu string) {
+	ctx, cancel := context.WithTimeout(context.Background(), hub.CommandTimeout+time.Second)
+	defer cancel()
+	out := h.Command(ctx, &v1.ToGame{Command: &v1.ToGame_OpenMenu{OpenMenu: &v1.OpenMenuRequest{Menu: menu}}})
+	if !out.GetOk() {
+		slog.Warn("open menu failed", "menu", menu, "reason", out.GetReason())
 	}
 }
 

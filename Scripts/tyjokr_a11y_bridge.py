@@ -265,6 +265,12 @@ def _run(cmd):
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
     if 'listTargets' in cmd:
         return True, '', {'targets': list_targets()}
+    if 'openMenu' in cmd:
+        if cmd['openMenu'].get('menu') != 'hub':
+            return False, 'unknown_command'
+        import tyjokr_a11y_hub as hub
+        hub.open_hub()
+        return True, ''
     if 'getHouseMap' in cmd:
         import tyjokr_a11y_housemap as housemap
         house = housemap.build()

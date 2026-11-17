@@ -369,6 +369,7 @@ type ToGame struct {
 	//	*ToGame_GetInteractions
 	//	*ToGame_RunInteraction
 	//	*ToGame_GetHouseMap
+	//	*ToGame_OpenMenu
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -490,6 +491,15 @@ func (x *ToGame) GetGetHouseMap() *GetHouseMapRequest {
 	return nil
 }
 
+func (x *ToGame) GetOpenMenu() *OpenMenuRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_OpenMenu); ok {
+			return x.OpenMenu
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -526,6 +536,10 @@ type ToGame_GetHouseMap struct {
 	GetHouseMap *GetHouseMapRequest `protobuf:"bytes,9,opt,name=get_house_map,json=getHouseMap,proto3,oneof"`
 }
 
+type ToGame_OpenMenu struct {
+	OpenMenu *OpenMenuRequest `protobuf:"bytes,10,opt,name=open_menu,json=openMenu,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -541,6 +555,55 @@ func (*ToGame_GetInteractions) isToGame_Command() {}
 func (*ToGame_RunInteraction) isToGame_Command() {}
 
 func (*ToGame_GetHouseMap) isToGame_Command() {}
+
+func (*ToGame_OpenMenu) isToGame_Command() {}
+
+// Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
+// menu bar icon, not from the phone).
+type OpenMenuRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// "hub": the TS4 Access menu (a11y.hub).
+	Menu          string `protobuf:"bytes,1,opt,name=menu,proto3" json:"menu,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OpenMenuRequest) Reset() {
+	*x = OpenMenuRequest{}
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenMenuRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenMenuRequest) ProtoMessage() {}
+
+func (x *OpenMenuRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenMenuRequest.ProtoReflect.Descriptor instead.
+func (*OpenMenuRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_pipe_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *OpenMenuRequest) GetMenu() string {
+	if x != nil {
+		return x.Menu
+	}
+	return ""
+}
 
 var File_ts4access_v1_pipe_proto protoreflect.FileDescriptor
 
@@ -569,7 +632,7 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x05event\x18\x03 \x01(\v2\x13.ts4access.v1.EventH\x00R\x05event\x125\n" +
 	"\x06result\x18\x04 \x01(\v2\x1b.ts4access.v1.CommandResultH\x00R\x06result\x12+\n" +
 	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voiceB\t\n" +
-	"\apayload\"\xe8\x04\n" +
+	"\apayload\"\xa6\x05\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1d.ts4access.v1.SetSpeedRequestH\x00R\bsetSpeed\x12?\n" +
@@ -580,8 +643,12 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\flist_targets\x18\x06 \x01(\v2 .ts4access.v1.ListTargetsRequestH\x00R\vlistTargets\x12Q\n" +
 	"\x10get_interactions\x18\a \x01(\v2$.ts4access.v1.GetInteractionsRequestH\x00R\x0fgetInteractions\x12N\n" +
 	"\x0frun_interaction\x18\b \x01(\v2#.ts4access.v1.RunInteractionRequestH\x00R\x0erunInteraction\x12F\n" +
-	"\rget_house_map\x18\t \x01(\v2 .ts4access.v1.GetHouseMapRequestH\x00R\vgetHouseMapB\t\n" +
-	"\acommandB\xc0\x01\n" +
+	"\rget_house_map\x18\t \x01(\v2 .ts4access.v1.GetHouseMapRequestH\x00R\vgetHouseMap\x12<\n" +
+	"\topen_menu\x18\n" +
+	" \x01(\v2\x1d.ts4access.v1.OpenMenuRequestH\x00R\bopenMenuB\t\n" +
+	"\acommand\"%\n" +
+	"\x0fOpenMenuRequest\x12\x12\n" +
+	"\x04menu\x18\x01 \x01(\tR\x04menuB\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tPipeProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -596,51 +663,53 @@ func file_ts4access_v1_pipe_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_pipe_proto_rawDescData
 }
 
-var file_ts4access_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_ts4access_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_ts4access_v1_pipe_proto_goTypes = []any{
 	(*Voice)(nil),                  // 0: ts4access.v1.Voice
 	(*Hello)(nil),                  // 1: ts4access.v1.Hello
 	(*CommandResult)(nil),          // 2: ts4access.v1.CommandResult
 	(*ToBridge)(nil),               // 3: ts4access.v1.ToBridge
 	(*ToGame)(nil),                 // 4: ts4access.v1.ToGame
-	(*CommandOutcome)(nil),         // 5: ts4access.v1.CommandOutcome
-	(*Target)(nil),                 // 6: ts4access.v1.Target
-	(*Interaction)(nil),            // 7: ts4access.v1.Interaction
-	(*HouseMap)(nil),               // 8: ts4access.v1.HouseMap
-	(*GameState)(nil),              // 9: ts4access.v1.GameState
-	(*Event)(nil),                  // 10: ts4access.v1.Event
-	(*SetSpeedRequest)(nil),        // 11: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),       // 12: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),    // 13: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),    // 14: ts4access.v1.SetNarrationRequest
-	(*ListTargetsRequest)(nil),     // 15: ts4access.v1.ListTargetsRequest
-	(*GetInteractionsRequest)(nil), // 16: ts4access.v1.GetInteractionsRequest
-	(*RunInteractionRequest)(nil),  // 17: ts4access.v1.RunInteractionRequest
-	(*GetHouseMapRequest)(nil),     // 18: ts4access.v1.GetHouseMapRequest
+	(*OpenMenuRequest)(nil),        // 5: ts4access.v1.OpenMenuRequest
+	(*CommandOutcome)(nil),         // 6: ts4access.v1.CommandOutcome
+	(*Target)(nil),                 // 7: ts4access.v1.Target
+	(*Interaction)(nil),            // 8: ts4access.v1.Interaction
+	(*HouseMap)(nil),               // 9: ts4access.v1.HouseMap
+	(*GameState)(nil),              // 10: ts4access.v1.GameState
+	(*Event)(nil),                  // 11: ts4access.v1.Event
+	(*SetSpeedRequest)(nil),        // 12: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),       // 13: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),    // 14: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),    // 15: ts4access.v1.SetNarrationRequest
+	(*ListTargetsRequest)(nil),     // 16: ts4access.v1.ListTargetsRequest
+	(*GetInteractionsRequest)(nil), // 17: ts4access.v1.GetInteractionsRequest
+	(*RunInteractionRequest)(nil),  // 18: ts4access.v1.RunInteractionRequest
+	(*GetHouseMapRequest)(nil),     // 19: ts4access.v1.GetHouseMapRequest
 }
 var file_ts4access_v1_pipe_proto_depIdxs = []int32{
-	5,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
-	6,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
-	7,  // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
-	8,  // 3: ts4access.v1.CommandResult.house_map:type_name -> ts4access.v1.HouseMap
+	6,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
+	7,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
+	8,  // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
+	9,  // 3: ts4access.v1.CommandResult.house_map:type_name -> ts4access.v1.HouseMap
 	1,  // 4: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
-	9,  // 5: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
-	10, // 6: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
+	10, // 5: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
+	11, // 6: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
 	2,  // 7: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
 	0,  // 8: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
-	11, // 9: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
-	12, // 10: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
-	13, // 11: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
-	14, // 12: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
-	15, // 13: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
-	16, // 14: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
-	17, // 15: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
-	18, // 16: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	12, // 9: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
+	13, // 10: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
+	14, // 11: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
+	15, // 12: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
+	16, // 13: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
+	17, // 14: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
+	18, // 15: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
+	19, // 16: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
+	5,  // 17: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_pipe_proto_init() }
@@ -666,6 +735,7 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToGame_GetInteractions)(nil),
 		(*ToGame_RunInteraction)(nil),
 		(*ToGame_GetHouseMap)(nil),
+		(*ToGame_OpenMenu)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -673,7 +743,7 @@ func file_ts4access_v1_pipe_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_pipe_proto_rawDesc), len(file_ts4access_v1_pipe_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/pipe.proto.
  */
 export const file_ts4access_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAi4AEKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSABCCQoHcGF5bG9hZCL4AwoGVG9HYW1lEgoKAmlkGAEgASgJEjIKCXNldF9zcGVlZBgCIAEoCzIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3RIABI0CgpzZWxlY3Rfc2ltGAMgASgLMh4udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlcXVlc3RIABI6Cg1jYW5jZWxfYWN0aW9uGAQgASgLMiEudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI6Cg1zZXRfbmFycmF0aW9uGAUgASgLMiEudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlcXVlc3RIABI4CgxsaXN0X3RhcmdldHMYBiABKAsyIC50czRhY2Nlc3MudjEuTGlzdFRhcmdldHNSZXF1ZXN0SAASQAoQZ2V0X2ludGVyYWN0aW9ucxgHIAEoCzIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPgoPcnVuX2ludGVyYWN0aW9uGAggASgLMiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdEgAEjkKDWdldF9ob3VzZV9tYXAYCSABKAsyIC50czRhY2Nlc3MudjEuR2V0SG91c2VNYXBSZXF1ZXN0SABCCQoHY29tbWFuZGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
+  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAi4AEKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSABCCQoHcGF5bG9hZCKsBAoGVG9HYW1lEgoKAmlkGAEgASgJEjIKCXNldF9zcGVlZBgCIAEoCzIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3RIABI0CgpzZWxlY3Rfc2ltGAMgASgLMh4udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlcXVlc3RIABI6Cg1jYW5jZWxfYWN0aW9uGAQgASgLMiEudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI6Cg1zZXRfbmFycmF0aW9uGAUgASgLMiEudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlcXVlc3RIABI4CgxsaXN0X3RhcmdldHMYBiABKAsyIC50czRhY2Nlc3MudjEuTGlzdFRhcmdldHNSZXF1ZXN0SAASQAoQZ2V0X2ludGVyYWN0aW9ucxgHIAEoCzIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPgoPcnVuX2ludGVyYWN0aW9uGAggASgLMiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdEgAEjkKDWdldF9ob3VzZV9tYXAYCSABKAsyIC50czRhY2Nlc3MudjEuR2V0SG91c2VNYXBSZXF1ZXN0SAASMgoJb3Blbl9tZW51GAogASgLMh0udHM0YWNjZXNzLnYxLk9wZW5NZW51UmVxdWVzdEgAQgkKB2NvbW1hbmQiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAliBnByb3RvMw", [file_ts4access_v1_companion, file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.Voice
@@ -229,6 +229,12 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
      */
     value: GetHouseMapRequest;
     case: "getHouseMap";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.OpenMenuRequest open_menu = 10;
+     */
+    value: OpenMenuRequest;
+    case: "openMenu";
   } | { case: undefined; value?: undefined };
 };
 
@@ -238,4 +244,26 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
  */
 export const ToGameSchema: GenMessage<ToGame> = /*@__PURE__*/
   messageDesc(file_ts4access_v1_pipe, 4);
+
+/**
+ * Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
+ * menu bar icon, not from the phone).
+ *
+ * @generated from message ts4access.v1.OpenMenuRequest
+ */
+export type OpenMenuRequest = Message<"ts4access.v1.OpenMenuRequest"> & {
+  /**
+   * "hub": the TS4 Access menu (a11y.hub).
+   *
+   * @generated from field: string menu = 1;
+   */
+  menu: string;
+};
+
+/**
+ * Describes the message ts4access.v1.OpenMenuRequest.
+ * Use `create(OpenMenuRequestSchema)` to create a new message.
+ */
+export const OpenMenuRequestSchema: GenMessage<OpenMenuRequest> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_pipe, 5);
 
