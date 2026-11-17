@@ -35,6 +35,22 @@ for _ in {1..60}; do
 done
 [[ -n "$URL" ]] || { echo "Cloudflare did not give an address:"; tail -5 "$LOG"; exit 1; }
 
+# A fresh name takes a few seconds to be published. A phone that looks it up
+# too early caches "not found" for minutes, so show the QR only once public
+# DNS has it and a request through the tunnel succeeds.
+HOST=${URL#https://}
+echo "Waiting for Cloudflare to publish $HOST…"
+READY=""
+for _ in {1..60}; do
+  IP=$(dig +short "$HOST" @1.1.1.1 2>/dev/null | grep -Eo '^[0-9.]+$' | head -1 || true)
+  if [[ -n "$IP" ]] && [[ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 --resolve "$HOST:443:$IP" "$URL/")" == 200 ]]; then
+    READY=1; break
+  fi
+  sleep 2
+done
+[[ -n "$READY" ]] || echo "Still not published after 2 minutes; the link may need another minute."
+sleep 3
+
 OUT=$("$BRIDGE" link --base "$URL" "$@")
 print -r -- "$OUT"
 print -r -- "$OUT" | grep -m1 '^http' | tr -d '\n' | pbcopy
