@@ -29,7 +29,8 @@ Steps:
    - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
    Then read the other files listed in llms.txt when the question needs them
    (keyboard: docs/mac/KEYBOARD.md; installing: mac/PLAYERS.md; fixed phone
-   address: docs/mac/FIXED-ADDRESS.md).
+   address: docs/mac/FIXED-ADDRESS.md; testing and reporting problems:
+   docs/mac/TESTING.md).
 2. If the guides cannot be opened, say so, use the reference files bundled
    with the plugin if there are any (and say the answer might be out of
    date), otherwise answer carefully and mark what is uncertain.
