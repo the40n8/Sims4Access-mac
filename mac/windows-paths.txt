@@ -1,4 +1,5 @@
-# Paths removed from the macOS fork. mac/sync-upstream.sh deletes them again
+# Paths removed from the macOS fork (Windows-only, or the original's
+# developer and marketing material). mac/sync-upstream.sh deletes them again
 # after every upstream merge, so upstream changes to them never need handling.
 # One git pathspec per line.
 helper
@@ -13,3 +14,14 @@ tools/*.ps1
 tools/build_updater*
 tools/build_prelaunch_helper*
 tools/publish_github_release*
+# The original's Windows development workflow, release pages and baselines
+docs/patreon
+docs/development
+START-HERE.md
+CONTRIBUTING.md
+README.md
+CLAUDE.md
+dev.local.example.json
+compile.py
+reference
+tools

@@ -108,7 +108,9 @@ companion/
   speaker/            TS4AccessSay.swift (macOS voices)
 mac/                  build, install, sync, docs
   ui-package.json     pinned upstream release for TS4_Access_UI.package
-flash/, tools/, docs/ upstream UI sources, tests and developer docs (reference)
+docs/mac/             player guides (phone app, keyboard, fixed address, AI helper)
+docs/plus/            the original's player guides (TS4 Access Plus)
+flash/                the original's patched game interface source (reference)
 ```
 
 ## Development
@@ -126,8 +128,10 @@ flash/, tools/, docs/ upstream UI sources, tests and developer docs (reference)
   background thread importing a not-yet-loaded module crashed the game. Run
   game work from the game's tick (see `tyjokr_a11y_bridge.py`), never import
   inside a thread, and keep macOS changes as small `sys.platform == 'darwin'`
-  branches so upstream merges stay clean. Do not use upstream's
-  Dev.ps1/compile.py workflow.
+  branches so upstream merges stay clean. The original's Windows developer
+  material (its build tooling, baselines and docs) is not kept in this fork:
+  mac/windows-paths.txt lists it and mac/sync-upstream.sh removes it again
+  after each merge.
 
 ## Licence and credits
 

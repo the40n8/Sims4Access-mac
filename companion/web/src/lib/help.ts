@@ -1,5 +1,5 @@
 // The in-app help, one section per screen, in each language. Kept in step
-// with docs/PHONE-GUIDE.md (the same guide in English, for people and AIs).
+// with docs/mac/PHONE-GUIDE.md (the same guide in English, for people and AIs).
 import type { Locale } from './i18n/paraglide/runtime.js';
 
 export type HelpSection = { id: string; title: string; body: string[] };
