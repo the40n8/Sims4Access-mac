@@ -347,5 +347,12 @@
 	"pairing_title": "Este teléfono",
 	"pairing_help": "Para usar la app desde la pantalla de inicio: copia aquí el enlace de conexión, abre la app de la pantalla de inicio, pégalo y pulsa Conectar. Basta una vez.",
 	"copy_pairing_link": "Copiar el enlace de conexión",
-	"pairing_copied": "Enlace de conexión copiado."
+	"pairing_copied": "Enlace de conexión copiado.",
+	"inventory_of": "Inventario de {name}",
+	"inventory_empty": "El inventario está vacío.",
+	"inventory_nowhere": "Nada en el solar puede guardarlo.",
+	"put_in": "Guardar en {place}, a {meters} m",
+	"moved_to": "{name} guardado en {place}.",
+	"qa_put_away": "Guardar",
+	"reason_not_accepted": "no se puede guardar ahí"
 }

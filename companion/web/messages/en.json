@@ -347,5 +347,12 @@
 	"pairing_title": "This phone",
 	"pairing_help": "To use the app from the Home Screen: copy the pairing link here, open the Home Screen app, paste it and press Pair. Once is enough.",
 	"copy_pairing_link": "Copy pairing link",
-	"pairing_copied": "Pairing link copied."
+	"pairing_copied": "Pairing link copied.",
+	"inventory_of": "{name}’s inventory",
+	"inventory_empty": "Nothing in the inventory.",
+	"inventory_nowhere": "Nothing on the lot takes this.",
+	"put_in": "Put in {place}, {meters} m",
+	"moved_to": "{name} put in {place}.",
+	"qa_put_away": "Put away",
+	"reason_not_accepted": "it does not go there"
 }

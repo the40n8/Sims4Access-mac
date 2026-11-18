@@ -124,6 +124,19 @@ func (s *service) SetMacAnnounce(ctx context.Context, req *connect.Request[v1.Se
 	return connect.NewResponse(&v1.SetMacAnnounceResponse{Outcome: &v1.CommandOutcome{Ok: true}}), nil
 }
 
+func (s *service) ListInventory(ctx context.Context, req *connect.Request[v1.ListInventoryRequest]) (*connect.Response[v1.ListInventoryResponse], error) {
+	res := s.hub.Call(ctx, &v1.ToGame{Command: &v1.ToGame_ListInventory{ListInventory: req.Msg}})
+	return connect.NewResponse(&v1.ListInventoryResponse{Outcome: res.GetOutcome(), Items: res.GetInventory()}), nil
+}
+
+func (s *service) MoveItem(ctx context.Context, req *connect.Request[v1.MoveItemRequest]) (*connect.Response[v1.MoveItemResponse], error) {
+	if req.Msg.GetItemId() == "" || req.Msg.GetDestinationId() == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("item_id and destination_id are required"))
+	}
+	out := s.hub.Command(ctx, &v1.ToGame{Command: &v1.ToGame_MoveItem{MoveItem: req.Msg}})
+	return connect.NewResponse(&v1.MoveItemResponse{Outcome: out}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

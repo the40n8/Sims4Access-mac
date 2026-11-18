@@ -2695,6 +2695,69 @@ func (x *Want) GetFear() bool {
 	return false
 }
 
+// Something the controlled Sim carries, and where it can go.
+type InventoryItem struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Item  *Target                `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
+	// How many in the stack (moved together).
+	Count int32 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	// Places on the lot that accept it (fridge, bookcase...), nearest first.
+	Destinations  []*Target `protobuf:"bytes,3,rep,name=destinations,proto3" json:"destinations,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InventoryItem) Reset() {
+	*x = InventoryItem{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InventoryItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InventoryItem) ProtoMessage() {}
+
+func (x *InventoryItem) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InventoryItem.ProtoReflect.Descriptor instead.
+func (*InventoryItem) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *InventoryItem) GetItem() *Target {
+	if x != nil {
+		return x.Item
+	}
+	return nil
+}
+
+func (x *InventoryItem) GetCount() int32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+func (x *InventoryItem) GetDestinations() []*Target {
+	if x != nil {
+		return x.Destinations
+	}
+	return nil
+}
+
 var File_ts4access_v1_game_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_game_proto_rawDesc = "" +
@@ -2907,7 +2970,11 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x04done\x18\x02 \x01(\bR\x04done\".\n" +
 	"\x04Want\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
-	"\x04fear\x18\x02 \x01(\bR\x04fear*t\n" +
+	"\x04fear\x18\x02 \x01(\bR\x04fear\"\x89\x01\n" +
+	"\rInventoryItem\x12(\n" +
+	"\x04item\x18\x01 \x01(\v2\x14.ts4access.v1.TargetR\x04item\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x05R\x05count\x128\n" +
+	"\fdestinations\x18\x03 \x03(\v2\x14.ts4access.v1.TargetR\fdestinations*t\n" +
 	"\x05Speed\x12\x15\n" +
 	"\x11SPEED_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fSPEED_PAUSED\x10\x01\x12\x10\n" +
@@ -2964,41 +3031,42 @@ func file_ts4access_v1_game_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_game_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
+var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_ts4access_v1_game_proto_goTypes = []any{
-	(Speed)(0),           // 0: ts4access.v1.Speed
-	(NeedLevel)(0),       // 1: ts4access.v1.NeedLevel
-	(ActionState)(0),     // 2: ts4access.v1.ActionState
-	(EventKind)(0),       // 3: ts4access.v1.EventKind
-	(*Clock)(nil),        // 4: ts4access.v1.Clock
-	(*Need)(nil),         // 5: ts4access.v1.Need
-	(*Mood)(nil),         // 6: ts4access.v1.Mood
-	(*Moodlet)(nil),      // 7: ts4access.v1.Moodlet
-	(*Action)(nil),       // 8: ts4access.v1.Action
-	(*Sim)(nil),          // 9: ts4access.v1.Sim
-	(*Narration)(nil),    // 10: ts4access.v1.Narration
-	(*GameState)(nil),    // 11: ts4access.v1.GameState
-	(*MacAnnounce)(nil),  // 12: ts4access.v1.MacAnnounce
-	(*Visitor)(nil),      // 13: ts4access.v1.Visitor
-	(*RoomRef)(nil),      // 14: ts4access.v1.RoomRef
-	(*Problem)(nil),      // 15: ts4access.v1.Problem
-	(*Dialog)(nil),       // 16: ts4access.v1.Dialog
-	(*DialogChoice)(nil), // 17: ts4access.v1.DialogChoice
-	(*DialogRow)(nil),    // 18: ts4access.v1.DialogRow
-	(*Target)(nil),       // 19: ts4access.v1.Target
-	(*Interaction)(nil),  // 20: ts4access.v1.Interaction
-	(*Event)(nil),        // 21: ts4access.v1.Event
-	(*HouseMap)(nil),     // 22: ts4access.v1.HouseMap
-	(*Stairs)(nil),       // 23: ts4access.v1.Stairs
-	(*Room)(nil),         // 24: ts4access.v1.Room
-	(*RoomArea)(nil),     // 25: ts4access.v1.RoomArea
-	(*RoomLink)(nil),     // 26: ts4access.v1.RoomLink
-	(*RoomItem)(nil),     // 27: ts4access.v1.RoomItem
-	(*Relationship)(nil), // 28: ts4access.v1.Relationship
-	(*Skill)(nil),        // 29: ts4access.v1.Skill
-	(*Goals)(nil),        // 30: ts4access.v1.Goals
-	(*Objective)(nil),    // 31: ts4access.v1.Objective
-	(*Want)(nil),         // 32: ts4access.v1.Want
+	(Speed)(0),            // 0: ts4access.v1.Speed
+	(NeedLevel)(0),        // 1: ts4access.v1.NeedLevel
+	(ActionState)(0),      // 2: ts4access.v1.ActionState
+	(EventKind)(0),        // 3: ts4access.v1.EventKind
+	(*Clock)(nil),         // 4: ts4access.v1.Clock
+	(*Need)(nil),          // 5: ts4access.v1.Need
+	(*Mood)(nil),          // 6: ts4access.v1.Mood
+	(*Moodlet)(nil),       // 7: ts4access.v1.Moodlet
+	(*Action)(nil),        // 8: ts4access.v1.Action
+	(*Sim)(nil),           // 9: ts4access.v1.Sim
+	(*Narration)(nil),     // 10: ts4access.v1.Narration
+	(*GameState)(nil),     // 11: ts4access.v1.GameState
+	(*MacAnnounce)(nil),   // 12: ts4access.v1.MacAnnounce
+	(*Visitor)(nil),       // 13: ts4access.v1.Visitor
+	(*RoomRef)(nil),       // 14: ts4access.v1.RoomRef
+	(*Problem)(nil),       // 15: ts4access.v1.Problem
+	(*Dialog)(nil),        // 16: ts4access.v1.Dialog
+	(*DialogChoice)(nil),  // 17: ts4access.v1.DialogChoice
+	(*DialogRow)(nil),     // 18: ts4access.v1.DialogRow
+	(*Target)(nil),        // 19: ts4access.v1.Target
+	(*Interaction)(nil),   // 20: ts4access.v1.Interaction
+	(*Event)(nil),         // 21: ts4access.v1.Event
+	(*HouseMap)(nil),      // 22: ts4access.v1.HouseMap
+	(*Stairs)(nil),        // 23: ts4access.v1.Stairs
+	(*Room)(nil),          // 24: ts4access.v1.Room
+	(*RoomArea)(nil),      // 25: ts4access.v1.RoomArea
+	(*RoomLink)(nil),      // 26: ts4access.v1.RoomLink
+	(*RoomItem)(nil),      // 27: ts4access.v1.RoomItem
+	(*Relationship)(nil),  // 28: ts4access.v1.Relationship
+	(*Skill)(nil),         // 29: ts4access.v1.Skill
+	(*Goals)(nil),         // 30: ts4access.v1.Goals
+	(*Objective)(nil),     // 31: ts4access.v1.Objective
+	(*Want)(nil),          // 32: ts4access.v1.Want
+	(*InventoryItem)(nil), // 33: ts4access.v1.InventoryItem
 }
 var file_ts4access_v1_game_proto_depIdxs = []int32{
 	0,  // 0: ts4access.v1.Clock.speed:type_name -> ts4access.v1.Speed
@@ -3033,11 +3101,13 @@ var file_ts4access_v1_game_proto_depIdxs = []int32{
 	32, // 29: ts4access.v1.Goals.wants:type_name -> ts4access.v1.Want
 	31, // 30: ts4access.v1.Goals.work_tasks:type_name -> ts4access.v1.Objective
 	31, // 31: ts4access.v1.Goals.promotion_steps:type_name -> ts4access.v1.Objective
-	32, // [32:32] is the sub-list for method output_type
-	32, // [32:32] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	19, // 32: ts4access.v1.InventoryItem.item:type_name -> ts4access.v1.Target
+	19, // 33: ts4access.v1.InventoryItem.destinations:type_name -> ts4access.v1.Target
+	34, // [34:34] is the sub-list for method output_type
+	34, // [34:34] is the sub-list for method input_type
+	34, // [34:34] is the sub-list for extension type_name
+	34, // [34:34] is the sub-list for extension extendee
+	0,  // [0:34] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_game_proto_init() }
@@ -3052,7 +3122,7 @@ func file_ts4access_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_game_proto_rawDesc), len(file_ts4access_v1_game_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   29,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

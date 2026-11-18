@@ -347,5 +347,12 @@
 	"pairing_title": "Ce téléphone",
 	"pairing_help": "Pour utiliser l’appli depuis l’écran d’accueil : copie le lien de connexion ici, ouvre l’appli de l’écran d’accueil, colle-le et appuie sur Connecter. Une seule fois suffit.",
 	"copy_pairing_link": "Copier le lien de connexion",
-	"pairing_copied": "Lien de connexion copié."
+	"pairing_copied": "Lien de connexion copié.",
+	"inventory_of": "Inventaire de {name}",
+	"inventory_empty": "L’inventaire est vide.",
+	"inventory_nowhere": "Rien sur le terrain ne peut le ranger.",
+	"put_in": "Ranger dans {place}, à {meters} m",
+	"moved_to": "{name} rangé dans {place}.",
+	"qa_put_away": "Ranger",
+	"reason_not_accepted": "ça ne se range pas là"
 }

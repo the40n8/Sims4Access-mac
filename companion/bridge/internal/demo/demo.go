@@ -19,6 +19,8 @@ type game struct {
 	state   *v1.GameState
 	minutes int
 	nextID  int
+	// The controlled Sim's inventory (two fridges accept food).
+	inventory []*v1.InventoryItem
 }
 
 var activities = []string{"Cook Dinner", "Watch TV", "Chat", "Read a Book", "Take Shower", "Play Video Games", "Nap"}
@@ -26,6 +28,13 @@ var activities = []string{"Cook Dinner", "Watch TV", "Chat", "Read a Book", "Tak
 // Run drives the fake household until ctx ends.
 func Run(ctx context.Context, h *hub.Hub) {
 	g := &game{hub: h, cmds: make(chan *v1.ToGame, 16), minutes: 8 * 60}
+	fridges := []*v1.Target{{Id: "o1", Name: "Fridge", Group: "APPLIANCES", Kind: "Refrigerators", Distance: 3},
+		{Id: "o12", Name: "Mini Fridge", Group: "APPLIANCES", Kind: "Refrigerators", Distance: 9}}
+	g.inventory = []*v1.InventoryItem{
+		{Item: &v1.Target{Id: "i1", Name: "Mac and Cheese", Group: "MISC", Kind: "Food"}, Count: 2, Destinations: fridges},
+		{Item: &v1.Target{Id: "i2", Name: "Mystery Novel", Group: "MISC", Kind: "Books"}, Count: 1,
+			Destinations: []*v1.Target{{Id: "o13", Name: "Bookcase", Group: "STORAGE", Kind: "Bookshelves", Distance: 6}}},
+	}
 	g.state = &v1.GameState{
 		InGame:        true,
 		Funds:         20450,
@@ -240,6 +249,16 @@ func demoHouse() *v1.HouseMap {
 
 func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 	switch cmd := c.Command.(type) {
+	case *v1.ToGame_ListInventory:
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Inventory: g.inventory}
+	case *v1.ToGame_MoveItem:
+		for i, it := range g.inventory {
+			if it.GetItem().GetId() == cmd.MoveItem.GetItemId() {
+				g.inventory = append(g.inventory[:i], g.inventory[i+1:]...)
+				return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
+			}
+		}
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Reason: "target_unavailable"}}
 	case *v1.ToGame_GetHouseMap:
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, HouseMap: demoHouse()}
 	case *v1.ToGame_ListTargets:

@@ -1302,6 +1302,190 @@ func (x *SetMacAnnounceResponse) GetOutcome() *CommandOutcome {
 	return nil
 }
 
+type ListInventoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListInventoryRequest) Reset() {
+	*x = ListInventoryRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListInventoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListInventoryRequest) ProtoMessage() {}
+
+func (x *ListInventoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListInventoryRequest.ProtoReflect.Descriptor instead.
+func (*ListInventoryRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{25}
+}
+
+type ListInventoryResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	Items         []*InventoryItem       `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListInventoryResponse) Reset() {
+	*x = ListInventoryResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListInventoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListInventoryResponse) ProtoMessage() {}
+
+func (x *ListInventoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListInventoryResponse.ProtoReflect.Descriptor instead.
+func (*ListInventoryResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ListInventoryResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
+func (x *ListInventoryResponse) GetItems() []*InventoryItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type MoveItemRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ItemId        string                 `protobuf:"bytes,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	DestinationId string                 `protobuf:"bytes,2,opt,name=destination_id,json=destinationId,proto3" json:"destination_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MoveItemRequest) Reset() {
+	*x = MoveItemRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MoveItemRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MoveItemRequest) ProtoMessage() {}
+
+func (x *MoveItemRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MoveItemRequest.ProtoReflect.Descriptor instead.
+func (*MoveItemRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *MoveItemRequest) GetItemId() string {
+	if x != nil {
+		return x.ItemId
+	}
+	return ""
+}
+
+func (x *MoveItemRequest) GetDestinationId() string {
+	if x != nil {
+		return x.DestinationId
+	}
+	return ""
+}
+
+type MoveItemResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MoveItemResponse) Reset() {
+	*x = MoveItemResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MoveItemResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MoveItemResponse) ProtoMessage() {}
+
+func (x *MoveItemResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MoveItemResponse.ProtoReflect.Descriptor instead.
+func (*MoveItemResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *MoveItemResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
 var File_ts4access_v1_companion_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_companion_proto_rawDesc = "" +
@@ -1367,13 +1551,22 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\x15SetMacAnnounceRequest\x12<\n" +
 	"\fmac_announce\x18\x01 \x01(\v2\x19.ts4access.v1.MacAnnounceR\vmacAnnounce\"P\n" +
 	"\x16SetMacAnnounceResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"\x16\n" +
+	"\x14ListInventoryRequest\"\x82\x01\n" +
+	"\x15ListInventoryResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x121\n" +
+	"\x05items\x18\x02 \x03(\v2\x1b.ts4access.v1.InventoryItemR\x05items\"Q\n" +
+	"\x0fMoveItemRequest\x12\x17\n" +
+	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12%\n" +
+	"\x0edestination_id\x18\x02 \x01(\tR\rdestinationId\"J\n" +
+	"\x10MoveItemResponse\x126\n" +
 	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome*n\n" +
 	"\n" +
 	"CameraMode\x12\x1b\n" +
 	"\x17CAMERA_MODE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12CAMERA_MODE_FOLLOW\x10\x01\x12\x15\n" +
 	"\x11CAMERA_MODE_CLOSE\x10\x02\x12\x14\n" +
-	"\x10CAMERA_MODE_FREE\x10\x032\x87\b\n" +
+	"\x10CAMERA_MODE_FREE\x10\x032\xac\t\n" +
 	"\x10CompanionService\x12B\n" +
 	"\x05Watch\x12\x1a.ts4access.v1.WatchRequest\x1a\x1b.ts4access.v1.WatchResponse0\x01\x12I\n" +
 	"\bSetSpeed\x12\x1d.ts4access.v1.SetSpeedRequest\x1a\x1e.ts4access.v1.SetSpeedResponse\x12L\n" +
@@ -1385,7 +1578,9 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponse\x12R\n" +
 	"\vGetHouseMap\x12 .ts4access.v1.GetHouseMapRequest\x1a!.ts4access.v1.GetHouseMapResponse\x12X\n" +
 	"\rRespondDialog\x12\".ts4access.v1.RespondDialogRequest\x1a#.ts4access.v1.RespondDialogResponse\x12L\n" +
-	"\tSetCamera\x12\x1e.ts4access.v1.SetCameraRequest\x1a\x1f.ts4access.v1.SetCameraResponse\x12[\n" +
+	"\tSetCamera\x12\x1e.ts4access.v1.SetCameraRequest\x1a\x1f.ts4access.v1.SetCameraResponse\x12X\n" +
+	"\rListInventory\x12\".ts4access.v1.ListInventoryRequest\x1a#.ts4access.v1.ListInventoryResponse\x12I\n" +
+	"\bMoveItem\x12\x1d.ts4access.v1.MoveItemRequest\x1a\x1e.ts4access.v1.MoveItemResponse\x12[\n" +
 	"\x0eSetMacAnnounce\x12#.ts4access.v1.SetMacAnnounceRequest\x1a$.ts4access.v1.SetMacAnnounceResponseB\xc5\x01\n" +
 	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
@@ -1402,7 +1597,7 @@ func file_ts4access_v1_companion_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_companion_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_ts4access_v1_companion_proto_goTypes = []any{
 	(CameraMode)(0),                 // 0: ts4access.v1.CameraMode
 	(*WatchRequest)(nil),            // 1: ts4access.v1.WatchRequest
@@ -1430,65 +1625,77 @@ var file_ts4access_v1_companion_proto_goTypes = []any{
 	(*SetCameraResponse)(nil),       // 23: ts4access.v1.SetCameraResponse
 	(*SetMacAnnounceRequest)(nil),   // 24: ts4access.v1.SetMacAnnounceRequest
 	(*SetMacAnnounceResponse)(nil),  // 25: ts4access.v1.SetMacAnnounceResponse
-	(*GameState)(nil),               // 26: ts4access.v1.GameState
-	(*Event)(nil),                   // 27: ts4access.v1.Event
-	(Speed)(0),                      // 28: ts4access.v1.Speed
-	(*Narration)(nil),               // 29: ts4access.v1.Narration
-	(*Target)(nil),                  // 30: ts4access.v1.Target
-	(*Interaction)(nil),             // 31: ts4access.v1.Interaction
-	(*HouseMap)(nil),                // 32: ts4access.v1.HouseMap
-	(*MacAnnounce)(nil),             // 33: ts4access.v1.MacAnnounce
+	(*ListInventoryRequest)(nil),    // 26: ts4access.v1.ListInventoryRequest
+	(*ListInventoryResponse)(nil),   // 27: ts4access.v1.ListInventoryResponse
+	(*MoveItemRequest)(nil),         // 28: ts4access.v1.MoveItemRequest
+	(*MoveItemResponse)(nil),        // 29: ts4access.v1.MoveItemResponse
+	(*GameState)(nil),               // 30: ts4access.v1.GameState
+	(*Event)(nil),                   // 31: ts4access.v1.Event
+	(Speed)(0),                      // 32: ts4access.v1.Speed
+	(*Narration)(nil),               // 33: ts4access.v1.Narration
+	(*Target)(nil),                  // 34: ts4access.v1.Target
+	(*Interaction)(nil),             // 35: ts4access.v1.Interaction
+	(*HouseMap)(nil),                // 36: ts4access.v1.HouseMap
+	(*MacAnnounce)(nil),             // 37: ts4access.v1.MacAnnounce
+	(*InventoryItem)(nil),           // 38: ts4access.v1.InventoryItem
 }
 var file_ts4access_v1_companion_proto_depIdxs = []int32{
-	26, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
-	27, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
-	28, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
-	29, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
+	30, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
+	31, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
+	32, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
+	33, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
 	17, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	17, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	17, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	17, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	17, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	30, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
+	34, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
 	17, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	31, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
+	35, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
 	17, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	17, // 13: ts4access.v1.GetHouseMapResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	32, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
+	36, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
 	17, // 15: ts4access.v1.RespondDialogResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	0,  // 16: ts4access.v1.SetCameraRequest.mode:type_name -> ts4access.v1.CameraMode
 	17, // 17: ts4access.v1.SetCameraResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	33, // 18: ts4access.v1.SetMacAnnounceRequest.mac_announce:type_name -> ts4access.v1.MacAnnounce
+	37, // 18: ts4access.v1.SetMacAnnounceRequest.mac_announce:type_name -> ts4access.v1.MacAnnounce
 	17, // 19: ts4access.v1.SetMacAnnounceResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	1,  // 20: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
-	3,  // 21: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
-	4,  // 22: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
-	5,  // 23: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
-	6,  // 24: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
-	11, // 25: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
-	13, // 26: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
-	15, // 27: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
-	18, // 28: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
-	20, // 29: ts4access.v1.CompanionService.RespondDialog:input_type -> ts4access.v1.RespondDialogRequest
-	22, // 30: ts4access.v1.CompanionService.SetCamera:input_type -> ts4access.v1.SetCameraRequest
-	24, // 31: ts4access.v1.CompanionService.SetMacAnnounce:input_type -> ts4access.v1.SetMacAnnounceRequest
-	2,  // 32: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
-	7,  // 33: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
-	8,  // 34: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
-	9,  // 35: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
-	10, // 36: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
-	12, // 37: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
-	14, // 38: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
-	16, // 39: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
-	19, // 40: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
-	21, // 41: ts4access.v1.CompanionService.RespondDialog:output_type -> ts4access.v1.RespondDialogResponse
-	23, // 42: ts4access.v1.CompanionService.SetCamera:output_type -> ts4access.v1.SetCameraResponse
-	25, // 43: ts4access.v1.CompanionService.SetMacAnnounce:output_type -> ts4access.v1.SetMacAnnounceResponse
-	32, // [32:44] is the sub-list for method output_type
-	20, // [20:32] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	17, // 20: ts4access.v1.ListInventoryResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	38, // 21: ts4access.v1.ListInventoryResponse.items:type_name -> ts4access.v1.InventoryItem
+	17, // 22: ts4access.v1.MoveItemResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	1,  // 23: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
+	3,  // 24: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
+	4,  // 25: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
+	5,  // 26: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
+	6,  // 27: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
+	11, // 28: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
+	13, // 29: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
+	15, // 30: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
+	18, // 31: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
+	20, // 32: ts4access.v1.CompanionService.RespondDialog:input_type -> ts4access.v1.RespondDialogRequest
+	22, // 33: ts4access.v1.CompanionService.SetCamera:input_type -> ts4access.v1.SetCameraRequest
+	26, // 34: ts4access.v1.CompanionService.ListInventory:input_type -> ts4access.v1.ListInventoryRequest
+	28, // 35: ts4access.v1.CompanionService.MoveItem:input_type -> ts4access.v1.MoveItemRequest
+	24, // 36: ts4access.v1.CompanionService.SetMacAnnounce:input_type -> ts4access.v1.SetMacAnnounceRequest
+	2,  // 37: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
+	7,  // 38: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
+	8,  // 39: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
+	9,  // 40: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
+	10, // 41: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
+	12, // 42: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
+	14, // 43: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
+	16, // 44: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
+	19, // 45: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
+	21, // 46: ts4access.v1.CompanionService.RespondDialog:output_type -> ts4access.v1.RespondDialogResponse
+	23, // 47: ts4access.v1.CompanionService.SetCamera:output_type -> ts4access.v1.SetCameraResponse
+	27, // 48: ts4access.v1.CompanionService.ListInventory:output_type -> ts4access.v1.ListInventoryResponse
+	29, // 49: ts4access.v1.CompanionService.MoveItem:output_type -> ts4access.v1.MoveItemResponse
+	25, // 50: ts4access.v1.CompanionService.SetMacAnnounce:output_type -> ts4access.v1.SetMacAnnounceResponse
+	37, // [37:51] is the sub-list for method output_type
+	23, // [23:37] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_companion_proto_init() }
@@ -1508,7 +1715,7 @@ func file_ts4access_v1_companion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_companion_proto_rawDesc), len(file_ts4access_v1_companion_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   25,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

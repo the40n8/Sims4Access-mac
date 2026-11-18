@@ -391,3 +391,12 @@ message Want {
   string name = 1;
   bool fear = 2;
 }
+
+// Something the controlled Sim carries, and where it can go.
+message InventoryItem {
+  Target item = 1;
+  // How many in the stack (moved together).
+  int32 count = 2;
+  // Places on the lot that accept it (fridge, bookcase...), nearest first.
+  repeated Target destinations = 3;
+}

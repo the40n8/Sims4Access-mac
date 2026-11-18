@@ -201,7 +201,8 @@ export function reasonText(reason: string): string {
 		menu_expired: m.reason_menu_expired,
 		refused: m.reason_refused,
 		target_unavailable: m.reason_target_unavailable,
-		dialog_closed: m.reason_dialog_closed
+		dialog_closed: m.reason_dialog_closed,
+		not_accepted: m.reason_not_accepted
 	};
 	return (map[reason] ?? m.reason_other)();
 }

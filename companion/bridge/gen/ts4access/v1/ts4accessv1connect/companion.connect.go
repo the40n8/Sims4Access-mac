@@ -65,6 +65,12 @@ const (
 	// CompanionServiceSetCameraProcedure is the fully-qualified name of the CompanionService's
 	// SetCamera RPC.
 	CompanionServiceSetCameraProcedure = "/ts4access.v1.CompanionService/SetCamera"
+	// CompanionServiceListInventoryProcedure is the fully-qualified name of the CompanionService's
+	// ListInventory RPC.
+	CompanionServiceListInventoryProcedure = "/ts4access.v1.CompanionService/ListInventory"
+	// CompanionServiceMoveItemProcedure is the fully-qualified name of the CompanionService's MoveItem
+	// RPC.
+	CompanionServiceMoveItemProcedure = "/ts4access.v1.CompanionService/MoveItem"
 	// CompanionServiceSetMacAnnounceProcedure is the fully-qualified name of the CompanionService's
 	// SetMacAnnounce RPC.
 	CompanionServiceSetMacAnnounceProcedure = "/ts4access.v1.CompanionService/SetMacAnnounce"
@@ -90,6 +96,10 @@ type CompanionServiceClient interface {
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
 	// Point the game camera at a Sim: follow, close-up, or let go.
 	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
+	// The controlled Sim's inventory, and moving an item into a fridge, a
+	// bookcase... (the game's drag and drop, in one step).
+	ListInventory(context.Context, *connect.Request[v1.ListInventoryRequest]) (*connect.Response[v1.ListInventoryResponse], error)
+	MoveItem(context.Context, *connect.Request[v1.MoveItemRequest]) (*connect.Response[v1.MoveItemResponse], error)
 	// What the Mac voice announces by itself (bridge setting, not sent to the game).
 	SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error)
 }
@@ -171,6 +181,18 @@ func NewCompanionServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
 			connect.WithClientOptions(opts...),
 		),
+		listInventory: connect.NewClient[v1.ListInventoryRequest, v1.ListInventoryResponse](
+			httpClient,
+			baseURL+CompanionServiceListInventoryProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("ListInventory")),
+			connect.WithClientOptions(opts...),
+		),
+		moveItem: connect.NewClient[v1.MoveItemRequest, v1.MoveItemResponse](
+			httpClient,
+			baseURL+CompanionServiceMoveItemProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("MoveItem")),
+			connect.WithClientOptions(opts...),
+		),
 		setMacAnnounce: connect.NewClient[v1.SetMacAnnounceRequest, v1.SetMacAnnounceResponse](
 			httpClient,
 			baseURL+CompanionServiceSetMacAnnounceProcedure,
@@ -193,6 +215,8 @@ type companionServiceClient struct {
 	getHouseMap     *connect.Client[v1.GetHouseMapRequest, v1.GetHouseMapResponse]
 	respondDialog   *connect.Client[v1.RespondDialogRequest, v1.RespondDialogResponse]
 	setCamera       *connect.Client[v1.SetCameraRequest, v1.SetCameraResponse]
+	listInventory   *connect.Client[v1.ListInventoryRequest, v1.ListInventoryResponse]
+	moveItem        *connect.Client[v1.MoveItemRequest, v1.MoveItemResponse]
 	setMacAnnounce  *connect.Client[v1.SetMacAnnounceRequest, v1.SetMacAnnounceResponse]
 }
 
@@ -251,6 +275,16 @@ func (c *companionServiceClient) SetCamera(ctx context.Context, req *connect.Req
 	return c.setCamera.CallUnary(ctx, req)
 }
 
+// ListInventory calls ts4access.v1.CompanionService.ListInventory.
+func (c *companionServiceClient) ListInventory(ctx context.Context, req *connect.Request[v1.ListInventoryRequest]) (*connect.Response[v1.ListInventoryResponse], error) {
+	return c.listInventory.CallUnary(ctx, req)
+}
+
+// MoveItem calls ts4access.v1.CompanionService.MoveItem.
+func (c *companionServiceClient) MoveItem(ctx context.Context, req *connect.Request[v1.MoveItemRequest]) (*connect.Response[v1.MoveItemResponse], error) {
+	return c.moveItem.CallUnary(ctx, req)
+}
+
 // SetMacAnnounce calls ts4access.v1.CompanionService.SetMacAnnounce.
 func (c *companionServiceClient) SetMacAnnounce(ctx context.Context, req *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error) {
 	return c.setMacAnnounce.CallUnary(ctx, req)
@@ -276,6 +310,10 @@ type CompanionServiceHandler interface {
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
 	// Point the game camera at a Sim: follow, close-up, or let go.
 	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
+	// The controlled Sim's inventory, and moving an item into a fridge, a
+	// bookcase... (the game's drag and drop, in one step).
+	ListInventory(context.Context, *connect.Request[v1.ListInventoryRequest]) (*connect.Response[v1.ListInventoryResponse], error)
+	MoveItem(context.Context, *connect.Request[v1.MoveItemRequest]) (*connect.Response[v1.MoveItemResponse], error)
 	// What the Mac voice announces by itself (bridge setting, not sent to the game).
 	SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error)
 }
@@ -353,6 +391,18 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 		connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
 		connect.WithHandlerOptions(opts...),
 	)
+	companionServiceListInventoryHandler := connect.NewUnaryHandler(
+		CompanionServiceListInventoryProcedure,
+		svc.ListInventory,
+		connect.WithSchema(companionServiceMethods.ByName("ListInventory")),
+		connect.WithHandlerOptions(opts...),
+	)
+	companionServiceMoveItemHandler := connect.NewUnaryHandler(
+		CompanionServiceMoveItemProcedure,
+		svc.MoveItem,
+		connect.WithSchema(companionServiceMethods.ByName("MoveItem")),
+		connect.WithHandlerOptions(opts...),
+	)
 	companionServiceSetMacAnnounceHandler := connect.NewUnaryHandler(
 		CompanionServiceSetMacAnnounceProcedure,
 		svc.SetMacAnnounce,
@@ -383,6 +433,10 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 			companionServiceRespondDialogHandler.ServeHTTP(w, r)
 		case CompanionServiceSetCameraProcedure:
 			companionServiceSetCameraHandler.ServeHTTP(w, r)
+		case CompanionServiceListInventoryProcedure:
+			companionServiceListInventoryHandler.ServeHTTP(w, r)
+		case CompanionServiceMoveItemProcedure:
+			companionServiceMoveItemHandler.ServeHTTP(w, r)
 		case CompanionServiceSetMacAnnounceProcedure:
 			companionServiceSetMacAnnounceHandler.ServeHTTP(w, r)
 		default:
@@ -436,6 +490,14 @@ func (UnimplementedCompanionServiceHandler) RespondDialog(context.Context, *conn
 
 func (UnimplementedCompanionServiceHandler) SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.SetCamera is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) ListInventory(context.Context, *connect.Request[v1.ListInventoryRequest]) (*connect.Response[v1.ListInventoryResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.ListInventory is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) MoveItem(context.Context, *connect.Request[v1.MoveItemRequest]) (*connect.Response[v1.MoveItemResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.MoveItem is not implemented"))
 }
 
 func (UnimplementedCompanionServiceHandler) SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error) {

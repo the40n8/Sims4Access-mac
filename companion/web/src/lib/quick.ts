@@ -79,7 +79,12 @@ export const PROBLEM_HELP: Record<string, Help> = {
 	},
 	FOOD: {
 		quick: [
-			{ label: m.qa_eat_this, on: 'object', action: /grab a plate|grab a serving|^eat|^have |^serve|^drink/i }
+			{
+				label: m.qa_eat_this,
+				on: 'object',
+				action: /grab a plate|grab a serving|^eat|^have |^serve|^drink/i
+			},
+			{ label: m.qa_put_away, on: 'object', action: /put away/i }
 		]
 	}
 };

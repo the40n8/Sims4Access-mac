@@ -12,6 +12,7 @@
 	import InteractionMenu from './InteractionMenu.svelte';
 	import ActionQueue from './ActionQueue.svelte';
 	import ControlSim from './ControlSim.svelte';
+	import InventoryView from './InventoryView.svelte';
 	import { setSpeed } from '$lib/speed.svelte.js';
 
 	const game = $derived(live.state);
@@ -25,6 +26,12 @@
 	];
 
 	let busy = $state(false);
+	let showInventory = $state(false);
+	async function closeInventory() {
+		showInventory = false;
+		await tick();
+		document.getElementById('open-inventory')?.focus();
+	}
 	let targets = $state<Target[] | null>(null);
 	let query = $state('');
 	let selected = $state<Target | null>(null);
@@ -124,6 +131,8 @@
 {#if game?.inGame}
 	{#if selected}
 		<InteractionMenu target={selected} onBack={back} />
+	{:else if showInventory && me}
+		<InventoryView owner={simName(me)} onBack={closeInventory} />
 	{:else}
 		<ControlSim />
 
@@ -164,6 +173,11 @@
 					{#if phone}
 						<button type="button" id={`target-${phone.id}`} onclick={() => open(phone)}>
 							{targetLabel(phone, me ? simName(me) : '')}
+						</button>
+					{/if}
+					{#if me}
+						<button type="button" id="open-inventory" onclick={() => (showInventory = true)}>
+							{m.inventory_of({ name: simName(me) })}
 						</button>
 					{/if}
 				</div>

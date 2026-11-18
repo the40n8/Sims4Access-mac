@@ -53,7 +53,8 @@ an iPhone, often playing together with a sighted player on the Mac.
 - **Needs attention**: what needs doing now, most urgent first:
   - low needs (hunger, bladder, energy, hygiene, fun, social);
   - fire, broken objects, puddles, spoiled food;
-  - food ready to eat (cooked meals, deliveries): **Eat**;
+  - food ready to eat (cooked meals, deliveries): **Eat**, or **Put away**
+    (the Sim takes it to the fridge);
   - visitors on the lot: **Greet**, **Welcome**;
   - bills due: **Pay the bills** (at the mailbox).
 - Each line has buttons that run the game's own actions:
@@ -77,6 +78,10 @@ From top to bottom:
 - **<Name>'s actions**: the action running now and the ones waiting in the
   queue, each with a **Cancel** button (as in the game, only for the
   controlled Sim). The Sims tab shows every Sim's queue too.
+- **<Name>'s inventory** (in You): what the Sim carries ("Food: Mac and
+  Cheese ×2"), each with "Put in Fridge, 3 m" buttons, one per place on the
+  lot that accepts it (several fridges: each one). One tap moves the whole
+  stack, like dragging it in the game.
 - **You**: the Sim itself (self-care, its own interactions) and the Sim's
   **phone** (calls, invitations, going out, services, travel).
 - **Interact**:

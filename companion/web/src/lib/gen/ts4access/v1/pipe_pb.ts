@@ -4,9 +4,9 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
-import type { CancelActionRequest, CommandOutcome, GetHouseMapRequest, GetInteractionsRequest, ListTargetsRequest, RespondDialogRequest, RunInteractionRequest, SelectSimRequest, SetCameraRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
+import type { CancelActionRequest, CommandOutcome, GetHouseMapRequest, GetInteractionsRequest, ListInventoryRequest, ListTargetsRequest, MoveItemRequest, RespondDialogRequest, RunInteractionRequest, SelectSimRequest, SetCameraRequest, SetNarrationRequest, SetSpeedRequest } from "./companion_pb.js";
 import { file_ts4access_v1_companion } from "./companion_pb.js";
-import type { Event, GameState, HouseMap, Interaction, Target } from "./game_pb.js";
+import type { Event, GameState, HouseMap, Interaction, InventoryItem, Target } from "./game_pb.js";
 import { file_ts4access_v1_game } from "./game_pb.js";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/pipe.proto.
  */
 export const file_ts4access_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAiiAIKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSAASJgoEZ3JhYhgGIAEoCzIWLnRzNGFjY2Vzcy52MS5HcmFiS2V5c0gAQgkKB3BheWxvYWQixwUKBlRvR2FtZRIKCgJpZBgBIAEoCRIyCglzZXRfc3BlZWQYAiABKAsyHS50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXF1ZXN0SAASNAoKc2VsZWN0X3NpbRgDIAEoCzIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOgoNY2FuY2VsX2FjdGlvbhgEIAEoCzIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0SAASOgoNc2V0X25hcnJhdGlvbhgFIAEoCzIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0SAASOAoMbGlzdF90YXJnZXRzGAYgASgLMiAudHM0YWNjZXNzLnYxLkxpc3RUYXJnZXRzUmVxdWVzdEgAEkAKEGdldF9pbnRlcmFjdGlvbnMYByABKAsyJC50czRhY2Nlc3MudjEuR2V0SW50ZXJhY3Rpb25zUmVxdWVzdEgAEj4KD3J1bl9pbnRlcmFjdGlvbhgIIAEoCzIjLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlcXVlc3RIABI5Cg1nZXRfaG91c2VfbWFwGAkgASgLMiAudHM0YWNjZXNzLnYxLkdldEhvdXNlTWFwUmVxdWVzdEgAEjIKCW9wZW5fbWVudRgKIAEoCzIdLnRzNGFjY2Vzcy52MS5PcGVuTWVudVJlcXVlc3RIABI8Cg5yZXNwb25kX2RpYWxvZxgLIAEoCzIiLnRzNGFjY2Vzcy52MS5SZXNwb25kRGlhbG9nUmVxdWVzdEgAEjQKCnNldF9jYW1lcmEYDCABKAsyHi50czRhY2Nlc3MudjEuU2V0Q2FtZXJhUmVxdWVzdEgAEiUKA2tleRgNIAEoCzIWLnRzNGFjY2Vzcy52MS5LZXlFdmVudEgAQgkKB2NvbW1hbmQiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAkiGAoIR3JhYktleXMSDAoEa2V5cxgBIAMoCSJDCghLZXlFdmVudBIOCgZmYW1pbHkYASABKAkSCgoCdmsYAiABKAUSDAoEZG93bhgDIAEoCBINCgVzaGlmdBgEIAEoCGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
+  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAkilAIKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXASLgoJaW52ZW50b3J5GAcgAygLMhsudHM0YWNjZXNzLnYxLkludmVudG9yeUl0ZW0iiAIKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSAASJgoEZ3JhYhgGIAEoCzIWLnRzNGFjY2Vzcy52MS5HcmFiS2V5c0gAQgkKB3BheWxvYWQiuQYKBlRvR2FtZRIKCgJpZBgBIAEoCRIyCglzZXRfc3BlZWQYAiABKAsyHS50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXF1ZXN0SAASNAoKc2VsZWN0X3NpbRgDIAEoCzIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOgoNY2FuY2VsX2FjdGlvbhgEIAEoCzIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0SAASOgoNc2V0X25hcnJhdGlvbhgFIAEoCzIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0SAASOAoMbGlzdF90YXJnZXRzGAYgASgLMiAudHM0YWNjZXNzLnYxLkxpc3RUYXJnZXRzUmVxdWVzdEgAEkAKEGdldF9pbnRlcmFjdGlvbnMYByABKAsyJC50czRhY2Nlc3MudjEuR2V0SW50ZXJhY3Rpb25zUmVxdWVzdEgAEj4KD3J1bl9pbnRlcmFjdGlvbhgIIAEoCzIjLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlcXVlc3RIABI5Cg1nZXRfaG91c2VfbWFwGAkgASgLMiAudHM0YWNjZXNzLnYxLkdldEhvdXNlTWFwUmVxdWVzdEgAEjIKCW9wZW5fbWVudRgKIAEoCzIdLnRzNGFjY2Vzcy52MS5PcGVuTWVudVJlcXVlc3RIABI8Cg5yZXNwb25kX2RpYWxvZxgLIAEoCzIiLnRzNGFjY2Vzcy52MS5SZXNwb25kRGlhbG9nUmVxdWVzdEgAEjQKCnNldF9jYW1lcmEYDCABKAsyHi50czRhY2Nlc3MudjEuU2V0Q2FtZXJhUmVxdWVzdEgAEiUKA2tleRgNIAEoCzIWLnRzNGFjY2Vzcy52MS5LZXlFdmVudEgAEjwKDmxpc3RfaW52ZW50b3J5GA4gASgLMiIudHM0YWNjZXNzLnYxLkxpc3RJbnZlbnRvcnlSZXF1ZXN0SAASMgoJbW92ZV9pdGVtGA8gASgLMh0udHM0YWNjZXNzLnYxLk1vdmVJdGVtUmVxdWVzdEgAQgkKB2NvbW1hbmQiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAkiGAoIR3JhYktleXMSDAoEa2V5cxgBIAMoCSJDCghLZXlFdmVudBIOCgZmYW1pbHkYASABKAkSCgoCdmsYAiABKAUSDAoEZG93bhgDIAEoCBINCgVzaGlmdBgEIAEoCGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.Voice
@@ -113,6 +113,11 @@ export type CommandResult = Message<"ts4access.v1.CommandResult"> & {
    * @generated from field: ts4access.v1.HouseMap house_map = 6;
    */
   houseMap?: HouseMap | undefined;
+
+  /**
+   * @generated from field: repeated ts4access.v1.InventoryItem inventory = 7;
+   */
+  inventory: InventoryItem[];
 };
 
 /**
@@ -262,6 +267,18 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
      */
     value: KeyEvent;
     case: "key";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.ListInventoryRequest list_inventory = 14;
+     */
+    value: ListInventoryRequest;
+    case: "listInventory";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.MoveItemRequest move_item = 15;
+     */
+    value: MoveItemRequest;
+    case: "moveItem";
   } | { case: undefined; value?: undefined };
 };
 

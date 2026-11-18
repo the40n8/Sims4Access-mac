@@ -282,6 +282,11 @@ def _run(cmd):
             return True, ''
         return _mackeys.handle(k.get('family', ''), int(k.get('vk', 0)), bool(k.get('down')),
                                bool(k.get('shift'))), 'not_owned'
+    if 'listInventory' in cmd:
+        return list_inventory()
+    if 'moveItem' in cmd:
+        c = cmd['moveItem']
+        return move_item(c.get('itemId', ''), c.get('destinationId', ''))
     if 'setCamera' in cmd:
         c = cmd['setCamera']
         return _set_camera(c.get('simId', ''), c.get('mode', 'CAMERA_MODE_FOLLOW'))
@@ -953,6 +958,106 @@ def _set_camera(sim_id, mode):
             log('close camera failed: {!r}'.format(ex))
     camera.focus_on_sim(sim=sim, follow=True, client=client)
     return True, ''
+
+
+# ---------------------------------------------------------------- inventory
+# What the controlled Sim carries, and where each item can go (fridge,
+# bookcase...): the game's drag and drop between inventories, in one tap.
+# A whole stack moves; the destination's own rules decide what it accepts.
+
+MAX_DESTINATIONS = 5
+
+
+def _stack_count(obj):
+    try:
+        return int(obj.stack_count())
+    except Exception:
+        return 1
+
+
+def _inventory_items(sim):
+    seen, out = set(), []
+    for obj in list(sim.inventory_component or ()):
+        try:
+            stack = obj.inventoryitem_component.get_stack_id()
+        except Exception:
+            stack = obj.id
+        if stack in seen:
+            continue
+        seen.add(stack)
+        out.append(obj)
+    return out
+
+
+def _destinations(sim, item, holders):
+    out = []
+    for d, holder in holders:
+        try:
+            if holder.inventory_component.can_add(item):
+                group, kind, _keywords = _classify(holder)
+                out.append({'id': str(holder.id), 'name': _object_name(holder), 'group': group, 'kind': kind,
+                            'distance': int(round(d))})
+        except Exception:
+            continue
+        if len(out) >= MAX_DESTINATIONS:
+            break
+    return out
+
+
+def list_inventory():
+    import services
+    sim, _client = _sim_and_client()
+    if sim is None or getattr(sim, 'inventory_component', None) is None:
+        return False, 'sim_unavailable'
+    holders = []
+    for obj in services.object_manager().get_valid_objects_gen():
+        try:
+            if getattr(obj, 'is_sim', False) or obj.is_hidden() or getattr(obj, 'inventory_component', None) is None:
+                continue
+            on_lot = getattr(obj, 'is_on_active_lot', None)
+            if on_lot is not None and not on_lot():
+                continue
+            d = ((obj.position.x - sim.position.x) ** 2 + (obj.position.z - sim.position.z) ** 2) ** 0.5
+            holders.append((d, obj))
+        except Exception:
+            continue
+    holders.sort(key=lambda pair: pair[0])
+    items = []
+    for item in _inventory_items(sim):
+        try:
+            group, kind, _keywords = _classify(item)
+            items.append({'item': {'id': str(item.id), 'name': _object_name(item), 'group': group, 'kind': kind},
+                          'count': _stack_count(item), 'destinations': _destinations(sim, item, holders)})
+        except Exception as ex:
+            log('inventory item skipped: {!r}'.format(ex))
+    return True, '', {'inventory': items}
+
+
+def move_item(item_id, destination_id):
+    import services
+    sim, _client = _sim_and_client()
+    if sim is None:
+        return False, 'sim_unavailable'
+    source = sim.inventory_component
+    item = next((o for o in _inventory_items(sim) if str(o.id) == str(item_id)), None)
+    if item is None:
+        return False, 'target_unavailable'
+    try:
+        holder = services.object_manager().get(int(destination_id))
+    except (TypeError, ValueError):
+        holder = None
+    if holder is None or getattr(holder, 'inventory_component', None) is None:
+        return False, 'target_unavailable'
+    target = holder.inventory_component
+    if not target.can_add(item):
+        return False, 'not_accepted'
+    if not source.try_remove_object_by_id(item.id, count=_stack_count(item)):
+        return False, 'refused'
+    if target.player_try_add_object(item):
+        return True, ''
+    # Put it back rather than lose it.
+    source.player_try_add_object(item)
+    return False, 'not_accepted'
 
 
 # ---------------------------------------------------------------- blocked Sims

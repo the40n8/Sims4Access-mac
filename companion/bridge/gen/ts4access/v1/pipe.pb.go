@@ -146,10 +146,11 @@ type CommandResult struct {
 	Id      string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Outcome *CommandOutcome        `protobuf:"bytes,2,opt,name=outcome,proto3" json:"outcome,omitempty"`
 	// Data some commands return.
-	Targets       []*Target      `protobuf:"bytes,3,rep,name=targets,proto3" json:"targets,omitempty"`
-	Interactions  []*Interaction `protobuf:"bytes,4,rep,name=interactions,proto3" json:"interactions,omitempty"`
-	NamesPending  bool           `protobuf:"varint,5,opt,name=names_pending,json=namesPending,proto3" json:"names_pending,omitempty"`
-	HouseMap      *HouseMap      `protobuf:"bytes,6,opt,name=house_map,json=houseMap,proto3" json:"house_map,omitempty"`
+	Targets       []*Target        `protobuf:"bytes,3,rep,name=targets,proto3" json:"targets,omitempty"`
+	Interactions  []*Interaction   `protobuf:"bytes,4,rep,name=interactions,proto3" json:"interactions,omitempty"`
+	NamesPending  bool             `protobuf:"varint,5,opt,name=names_pending,json=namesPending,proto3" json:"names_pending,omitempty"`
+	HouseMap      *HouseMap        `protobuf:"bytes,6,opt,name=house_map,json=houseMap,proto3" json:"house_map,omitempty"`
+	Inventory     []*InventoryItem `protobuf:"bytes,7,rep,name=inventory,proto3" json:"inventory,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -222,6 +223,13 @@ func (x *CommandResult) GetNamesPending() bool {
 func (x *CommandResult) GetHouseMap() *HouseMap {
 	if x != nil {
 		return x.HouseMap
+	}
+	return nil
+}
+
+func (x *CommandResult) GetInventory() []*InventoryItem {
+	if x != nil {
+		return x.Inventory
 	}
 	return nil
 }
@@ -391,6 +399,8 @@ type ToGame struct {
 	//	*ToGame_RespondDialog
 	//	*ToGame_SetCamera
 	//	*ToGame_Key
+	//	*ToGame_ListInventory
+	//	*ToGame_MoveItem
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -548,6 +558,24 @@ func (x *ToGame) GetKey() *KeyEvent {
 	return nil
 }
 
+func (x *ToGame) GetListInventory() *ListInventoryRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_ListInventory); ok {
+			return x.ListInventory
+		}
+	}
+	return nil
+}
+
+func (x *ToGame) GetMoveItem() *MoveItemRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_MoveItem); ok {
+			return x.MoveItem
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -600,6 +628,14 @@ type ToGame_Key struct {
 	Key *KeyEvent `protobuf:"bytes,13,opt,name=key,proto3,oneof"`
 }
 
+type ToGame_ListInventory struct {
+	ListInventory *ListInventoryRequest `protobuf:"bytes,14,opt,name=list_inventory,json=listInventory,proto3,oneof"`
+}
+
+type ToGame_MoveItem struct {
+	MoveItem *MoveItemRequest `protobuf:"bytes,15,opt,name=move_item,json=moveItem,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -623,6 +659,10 @@ func (*ToGame_RespondDialog) isToGame_Command() {}
 func (*ToGame_SetCamera) isToGame_Command() {}
 
 func (*ToGame_Key) isToGame_Command() {}
+
+func (*ToGame_ListInventory) isToGame_Command() {}
+
+func (*ToGame_MoveItem) isToGame_Command() {}
 
 // Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
 // menu bar icon, not from the phone).
@@ -800,14 +840,15 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x05Hello\x12\x1f\n" +
 	"\vmod_version\x18\x01 \x01(\tR\n" +
 	"modVersion\x12!\n" +
-	"\fgame_version\x18\x02 \x01(\tR\vgameVersion\"\xa0\x02\n" +
+	"\fgame_version\x18\x02 \x01(\tR\vgameVersion\"\xdb\x02\n" +
 	"\rCommandResult\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x126\n" +
 	"\aoutcome\x18\x02 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12.\n" +
 	"\atargets\x18\x03 \x03(\v2\x14.ts4access.v1.TargetR\atargets\x12=\n" +
 	"\finteractions\x18\x04 \x03(\v2\x19.ts4access.v1.InteractionR\finteractions\x12#\n" +
 	"\rnames_pending\x18\x05 \x01(\bR\fnamesPending\x123\n" +
-	"\thouse_map\x18\x06 \x01(\v2\x16.ts4access.v1.HouseMapR\bhouseMap\"\xb2\x02\n" +
+	"\thouse_map\x18\x06 \x01(\v2\x16.ts4access.v1.HouseMapR\bhouseMap\x129\n" +
+	"\tinventory\x18\a \x03(\v2\x1b.ts4access.v1.InventoryItemR\tinventory\"\xb2\x02\n" +
 	"\bToBridge\x12+\n" +
 	"\x05hello\x18\x01 \x01(\v2\x13.ts4access.v1.HelloH\x00R\x05hello\x12/\n" +
 	"\x05state\x18\x02 \x01(\v2\x17.ts4access.v1.GameStateH\x00R\x05state\x12+\n" +
@@ -815,7 +856,7 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x06result\x18\x04 \x01(\v2\x1b.ts4access.v1.CommandResultH\x00R\x06result\x12+\n" +
 	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voice\x12,\n" +
 	"\x04grab\x18\x06 \x01(\v2\x16.ts4access.v1.GrabKeysH\x00R\x04grabB\t\n" +
-	"\apayload\"\xe0\x06\n" +
+	"\apayload\"\xeb\a\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1d.ts4access.v1.SetSpeedRequestH\x00R\bsetSpeed\x12?\n" +
@@ -832,7 +873,9 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x0erespond_dialog\x18\v \x01(\v2\".ts4access.v1.RespondDialogRequestH\x00R\rrespondDialog\x12?\n" +
 	"\n" +
 	"set_camera\x18\f \x01(\v2\x1e.ts4access.v1.SetCameraRequestH\x00R\tsetCamera\x12*\n" +
-	"\x03key\x18\r \x01(\v2\x16.ts4access.v1.KeyEventH\x00R\x03keyB\t\n" +
+	"\x03key\x18\r \x01(\v2\x16.ts4access.v1.KeyEventH\x00R\x03key\x12K\n" +
+	"\x0elist_inventory\x18\x0e \x01(\v2\".ts4access.v1.ListInventoryRequestH\x00R\rlistInventory\x12<\n" +
+	"\tmove_item\x18\x0f \x01(\v2\x1d.ts4access.v1.MoveItemRequestH\x00R\bmoveItemB\t\n" +
 	"\acommand\"%\n" +
 	"\x0fOpenMenuRequest\x12\x12\n" +
 	"\x04menu\x18\x01 \x01(\tR\x04menu\"\x1e\n" +
@@ -871,47 +914,53 @@ var file_ts4access_v1_pipe_proto_goTypes = []any{
 	(*Target)(nil),                 // 9: ts4access.v1.Target
 	(*Interaction)(nil),            // 10: ts4access.v1.Interaction
 	(*HouseMap)(nil),               // 11: ts4access.v1.HouseMap
-	(*GameState)(nil),              // 12: ts4access.v1.GameState
-	(*Event)(nil),                  // 13: ts4access.v1.Event
-	(*SetSpeedRequest)(nil),        // 14: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),       // 15: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),    // 16: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),    // 17: ts4access.v1.SetNarrationRequest
-	(*ListTargetsRequest)(nil),     // 18: ts4access.v1.ListTargetsRequest
-	(*GetInteractionsRequest)(nil), // 19: ts4access.v1.GetInteractionsRequest
-	(*RunInteractionRequest)(nil),  // 20: ts4access.v1.RunInteractionRequest
-	(*GetHouseMapRequest)(nil),     // 21: ts4access.v1.GetHouseMapRequest
-	(*RespondDialogRequest)(nil),   // 22: ts4access.v1.RespondDialogRequest
-	(*SetCameraRequest)(nil),       // 23: ts4access.v1.SetCameraRequest
+	(*InventoryItem)(nil),          // 12: ts4access.v1.InventoryItem
+	(*GameState)(nil),              // 13: ts4access.v1.GameState
+	(*Event)(nil),                  // 14: ts4access.v1.Event
+	(*SetSpeedRequest)(nil),        // 15: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),       // 16: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),    // 17: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),    // 18: ts4access.v1.SetNarrationRequest
+	(*ListTargetsRequest)(nil),     // 19: ts4access.v1.ListTargetsRequest
+	(*GetInteractionsRequest)(nil), // 20: ts4access.v1.GetInteractionsRequest
+	(*RunInteractionRequest)(nil),  // 21: ts4access.v1.RunInteractionRequest
+	(*GetHouseMapRequest)(nil),     // 22: ts4access.v1.GetHouseMapRequest
+	(*RespondDialogRequest)(nil),   // 23: ts4access.v1.RespondDialogRequest
+	(*SetCameraRequest)(nil),       // 24: ts4access.v1.SetCameraRequest
+	(*ListInventoryRequest)(nil),   // 25: ts4access.v1.ListInventoryRequest
+	(*MoveItemRequest)(nil),        // 26: ts4access.v1.MoveItemRequest
 }
 var file_ts4access_v1_pipe_proto_depIdxs = []int32{
 	8,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
 	9,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
 	10, // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
 	11, // 3: ts4access.v1.CommandResult.house_map:type_name -> ts4access.v1.HouseMap
-	1,  // 4: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
-	12, // 5: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
-	13, // 6: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
-	2,  // 7: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
-	0,  // 8: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
-	6,  // 9: ts4access.v1.ToBridge.grab:type_name -> ts4access.v1.GrabKeys
-	14, // 10: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
-	15, // 11: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
-	16, // 12: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
-	17, // 13: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
-	18, // 14: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
-	19, // 15: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
-	20, // 16: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
-	21, // 17: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
-	5,  // 18: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
-	22, // 19: ts4access.v1.ToGame.respond_dialog:type_name -> ts4access.v1.RespondDialogRequest
-	23, // 20: ts4access.v1.ToGame.set_camera:type_name -> ts4access.v1.SetCameraRequest
-	7,  // 21: ts4access.v1.ToGame.key:type_name -> ts4access.v1.KeyEvent
-	22, // [22:22] is the sub-list for method output_type
-	22, // [22:22] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	12, // 4: ts4access.v1.CommandResult.inventory:type_name -> ts4access.v1.InventoryItem
+	1,  // 5: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
+	13, // 6: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
+	14, // 7: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
+	2,  // 8: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
+	0,  // 9: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
+	6,  // 10: ts4access.v1.ToBridge.grab:type_name -> ts4access.v1.GrabKeys
+	15, // 11: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
+	16, // 12: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
+	17, // 13: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
+	18, // 14: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
+	19, // 15: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
+	20, // 16: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
+	21, // 17: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
+	22, // 18: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
+	5,  // 19: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
+	23, // 20: ts4access.v1.ToGame.respond_dialog:type_name -> ts4access.v1.RespondDialogRequest
+	24, // 21: ts4access.v1.ToGame.set_camera:type_name -> ts4access.v1.SetCameraRequest
+	7,  // 22: ts4access.v1.ToGame.key:type_name -> ts4access.v1.KeyEvent
+	25, // 23: ts4access.v1.ToGame.list_inventory:type_name -> ts4access.v1.ListInventoryRequest
+	26, // 24: ts4access.v1.ToGame.move_item:type_name -> ts4access.v1.MoveItemRequest
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_pipe_proto_init() }
@@ -942,6 +991,8 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToGame_RespondDialog)(nil),
 		(*ToGame_SetCamera)(nil),
 		(*ToGame_Key)(nil),
+		(*ToGame_ListInventory)(nil),
+		(*ToGame_MoveItem)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

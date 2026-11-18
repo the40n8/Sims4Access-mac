@@ -32,6 +32,7 @@ message CommandResult {
   repeated Interaction interactions = 4;
   bool names_pending = 5;
   HouseMap house_map = 6;
+  repeated InventoryItem inventory = 7;
 }
 
 message ToBridge {
@@ -62,6 +63,8 @@ message ToGame {
     RespondDialogRequest respond_dialog = 11;
     SetCameraRequest set_camera = 12;
     KeyEvent key = 13;
+    ListInventoryRequest list_inventory = 14;
+    MoveItemRequest move_item = 15;
   }
 }
 

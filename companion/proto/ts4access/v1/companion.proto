@@ -27,6 +27,10 @@ service CompanionService {
   rpc RespondDialog(RespondDialogRequest) returns (RespondDialogResponse);
   // Point the game camera at a Sim: follow, close-up, or let go.
   rpc SetCamera(SetCameraRequest) returns (SetCameraResponse);
+  // The controlled Sim's inventory, and moving an item into a fridge, a
+  // bookcase... (the game's drag and drop, in one step).
+  rpc ListInventory(ListInventoryRequest) returns (ListInventoryResponse);
+  rpc MoveItem(MoveItemRequest) returns (MoveItemResponse);
   // What the Mac voice announces by itself (bridge setting, not sent to the game).
   rpc SetMacAnnounce(SetMacAnnounceRequest) returns (SetMacAnnounceResponse);
 }
@@ -155,5 +159,21 @@ message SetMacAnnounceRequest {
 }
 
 message SetMacAnnounceResponse {
+  CommandOutcome outcome = 1;
+}
+
+message ListInventoryRequest {}
+
+message ListInventoryResponse {
+  CommandOutcome outcome = 1;
+  repeated InventoryItem items = 2;
+}
+
+message MoveItemRequest {
+  string item_id = 1;
+  string destination_id = 2;
+}
+
+message MoveItemResponse {
   CommandOutcome outcome = 1;
 }
