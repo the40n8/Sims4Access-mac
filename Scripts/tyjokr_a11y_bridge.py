@@ -955,6 +955,63 @@ def _set_camera(sim_id, mode):
     return True, ''
 
 
+# ---------------------------------------------------------------- blocked Sims
+# When a Sim cannot reach where an action happens (no door, no stairs,
+# something in the way), the game cancels the action and only shows a
+# "blocked" bubble. interactions.utils.route_fail.route_failure plays it:
+# report it to the phone and the Mac voice with the game's reason.
+
+_route_seen = {}     # (sim id, action) -> monotonic time, to skip repeats
+
+
+def _install_route_fail():
+    import interactions.utils.route_fail as route_fail
+    original = route_fail.route_failure
+    if getattr(original, '_ts4access_phone', False):
+        return
+
+    def route_failure(sim, interaction, failure_reason, failure_object_id, *args, **kwargs):
+        try:
+            _report_route_fail(sim, interaction, failure_reason, failure_object_id)
+        except Exception as ex:
+            log('route failure report failed: {!r}'.format(ex))
+        return original(sim, interaction, failure_reason, failure_object_id, *args, **kwargs)
+
+    route_failure._ts4access_phone = True
+    route_fail.route_failure = route_failure
+
+
+def _report_route_fail(sim, interaction, failure_reason, failure_object_id):
+    import services
+    household = services.active_household()
+    info = getattr(sim, 'sim_info', None)
+    if info is None or household is None or info.household is not household:
+        return
+    action = ''
+    try:
+        action = text_of(interaction.get_name(), '')
+    except Exception:
+        pass
+    if not action:
+        action = _pretty(getattr(getattr(interaction, 'affordance', None), '__name__', ''), ('sim-', 'si_'))
+    now = time.monotonic()
+    key = (info.sim_id, action)
+    if now - _route_seen.get(key, -1e9) < 10.0:
+        return
+    _route_seen[key] = now
+    reason = getattr(failure_reason, 'name', '') or str(failure_reason or '')
+    obj_name = ''
+    if failure_object_id:
+        obj = services.object_manager().get(failure_object_id)
+        if obj is not None and not getattr(obj, 'is_sim', False):
+            obj_name = _object_name(obj)
+        elif obj is not None:
+            obj_name = '{} {}'.format(obj.sim_info.first_name, obj.sim_info.last_name).strip()
+    log('route failure: {} {} ({}, {})'.format(info.first_name, action, reason, obj_name))
+    send({'event': {'kind': 'EVENT_KIND_ROUTE_FAIL', 'simId': str(info.sim_id), 'simName': info.first_name,
+                    'subject': action, 'detail': reason, 'objectName': obj_name}})
+
+
 # ---------------------------------------------------------------- things to deal with
 # Puddles, broken objects, spoiled food, fire on the lot: listed for the
 # phone's "Needs attention" card. Scanning every object takes a moment, so
@@ -1364,6 +1421,10 @@ if IS_MAC:
     except Exception as _ex:
         _mackeys = None
         log('keyboard unavailable: {!r}'.format(_ex))
+    try:
+        _install_route_fail()
+    except Exception as _ex:
+        log('route failure hook unavailable: {!r}'.format(_ex))
     try:
         import tyjokr_a11y_dialogs as _dialogs
         _dialogs.install()

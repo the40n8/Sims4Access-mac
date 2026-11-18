@@ -144,6 +144,10 @@ func (g *game) step() {
 			r.Labels = append(r.Labels, "Good Friends")
 		}
 	}
+	if rand.IntN(120) == 0 {
+		g.hub.AddEvent(&v1.Event{Kind: v1.EventKind_EVENT_KIND_ROUTE_FAIL, SimId: st.Sims[0].Id, SimName: st.Sims[0].FirstName,
+			Subject: "Take Shower", Detail: "NO_PATH_FOUND"})
+	}
 	if rand.IntN(90) == 0 {
 		g.hub.AddEvent(&v1.Event{Kind: v1.EventKind_EVENT_KIND_NOTIFICATION, Subject: "Bills Due", Detail: "The household bills of §340 are due."})
 	}

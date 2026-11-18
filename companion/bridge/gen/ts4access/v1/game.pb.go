@@ -218,6 +218,10 @@ const (
 	EventKind_EVENT_KIND_SOCIAL EventKind = 18
 	// A relationship gained a label: subject is the other Sim, detail the label.
 	EventKind_EVENT_KIND_RELATIONSHIP EventKind = 19
+	// A Sim could not reach where an action happens (the "blocked" bubble):
+	// subject is the action, detail the game's reason (NO_PATH_FOUND,
+	// BLOCKING_OBJECT, BUILD_BUY, RESERVATION...), object_name what is in the way.
+	EventKind_EVENT_KIND_ROUTE_FAIL EventKind = 20
 )
 
 // Enum value maps for EventKind.
@@ -243,6 +247,7 @@ var (
 		17: "EVENT_KIND_BILLS",
 		18: "EVENT_KIND_SOCIAL",
 		19: "EVENT_KIND_RELATIONSHIP",
+		20: "EVENT_KIND_ROUTE_FAIL",
 	}
 	EventKind_value = map[string]int32{
 		"EVENT_KIND_UNSPECIFIED":     0,
@@ -265,6 +270,7 @@ var (
 		"EVENT_KIND_BILLS":           17,
 		"EVENT_KIND_SOCIAL":          18,
 		"EVENT_KIND_RELATIONSHIP":    19,
+		"EVENT_KIND_ROUTE_FAIL":      20,
 	}
 )
 
@@ -1742,8 +1748,10 @@ type Event struct {
 	// SOCIAL: how the relationship moved.
 	FriendshipDelta int32 `protobuf:"varint,8,opt,name=friendship_delta,json=friendshipDelta,proto3" json:"friendship_delta,omitempty"`
 	RomanceDelta    int32 `protobuf:"varint,9,opt,name=romance_delta,json=romanceDelta,proto3" json:"romance_delta,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// ROUTE_FAIL: the object in the way or out of reach.
+	ObjectName    string `protobuf:"bytes,10,opt,name=object_name,json=objectName,proto3" json:"object_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Event) Reset() {
@@ -1837,6 +1845,13 @@ func (x *Event) GetRomanceDelta() int32 {
 		return x.RomanceDelta
 	}
 	return 0
+}
+
+func (x *Event) GetObjectName() string {
+	if x != nil {
+		return x.ObjectName
+	}
+	return ""
 }
 
 // The house, room by room, for a mental map of the lot.
@@ -2809,7 +2824,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bcategory\x18\x03 \x01(\tR\bcategory\x12\x18\n" +
 	"\aenabled\x18\x04 \x01(\bR\aenabled\x12\x16\n" +
-	"\x06reason\x18\x05 \x01(\tR\x06reason\"\x8a\x02\n" +
+	"\x06reason\x18\x05 \x01(\tR\x06reason\"\xab\x02\n" +
 	"\x05Event\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x04R\x03seq\x12\x0e\n" +
 	"\x02at\x18\x02 \x01(\x03R\x02at\x12+\n" +
@@ -2819,7 +2834,10 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\asubject\x18\x06 \x01(\tR\asubject\x12\x16\n" +
 	"\x06detail\x18\a \x01(\tR\x06detail\x12)\n" +
 	"\x10friendship_delta\x18\b \x01(\x05R\x0ffriendshipDelta\x12#\n" +
-	"\rromance_delta\x18\t \x01(\x05R\fromanceDelta\"\x9f\x01\n" +
+	"\rromance_delta\x18\t \x01(\x05R\fromanceDelta\x12\x1f\n" +
+	"\vobject_name\x18\n" +
+	" \x01(\tR\n" +
+	"objectName\"\x9f\x01\n" +
 	"\bHouseMap\x12(\n" +
 	"\x05rooms\x18\x01 \x03(\v2\x12.ts4access.v1.RoomR\x05rooms\x12\x16\n" +
 	"\x06floors\x18\x02 \x03(\x05R\x06floors\x12,\n" +
@@ -2907,7 +2925,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\vActionState\x12\x1c\n" +
 	"\x18ACTION_STATE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14ACTION_STATE_RUNNING\x10\x01\x12\x17\n" +
-	"\x13ACTION_STATE_QUEUED\x10\x02*\x90\x04\n" +
+	"\x13ACTION_STATE_QUEUED\x10\x02*\xab\x04\n" +
 	"\tEventKind\x12\x1a\n" +
 	"\x16EVENT_KIND_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fEVENT_KIND_MOOD\x10\x01\x12\x1c\n" +
@@ -2929,7 +2947,8 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x12EVENT_KIND_VISITOR\x10\x10\x12\x14\n" +
 	"\x10EVENT_KIND_BILLS\x10\x11\x12\x15\n" +
 	"\x11EVENT_KIND_SOCIAL\x10\x12\x12\x1b\n" +
-	"\x17EVENT_KIND_RELATIONSHIP\x10\x13B\xc0\x01\n" +
+	"\x17EVENT_KIND_RELATIONSHIP\x10\x13\x12\x19\n" +
+	"\x15EVENT_KIND_ROUTE_FAIL\x10\x14B\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tGameProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (

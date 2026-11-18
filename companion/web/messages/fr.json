@@ -330,5 +330,14 @@
 	"show_fewer": "Afficher moins",
 	"submenu_label": "{name}, {count} choix",
 	"back_to_menu": "Retour à {name}",
-	"submenu_label_one": "{name}, 1 choix"
+	"submenu_label_one": "{name}, 1 choix",
+	"ev_route_fail": "{sim} ne peut pas faire « {action} » : {reason}.",
+	"rf_object": "{name} bloque le passage",
+	"rf_something": "quelque chose bloque le passage",
+	"rf_in_use": "quelqu’un d’autre l’utilise",
+	"rf_building": "des murs ou la construction bloquent le passage",
+	"rf_slope": "l’endroit est en pente",
+	"rf_headroom": "pas assez de hauteur",
+	"rf_blocked": "le passage est bloqué",
+	"rf_no_path": "aucun chemin pour y aller, vérifiez les portes et escaliers"
 }

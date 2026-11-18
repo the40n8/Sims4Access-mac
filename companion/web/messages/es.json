@@ -330,5 +330,14 @@
 	"show_fewer": "Mostrar menos",
 	"submenu_label": "{name}, {count} opciones",
 	"back_to_menu": "Volver a {name}",
-	"submenu_label_one": "{name}, 1 opción"
+	"submenu_label_one": "{name}, 1 opción",
+	"ev_route_fail": "{sim} no puede hacer «{action}»: {reason}.",
+	"rf_object": "{name} bloquea el paso",
+	"rf_something": "algo bloquea el paso",
+	"rf_in_use": "otra persona lo está usando",
+	"rf_building": "paredes o la construcción bloquean el paso",
+	"rf_slope": "el sitio está en pendiente",
+	"rf_headroom": "no hay suficiente altura",
+	"rf_blocked": "el paso está bloqueado",
+	"rf_no_path": "no hay camino, revisa puertas y escaleras"
 }

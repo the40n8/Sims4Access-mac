@@ -86,6 +86,10 @@ func abs(n int32) int32 {
 // Wants reports whether the Mac voice should say e under setting a
 // (mirrors the phone's socialShown for conversations).
 func Wants(a *v1.MacAnnounce, e *v1.Event) bool {
+	// A blocked Sim is only shown by a bubble in the game: always said.
+	if e.GetKind() == v1.EventKind_EVENT_KIND_ROUTE_FAIL {
+		return true
+	}
 	g := group(e.GetKind())
 	if g == "social" {
 		switch a.GetSocial() {
@@ -114,6 +118,28 @@ func signed(n int32) string {
 
 var problems = map[string]string{"FIRE": "Fire! %s", "BROKEN": "Broken: %s", "PUDDLE": "A puddle on the floor",
 	"SPOILED": "Spoiled food: %s", "FOOD": "Food ready: %s"}
+
+// Why a Sim could not get there, from the game's TransitionFailureReasons.
+func routeReason(reason, object string) string {
+	switch reason {
+	case "BLOCKING_OBJECT":
+		if object != "" {
+			return object + " is in the way"
+		}
+		return "something is in the way"
+	case "RESERVATION":
+		return "someone else is using it"
+	case "BUILD_BUY":
+		return "walls or building block the way"
+	case "GOAL_ON_SLOPE":
+		return "the spot is on a slope"
+	case "INSUFFICIENT_HEAD_CLEARANCE":
+		return "not enough room overhead"
+	case "UNKNOWN", "":
+		return "the way is blocked"
+	}
+	return "no way to get there: check doors and stairs"
+}
 
 // Text words an event for the Mac voice ("" for nothing to say).
 func Text(e *v1.Event) string {
@@ -170,6 +196,8 @@ func Text(e *v1.Event) string {
 			parts = append(parts, "romance "+signed(d))
 		}
 		return fmt.Sprintf("%s and %s: %s.", sim, e.GetSubject(), strings.Join(parts, ", "))
+	case v1.EventKind_EVENT_KIND_ROUTE_FAIL:
+		return fmt.Sprintf("%s can't %s: %s.", sim, strings.ToLower(strings.TrimRight(e.GetSubject(), ".…")), routeReason(e.GetDetail(), e.GetObjectName()))
 	case v1.EventKind_EVENT_KIND_RELATIONSHIP:
 		return fmt.Sprintf("%s and %s: now %s.", sim, e.GetSubject(), e.GetDetail())
 	}

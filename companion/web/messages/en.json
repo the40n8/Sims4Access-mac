@@ -330,5 +330,14 @@
 	"show_fewer": "Show fewer",
 	"submenu_label": "{name}, {count} choices",
 	"back_to_menu": "Back to {name}",
-	"submenu_label_one": "{name}, 1 choice"
+	"submenu_label_one": "{name}, 1 choice",
+	"ev_route_fail": "{sim} can’t do “{action}”: {reason}.",
+	"rf_object": "{name} is in the way",
+	"rf_something": "something is in the way",
+	"rf_in_use": "someone else is using it",
+	"rf_building": "walls or building block the way",
+	"rf_slope": "the spot is on a slope",
+	"rf_headroom": "not enough room overhead",
+	"rf_blocked": "the way is blocked",
+	"rf_no_path": "no way to get there, check doors and stairs"
 }

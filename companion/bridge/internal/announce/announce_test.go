@@ -39,3 +39,13 @@ func TestSaveLoad(t *testing.T) {
 		t.Fatalf("got %v", got)
 	}
 }
+
+func TestRouteFail(t *testing.T) {
+	e := &v1.Event{Kind: v1.EventKind_EVENT_KIND_ROUTE_FAIL, SimName: "Bella", Subject: "Take Shower", Detail: "NO_PATH_FOUND"}
+	if !Wants(&v1.MacAnnounce{}, e) {
+		t.Fatal("route failures are always said")
+	}
+	if got := Text(e); got != "Bella can't take shower: no way to get there: check doors and stairs." {
+		t.Fatalf("got %q", got)
+	}
+}

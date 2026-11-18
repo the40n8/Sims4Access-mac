@@ -42,6 +42,7 @@ export function groupOf(kind: EventKind): Group | 'social' | 'spoken' | null {
 		case EventKind.PROBLEM:
 		case EventKind.VISITOR:
 		case EventKind.BILLS:
+		case EventKind.ROUTE_FAIL:
 			return 'messages';
 		case EventKind.SOCIAL:
 		case EventKind.RELATIONSHIP:

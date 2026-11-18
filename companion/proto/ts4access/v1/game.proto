@@ -226,6 +226,10 @@ enum EventKind {
   EVENT_KIND_SOCIAL = 18;
   // A relationship gained a label: subject is the other Sim, detail the label.
   EVENT_KIND_RELATIONSHIP = 19;
+  // A Sim could not reach where an action happens (the "blocked" bubble):
+  // subject is the action, detail the game's reason (NO_PATH_FOUND,
+  // BLOCKING_OBJECT, BUILD_BUY, RESERVATION...), object_name what is in the way.
+  EVENT_KIND_ROUTE_FAIL = 20;
 }
 
 // Something the controlled Sim can interact with.
@@ -270,6 +274,8 @@ message Event {
   // SOCIAL: how the relationship moved.
   int32 friendship_delta = 8;
   int32 romance_delta = 9;
+  // ROUTE_FAIL: the object in the way or out of reach.
+  string object_name = 10;
 }
 
 // The house, room by room, for a mental map of the lot.

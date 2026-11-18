@@ -155,6 +155,10 @@ From top to bottom:
 
 ## Troubleshooting
 
+- "Bella can't do “Take Shower”: no way to get there, check doors and
+  stairs": the Sim could not reach the place (the game shows a "blocked"
+  bubble). Add a door or stairs, or move what is in the way. Said on the
+  Mac and on the phone.
 - "Waiting for the game": the game is loading or closed.
 - The page does not open: the game was restarted, so the address changed.
   Scan the new QR code.

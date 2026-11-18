@@ -173,6 +173,8 @@ export function eventText(e: Event): string {
 			const what = [e.detail, moves.join(', ')].filter(Boolean).join(', ');
 			return m.ev_social({ sim, other: e.subject, what });
 		}
+		case EventKind.ROUTE_FAIL:
+			return m.ev_route_fail({ sim, action: e.subject, reason: routeReason(e.detail, e.objectName) });
 		case EventKind.RELATIONSHIP:
 			return m.ev_relationship({ sim, other: e.subject, label: e.detail });
 		case EventKind.VISITOR:
@@ -202,4 +204,25 @@ export function reasonText(reason: string): string {
 		dialog_closed: m.reason_dialog_closed
 	};
 	return (map[reason] ?? m.reason_other)();
+}
+
+/** Why a Sim could not get there (the game's TransitionFailureReasons). */
+function routeReason(reason: string, object: string): string {
+	switch (reason) {
+		case 'BLOCKING_OBJECT':
+			return object ? m.rf_object({ name: object }) : m.rf_something();
+		case 'RESERVATION':
+			return m.rf_in_use();
+		case 'BUILD_BUY':
+			return m.rf_building();
+		case 'GOAL_ON_SLOPE':
+			return m.rf_slope();
+		case 'INSUFFICIENT_HEAD_CLEARANCE':
+			return m.rf_headroom();
+		case 'UNKNOWN':
+		case '':
+			return m.rf_blocked();
+		default:
+			return m.rf_no_path();
+	}
 }
