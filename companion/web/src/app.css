@@ -137,3 +137,8 @@ p,
 li {
 	overflow-wrap: anywhere;
 }
+
+/* The sticky top bar (pause + tabs) must not cover what focus moves to. */
+html {
+	scroll-padding-top: 10rem;
+}

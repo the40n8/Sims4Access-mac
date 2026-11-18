@@ -324,5 +324,8 @@
 	"want_line": "Desea: {name}",
 	"fear_line": "Miedo: {name}",
 	"work_tasks_title": "Hoy en el trabajo",
-	"promotion_title": "Para el próximo ascenso"
+	"promotion_title": "Para el próximo ascenso",
+	"att_needs_other": "{sim}: {needs}",
+	"show_all_actions": "Mostrar las {count} acciones",
+	"show_fewer": "Mostrar menos"
 }

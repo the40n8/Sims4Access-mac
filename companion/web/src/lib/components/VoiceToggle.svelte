@@ -48,7 +48,7 @@
 		gap: 1rem;
 	}
 	.voice button[aria-checked='true'] .state {
-		color: var(--accent);
+		font-weight: 800;
 	}
 	.voice p {
 		margin: 0;

@@ -74,7 +74,8 @@
 	});
 </script>
 
-<svelte:head><title>{m.page_title()}</title></svelte:head>
+<!-- The screen's name first: VoiceOver reads the title when the app comes back. -->
+<svelte:head><title>{title} · {m.page_title()}</title></svelte:head>
 
 <Announcer />
 

@@ -68,10 +68,25 @@
 		}
 		for (const sim of game?.sims ?? []) {
 			if (!sim.here) continue;
-			for (const need of sim.needs) {
-				if (need.level !== NeedLevel.LOW && need.level !== NeedLevel.CRITICAL) continue;
-				const help = NEED_HELP[need.key];
-				if (!help) continue;
+			const low = sim.needs.filter(
+				(n) => (n.level === NeedLevel.LOW || n.level === NeedLevel.CRITICAL) && NEED_HELP[n.key]
+			);
+			if (!sim.active) {
+				// Another Sim: one line with all its low needs, and one "Control" button.
+				if (low.length)
+					out.push({
+						id: `n-${sim.id}`,
+						text: m.att_needs_other({
+							sim: simName(sim),
+							needs: low.map((n) => `${needName(n.key)} ${n.percent}%, ${levelName(n.level)}`).join('; ')
+						}),
+						help: NEED_HELP[low[0].key],
+						sim,
+						urgent: low.some((n) => n.level === NeedLevel.CRITICAL)
+					});
+				continue;
+			}
+			for (const need of low) {
 				out.push({
 					id: `n-${sim.id}-${need.key}`,
 					text: m.att_need({
@@ -80,7 +95,7 @@
 						percent: need.percent,
 						level: levelName(need.level)
 					}),
-					help,
+					help: NEED_HELP[need.key],
 					sim,
 					urgent: need.level === NeedLevel.CRITICAL
 				});
@@ -200,10 +215,11 @@
 		<ul class="stack">
 			{#each items as item (item.id)}
 				<li class="stack item" class:urgent={item.urgent}>
-					<p>{item.text}</p>
+					<p id={`${item.id}-text`}>{item.text}</p>
 					<div class="buttons">
 						{#if item.sim && !item.sim.active}
 							<button
+								aria-describedby={`${item.id}-text`}
 								type="button"
 								id={`${item.id}-control`}
 								aria-disabled={busy}
@@ -214,6 +230,7 @@
 						{:else}
 							{#each item.help.quick as q, i (i)}
 								<button
+									aria-describedby={`${item.id}-text`}
 									type="button"
 									id={`${item.id}-q${i}`}
 									aria-disabled={busy}
@@ -222,6 +239,7 @@
 							{/each}
 							{#if item.help.objects || item.help.phone}
 								<button
+									aria-describedby={`${item.id}-text`}
 									type="button"
 									id={`${item.id}-others`}
 									aria-expanded={others === item.id}
@@ -236,6 +254,7 @@
 							{#each helpers(targets, item.help.objects) as t (t.id)}
 								<li>
 									<button
+										aria-describedby={`${item.id}-text`}
 										type="button"
 										class="row"
 										id={`${item.id}-o-${t.id}`}
@@ -248,6 +267,7 @@
 							{#if item.help.phone && phone}
 								<li>
 									<button
+										aria-describedby={`${item.id}-text`}
 										type="button"
 										class="row"
 										id={`${item.id}-o-phone`}

@@ -23,6 +23,7 @@
 	];
 
 	let busy = $state(false);
+	let showAllActions = $state(false);
 	let targets = $state<Target[] | null>(null);
 	let query = $state('');
 	let selected = $state<Target | null>(null);
@@ -173,23 +174,40 @@
 				{#if me.actions.length === 0}
 					<p class="muted">{m.actions_none()}</p>
 				{:else}
-					<ul class="stack">
-						{#each me.actions as action (action.id)}
+					<!-- The running action and the next few; the rest on demand, so the
+					     screen below stays one swipe away. -->
+					<ul class="stack" id="queue-list">
+						{#each showAllActions ? me.actions : me.actions.slice(0, 4) as action, n (action.id)}
 							<li class="queued">
-								<span>
-									{action.name}
+								<span id={`action-${action.id}`}>
+									{n + 1}. {action.name}
 									<span class="muted">
 										· {action.state === ActionState.RUNNING ? m.action_running() : m.action_queued()}
 									</span>
 								</span>
 								{#if action.cancelable}
-									<button type="button" aria-disabled={busy} onclick={() => cancelAction(action)}>
+									<button
+										type="button"
+										aria-describedby={`action-${action.id}`}
+										aria-disabled={busy}
+										onclick={() => cancelAction(action)}
+									>
 										{m.cancel_action({ action: action.name })}
 									</button>
 								{/if}
 							</li>
 						{/each}
 					</ul>
+					{#if me.actions.length > 4}
+						<button
+							type="button"
+							aria-expanded={showAllActions}
+							aria-controls="queue-list"
+							onclick={() => (showAllActions = !showAllActions)}
+						>
+							{showAllActions ? m.show_fewer() : m.show_all_actions({ count: me.actions.length })}
+						</button>
+					{/if}
 				{/if}
 			</section>
 		{/if}
