@@ -1,6 +1,7 @@
 // Turning game data into sentences in the phone's language. Fixed sets
 // (needs, levels, moods, speeds) use our translations; names that only the
 // game knows (moodlets, actions) come in the game's language.
+import { roomName } from './rooms.js';
 import { m } from './i18n/paraglide/messages.js';
 import {
 	ActionState,
@@ -115,6 +116,7 @@ export function simSummary(sim: Sim): string {
 	let text: string = running
 		? m.summary_doing({ name, mood, action: running.name })
 		: m.summary_idle({ name, mood });
+	if (sim.room) text += ' ' + m.summary_room({ room: roomName(sim.room) });
 	const lowest = [...sim.needs].sort((a, b) => a.percent - b.percent)[0];
 	if (lowest && lowest.percent < 60) {
 		text += ' ' + m.summary_lowest({ need: needName(lowest.key), percent: lowest.percent });
@@ -163,6 +165,12 @@ export function eventText(e: Event): string {
 			return e.subject === 'school' ? m.ev_back_school({ sim }) : m.ev_back_work({ sim });
 		case EventKind.NOTIFICATION:
 			return e.detail ? m.ev_notification({ title: e.subject, text: e.detail }) : e.subject;
+		case EventKind.VISITOR:
+			return m.ev_visitor({ name: e.subject });
+		case EventKind.BILLS:
+			return m.ev_bills({ amount: Number(e.subject).toLocaleString() });
+		case EventKind.PROBLEM:
+			return e.subject === 'FOOD' ? m.pb_food({ name: e.detail }) : m.ev_problem({ name: e.detail });
 		case EventKind.DIALOG:
 			return m.ev_dialog({ text: e.subject });
 		default:

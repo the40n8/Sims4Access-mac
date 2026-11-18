@@ -112,6 +112,11 @@ func (s *service) RespondDialog(ctx context.Context, req *connect.Request[v1.Res
 	return connect.NewResponse(&v1.RespondDialogResponse{Outcome: out}), nil
 }
 
+func (s *service) SetCamera(ctx context.Context, req *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error) {
+	out := s.hub.Command(ctx, &v1.ToGame{Command: &v1.ToGame_SetCamera{SetCamera: req.Msg}})
+	return connect.NewResponse(&v1.SetCameraResponse{Outcome: out}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

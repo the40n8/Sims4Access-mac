@@ -32,7 +32,10 @@ func Run(ctx context.Context, h *hub.Hub) {
 		HouseholdName: "Goth",
 		Clock:         &v1.Clock{Speed: v1.Speed_SPEED_NORMAL},
 		Narration:     &v1.Narration{MacVoice: true, SimActions: true},
-		Problems: []*v1.Problem{{Kind: "BROKEN", TargetId: "o3", Name: "Shower", Distance: 8},
+		BillsOwed:     340,
+		Visitors:      []*v1.Visitor{{SimId: "2001", Name: "Nancy Landgraab", Room: &v1.RoomRef{Id: "outside:0", Kind: "OUTSIDE"}}},
+		Problems: []*v1.Problem{{Kind: "FOOD", TargetId: "o11", Name: "Mac and Cheese", Distance: 2},
+			{Kind: "BROKEN", TargetId: "o3", Name: "Shower", Distance: 8},
 			{Kind: "PUDDLE", TargetId: "o10", Name: "Puddle", Distance: 7}},
 		Sims: []*v1.Sim{
 			g.sim("1001", "Bella", "Goth", true),
@@ -68,6 +71,10 @@ func (g *game) sim(id, first, last string, active bool) *v1.Sim {
 	}
 	s.Moodlets = []*v1.Moodlet{{Name: "Well Rested", Description: "Slept like a log.", MoodKey: "energized", Weight: 1, MinutesLeft: 240}}
 	g.addAction(s, activities[rand.IntN(len(activities))])
+	s.Room = &v1.RoomRef{Id: "r1", Kind: "KITCHEN"}
+	if !active {
+		s.Room = &v1.RoomRef{Id: "r2", Kind: "LIVING"}
+	}
 	s.Skills = []*v1.Skill{{Key: "cooking", Name: "Cooking", Level: 4, MaxLevel: 10}, {Key: "charisma", Name: "Charisma", Level: 2, MaxLevel: 10}}
 	s.Relationships = []*v1.Relationship{{SimId: "2001", Name: "Nancy Landgraab", Friendship: 35, Labels: []string{"Friend"}},
 		{SimId: "2002", Name: "Eliza Pancakes", Friendship: -20, Labels: []string{"Disliked"}}}
@@ -170,6 +177,7 @@ var demoTargets = []*v1.Target{
 	{Id: "o2", Name: "Sofa", Group: "COMFORT", Distance: 5},
 	{Id: "o3", Name: "Shower", Group: "PLUMBING", Distance: 8},
 	{Id: "o4", Name: "Computer", Group: "ELECTRONICS", Distance: 9},
+	{Id: "o9", Name: "Mailbox", Group: "MISC", Kind: "Mailboxes", Keywords: "Mailbox", Distance: 12},
 }
 
 var demoMenus = map[string][]*v1.Interaction{
@@ -179,6 +187,9 @@ var demoMenus = map[string][]*v1.Interaction{
 	"o2":   {{Id: "1", Name: "Sit", Enabled: true}, {Id: "2", Name: "Nap", Enabled: true}},
 	"o3":   {{Id: "1", Name: "Take Shower", Reason: "Broken", Enabled: false}, {Id: "2", Name: "Repair", Enabled: true}},
 	"o10":  {{Id: "1", Name: "Mop Up", Enabled: true}},
+	"o11":  {{Id: "1", Name: "Grab a Plate", Enabled: true}, {Id: "2", Name: "Put Away", Enabled: true}},
+	"o9":   {{Id: "1", Name: "Pay Bills", Enabled: true}, {Id: "2", Name: "Check Mail", Enabled: true}},
+	"2001": {{Id: "1", Name: "Greet", Enabled: true}, {Id: "2", Name: "Welcome", Category: "Friendly", Enabled: true}},
 	"o4":   {{Id: "1", Name: "Play Games", Enabled: true}, {Id: "2", Name: "Browse Web", Enabled: true}},
 	"phone": {{Id: "1", Name: "Call to Chat...", Category: "Social", Enabled: true}, {Id: "2", Name: "Invite Over...", Category: "Social", Enabled: true},
 		{Id: "3", Name: "Order Pizza", Category: "Household", Enabled: true},
@@ -189,17 +200,18 @@ func item(t *v1.Target, side string) *v1.RoomItem { return &v1.RoomItem{Target: 
 
 // demoHouse: a small two-floor house around the demo objects.
 func demoHouse() *v1.HouseMap {
-	return &v1.HouseMap{Floors: []int32{0, 1}, Rooms: []*v1.Room{
+	return &v1.HouseMap{Floors: []int32{0, 1}, Stairs: []*v1.Stairs{{Floor: 0, Part: "E", BottomRoomId: "r2", TopRoomId: "r4"}}, Rooms: []*v1.Room{
 		{Id: "r1", Kind: "KITCHEN", Floor: 0, Width: 4, Depth: 5, Area: 20, Part: "NW", Here: true, Sims: []string{"Bella"},
 			Links: []*v1.RoomLink{{RoomId: "r2", Door: false, Side: "E"}, {RoomId: "outside:0", Door: true, Side: "N"}},
 			Items: []*v1.RoomItem{item(demoTargets[0], "N"), item(&v1.Target{Id: "o5", Name: "Counter", Group: "SURFACE", Kind: "Counters"}, "W")}},
-		{Id: "r2", Kind: "LIVING", Floor: 0, Width: 6, Depth: 5, Area: 30, Part: "NE", Distance: 5, Bearing: "E",
-			Links: []*v1.RoomLink{{RoomId: "r1", Side: "W"}, {RoomId: "r3", Door: true, Side: "S"}, {RoomId: "outside:0", Door: true, Side: "E"}},
+		{Id: "r2", Kind: "LIVING", Kind2: "DINING", Areas: []*v1.RoomArea{{Kind: "LIVING", Side: "N"}, {Kind: "DINING", Side: "S"}}, Floor: 0, Width: 6, Depth: 5, Area: 30, Part: "NE", Distance: 5, Bearing: "E",
+			Links: []*v1.RoomLink{{RoomId: "r4", Stairs: "up", Side: "E"}, {RoomId: "r1", Side: "W"}, {RoomId: "r3", Door: true, Side: "S"}, {RoomId: "outside:0", Door: true, Side: "E"}},
 			Items: []*v1.RoomItem{item(demoTargets[1], "C"), item(&v1.Target{Id: "o6", Name: "TV", Group: "ELECTRONICS", Kind: "Televisions"}, "N")}},
 		{Id: "r3", Kind: "BATHROOM", Floor: 0, Width: 2, Depth: 3, Area: 6, Part: "S", Distance: 8, Bearing: "SE",
 			Links: []*v1.RoomLink{{RoomId: "r2", Door: true, Side: "N"}},
 			Items: []*v1.RoomItem{item(demoTargets[2], "E")}},
 		{Id: "r4", Kind: "BEDROOM", Number: 0, Floor: 1, Width: 4, Depth: 4, Area: 16, Part: "C", Distance: 9, Bearing: "N",
+			Links: []*v1.RoomLink{{RoomId: "r2", Stairs: "down", Side: "E"}},
 			Items: []*v1.RoomItem{item(demoTargets[3], "S"), item(&v1.Target{Id: "o7", Name: "Double Bed", Group: "COMFORT", Kind: "Beds"}, "N")}},
 		{Id: "outside:0", Kind: "OUTSIDE", Floor: 0, Width: 20, Depth: 15, Area: 200, Part: "C", Distance: 6, Bearing: "S",
 			Links: []*v1.RoomLink{{RoomId: "r2", Door: true, Side: "E"}, {RoomId: "r1", Door: true, Side: "N"}},
@@ -235,6 +247,10 @@ func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Interactions: menu}
 	case *v1.ToGame_RunInteraction:
 		ri := cmd.RunInteraction
+		if ri.GetTargetId() == "o9" && ri.GetInteractionId() == "1" {
+			g.state.Funds -= g.state.BillsOwed
+			g.state.BillsOwed = 0
+		}
 		if ri.GetTargetId() == "o1" && ri.GetInteractionId() == "2" {
 			g.nextID++
 			g.state.Dialogs = append(g.state.Dialogs, &v1.Dialog{
@@ -308,6 +324,13 @@ func (g *game) apply(c *v1.ToGame) *v1.CommandOutcome {
 			}
 		}
 		return &v1.CommandOutcome{Reason: "action_finished"}
+	case *v1.ToGame_SetCamera:
+		if cmd.SetCamera.GetMode() == v1.CameraMode_CAMERA_MODE_FREE {
+			g.state.CameraFollows = ""
+		} else {
+			g.state.CameraFollows = cmd.SetCamera.GetSimId()
+		}
+		return ok
 	case *v1.ToGame_SetNarration:
 		g.state.Narration = cmd.SetNarration.GetNarration()
 		return ok

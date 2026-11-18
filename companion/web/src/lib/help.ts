@@ -26,7 +26,7 @@ const en: HelpSection[] = [
 		id: 'live',
 		title: 'Live',
 		body: [
-			'"Needs attention" lists what needs doing now: low needs, fire, broken objects, puddles, spoiled food. Each line has buttons that run the game’s own actions, for example Eat now (a quick meal from the fridge) or Cook (opens the recipe question). "Other ways" lists the objects that can help, and the phone.',
+			'"Needs attention" lists what needs doing now: low needs, fire, broken objects, puddles, spoiled food, food ready to eat, visitors on the lot and bills to pay. Each line has buttons that run the game’s own actions, for example Eat now (a quick meal from the fridge) or Cook (opens the recipe question). "Other ways" lists the objects that can help, and the phone.',
 			'Then: the Mac voice switch, the household (money, mood of each Sim) and the latest events. "Full history" opens History.'
 		]
 	},
@@ -37,7 +37,7 @@ const en: HelpSection[] = [
 			'From the top: Controlled Sim (which Sim you play), the Sim’s actions (running and waiting, each with a Cancel button), You (the Sim itself and its phone), then Interact: a search, the Sims nearby, and objects by category (appliances, plumbing, comfort...). Categories are folded: each one is a button that opens it. Typing a search opens every category with matches.',
 			'Search finds an object by its type or name, in French, Spanish or English ("frigo", "nevera", "fridge"). Press Search on the keyboard to close it and go to the results.',
 			'Choose an object to hear its menu, the same as clicking it in the game. Greyed rows say why they are unavailable. Choosing a row adds the action to the Sim’s queue.',
-			'At the end: the four game speeds.'
+			'Camera moves the game camera on the Mac to the Sim (follow, or close-up) to see and hear them better. At the end: the four game speeds.'
 		]
 	},
 	{
@@ -45,7 +45,7 @@ const en: HelpSection[] = [
 		title: 'House',
 		body: [
 			'The home floor by floor. Each room says what it is (named from its furniture), where it is on the floor (north, south-east...), its size, and how far it is from the Sim. North is the game’s north.',
-			'Open a room to hear the doors and openings to other rooms (tap one to go there), who is inside, and what is in it, with where in the room. Objects open their menu. The garden and the pool are listed too.'
+			'Open a room to hear the doors and openings to other rooms (tap one to go there), who is inside, and what is in it, with where in the room. Objects open their menu. The garden and the pool are listed too. Each floor says where its stairs are, and rooms with stairs list them in their ways in and out. An open-plan room is named by both parts (Kitchen and Living room) and says which part is where.'
 		]
 	},
 	{
@@ -115,7 +115,7 @@ const fr: HelpSection[] = [
 		id: 'live',
 		title: 'En direct',
 		body: [
-			'« À faire » liste ce qui demande une action : besoins bas, feu, objets cassés, flaques, nourriture avariée. Chaque ligne a des boutons qui lancent les actions du jeu, par exemple Manger (repas rapide au frigo) ou Cuisiner (ouvre la question des recettes). « Autres solutions » liste les objets utiles et le téléphone.',
+			'« À faire » liste ce qui demande une action : besoins bas, feu, objets cassés, flaques, nourriture avariée, repas prêts, visiteurs sur le terrain et factures à payer. Chaque ligne a des boutons qui lancent les actions du jeu, par exemple Manger (repas rapide au frigo) ou Cuisiner (ouvre la question des recettes). « Autres solutions » liste les objets utiles et le téléphone.',
 			'Ensuite : l’interrupteur de la voix du Mac, le foyer (argent, humeur de chaque Sim) et les derniers événements. « Tout l’historique » ouvre l’Historique.'
 		]
 	},
@@ -126,7 +126,7 @@ const fr: HelpSection[] = [
 			'De haut en bas : Sim contrôlé (quel Sim tu joues), les actions du Sim (en cours et en attente, chacune avec un bouton Annuler), Toi (le Sim lui-même et son téléphone), puis Interagir : une recherche, les Sims à proximité et les objets par catégorie (électroménager, plomberie, confort...). Les catégories sont repliées : chacune est un bouton qui l’ouvre. Une recherche ouvre toutes les catégories qui ont des résultats.',
 			'La recherche trouve un objet par son type ou son nom, en français, espagnol ou anglais (« frigo », « nevera », « fridge »). Le bouton Rechercher du clavier ferme le clavier et mène aux résultats.',
 			'Choisis un objet pour entendre son menu, comme en cliquant dessus dans le jeu. Les lignes grisées disent pourquoi. Choisir une ligne ajoute l’action à la file du Sim.',
-			'À la fin : les quatre vitesses du jeu.'
+			'Caméra déplace la caméra du jeu sur le Mac vers le Sim (suivre, ou gros plan) pour mieux le voir et l’entendre. À la fin : les quatre vitesses du jeu.'
 		]
 	},
 	{
@@ -134,7 +134,7 @@ const fr: HelpSection[] = [
 		title: 'Maison',
 		body: [
 			'La maison étage par étage. Chaque pièce dit ce qu’elle est (d’après ses meubles), où elle se trouve (nord, sud-est...), sa taille et sa distance au Sim. Le nord est celui du jeu.',
-			'Ouvre une pièce pour entendre les portes et ouvertures vers les autres pièces (touche-en une pour y aller), qui s’y trouve et ce qu’elle contient, avec l’endroit dans la pièce. Les objets ouvrent leur menu. Le jardin et la piscine sont aussi listés.'
+			'Ouvre une pièce pour entendre les portes et ouvertures vers les autres pièces (touche-en une pour y aller), qui s’y trouve et ce qu’elle contient, avec l’endroit dans la pièce. Les objets ouvrent leur menu. Le jardin et la piscine sont aussi listés. Chaque étage dit où sont ses escaliers, et les pièces qui en ont les listent dans leurs accès. Une pièce ouverte porte les deux noms (Cuisine et Salon) et dit quel coin est où.'
 		]
 	},
 	{
@@ -204,7 +204,7 @@ const es: HelpSection[] = [
 		id: 'live',
 		title: 'En directo',
 		body: [
-			'«Por atender» lista lo que hay que hacer ahora: necesidades bajas, fuego, objetos rotos, charcos, comida podrida. Cada línea tiene botones que lanzan las acciones del juego, por ejemplo Comer (comida rápida de la nevera) o Cocinar (abre la pregunta de recetas). «Otras opciones» lista los objetos que ayudan y el teléfono.',
+			'«Por atender» lista lo que hay que hacer ahora: necesidades bajas, fuego, objetos rotos, charcos, comida podrida, comida lista, visitas en el solar y facturas por pagar. Cada línea tiene botones que lanzan las acciones del juego, por ejemplo Comer (comida rápida de la nevera) o Cocinar (abre la pregunta de recetas). «Otras opciones» lista los objetos que ayudan y el teléfono.',
 			'Después: el interruptor de la voz del Mac, el hogar (dinero, ánimo de cada Sim) y los últimos eventos. «Todo el historial» abre el Historial.'
 		]
 	},
@@ -215,7 +215,7 @@ const es: HelpSection[] = [
 			'De arriba abajo: Sim controlado (qué Sim juegas), las acciones del Sim (en curso y en espera, cada una con un botón Cancelar), Tú (el propio Sim y su teléfono) y luego Interactuar: una búsqueda, los Sims cerca y los objetos por categoría (electrodomésticos, fontanería, comodidad...). Las categorías están plegadas: cada una es un botón que la abre. Una búsqueda abre todas las que tienen resultados.',
 			'La búsqueda encuentra un objeto por su tipo o nombre, en español, francés o inglés («nevera», «frigo», «fridge»). El botón Buscar del teclado lo cierra y lleva a los resultados.',
 			'Elige un objeto para oír su menú, como al hacer clic en el juego. Las líneas en gris dicen por qué. Elegir una línea añade la acción a la cola del Sim.',
-			'Al final: las cuatro velocidades del juego.'
+			'Cámara mueve la cámara del juego en el Mac hacia el Sim (seguir o primer plano) para verlo y oírlo mejor. Al final: las cuatro velocidades del juego.'
 		]
 	},
 	{
@@ -223,7 +223,7 @@ const es: HelpSection[] = [
 		title: 'Casa',
 		body: [
 			'La casa planta por planta. Cada habitación dice qué es (según sus muebles), dónde está (norte, sureste...), su tamaño y su distancia al Sim. El norte es el del juego.',
-			'Abre una habitación para oír las puertas y aberturas a otras habitaciones (toca una para ir), quién está dentro y qué contiene, con su lugar en la habitación. Los objetos abren su menú. También aparecen el jardín y la piscina.'
+			'Abre una habitación para oír las puertas y aberturas a otras habitaciones (toca una para ir), quién está dentro y qué contiene, con su lugar en la habitación. Los objetos abren su menú. También aparecen el jardín y la piscina. Cada planta dice dónde están sus escaleras, y las habitaciones con escalera la incluyen en sus accesos. Un espacio abierto lleva los dos nombres (Cocina y Salón) y dice qué zona está dónde.'
 		]
 	},
 	{

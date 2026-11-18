@@ -32,6 +32,10 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 
 	diffDialogs(old, cur, add)
 	diffProblems(old, cur, add)
+	diffVisitors(old, cur, add)
+	if cur.GetBillsOwed() > 0 && old.GetBillsOwed() == 0 {
+		add(v1.EventKind_EVENT_KIND_BILLS, nil, strconv.FormatInt(cur.GetBillsOwed(), 10), "")
+	}
 
 	before := map[string]*v1.Sim{}
 	for _, s := range old.GetSims() {
@@ -150,6 +154,19 @@ func diffProblems(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string
 	for _, p := range cur.GetProblems() {
 		if !seen[p.GetKind()+p.GetTargetId()] {
 			add(v1.EventKind_EVENT_KIND_PROBLEM, nil, p.GetKind(), p.GetName())
+		}
+	}
+}
+
+// diffVisitors announces each Sim arriving on the lot.
+func diffVisitors(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string, string)) {
+	here := map[string]bool{}
+	for _, v := range old.GetVisitors() {
+		here[v.GetSimId()] = true
+	}
+	for _, v := range cur.GetVisitors() {
+		if !here[v.GetSimId()] {
+			add(v1.EventKind_EVENT_KIND_VISITOR, nil, v.GetName(), "")
 		}
 	}
 }

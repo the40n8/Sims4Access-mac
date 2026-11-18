@@ -133,3 +133,19 @@ func TestDiffProblems(t *testing.T) {
 		t.Fatalf("same puddle, want nothing, got %v", ev)
 	}
 }
+
+func TestDiffVisitorsAndBills(t *testing.T) {
+	before := &v1.GameState{InGame: true}
+	after := &v1.GameState{InGame: true, BillsOwed: 340, Visitors: []*v1.Visitor{{SimId: "9", Name: "Nancy"}}}
+	ev := Diff(before, after)
+	kinds := map[v1.EventKind]string{}
+	for _, e := range ev {
+		kinds[e.GetKind()] = e.GetSubject()
+	}
+	if kinds[v1.EventKind_EVENT_KIND_VISITOR] != "Nancy" || kinds[v1.EventKind_EVENT_KIND_BILLS] != "340" {
+		t.Fatalf("want visitor and bills events, got %v", ev)
+	}
+	if ev := Diff(after, after); len(ev) != 0 {
+		t.Fatalf("nothing new, got %v", ev)
+	}
+}

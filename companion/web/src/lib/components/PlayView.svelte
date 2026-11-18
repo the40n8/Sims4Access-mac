@@ -5,7 +5,7 @@
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
 	import { ActionState, Speed, type Action, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
-	import type { CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
+	import { CameraMode, type CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
 	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
 	import { matchesWords } from '$lib/search.js';
 	import { announce } from './Announcer.svelte';
@@ -38,6 +38,7 @@
 	}
 	const changeSpeed = (speed: Speed) => act(() => setSpeed(speed));
 	const selectSim = (simId: string) => act(() => run(() => client.selectSim({ simId })));
+	const camera = (mode: CameraMode) => me && act(() => run(() => client.setCamera({ simId: me.id, mode })));
 	const cancelAction = (action: Action) =>
 		me && act(() => run(() => client.cancelAction({ simId: me.id, actionId: action.id })));
 
@@ -140,6 +141,29 @@
 						</button>
 					{/each}
 				</div>
+			</section>
+		{/if}
+
+		{#if me && me.here}
+			<section class="card stack" aria-labelledby="camera">
+				<h2 id="camera">{m.camera_title()}</h2>
+				<p class="muted">{m.camera_help()}</p>
+				<div class="pair">
+					<button
+						type="button"
+						aria-pressed={game.cameraFollows === me.id}
+						aria-disabled={busy}
+						onclick={() => camera(CameraMode.FOLLOW)}>{m.camera_follow({ name: simName(me) })}</button
+					>
+					<button type="button" aria-disabled={busy} onclick={() => camera(CameraMode.CLOSE)}
+						>{m.camera_close({ name: simName(me) })}</button
+					>
+				</div>
+				{#if game.cameraFollows}
+					<button type="button" aria-disabled={busy} onclick={() => camera(CameraMode.FREE)}
+						>{m.camera_free()}</button
+					>
+				{/if}
 			</section>
 		{/if}
 

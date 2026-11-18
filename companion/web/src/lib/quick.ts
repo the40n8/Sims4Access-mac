@@ -76,7 +76,24 @@ export const PROBLEM_HELP: Record<string, Help> = {
 	},
 	SPOILED: {
 		quick: [{ label: m.qa_throw, on: 'object', action: /throw away|clean up|dispose|discard|put away/i }]
+	},
+	FOOD: {
+		quick: [
+			{ label: m.qa_eat_this, on: 'object', action: /grab a plate|grab a serving|^eat|^have |^serve|^drink/i }
+		]
 	}
+};
+
+export const VISITOR_HELP: Help = {
+	quick: [
+		{ label: m.qa_greet, on: 'object', action: /greet|introduce|wave|^chat/i },
+		{ label: m.qa_welcome, on: 'object', action: /welcome|invite in/i }
+	]
+};
+
+export const BILLS_HELP: Help = {
+	objects: /mailbox/i,
+	quick: [{ label: m.qa_pay, on: 'nearest', action: /pay bills|^pay/i }]
 };
 
 const hay = (t: Target) => `${t.kind} ${t.keywords} ${t.name}`;

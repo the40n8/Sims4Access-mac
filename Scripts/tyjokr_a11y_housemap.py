@@ -37,6 +37,8 @@ class _Room(object):
         self.sims = []
         self.links = {}      # other room key or None (outside) -> {'door': bool, 'sides': {side: count}}
         self.kind = 'ROOM'
+        self.kind2 = ''
+        self.areas = []      # (kind, side) for open-plan rooms
         self.number = 0
         self.custom = ''
 
@@ -49,8 +51,10 @@ class _Room(object):
         n = float(len(self.tiles)) or 1.0
         return (sum(t[0] for t in self.tiles) / n, sum(t[1] for t in self.tiles) / n)
 
-    def link(self, other, side, door=False):
-        entry = self.links.setdefault(other, {'door': False, 'sides': {}, 'doors': {}})
+    def link(self, other, side, door=False, stairs=''):
+        entry = self.links.setdefault(other, {'door': False, 'sides': {}, 'doors': {}, 'stairs': ''})
+        if stairs:
+            entry['stairs'] = stairs
         if door:
             entry['door'] = True
             entry['doors'][side] = entry['doors'].get(side, 0) + 1
@@ -154,6 +158,7 @@ def build():
                 if other is not room:
                     room.link(other, compass(dx, dz))
 
+    stairs = []
     for obj in services.object_manager().get_valid_objects_gen():
         try:
             if getattr(obj, 'is_sim', False) or getattr(obj, 'is_terrain', False) or obj.is_hidden():
@@ -165,6 +170,9 @@ def build():
             if in_inventory is not None and in_inventory():
                 continue
             pos, level = obj.position, int(obj.level)
+            if _is_stairs(obj):
+                stairs.append(obj)
+                continue
             if _is_door(obj):
                 fwd = obj.forward
                 a = room_at_world(pos.x + fwd.x * 0.6, pos.z + fwd.z * 0.6, level)
@@ -197,6 +205,30 @@ def build():
 
     _name(list(found.values()))
 
+    # Stairs: the room at each end, found a step or two along the flight.
+    flights = []
+    for obj in stairs:
+        try:
+            pos, level, fwd = obj.position, int(obj.level), obj.forward
+            ends = []
+            for lvl in (level, level + 1):
+                end = None
+                for step in (0.0, 1.0, -1.0, 2.0, -2.0, 3.0, -3.0):
+                    room = found.get((rooms.room_id_at(pos.x + fwd.x * step, pos.z + fwd.z * step, lvl), lvl))
+                    if room is not None:
+                        end = room
+                        break
+                ends.append(end)
+            bottom, top = ends
+            if bottom is not None and top is not None:
+                cx, cz = bottom.center
+                bottom.link(top, compass(pos.x - cx, pos.z - cz), stairs='up')
+                cx, cz = top.center
+                top.link(bottom, compass(pos.x - cx, pos.z - cz), stairs='down')
+            flights.append((obj, level, bottom, top))
+        except Exception:
+            continue
+
     # Where each room sits on its floor, from the middle of the floor.
     middles = {}
     for room in found.values():
@@ -213,7 +245,9 @@ def build():
         part = 'C' if math.hypot(cx - mx, cz - mz) < span * 0.3 else compass(cx - mx, cz - mz)
         iu = [c[0] for c in room.cells]
         jv = [c[1] for c in room.cells]
-        entry = {'id': room.key, 'kind': room.kind, 'number': room.number, 'customName': room.custom,
+        entry = {'id': room.key, 'kind': room.kind, 'kind2': room.kind2,
+                 'areas': [{'kind': k, 'side': sd} for (k, sd) in room.areas],
+                 'number': room.number, 'customName': room.custom,
                  'floor': room.level, 'width': max(iu) - min(iu) + 1, 'depth': max(jv) - min(jv) + 1,
                  'area': len(room.cells), 'part': part,
                  'sims': [s.sim_info.first_name for s in room.sims]}
@@ -229,8 +263,12 @@ def build():
             side = max(sides.items(), key=lambda kv: kv[1])[0]
             if other is room:
                 continue
-            links.append({'roomId': other.key, 'door': info['door'], 'side': side})
-        links.sort(key=lambda l: (not l['door'], l['roomId'] == outside.key, COMPASS.index(l['side'])))
+            link = {'roomId': other.key, 'door': info['door'], 'side': side}
+            if info.get('stairs'):
+                link['stairs'] = info['stairs']
+            links.append(link)
+        links.sort(key=lambda l: (not l.get('stairs'), not l['door'], l['roomId'] == outside.key,
+                                  COMPASS.index(l['side'])))
         entry['links'] = links
         half = max(entry['width'], entry['depth']) / 2.0
         items = []
@@ -249,7 +287,24 @@ def build():
                 continue
         entry['items'] = items
         out.append(entry)
-    return {'rooms': out, 'floors': sorted(middles)}
+    stairs_out = []
+    for obj, level, bottom, top in flights:
+        tiles = middles.get(level) or outside.tiles
+        mx = sum(t[0] for t in tiles) / len(tiles)
+        mz = sum(t[1] for t in tiles) / len(tiles)
+        span = max(max(abs(t[0] - mx) for t in tiles), max(abs(t[1] - mz) for t in tiles), 1.0)
+        dx, dz = obj.position.x - mx, obj.position.z - mz
+        stairs_out.append({'floor': level, 'part': 'C' if math.hypot(dx, dz) < span * 0.3 else compass(dx, dz),
+                           'bottomRoomId': bottom.key if bottom is not None else '',
+                           'topRoomId': top.key if top is not None else ''})
+    return {'rooms': out, 'floors': sorted(middles), 'stairs': stairs_out}
+
+
+def _is_stairs(obj):
+    if any('Stair' in n and 'Ladder' not in n for n in rooms.tag_names(obj)):
+        return True
+    return 'stair' in str(getattr(obj.definition, 'name', '') or '').lower()
+
 
 
 def _is_pool(x, z, level):
@@ -262,6 +317,22 @@ def _is_pool(x, z, level):
         return bool(build_buy.is_location_pool(sims4.math.Vector3(float(x), float(y), float(z)), int(level)))
     except Exception:
         return False
+
+
+def _areas(room, kinds):
+    """Where in the room each kind's furniture is: [(KIND, side)]."""
+    cx, cz = room.center
+    out = []
+    for kind in kinds:
+        tags = dict((k, t) for (k, t, _w) in rooms.KINDS)[kind]
+        spots = [o.position for o in room.objects if rooms.tag_names(o).intersection(tags)]
+        if not spots:
+            continue
+        x = sum(p.x for p in spots) / len(spots)
+        z = sum(p.z for p in spots) / len(spots)
+        side = 'C' if math.hypot(x - cx, z - cz) < 1.0 else compass(x - cx, z - cz)
+        out.append((_KIND_KEYS.get(kind, 'ROOM'), side))
+    return out
 
 
 def _name(found):
@@ -278,7 +349,12 @@ def _name(found):
                 if names.intersection(tags):
                     score[kind] = score.get(kind, 0) + weight
         if score:
-            room.kind = _KIND_KEYS.get(max(score.items(), key=lambda kv: kv[1])[0], 'ROOM')
+            ranked = sorted(score.items(), key=lambda kv: -kv[1])
+            room.kind = _KIND_KEYS.get(ranked[0][0], 'ROOM')
+            # Open plan: a second kind with real furniture of its own.
+            if len(ranked) > 1 and ranked[1][1] >= 2 and len(room.cells) >= 16:
+                room.kind2 = _KIND_KEYS.get(ranked[1][0], '')
+                room.areas = _areas(room, [ranked[0][0], ranked[1][0]])
         else:
             room.kind = 'ROOM' if room.objects else 'EMPTY'
         counts[room.kind] = counts.get(room.kind, 0) + 1

@@ -2,8 +2,8 @@
 // @generated from file ts4access/v1/companion.proto (package ts4access.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Event, GameState, HouseMap, Interaction, Narration, Speed, Target } from "./game_pb.js";
 import { file_ts4access_v1_game } from "./game_pb.js";
 import type { Message } from "@bufbuild/protobuf";
@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/companion.proto.
  */
 export const file_ts4access_v1_companion: GenFile = /*@__PURE__*/
-  fileDesc("Chx0czRhY2Nlc3MvdjEvY29tcGFuaW9uLnByb3RvEgx0czRhY2Nlc3MudjEiDgoMV2F0Y2hSZXF1ZXN0IoQBCg1XYXRjaFJlc3BvbnNlEigKBXN0YXRlGAEgASgLMhcudHM0YWNjZXNzLnYxLkdhbWVTdGF0ZUgAEiQKBWV2ZW50GAIgASgLMhMudHM0YWNjZXNzLnYxLkV2ZW50SAASGAoOZ2FtZV9jb25uZWN0ZWQYAyABKAhIAEIJCgdwYXlsb2FkIjUKD1NldFNwZWVkUmVxdWVzdBIiCgVzcGVlZBgBIAEoDjITLnRzNGFjY2Vzcy52MS5TcGVlZCIiChBTZWxlY3RTaW1SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCSI4ChNDYW5jZWxBY3Rpb25SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCRIRCglhY3Rpb25faWQYAiABKAkiQQoTU2V0TmFycmF0aW9uUmVxdWVzdBIqCgluYXJyYXRpb24YASABKAsyFy50czRhY2Nlc3MudjEuTmFycmF0aW9uIkEKEFNldFNwZWVkUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSJCChFTZWxlY3RTaW1SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIkUKFENhbmNlbEFjdGlvblJlc3BvbnNlEi0KB291dGNvbWUYASABKAsyHC50czRhY2Nlc3MudjEuQ29tbWFuZE91dGNvbWUiRQoUU2V0TmFycmF0aW9uUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSIUChJMaXN0VGFyZ2V0c1JlcXVlc3QiawoTTGlzdFRhcmdldHNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEiUKB3RhcmdldHMYAiADKAsyFC50czRhY2Nlc3MudjEuVGFyZ2V0IisKFkdldEludGVyYWN0aW9uc1JlcXVlc3QSEQoJdGFyZ2V0X2lkGAEgASgJIpABChdHZXRJbnRlcmFjdGlvbnNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEi8KDGludGVyYWN0aW9ucxgCIAMoCzIZLnRzNGFjY2Vzcy52MS5JbnRlcmFjdGlvbhIVCg1uYW1lc19wZW5kaW5nGAMgASgIIkIKFVJ1bkludGVyYWN0aW9uUmVxdWVzdBIRCgl0YXJnZXRfaWQYASABKAkSFgoOaW50ZXJhY3Rpb25faWQYAiABKAkiRwoWUnVuSW50ZXJhY3Rpb25SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIiwKDkNvbW1hbmRPdXRjb21lEgoKAm9rGAEgASgIEg4KBnJlYXNvbhgCIAEoCSIUChJHZXRIb3VzZU1hcFJlcXVlc3QiaQoTR2V0SG91c2VNYXBSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEiMKA21hcBgCIAEoCzIWLnRzNGFjY2Vzcy52MS5Ib3VzZU1hcCJbChRSZXNwb25kRGlhbG9nUmVxdWVzdBIRCglkaWFsb2dfaWQYASABKAkSEQoJY2hvaWNlX2lkGAIgASgFEg8KB3Jvd19pZHMYAyADKAkSDAoEdGV4dBgEIAEoCSJGChVSZXNwb25kRGlhbG9nUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZTLcBgoQQ29tcGFuaW9uU2VydmljZRJCCgVXYXRjaBIaLnRzNGFjY2Vzcy52MS5XYXRjaFJlcXVlc3QaGy50czRhY2Nlc3MudjEuV2F0Y2hSZXNwb25zZTABEkkKCFNldFNwZWVkEh0udHM0YWNjZXNzLnYxLlNldFNwZWVkUmVxdWVzdBoeLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlc3BvbnNlEkwKCVNlbGVjdFNpbRIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0Gh8udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlc3BvbnNlElUKDENhbmNlbEFjdGlvbhIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0GiIudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlc3BvbnNlElUKDFNldE5hcnJhdGlvbhIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0GiIudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlc3BvbnNlElIKC0xpc3RUYXJnZXRzEiAudHM0YWNjZXNzLnYxLkxpc3RUYXJnZXRzUmVxdWVzdBohLnRzNGFjY2Vzcy52MS5MaXN0VGFyZ2V0c1Jlc3BvbnNlEl4KD0dldEludGVyYWN0aW9ucxIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0GiUudHM0YWNjZXNzLnYxLkdldEludGVyYWN0aW9uc1Jlc3BvbnNlElsKDlJ1bkludGVyYWN0aW9uEiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdBokLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlc3BvbnNlElIKC0dldEhvdXNlTWFwEiAudHM0YWNjZXNzLnYxLkdldEhvdXNlTWFwUmVxdWVzdBohLnRzNGFjY2Vzcy52MS5HZXRIb3VzZU1hcFJlc3BvbnNlElgKDVJlc3BvbmREaWFsb2cSIi50czRhY2Nlc3MudjEuUmVzcG9uZERpYWxvZ1JlcXVlc3QaIy50czRhY2Nlc3MudjEuUmVzcG9uZERpYWxvZ1Jlc3BvbnNlYgZwcm90bzM", [file_ts4access_v1_game]);
+  fileDesc("Chx0czRhY2Nlc3MvdjEvY29tcGFuaW9uLnByb3RvEgx0czRhY2Nlc3MudjEiDgoMV2F0Y2hSZXF1ZXN0IoQBCg1XYXRjaFJlc3BvbnNlEigKBXN0YXRlGAEgASgLMhcudHM0YWNjZXNzLnYxLkdhbWVTdGF0ZUgAEiQKBWV2ZW50GAIgASgLMhMudHM0YWNjZXNzLnYxLkV2ZW50SAASGAoOZ2FtZV9jb25uZWN0ZWQYAyABKAhIAEIJCgdwYXlsb2FkIjUKD1NldFNwZWVkUmVxdWVzdBIiCgVzcGVlZBgBIAEoDjITLnRzNGFjY2Vzcy52MS5TcGVlZCIiChBTZWxlY3RTaW1SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCSI4ChNDYW5jZWxBY3Rpb25SZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCRIRCglhY3Rpb25faWQYAiABKAkiQQoTU2V0TmFycmF0aW9uUmVxdWVzdBIqCgluYXJyYXRpb24YASABKAsyFy50czRhY2Nlc3MudjEuTmFycmF0aW9uIkEKEFNldFNwZWVkUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSJCChFTZWxlY3RTaW1SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIkUKFENhbmNlbEFjdGlvblJlc3BvbnNlEi0KB291dGNvbWUYASABKAsyHC50czRhY2Nlc3MudjEuQ29tbWFuZE91dGNvbWUiRQoUU2V0TmFycmF0aW9uUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSIUChJMaXN0VGFyZ2V0c1JlcXVlc3QiawoTTGlzdFRhcmdldHNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEiUKB3RhcmdldHMYAiADKAsyFC50czRhY2Nlc3MudjEuVGFyZ2V0IisKFkdldEludGVyYWN0aW9uc1JlcXVlc3QSEQoJdGFyZ2V0X2lkGAEgASgJIpABChdHZXRJbnRlcmFjdGlvbnNSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEi8KDGludGVyYWN0aW9ucxgCIAMoCzIZLnRzNGFjY2Vzcy52MS5JbnRlcmFjdGlvbhIVCg1uYW1lc19wZW5kaW5nGAMgASgIIkIKFVJ1bkludGVyYWN0aW9uUmVxdWVzdBIRCgl0YXJnZXRfaWQYASABKAkSFgoOaW50ZXJhY3Rpb25faWQYAiABKAkiRwoWUnVuSW50ZXJhY3Rpb25SZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lIiwKDkNvbW1hbmRPdXRjb21lEgoKAm9rGAEgASgIEg4KBnJlYXNvbhgCIAEoCSIUChJHZXRIb3VzZU1hcFJlcXVlc3QiaQoTR2V0SG91c2VNYXBSZXNwb25zZRItCgdvdXRjb21lGAEgASgLMhwudHM0YWNjZXNzLnYxLkNvbW1hbmRPdXRjb21lEiMKA21hcBgCIAEoCzIWLnRzNGFjY2Vzcy52MS5Ib3VzZU1hcCJbChRSZXNwb25kRGlhbG9nUmVxdWVzdBIRCglkaWFsb2dfaWQYASABKAkSEQoJY2hvaWNlX2lkGAIgASgFEg8KB3Jvd19pZHMYAyADKAkSDAoEdGV4dBgEIAEoCSJGChVSZXNwb25kRGlhbG9nUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSJKChBTZXRDYW1lcmFSZXF1ZXN0Eg4KBnNpbV9pZBgBIAEoCRImCgRtb2RlGAIgASgOMhgudHM0YWNjZXNzLnYxLkNhbWVyYU1vZGUiQgoRU2V0Q2FtZXJhUmVzcG9uc2USLQoHb3V0Y29tZRgBIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZSpuCgpDYW1lcmFNb2RlEhsKF0NBTUVSQV9NT0RFX1VOU1BFQ0lGSUVEEAASFgoSQ0FNRVJBX01PREVfRk9MTE9XEAESFQoRQ0FNRVJBX01PREVfQ0xPU0UQAhIUChBDQU1FUkFfTU9ERV9GUkVFEAMyqgcKEENvbXBhbmlvblNlcnZpY2USQgoFV2F0Y2gSGi50czRhY2Nlc3MudjEuV2F0Y2hSZXF1ZXN0GhsudHM0YWNjZXNzLnYxLldhdGNoUmVzcG9uc2UwARJJCghTZXRTcGVlZBIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3QaHi50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXNwb25zZRJMCglTZWxlY3RTaW0SHi50czRhY2Nlc3MudjEuU2VsZWN0U2ltUmVxdWVzdBofLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXNwb25zZRJVCgxDYW5jZWxBY3Rpb24SIS50czRhY2Nlc3MudjEuQ2FuY2VsQWN0aW9uUmVxdWVzdBoiLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXNwb25zZRJVCgxTZXROYXJyYXRpb24SIS50czRhY2Nlc3MudjEuU2V0TmFycmF0aW9uUmVxdWVzdBoiLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXNwb25zZRJSCgtMaXN0VGFyZ2V0cxIgLnRzNGFjY2Vzcy52MS5MaXN0VGFyZ2V0c1JlcXVlc3QaIS50czRhY2Nlc3MudjEuTGlzdFRhcmdldHNSZXNwb25zZRJeCg9HZXRJbnRlcmFjdGlvbnMSJC50czRhY2Nlc3MudjEuR2V0SW50ZXJhY3Rpb25zUmVxdWVzdBolLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXNwb25zZRJbCg5SdW5JbnRlcmFjdGlvbhIjLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlcXVlc3QaJC50czRhY2Nlc3MudjEuUnVuSW50ZXJhY3Rpb25SZXNwb25zZRJSCgtHZXRIb3VzZU1hcBIgLnRzNGFjY2Vzcy52MS5HZXRIb3VzZU1hcFJlcXVlc3QaIS50czRhY2Nlc3MudjEuR2V0SG91c2VNYXBSZXNwb25zZRJYCg1SZXNwb25kRGlhbG9nEiIudHM0YWNjZXNzLnYxLlJlc3BvbmREaWFsb2dSZXF1ZXN0GiMudHM0YWNjZXNzLnYxLlJlc3BvbmREaWFsb2dSZXNwb25zZRJMCglTZXRDYW1lcmESHi50czRhY2Nlc3MudjEuU2V0Q2FtZXJhUmVxdWVzdBofLnRzNGFjY2Vzcy52MS5TZXRDYW1lcmFSZXNwb25zZWIGcHJvdG8z", [file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.WatchRequest
@@ -442,6 +442,82 @@ export const RespondDialogResponseSchema: GenMessage<RespondDialogResponse> = /*
   messageDesc(file_ts4access_v1_companion, 20);
 
 /**
+ * @generated from message ts4access.v1.SetCameraRequest
+ */
+export type SetCameraRequest = Message<"ts4access.v1.SetCameraRequest"> & {
+  /**
+   * @generated from field: string sim_id = 1;
+   */
+  simId: string;
+
+  /**
+   * @generated from field: ts4access.v1.CameraMode mode = 2;
+   */
+  mode: CameraMode;
+};
+
+/**
+ * Describes the message ts4access.v1.SetCameraRequest.
+ * Use `create(SetCameraRequestSchema)` to create a new message.
+ */
+export const SetCameraRequestSchema: GenMessage<SetCameraRequest> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 21);
+
+/**
+ * @generated from message ts4access.v1.SetCameraResponse
+ */
+export type SetCameraResponse = Message<"ts4access.v1.SetCameraResponse"> & {
+  /**
+   * @generated from field: ts4access.v1.CommandOutcome outcome = 1;
+   */
+  outcome?: CommandOutcome | undefined;
+};
+
+/**
+ * Describes the message ts4access.v1.SetCameraResponse.
+ * Use `create(SetCameraResponseSchema)` to create a new message.
+ */
+export const SetCameraResponseSchema: GenMessage<SetCameraResponse> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_companion, 22);
+
+/**
+ * @generated from enum ts4access.v1.CameraMode
+ */
+export enum CameraMode {
+  /**
+   * @generated from enum value: CAMERA_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * Follow the Sim at the current distance.
+   *
+   * @generated from enum value: CAMERA_MODE_FOLLOW = 1;
+   */
+  FOLLOW = 1,
+
+  /**
+   * Move close to the Sim, then follow.
+   *
+   * @generated from enum value: CAMERA_MODE_CLOSE = 2;
+   */
+  CLOSE = 2,
+
+  /**
+   * Stop following.
+   *
+   * @generated from enum value: CAMERA_MODE_FREE = 3;
+   */
+  FREE = 3,
+}
+
+/**
+ * Describes the enum ts4access.v1.CameraMode.
+ */
+export const CameraModeSchema: GenEnum<CameraMode> = /*@__PURE__*/
+  enumDesc(file_ts4access_v1_companion, 0);
+
+/**
  * Phone <-> bridge API (Connect). Every call needs the pairing token
  * ("Authorization: Bearer <token>").
  *
@@ -539,6 +615,16 @@ export const CompanionService: GenService<{
     methodKind: "unary";
     input: typeof RespondDialogRequestSchema;
     output: typeof RespondDialogResponseSchema;
+  },
+  /**
+   * Point the game camera at a Sim: follow, close-up, or let go.
+   *
+   * @generated from rpc ts4access.v1.CompanionService.SetCamera
+   */
+  setCamera: {
+    methodKind: "unary";
+    input: typeof SetCameraRequestSchema;
+    output: typeof SetCameraResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_ts4access_v1_companion, 0);

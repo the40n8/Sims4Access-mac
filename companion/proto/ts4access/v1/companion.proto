@@ -25,6 +25,8 @@ service CompanionService {
   rpc GetHouseMap(GetHouseMapRequest) returns (GetHouseMapResponse);
   // Answer a game window: press a button, pick rows, or type text.
   rpc RespondDialog(RespondDialogRequest) returns (RespondDialogResponse);
+  // Point the game camera at a Sim: follow, close-up, or let go.
+  rpc SetCamera(SetCameraRequest) returns (SetCameraResponse);
 }
 
 message WatchRequest {}
@@ -124,5 +126,24 @@ message RespondDialogRequest {
 }
 
 message RespondDialogResponse {
+  CommandOutcome outcome = 1;
+}
+
+enum CameraMode {
+  CAMERA_MODE_UNSPECIFIED = 0;
+  // Follow the Sim at the current distance.
+  CAMERA_MODE_FOLLOW = 1;
+  // Move close to the Sim, then follow.
+  CAMERA_MODE_CLOSE = 2;
+  // Stop following.
+  CAMERA_MODE_FREE = 3;
+}
+
+message SetCameraRequest {
+  string sim_id = 1;
+  CameraMode mode = 2;
+}
+
+message SetCameraResponse {
   CommandOutcome outcome = 1;
 }

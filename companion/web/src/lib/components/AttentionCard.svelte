@@ -5,7 +5,17 @@
 	import { live } from '$lib/live.svelte.js';
 	import { levelName, needName, reasonText, simName } from '$lib/text.js';
 	import { NeedLevel, type Problem, type Sim, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
-	import { NEED_HELP, PROBLEM_HELP, helpers, runQuick, type Help, type Quick } from '$lib/quick.js';
+	import {
+		BILLS_HELP,
+		NEED_HELP,
+		PROBLEM_HELP,
+		VISITOR_HELP,
+		helpers,
+		runQuick,
+		type Help,
+		type Quick
+	} from '$lib/quick.js';
+	import { roomName } from '$lib/rooms.js';
 	import { objectName } from '$lib/targets.js';
 	import { announce } from './Announcer.svelte';
 	import InteractionMenu from './InteractionMenu.svelte';
@@ -21,7 +31,8 @@
 		FIRE: (p) => m.pb_fire({ name: p.name }),
 		BROKEN: (p) => m.pb_broken({ name: p.name }),
 		PUDDLE: () => m.pb_puddle(),
-		SPOILED: (p) => m.pb_spoiled({ name: p.name })
+		SPOILED: (p) => m.pb_spoiled({ name: p.name }),
+		FOOD: (p) => m.pb_food({ name: p.name })
 	};
 
 	const items = $derived.by(() => {
@@ -36,6 +47,23 @@
 				help,
 				targetId: p.targetId,
 				urgent: p.kind === 'FIRE'
+			});
+		}
+		for (const v of game?.visitors ?? []) {
+			out.push({
+				id: `v-${v.simId}`,
+				text: m.pb_visitor({ name: v.name }) + (v.room ? `, ${roomName(v.room)}` : ''),
+				help: VISITOR_HELP,
+				targetId: v.simId,
+				urgent: false
+			});
+		}
+		if (game && game.billsOwed > 0n) {
+			out.push({
+				id: 'bills',
+				text: m.pb_bills({ amount: Number(game.billsOwed).toLocaleString() }),
+				help: BILLS_HELP,
+				urgent: false
 			});
 		}
 		for (const sim of game?.sims ?? []) {
@@ -59,7 +87,7 @@
 			}
 		}
 		// Fire and critical needs first; then the rest as found.
-		return out.sort((a, b) => Number(b.urgent) - Number(a.urgent)).slice(0, 6);
+		return out.sort((a, b) => Number(b.urgent) - Number(a.urgent)).slice(0, 8);
 	});
 
 	// Objects near the Sim, for "nearest" actions and "Other ways".
@@ -76,7 +104,7 @@
 		}
 	}
 	$effect(() => {
-		if (items.some((i) => i.sim)) void loadTargets();
+		if (items.some((i) => i.sim || i.id === 'bills')) void loadTargets();
 	});
 	const phone = $derived(targets.find((t) => t.group === 'PHONE'));
 

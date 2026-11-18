@@ -21,6 +21,61 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CameraMode int32
+
+const (
+	CameraMode_CAMERA_MODE_UNSPECIFIED CameraMode = 0
+	// Follow the Sim at the current distance.
+	CameraMode_CAMERA_MODE_FOLLOW CameraMode = 1
+	// Move close to the Sim, then follow.
+	CameraMode_CAMERA_MODE_CLOSE CameraMode = 2
+	// Stop following.
+	CameraMode_CAMERA_MODE_FREE CameraMode = 3
+)
+
+// Enum value maps for CameraMode.
+var (
+	CameraMode_name = map[int32]string{
+		0: "CAMERA_MODE_UNSPECIFIED",
+		1: "CAMERA_MODE_FOLLOW",
+		2: "CAMERA_MODE_CLOSE",
+		3: "CAMERA_MODE_FREE",
+	}
+	CameraMode_value = map[string]int32{
+		"CAMERA_MODE_UNSPECIFIED": 0,
+		"CAMERA_MODE_FOLLOW":      1,
+		"CAMERA_MODE_CLOSE":       2,
+		"CAMERA_MODE_FREE":        3,
+	}
+)
+
+func (x CameraMode) Enum() *CameraMode {
+	p := new(CameraMode)
+	*p = x
+	return p
+}
+
+func (x CameraMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CameraMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_ts4access_v1_companion_proto_enumTypes[0].Descriptor()
+}
+
+func (CameraMode) Type() protoreflect.EnumType {
+	return &file_ts4access_v1_companion_proto_enumTypes[0]
+}
+
+func (x CameraMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CameraMode.Descriptor instead.
+func (CameraMode) EnumDescriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{0}
+}
+
 type WatchRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1063,6 +1118,102 @@ func (x *RespondDialogResponse) GetOutcome() *CommandOutcome {
 	return nil
 }
 
+type SetCameraRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SimId         string                 `protobuf:"bytes,1,opt,name=sim_id,json=simId,proto3" json:"sim_id,omitempty"`
+	Mode          CameraMode             `protobuf:"varint,2,opt,name=mode,proto3,enum=ts4access.v1.CameraMode" json:"mode,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetCameraRequest) Reset() {
+	*x = SetCameraRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetCameraRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetCameraRequest) ProtoMessage() {}
+
+func (x *SetCameraRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetCameraRequest.ProtoReflect.Descriptor instead.
+func (*SetCameraRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *SetCameraRequest) GetSimId() string {
+	if x != nil {
+		return x.SimId
+	}
+	return ""
+}
+
+func (x *SetCameraRequest) GetMode() CameraMode {
+	if x != nil {
+		return x.Mode
+	}
+	return CameraMode_CAMERA_MODE_UNSPECIFIED
+}
+
+type SetCameraResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetCameraResponse) Reset() {
+	*x = SetCameraResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetCameraResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetCameraResponse) ProtoMessage() {}
+
+func (x *SetCameraResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetCameraResponse.ProtoReflect.Descriptor instead.
+func (*SetCameraResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SetCameraResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
 var File_ts4access_v1_companion_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_companion_proto_rawDesc = "" +
@@ -1119,7 +1270,18 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\arow_ids\x18\x03 \x03(\tR\x06rowIds\x12\x12\n" +
 	"\x04text\x18\x04 \x01(\tR\x04text\"O\n" +
 	"\x15RespondDialogResponse\x126\n" +
-	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome2\xdc\x06\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\"W\n" +
+	"\x10SetCameraRequest\x12\x15\n" +
+	"\x06sim_id\x18\x01 \x01(\tR\x05simId\x12,\n" +
+	"\x04mode\x18\x02 \x01(\x0e2\x18.ts4access.v1.CameraModeR\x04mode\"K\n" +
+	"\x11SetCameraResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome*n\n" +
+	"\n" +
+	"CameraMode\x12\x1b\n" +
+	"\x17CAMERA_MODE_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12CAMERA_MODE_FOLLOW\x10\x01\x12\x15\n" +
+	"\x11CAMERA_MODE_CLOSE\x10\x02\x12\x14\n" +
+	"\x10CAMERA_MODE_FREE\x10\x032\xaa\a\n" +
 	"\x10CompanionService\x12B\n" +
 	"\x05Watch\x12\x1a.ts4access.v1.WatchRequest\x1a\x1b.ts4access.v1.WatchResponse0\x01\x12I\n" +
 	"\bSetSpeed\x12\x1d.ts4access.v1.SetSpeedRequest\x1a\x1e.ts4access.v1.SetSpeedResponse\x12L\n" +
@@ -1130,7 +1292,8 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\x0fGetInteractions\x12$.ts4access.v1.GetInteractionsRequest\x1a%.ts4access.v1.GetInteractionsResponse\x12[\n" +
 	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponse\x12R\n" +
 	"\vGetHouseMap\x12 .ts4access.v1.GetHouseMapRequest\x1a!.ts4access.v1.GetHouseMapResponse\x12X\n" +
-	"\rRespondDialog\x12\".ts4access.v1.RespondDialogRequest\x1a#.ts4access.v1.RespondDialogResponseB\xc5\x01\n" +
+	"\rRespondDialog\x12\".ts4access.v1.RespondDialogRequest\x1a#.ts4access.v1.RespondDialogResponse\x12L\n" +
+	"\tSetCamera\x12\x1e.ts4access.v1.SetCameraRequest\x1a\x1f.ts4access.v1.SetCameraResponseB\xc5\x01\n" +
 	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -1145,79 +1308,87 @@ func file_ts4access_v1_companion_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_companion_proto_rawDescData
 }
 
-var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_ts4access_v1_companion_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_ts4access_v1_companion_proto_goTypes = []any{
-	(*WatchRequest)(nil),            // 0: ts4access.v1.WatchRequest
-	(*WatchResponse)(nil),           // 1: ts4access.v1.WatchResponse
-	(*SetSpeedRequest)(nil),         // 2: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),        // 3: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),     // 4: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),     // 5: ts4access.v1.SetNarrationRequest
-	(*SetSpeedResponse)(nil),        // 6: ts4access.v1.SetSpeedResponse
-	(*SelectSimResponse)(nil),       // 7: ts4access.v1.SelectSimResponse
-	(*CancelActionResponse)(nil),    // 8: ts4access.v1.CancelActionResponse
-	(*SetNarrationResponse)(nil),    // 9: ts4access.v1.SetNarrationResponse
-	(*ListTargetsRequest)(nil),      // 10: ts4access.v1.ListTargetsRequest
-	(*ListTargetsResponse)(nil),     // 11: ts4access.v1.ListTargetsResponse
-	(*GetInteractionsRequest)(nil),  // 12: ts4access.v1.GetInteractionsRequest
-	(*GetInteractionsResponse)(nil), // 13: ts4access.v1.GetInteractionsResponse
-	(*RunInteractionRequest)(nil),   // 14: ts4access.v1.RunInteractionRequest
-	(*RunInteractionResponse)(nil),  // 15: ts4access.v1.RunInteractionResponse
-	(*CommandOutcome)(nil),          // 16: ts4access.v1.CommandOutcome
-	(*GetHouseMapRequest)(nil),      // 17: ts4access.v1.GetHouseMapRequest
-	(*GetHouseMapResponse)(nil),     // 18: ts4access.v1.GetHouseMapResponse
-	(*RespondDialogRequest)(nil),    // 19: ts4access.v1.RespondDialogRequest
-	(*RespondDialogResponse)(nil),   // 20: ts4access.v1.RespondDialogResponse
-	(*GameState)(nil),               // 21: ts4access.v1.GameState
-	(*Event)(nil),                   // 22: ts4access.v1.Event
-	(Speed)(0),                      // 23: ts4access.v1.Speed
-	(*Narration)(nil),               // 24: ts4access.v1.Narration
-	(*Target)(nil),                  // 25: ts4access.v1.Target
-	(*Interaction)(nil),             // 26: ts4access.v1.Interaction
-	(*HouseMap)(nil),                // 27: ts4access.v1.HouseMap
+	(CameraMode)(0),                 // 0: ts4access.v1.CameraMode
+	(*WatchRequest)(nil),            // 1: ts4access.v1.WatchRequest
+	(*WatchResponse)(nil),           // 2: ts4access.v1.WatchResponse
+	(*SetSpeedRequest)(nil),         // 3: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),        // 4: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),     // 5: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),     // 6: ts4access.v1.SetNarrationRequest
+	(*SetSpeedResponse)(nil),        // 7: ts4access.v1.SetSpeedResponse
+	(*SelectSimResponse)(nil),       // 8: ts4access.v1.SelectSimResponse
+	(*CancelActionResponse)(nil),    // 9: ts4access.v1.CancelActionResponse
+	(*SetNarrationResponse)(nil),    // 10: ts4access.v1.SetNarrationResponse
+	(*ListTargetsRequest)(nil),      // 11: ts4access.v1.ListTargetsRequest
+	(*ListTargetsResponse)(nil),     // 12: ts4access.v1.ListTargetsResponse
+	(*GetInteractionsRequest)(nil),  // 13: ts4access.v1.GetInteractionsRequest
+	(*GetInteractionsResponse)(nil), // 14: ts4access.v1.GetInteractionsResponse
+	(*RunInteractionRequest)(nil),   // 15: ts4access.v1.RunInteractionRequest
+	(*RunInteractionResponse)(nil),  // 16: ts4access.v1.RunInteractionResponse
+	(*CommandOutcome)(nil),          // 17: ts4access.v1.CommandOutcome
+	(*GetHouseMapRequest)(nil),      // 18: ts4access.v1.GetHouseMapRequest
+	(*GetHouseMapResponse)(nil),     // 19: ts4access.v1.GetHouseMapResponse
+	(*RespondDialogRequest)(nil),    // 20: ts4access.v1.RespondDialogRequest
+	(*RespondDialogResponse)(nil),   // 21: ts4access.v1.RespondDialogResponse
+	(*SetCameraRequest)(nil),        // 22: ts4access.v1.SetCameraRequest
+	(*SetCameraResponse)(nil),       // 23: ts4access.v1.SetCameraResponse
+	(*GameState)(nil),               // 24: ts4access.v1.GameState
+	(*Event)(nil),                   // 25: ts4access.v1.Event
+	(Speed)(0),                      // 26: ts4access.v1.Speed
+	(*Narration)(nil),               // 27: ts4access.v1.Narration
+	(*Target)(nil),                  // 28: ts4access.v1.Target
+	(*Interaction)(nil),             // 29: ts4access.v1.Interaction
+	(*HouseMap)(nil),                // 30: ts4access.v1.HouseMap
 }
 var file_ts4access_v1_companion_proto_depIdxs = []int32{
-	21, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
-	22, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
-	23, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
-	24, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
-	16, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	16, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	16, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	16, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	16, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	25, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
-	16, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	26, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
-	16, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	16, // 13: ts4access.v1.GetHouseMapResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	27, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
-	16, // 15: ts4access.v1.RespondDialogResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	0,  // 16: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
-	2,  // 17: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
-	3,  // 18: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
-	4,  // 19: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
-	5,  // 20: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
-	10, // 21: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
-	12, // 22: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
-	14, // 23: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
-	17, // 24: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
-	19, // 25: ts4access.v1.CompanionService.RespondDialog:input_type -> ts4access.v1.RespondDialogRequest
-	1,  // 26: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
-	6,  // 27: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
-	7,  // 28: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
-	8,  // 29: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
-	9,  // 30: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
-	11, // 31: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
-	13, // 32: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
-	15, // 33: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
-	18, // 34: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
-	20, // 35: ts4access.v1.CompanionService.RespondDialog:output_type -> ts4access.v1.RespondDialogResponse
-	26, // [26:36] is the sub-list for method output_type
-	16, // [16:26] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	24, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
+	25, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
+	26, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
+	27, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
+	17, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	17, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	17, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	17, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	17, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	28, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
+	17, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	29, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
+	17, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	17, // 13: ts4access.v1.GetHouseMapResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	30, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
+	17, // 15: ts4access.v1.RespondDialogResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	0,  // 16: ts4access.v1.SetCameraRequest.mode:type_name -> ts4access.v1.CameraMode
+	17, // 17: ts4access.v1.SetCameraResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	1,  // 18: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
+	3,  // 19: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
+	4,  // 20: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
+	5,  // 21: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
+	6,  // 22: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
+	11, // 23: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
+	13, // 24: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
+	15, // 25: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
+	18, // 26: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
+	20, // 27: ts4access.v1.CompanionService.RespondDialog:input_type -> ts4access.v1.RespondDialogRequest
+	22, // 28: ts4access.v1.CompanionService.SetCamera:input_type -> ts4access.v1.SetCameraRequest
+	2,  // 29: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
+	7,  // 30: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
+	8,  // 31: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
+	9,  // 32: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
+	10, // 33: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
+	12, // 34: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
+	14, // 35: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
+	16, // 36: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
+	19, // 37: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
+	21, // 38: ts4access.v1.CompanionService.RespondDialog:output_type -> ts4access.v1.RespondDialogResponse
+	23, // 39: ts4access.v1.CompanionService.SetCamera:output_type -> ts4access.v1.SetCameraResponse
+	29, // [29:40] is the sub-list for method output_type
+	18, // [18:29] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_companion_proto_init() }
@@ -1236,13 +1407,14 @@ func file_ts4access_v1_companion_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_companion_proto_rawDesc), len(file_ts4access_v1_companion_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   21,
+			NumEnums:      1,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_ts4access_v1_companion_proto_goTypes,
 		DependencyIndexes: file_ts4access_v1_companion_proto_depIdxs,
+		EnumInfos:         file_ts4access_v1_companion_proto_enumTypes,
 		MessageInfos:      file_ts4access_v1_companion_proto_msgTypes,
 	}.Build()
 	File_ts4access_v1_companion_proto = out.File

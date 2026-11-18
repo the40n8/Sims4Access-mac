@@ -25,6 +25,9 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 			return 'game';
 		case EventKind.NOTIFICATION:
 		case EventKind.DIALOG:
+		case EventKind.PROBLEM:
+		case EventKind.VISITOR:
+		case EventKind.BILLS:
 			return 'messages';
 		case EventKind.SPOKEN:
 			return 'spoken';

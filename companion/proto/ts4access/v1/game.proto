@@ -96,6 +96,8 @@ message Sim {
   optional int32 performance = 14;
   repeated Relationship relationships = 15;
   repeated Skill skills = 16;
+  // The room the Sim is in, when on the home lot.
+  RoomRef room = 17;
 }
 
 message Narration {
@@ -115,12 +117,33 @@ message GameState {
   Narration narration = 7;
   // Windows the game is waiting on (questions, pickers), oldest first.
   repeated Dialog dialogs = 8;
-  // Things on the lot to deal with, most urgent first.
+  // Things on the lot to deal with, most urgent first (and food ready).
   repeated Problem problems = 9;
+  // Sims on the lot who are not in the household.
+  repeated Visitor visitors = 10;
+  // Unpaid bills, simoleons (0 when none are due).
+  int64 bills_owed = 11;
+  // The Sim the camera follows ("" when free).
+  string camera_follows = 12;
+}
+
+message Visitor {
+  string sim_id = 1;
+  string name = 2;
+  RoomRef room = 3;
+}
+
+// A room by name, as the House tab names it.
+message RoomRef {
+  string id = 1;
+  string kind = 2;
+  int32 number = 3;
+  string custom_name = 4;
+  int32 floor = 5;
 }
 
 message Problem {
-  // FIRE, BROKEN, PUDDLE or SPOILED.
+  // FIRE, BROKEN, PUDDLE, SPOILED, or FOOD (a meal ready to eat).
   string kind = 1;
   string target_id = 2;
   string name = 3;
@@ -183,6 +206,10 @@ enum EventKind {
   EVENT_KIND_DIALOG = 14;
   // Something to deal with appeared: subject is the Problem kind, detail the object name.
   EVENT_KIND_PROBLEM = 15;
+  // A visitor arrived on the lot: subject is the name.
+  EVENT_KIND_VISITOR = 16;
+  // Bills arrived: subject is the amount owed.
+  EVENT_KIND_BILLS = 17;
 }
 
 // Something the controlled Sim can interact with.
@@ -231,6 +258,17 @@ message HouseMap {
   repeated Room rooms = 1;
   // Ground floor is 0, basements are negative.
   repeated int32 floors = 2;
+  repeated Stairs stairs = 3;
+}
+
+message Stairs {
+  // The floor at the bottom; the stairs go up to floor + 1.
+  int32 floor = 1;
+  // Part of the floor: N, NE... or C.
+  string part = 2;
+  // Rooms at the bottom and at the top ("" when outside).
+  string bottom_room_id = 3;
+  string top_room_id = 4;
 }
 
 message Room {
@@ -258,6 +296,16 @@ message Room {
   repeated RoomItem items = 14;
   // First names of the Sims in the room.
   repeated string sims = 15;
+  // A second kind when the room is open-plan ("Kitchen and Living room").
+  string kind2 = 16;
+  // Areas of an open-plan room: which part holds what.
+  repeated RoomArea areas = 17;
+}
+
+message RoomArea {
+  string kind = 1;
+  // N, NE... or C.
+  string side = 2;
 }
 
 message RoomLink {
@@ -265,6 +313,8 @@ message RoomLink {
   string room_id = 1;
   // A door between them; otherwise they only share a wall or an opening.
   bool door = 2;
+  // "up" or "down" when the link is a staircase to another floor.
+  string stairs = 4;
   // Side of this room the link is on: N, E, S, W...
   string side = 3;
 }

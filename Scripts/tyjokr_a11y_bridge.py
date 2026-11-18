@@ -267,6 +267,9 @@ def _run(cmd):
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
     if 'listTargets' in cmd:
         return True, '', {'targets': list_targets()}
+    if 'setCamera' in cmd:
+        c = cmd['setCamera']
+        return _set_camera(c.get('simId', ''), c.get('mode', 'CAMERA_MODE_FOLLOW'))
     if 'respondDialog' in cmd:
         if _dialogs is None:
             return False, 'error'
@@ -665,8 +668,11 @@ def _performance(career):
 
 def _sim(info, client):
     sim = info.get_sim_instance()
+    room = _room_ref(sim) if sim is not None else None
     entry = {'id': str(info.sim_id), 'firstName': info.first_name or '', 'lastName': info.last_name or '',
              'active': client is not None and client.active_sim_info is info, 'here': sim is not None}
+    if room is not None:
+        entry['room'] = room
     try:
         _career(info, entry)
     except Exception as ex:
@@ -714,7 +720,123 @@ def build_state():
         'narration': _narration(),
         'dialogs': _open_dialogs(),
         'problems': _problems(),
+        'visitors': _visitors(household),
+        'billsOwed': str(_bills_owed(household)),
+        'cameraFollows': _camera_follows(),
     }
+
+
+# ---------------------------------------------------------------- where Sims are
+# The house map (rooms named as on the phone's House tab), rebuilt now and
+# then: it scans the lot, so not every second.
+
+HOUSE_INTERVAL = 20.0
+_house_cache = {'at': -1e9, 'map': None, 'rooms': {}}
+
+
+def _house():
+    now = time.monotonic()
+    if now - _house_cache['at'] >= HOUSE_INTERVAL:
+        _house_cache['at'] = now
+        try:
+            import tyjokr_a11y_housemap as housemap
+            house = housemap.build()
+            _house_cache['map'] = house
+            _house_cache['rooms'] = dict((r['id'], r) for r in (house or {}).get('rooms', []))
+        except Exception as ex:
+            log('house map failed: {!r}'.format(ex))
+            _house_cache['rooms'] = {}
+    return _house_cache['rooms']
+
+
+def _room_ref(obj):
+    """The room an object or Sim is in, as the House tab names it, or None."""
+    rooms = _house()
+    if not rooms:
+        return None
+    try:
+        import tyjokr_a11y_plus_rooms as plus_rooms
+        on_lot = getattr(obj, 'is_on_active_lot', None)
+        if on_lot is not None and not on_lot():
+            return None
+        level = int(obj.level)
+        rid = plus_rooms.room_id_at(obj.position.x, obj.position.z, level, obj.position.y)
+        room = rooms.get('{}:{}'.format(rid, level)) or rooms.get('outside:0')
+    except Exception:
+        return None
+    if room is None:
+        return None
+    return {'id': room['id'], 'kind': room['kind'], 'number': room.get('number', 0),
+            'customName': room.get('customName', ''), 'floor': room.get('floor', 0)}
+
+
+def _visitors(household):
+    """Sims on the lot who are not in the household."""
+    import services
+    out = []
+    members = set(info.sim_id for info in household.sim_info_gen())
+    for sim in services.sim_info_manager().instanced_sims_gen():
+        try:
+            if sim.sim_info.sim_id in members:
+                continue
+            on_lot = getattr(sim, 'is_on_active_lot', None)
+            if on_lot is None or not on_lot():
+                continue
+            entry = {'simId': str(sim.sim_info.sim_id),
+                     'name': '{} {}'.format(sim.sim_info.first_name, sim.sim_info.last_name).strip()}
+            room = _room_ref(sim)
+            if room is not None:
+                entry['room'] = room
+            out.append(entry)
+        except Exception:
+            continue
+    return out[:10]
+
+
+def _bills_owed(household):
+    try:
+        owed = household.bills_manager.current_payment_owed
+        owed = owed() if callable(owed) else owed
+        return int(owed or 0)
+    except Exception:
+        return 0
+
+
+def _camera_follows():
+    try:
+        import camera
+        if getattr(camera, '_follow_mode', False) and getattr(camera, '_sim_id', None):
+            return str(camera._sim_id)
+    except Exception:
+        pass
+    return ''
+
+
+def _set_camera(sim_id, mode):
+    """Follow a Sim with the game camera, close up, or let it go."""
+    import camera
+    import services
+    _sim_unused, client = _sim_and_client()
+    try:
+        info = services.sim_info_manager().get(int(sim_id))
+    except (TypeError, ValueError):
+        info = None
+    sim = info.get_sim_instance() if info is not None else None
+    if sim is None:
+        return False, 'sim_unavailable'
+    if mode == 'CAMERA_MODE_FREE':
+        camera.cancel_focus(object=sim)
+        return True, ''
+    if mode == 'CAMERA_MODE_CLOSE':
+        try:
+            import sims4.math
+            pos, fwd = sim.position, sim.forward
+            eye = sims4.math.Vector3(pos.x + fwd.x * 3.0, pos.y + 1.6, pos.z + fwd.z * 3.0)
+            camera.focus_on_object_from_position(obj_position=pos, camera_position=eye, client=client)
+        except Exception as ex:
+            log('close camera failed: {!r}'.format(ex))
+    camera.focus_on_sim(sim=sim, follow=True, client=client)
+    return True, ''
 
 
 # ---------------------------------------------------------------- things to deal with
@@ -787,6 +909,11 @@ def _scan_problems():
                 kind = 'SPOILED'
             elif broken_states and any(_state_active(obj, v) for v in broken_states):
                 kind = 'BROKEN'
+            elif getattr(obj, 'consumable_component', None) is not None:
+                parent = getattr(obj, 'parent', None)
+                if parent is not None and getattr(parent, 'is_sim', False):
+                    continue        # in a Sim's hands: being eaten
+                kind = 'FOOD'
             if kind is None:
                 continue
             entry = {'kind': kind, 'targetId': str(obj.id), 'name': _object_name(obj)}
@@ -796,11 +923,13 @@ def _scan_problems():
             out.append(entry)
         except Exception:
             continue
-    order = {'FIRE': 0, 'BROKEN': 1, 'PUDDLE': 2, 'SPOILED': 3}
+    order = {'FIRE': 0, 'BROKEN': 1, 'PUDDLE': 2, 'SPOILED': 3, 'FOOD': 4}
     out.sort(key=lambda e: (order[e['kind']], e.get('distance', 0)))
     # Fire burns in several pieces: one line is enough.
     fires = [e for e in out if e['kind'] == 'FIRE']
-    return fires[:1] + [e for e in out if e['kind'] != 'FIRE'][:12]
+    food = [e for e in out if e['kind'] == 'FOOD'][:3]
+    rest = [e for e in out if e['kind'] not in ('FIRE', 'FOOD')][:12]
+    return fires[:1] + rest + food
 
 
 def _state_active(obj, value):

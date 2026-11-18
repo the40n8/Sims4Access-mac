@@ -62,6 +62,9 @@ const (
 	// CompanionServiceRespondDialogProcedure is the fully-qualified name of the CompanionService's
 	// RespondDialog RPC.
 	CompanionServiceRespondDialogProcedure = "/ts4access.v1.CompanionService/RespondDialog"
+	// CompanionServiceSetCameraProcedure is the fully-qualified name of the CompanionService's
+	// SetCamera RPC.
+	CompanionServiceSetCameraProcedure = "/ts4access.v1.CompanionService/SetCamera"
 )
 
 // CompanionServiceClient is a client for the ts4access.v1.CompanionService service.
@@ -82,6 +85,8 @@ type CompanionServiceClient interface {
 	GetHouseMap(context.Context, *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error)
 	// Answer a game window: press a button, pick rows, or type text.
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
+	// Point the game camera at a Sim: follow, close-up, or let go.
+	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
 }
 
 // NewCompanionServiceClient constructs a client for the ts4access.v1.CompanionService service. By
@@ -155,6 +160,12 @@ func NewCompanionServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(companionServiceMethods.ByName("RespondDialog")),
 			connect.WithClientOptions(opts...),
 		),
+		setCamera: connect.NewClient[v1.SetCameraRequest, v1.SetCameraResponse](
+			httpClient,
+			baseURL+CompanionServiceSetCameraProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -170,6 +181,7 @@ type companionServiceClient struct {
 	runInteraction  *connect.Client[v1.RunInteractionRequest, v1.RunInteractionResponse]
 	getHouseMap     *connect.Client[v1.GetHouseMapRequest, v1.GetHouseMapResponse]
 	respondDialog   *connect.Client[v1.RespondDialogRequest, v1.RespondDialogResponse]
+	setCamera       *connect.Client[v1.SetCameraRequest, v1.SetCameraResponse]
 }
 
 // Watch calls ts4access.v1.CompanionService.Watch.
@@ -222,6 +234,11 @@ func (c *companionServiceClient) RespondDialog(ctx context.Context, req *connect
 	return c.respondDialog.CallUnary(ctx, req)
 }
 
+// SetCamera calls ts4access.v1.CompanionService.SetCamera.
+func (c *companionServiceClient) SetCamera(ctx context.Context, req *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error) {
+	return c.setCamera.CallUnary(ctx, req)
+}
+
 // CompanionServiceHandler is an implementation of the ts4access.v1.CompanionService service.
 type CompanionServiceHandler interface {
 	// Current state first, then every change and event as it happens.
@@ -240,6 +257,8 @@ type CompanionServiceHandler interface {
 	GetHouseMap(context.Context, *connect.Request[v1.GetHouseMapRequest]) (*connect.Response[v1.GetHouseMapResponse], error)
 	// Answer a game window: press a button, pick rows, or type text.
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
+	// Point the game camera at a Sim: follow, close-up, or let go.
+	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
 }
 
 // NewCompanionServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -309,6 +328,12 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 		connect.WithSchema(companionServiceMethods.ByName("RespondDialog")),
 		connect.WithHandlerOptions(opts...),
 	)
+	companionServiceSetCameraHandler := connect.NewUnaryHandler(
+		CompanionServiceSetCameraProcedure,
+		svc.SetCamera,
+		connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/ts4access.v1.CompanionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CompanionServiceWatchProcedure:
@@ -331,6 +356,8 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 			companionServiceGetHouseMapHandler.ServeHTTP(w, r)
 		case CompanionServiceRespondDialogProcedure:
 			companionServiceRespondDialogHandler.ServeHTTP(w, r)
+		case CompanionServiceSetCameraProcedure:
+			companionServiceSetCameraHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -378,4 +405,8 @@ func (UnimplementedCompanionServiceHandler) GetHouseMap(context.Context, *connec
 
 func (UnimplementedCompanionServiceHandler) RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.RespondDialog is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.SetCamera is not implemented"))
 }

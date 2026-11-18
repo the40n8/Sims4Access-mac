@@ -48,7 +48,10 @@ an iPhone, often playing together with a sighted player on the Mac.
 ### Live
 - **Needs attention**: what needs doing now, most urgent first:
   - low needs (hunger, bladder, energy, hygiene, fun, social);
-  - fire, broken objects, puddles, spoiled food.
+  - fire, broken objects, puddles, spoiled food;
+  - food ready to eat (cooked meals, deliveries): **Eat**;
+  - visitors on the lot: **Greet**, **Welcome**;
+  - bills due: **Pay the bills** (at the mailbox).
 - Each line has buttons that run the game's own actions:
   - Hunger: **Eat now** (quick meal from the fridge), **Cook…** (opens the
     recipe question), **Other ways** (fridge, stove, microwave, grill, and the
@@ -85,6 +88,9 @@ From top to bottom:
   - Choose a Sim or object: its menu is the game's own pie menu, with
     categories. Unavailable rows say why ("Lobster, unavailable: requires
     Cooking level 9"). Choosing a row adds the action to the Sim's queue.
+- **Camera**: moves the game camera on the Mac to the controlled Sim:
+  **Follow <name>**, **Close-up on <name>**, and **Free camera** to let go.
+  Useful to hear the Sims talk.
 - **Game speed**: Pause, Play, Fast, Ultra fast.
 
 ### House
@@ -97,7 +103,12 @@ From top to bottom:
   room), who is inside, and what is in it with where (north side, middle...).
   Decorations and lights are grouped separately. Objects open their menu.
 - The garden ("Outside") and pools are listed like rooms.
-- Limits: stairs are not described; an open-plan space with no wall is one room.
+- Each floor says where its stairs are ("Stairs up to Floor 1: east part, in
+  the Living room"); rooms with stairs list "Stairs up to …" / "Stairs down
+  to …" in their ways in and out.
+- An open-plan space is named by both parts ("Kitchen and Living room") and
+  says where each part is ("Kitchen area: north side").
+- Live and Sims say which room each Sim is in.
 
 ### Sims
 - Each household Sim: job and work performance (towards the next promotion),
