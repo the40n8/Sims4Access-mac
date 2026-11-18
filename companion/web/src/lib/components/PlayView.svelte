@@ -11,6 +11,7 @@
 	import { announce } from './Announcer.svelte';
 	import InteractionMenu from './InteractionMenu.svelte';
 	import ActionQueue from './ActionQueue.svelte';
+	import ControlSim from './ControlSim.svelte';
 	import { setSpeed } from '$lib/speed.svelte.js';
 
 	const game = $derived(live.state);
@@ -38,7 +39,6 @@
 		return out.ok;
 	}
 	const changeSpeed = (speed: Speed) => act(() => setSpeed(speed));
-	const selectSim = (simId: string) => act(() => run(() => client.selectSim({ simId })));
 	const camera = (mode: CameraMode) => me && act(() => run(() => client.setCamera({ simId: me.id, mode })));
 
 	async function loadTargets() {
@@ -125,23 +125,7 @@
 	{#if selected}
 		<InteractionMenu target={selected} onBack={back} />
 	{:else}
-		{#if game.sims.filter((s) => s.here).length > 1}
-			<section class="card stack" aria-labelledby="control">
-				<h2 id="control">{m.control_sim_title()}</h2>
-				<div class="pair">
-					{#each game.sims.filter((s) => s.here) as sim (sim.id)}
-						<button
-							type="button"
-							aria-pressed={sim.active}
-							aria-disabled={busy}
-							onclick={() => selectSim(sim.id)}
-						>
-							{simName(sim)}
-						</button>
-					{/each}
-				</div>
-			</section>
-		{/if}
+		<ControlSim />
 
 		{#if me && me.here}
 			<section class="card stack" aria-labelledby="camera">
