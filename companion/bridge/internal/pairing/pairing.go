@@ -23,6 +23,11 @@ const DefaultPort = 47800
 type Config struct {
 	Token string `json:"token"`
 	Port  int    `json:"port"`
+	// Optional fixed address: a Cloudflare named tunnel (token from the
+	// Cloudflare dashboard) and its public hostname, e.g.
+	// "https://sims.example.com". Empty: a random quick tunnel each session.
+	TunnelToken string `json:"tunnel_token,omitempty"`
+	PublicURL   string `json:"public_url,omitempty"`
 }
 
 // Load reads dir/config.json, creating it with a fresh token if missing.

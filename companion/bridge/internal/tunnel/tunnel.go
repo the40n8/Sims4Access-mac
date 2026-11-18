@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -37,10 +38,13 @@ func Find() string {
 	return ""
 }
 
-// Tunnel keeps a quick tunnel to a local port running until ctx ends.
+// Tunnel keeps a quick tunnel to a local port running until ctx ends, or a
+// named tunnel (fixed address) when created with NewNamed.
 type Tunnel struct {
 	bin, target string
 	onReady     func(url string)
+	// Named tunnel: token from the Cloudflare dashboard and its public URL.
+	token, fixedURL string
 
 	mu     sync.Mutex
 	url    string
@@ -49,6 +53,12 @@ type Tunnel struct {
 
 func New(bin string, port int, onReady func(url string)) *Tunnel {
 	return &Tunnel{bin: bin, target: "http://127.0.0.1:" + strconv.Itoa(port), onReady: onReady, status: "starting"}
+}
+
+// NewNamed runs a Cloudflare named tunnel: a fixed address set up once in the
+// Cloudflare dashboard (its public hostname points at this Mac's bridge).
+func NewNamed(bin, token, publicURL string, onReady func(url string)) *Tunnel {
+	return &Tunnel{bin: bin, token: token, fixedURL: strings.TrimRight(publicURL, "/"), onReady: onReady, status: "starting"}
 }
 
 // URL is the public address once it works ("" before).
@@ -89,6 +99,11 @@ func (t *Tunnel) Run(ctx context.Context) {
 
 func (t *Tunnel) once(ctx context.Context) {
 	cmd := exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "--url", t.target)
+	if t.token != "" {
+		// The token goes in the environment, not the command line (visible in ps).
+		cmd = exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "run")
+		cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+t.token)
+	}
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		t.set("", "unavailable")
@@ -105,7 +120,12 @@ func (t *Tunnel) once(ctx context.Context) {
 		sc := bufio.NewScanner(stderr)
 		sent := false
 		for sc.Scan() {
-			if m := urlPattern.FindString(sc.Text()); m != "" && !sent {
+			line := sc.Text()
+			m := urlPattern.FindString(line)
+			if t.fixedURL != "" && strings.Contains(line, "Registered tunnel connection") {
+				m = t.fixedURL
+			}
+			if m != "" && !sent {
 				found <- m
 				sent = true
 			}

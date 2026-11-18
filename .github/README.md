@@ -78,7 +78,8 @@ quick actions for what needs attention. See the
    `~/Library/Application Support/TS4AccessCompanion/config.json`.
    `ts4access-bridge --tunnel=false` keeps everything on the local network.
    `mac/wifi-test.sh` checks whether the phone reaches the Mac directly over
-   Wi-Fi (works without the game).
+   Wi-Fi (works without the game). For a fixed address instead of a random
+   one each session, see [docs/mac/FIXED-ADDRESS.md](../docs/mac/FIXED-ADDRESS.md).
 
 The first time, macOS may ask whether `ts4access-bridge` may accept incoming
 connections: allow it, or the phone cannot connect.

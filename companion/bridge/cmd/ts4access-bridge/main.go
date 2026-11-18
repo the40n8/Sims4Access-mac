@@ -131,14 +131,20 @@ func run() error {
 		return "", "No network address: is the Mac on Wi-Fi?"
 	}
 	if bin := tunnel.Find(); *useTunnel && bin != "" {
-		tun = tunnel.New(bin, cfg.Port, func(url string) {
+		ready := func(url string) {
 			link := url + "/#k=" + cfg.Token
 			path := filepath.Join(*dataDir, "phone-link.txt")
 			_ = os.WriteFile(path, []byte(link+"\n"+strings.Join(cfg.Links(), "\n")+"\n"), 0o600)
 			if f := onTunnelReady.Load(); f != nil {
 				(*f)(url)
 			}
-		})
+		}
+		if cfg.TunnelToken != "" && cfg.PublicURL != "" {
+			slog.Info("fixed phone address", "url", cfg.PublicURL)
+			tun = tunnel.NewNamed(bin, cfg.TunnelToken, cfg.PublicURL, ready)
+		} else {
+			tun = tunnel.New(bin, cfg.Port, ready)
+		}
 		go tun.Run(ctx)
 	} else if *useTunnel {
 		slog.Info("no cloudflared: phone link on the local network only")
@@ -175,11 +181,26 @@ func run() error {
 		*speakerPath = filepath.Join(filepath.Dir(exe), "ts4access-say")
 	}
 	spk := speaker.New(*speakerPath, &v1.Voice{Rate: int32(*rate), Volume: int32(*volume), Name: *voiceName, Lang: *lang})
-	// Said once the phone link works: how to show its QR code.
+	// Said once, when the phone link works and a household is loaded (the
+	// accessibility menu only opens in a household): how to show the QR code.
+	var linkReady, told atomic.Bool
+	tell := func() {
+		if linkReady.Load() && h.State().GetInGame() && told.CompareAndSwap(false, true) {
+			spk.Line("Q" + url.PathEscape("Phone link ready. Press Option Command A for the accessibility menu, then choose phone companion."))
+		}
+	}
 	announce := func(string) {
-		spk.Line("Q" + url.PathEscape("Phone link ready. Press Option Command A for the accessibility menu, then choose phone companion."))
+		linkReady.Store(true)
+		tell()
 	}
 	onTunnelReady.Store(&announce)
+	go func() {
+		for msg := range h.Subscribe(ctx) {
+			if msg.GetState().GetInGame() {
+				tell()
+			}
+		}
+	}()
 	defer spk.Close()
 
 	p := pipe.New(os.Stdin, os.Stdout)

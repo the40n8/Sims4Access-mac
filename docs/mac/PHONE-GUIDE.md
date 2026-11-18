@@ -27,7 +27,9 @@ an iPhone, often playing together with a sighted player on the Mac.
    then **Phone companion…**). A page with a QR code opens.
 3. Scan the QR code with the phone camera and open the link in Safari.
 4. The address changes each game session: scan again next time. The phone
-   stays paired (it remembers its key).
+   stays paired (it remembers its key). For an address that never changes
+   (a Home Screen app that always works), see
+   [FIXED-ADDRESS.md](FIXED-ADDRESS.md).
 
 ## Using the app with VoiceOver
 
