@@ -89,7 +89,7 @@
 <Announcer />
 
 {#if live.status === 'unpaired' || live.status === 'rejected'}
-	<main class="page stack">
+	<main class="page stack bare">
 		<h1>{m.pair_title()}</h1>
 		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
 		<form class="stack" onsubmit={pastePairing}>
@@ -146,14 +146,21 @@
 		top: 0;
 		z-index: 2;
 		gap: 0.5rem;
-		padding: calc(env(safe-area-inset-top) + 0.5rem) var(--gap) 0.5rem;
+		padding: calc(env(safe-area-inset-top) + 0.5rem) calc(env(safe-area-inset-right) + var(--gap)) 0.5rem
+			calc(env(safe-area-inset-left) + var(--gap));
 		background: var(--surface);
 		border-bottom: 1px solid var(--line);
 	}
 	.page {
 		max-width: 40rem;
 		margin: 0 auto;
-		padding: 1rem var(--gap) calc(env(safe-area-inset-bottom) + 2rem);
+		padding: 1rem calc(env(safe-area-inset-right) + var(--gap)) calc(env(safe-area-inset-bottom) + 2rem)
+			calc(env(safe-area-inset-left) + var(--gap));
+	}
+	/* No top bar on this screen: keep clear of the clock and the notch
+	   (full-screen Home Screen app); the top bar does it on the others. */
+	.bare {
+		padding-top: calc(env(safe-area-inset-top) + 1rem);
 	}
 	h1:focus {
 		outline: none;
