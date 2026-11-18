@@ -14,19 +14,35 @@ function read(): string | null {
 /** Takes the token from the link if present, otherwise the saved one. */
 export function loadToken(): string | null {
 	const match = /(?:^#|&)k=([A-Za-z0-9_-]{20,})/.exec(location.hash);
+	const token = match ? match[1] : read();
 	if (match) {
 		try {
 			localStorage.setItem(KEY, match[1]);
 		} catch {
 			// Private browsing: the token lives for this page only.
 		}
-		return match[1];
 	}
-	return read();
+	if (token) rememberForInstall(token);
+	return token;
+}
+
+/**
+ * iOS gives an app added to the Home Screen its own storage, without the key
+ * Safari kept. This cookie lets the bridge put the key in the install's start
+ * address (server/manifest.go); it is only sent to this same site.
+ */
+function rememberForInstall(token: string): void {
+	try {
+		const secure = location.protocol === 'https:' ? '; Secure' : '';
+		document.cookie = `ts4k=${token}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`;
+	} catch {
+		// cookies off: install from a scanned link still works in Safari
+	}
 }
 
 export function forgetToken(): void {
 	try {
+		document.cookie = 'ts4k=; Path=/; Max-Age=0';
 		localStorage.removeItem(KEY);
 	} catch {
 		// nothing stored

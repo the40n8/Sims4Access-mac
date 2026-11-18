@@ -165,6 +165,7 @@ func (a *auth) WrapStreamingHandler(next connect.StreamingHandlerFunc) connect.S
 func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/pair", PairPage(links))
+	mux.Handle("/manifest.json", Manifest(web, token))
 	path, api := ts4accessv1connect.NewCompanionServiceHandler(&service{hub: h},
 		connect.WithInterceptors(authInterceptor(token)))
 	mux.Handle(path, api)
