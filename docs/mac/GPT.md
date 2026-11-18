@@ -1,25 +1,28 @@
 # A ChatGPT helper for TS4 Access on Mac
 
-A custom GPT that answers questions about the mod and its phone app, in the
-player's language, with VoiceOver-friendly steps. It reads the guides from
-GitHub at the start of each conversation, so it follows the docs as they
-change: nothing to re-upload when the code or docs are updated.
+Ask ChatGPT (or any assistant) about the mod and its phone app, in your
+language, with VoiceOver-friendly steps. The assistant reads the guides
+from GitHub each time, so it follows the docs as they change.
 
-Creating it needs ChatGPT Plus (or Team/Pro); using it works with a free
-account. Players without ChatGPT can still use the Help tab's "Copy the
-prompt" button with any assistant.
+## Easiest: from the phone app
 
-## Create it (once)
+Help tab > **Ask an AI**: **Open ChatGPT** starts a conversation with the
+request already filled in; **Copy the prompt** works with any assistant.
+Works with free accounts, nothing to set up.
 
-1. Open https://chatgpt.com/gpts/editor and choose **Configure**.
-2. Fill in the fields below (copy each block as it is).
-3. **Capabilities**: turn on **Web Search**; leave the others off.
-4. **Knowledge**: nothing to upload.
-5. **Create** (top right) > **Anyone with the link** > **Save**. Share that
-   link (each person can add the GPT to their sidebar).
+## Your own helper in ChatGPT (optional)
 
-Update the GPT only if this file's Instructions block changes (the commit
-history of this file shows when).
+Custom GPTs are being retired by OpenAI (December 2026); their replacement,
+plugins, starts private with no share link, so there is nothing to share
+any more: each person can make their own helper instead.
+
+1. In ChatGPT, create a **Project** (for example "TS4 Access").
+2. Open the project's instructions and paste the **Instructions** block below.
+3. Make sure web search is allowed in that project, so it can read the guides.
+4. Ask questions inside the project.
+
+The blocks below were written for a GPT; Name, Description and Conversation
+starters are optional for a Project.
 
 ### Name
 
@@ -66,4 +69,4 @@ What can I do when the game asks me a question?
 
 Ask one of the starters. The answer should mention screens such as Live,
 Play or House and say it read the guide. If it answers without reading,
-check that Web Search is on.
+check that web search is allowed.
