@@ -7,6 +7,7 @@
 	import { Speed, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
 	import type { CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
 	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
+	import { matchesWords } from '$lib/search.js';
 	import { announce } from './Announcer.svelte';
 	import InteractionMenu from './InteractionMenu.svelte';
 	import VoiceToggle from './VoiceToggle.svelte';
@@ -56,14 +57,10 @@
 		}
 	});
 
-	function matches(t: Target, words: string[]): boolean {
-		const hay = `${t.name} ${t.kind} ${t.keywords} ${groupLabel(t)}`.toLocaleLowerCase();
-		return words.every((w) => hay.includes(w));
-	}
+	const matches = (t: Target) => matchesWords(`${t.name} ${t.kind} ${t.keywords} ${groupLabel(t)}`, query);
 
 	const groups = $derived.by(() => {
-		const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-		const list = (targets ?? []).filter((t) => matches(t, words)).sort((a, b) => rank(a) - rank(b));
+		const list = (targets ?? []).filter(matches).sort((a, b) => rank(a) - rank(b));
 		const out: { label: string; items: Target[] }[] = [];
 		for (const t of list) {
 			const label = groupLabel(t);
