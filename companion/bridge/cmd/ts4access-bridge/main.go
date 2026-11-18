@@ -175,7 +175,10 @@ func run() error {
 		*speakerPath = filepath.Join(filepath.Dir(exe), "ts4access-say")
 	}
 	spk := speaker.New(*speakerPath, &v1.Voice{Rate: int32(*rate), Volume: int32(*volume), Name: *voiceName, Lang: *lang})
-	announce := func(string) { spk.Line("Q" + url.PathEscape("Phone link ready.")) }
+	// Said once the phone link works: how to show its QR code.
+	announce := func(string) {
+		spk.Line("Q" + url.PathEscape("Phone link ready. Press Option Command A for the accessibility menu, then choose phone companion."))
+	}
 	onTunnelReady.Store(&announce)
 	defer spk.Close()
 

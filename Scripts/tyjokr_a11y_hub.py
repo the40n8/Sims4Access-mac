@@ -674,7 +674,8 @@ def open_hub():
     import tyjokr_a11y_phone as phone
     import tyjokr_a11y_build as build
     import tyjokr_a11y_grid as grid
-    rows = []
+    # Mac: the phone companion first, the row people come here for most.
+    rows = [(menu._raw(lang.t(label)), None, callback) for label, callback in _companion_rows()]
     for label, message in PANELS:
         rows.append((menu._raw(lang.t(label)), None,
                      lambda value=message: _ui(value)))
@@ -702,7 +703,6 @@ def open_hub():
              ('known contacts', contacts.open_contacts)) + build_rows +
             (('waiting call or text', phone.open_waiting),) +
             ((('phone', phone.open_list),) if phone.simplified() else ()) +
-            _companion_rows() +
             (('keyboard shortcuts', scanner_help),
              ('settings menu', menu._show_settings_window))):
         rows.append((menu._raw(lang.t(label)), None, callback))

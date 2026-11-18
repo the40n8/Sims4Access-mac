@@ -68,7 +68,7 @@ quick actions for what needs attention. See the
 
 1. Start the game. The bridge opens a Cloudflare quick tunnel by itself
    (bundled `cloudflared`, no account) so the phone works from any network;
-   the Mac voice says "Phone link ready".
+   the Mac voice says "Phone link ready" and how to open the QR code.
 2. Show the QR code: in game, accessibility menu (`a11y.hub` in the cheat
    console) > phone companion, or `a11y.companion`; from a terminal,
    `mac/phone-link.sh`. Both open http://127.0.0.1:47800/pair (this Mac only).

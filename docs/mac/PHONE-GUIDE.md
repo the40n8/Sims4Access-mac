@@ -19,10 +19,12 @@ an iPhone, often playing together with a sighted player on the Mac.
 
 ## Connecting the phone
 
-1. Start the game on the Mac. When the Mac says "Phone link ready", it is ready.
-2. On the Mac, click the accessibility icon in the macOS menu bar, then
-   **Phone companion…** (or press Option+Command+A and choose phone companion).
-   A page with a QR code opens.
+1. Start the game on the Mac. When the Mac says "Phone link ready. Press
+   Option Command A for the accessibility menu, then choose phone companion",
+   it is ready.
+2. Press Option+Command+A: the TS4 Access menu opens with **phone companion**
+   first; choose it (or click the accessibility icon in the macOS menu bar,
+   then **Phone companion…**). A page with a QR code opens.
 3. Scan the QR code with the phone camera and open the link in Safari.
 4. The address changes each game session: scan again next time. The phone
    stays paired (it remembers its key).
