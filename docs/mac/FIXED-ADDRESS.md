@@ -32,6 +32,19 @@ You need a free Cloudflare account and a domain managed by Cloudflare.
    ready…"; the QR code (Option+Command+A, phone companion) now shows the
    fixed address. Scan it once, then **Share > Add to Home Screen**.
 
+## Or from the command line
+
+With `cloudflared` logged in to your account (`cloudflared tunnel login`):
+
+```sh
+cloudflared tunnel create ts4access
+cloudflared tunnel route dns ts4access sims.example.com
+cloudflared tunnel token ts4access     # the tunnel_token for config.json
+```
+
+No public hostname needed in the dashboard: the mod sends everything the
+tunnel receives to the phone app.
+
 ## Notes
 
 - The phone still needs the pairing key that the QR code carries: knowing

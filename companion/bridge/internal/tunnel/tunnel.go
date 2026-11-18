@@ -57,8 +57,9 @@ func New(bin string, port int, onReady func(url string)) *Tunnel {
 
 // NewNamed runs a Cloudflare named tunnel: a fixed address set up once in the
 // Cloudflare dashboard (its public hostname points at this Mac's bridge).
-func NewNamed(bin, token, publicURL string, onReady func(url string)) *Tunnel {
-	return &Tunnel{bin: bin, token: token, fixedURL: strings.TrimRight(publicURL, "/"), onReady: onReady, status: "starting"}
+func NewNamed(bin, token, publicURL string, port int, onReady func(url string)) *Tunnel {
+	return &Tunnel{bin: bin, token: token, fixedURL: strings.TrimRight(publicURL, "/"),
+		target: "http://127.0.0.1:" + strconv.Itoa(port), onReady: onReady, status: "starting"}
 }
 
 // URL is the public address once it works ("" before).
@@ -101,7 +102,9 @@ func (t *Tunnel) once(ctx context.Context) {
 	cmd := exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "--url", t.target)
 	if t.token != "" {
 		// The token goes in the environment, not the command line (visible in ps).
-		cmd = exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "run")
+		// --url sends everything to the bridge, so the tunnel needs no ingress
+		// rules of its own (a dashboard public hostname works too).
+		cmd = exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "--url", t.target, "run")
 		cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+t.token)
 	}
 	stderr, err := cmd.StderrPipe()

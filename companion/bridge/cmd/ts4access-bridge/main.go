@@ -145,7 +145,7 @@ func run() error {
 		}
 		if cfg.TunnelToken != "" && cfg.PublicURL != "" {
 			slog.Info("fixed phone address", "url", cfg.PublicURL)
-			tun = tunnel.NewNamed(bin, cfg.TunnelToken, cfg.PublicURL, ready)
+			tun = tunnel.NewNamed(bin, cfg.TunnelToken, cfg.PublicURL, cfg.Port, ready)
 		} else {
 			tun = tunnel.New(bin, cfg.Port, ready)
 		}
