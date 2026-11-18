@@ -12,17 +12,37 @@ Works with free accounts, nothing to set up.
 
 ## Your own helper in ChatGPT (optional)
 
-Custom GPTs are being retired by OpenAI (December 2026); their replacement,
-plugins, starts private with no share link, so there is nothing to share
-any more: each person can make their own helper instead.
+Custom GPTs are being retired by OpenAI (December 2026) and replaced by
+plugins. A plugin is personal (it starts private, without a share link), so
+each person makes their own; the content below is the same for every route.
+
+### As a ChatGPT plugin
+
+1. In ChatGPT, open **GPTs** (or Plugins) and choose **Create plugin**.
+2. Name and description: use the Name and Description blocks below.
+3. Add a **skill** (the plugin's instructions) and paste the **Instructions**
+   block below.
+4. If the editor allows web search or browsing, turn it on: the plugin then
+   reads the current guides each time and never needs updating.
+5. If it does not, upload these files as **reference files** (download each
+   link with "Save as"), and upload them again when the guides change:
+   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt
+   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
+   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/KEYBOARD.md
+   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/mac/PLAYERS.md
+6. Save, then open it in the ChatGPT app on the phone to use it with
+   VoiceOver.
+
+The guides' history on GitHub (docs/mac) shows when they changed.
+
+### As a ChatGPT Project
 
 1. In ChatGPT, create a **Project** (for example "TS4 Access").
 2. Open the project's instructions and paste the **Instructions** block below.
 3. Make sure web search is allowed in that project, so it can read the guides.
 4. Ask questions inside the project.
 
-The blocks below were written for a GPT; Name, Description and Conversation
-starters are optional for a Project.
+Name, Description and Conversation starters are optional for a Project.
 
 ### Name
 
@@ -44,7 +64,7 @@ You help people play The Sims 4 on a Mac with the TS4 Access accessibility mod a
 At the start of every conversation, before answering, open and read:
 1. https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt
 2. https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
-Read other files listed in llms.txt when the question needs them (Mac keyboard: docs/mac/KEYBOARD.md; installing: mac/PLAYERS.md; fixed address: docs/mac/FIXED-ADDRESS.md). These files are the source of truth and change often: always use the current version, never memory. If you cannot open them, say so and answer carefully from general knowledge, marking what you are unsure of.
+If these guides were given to you as reference files instead, use those, and say when an answer might be out of date. Read other files listed in llms.txt when the question needs them (Mac keyboard: docs/mac/KEYBOARD.md; installing: mac/PLAYERS.md; fixed address: docs/mac/FIXED-ADDRESS.md). These files are the source of truth and change often: always use the current version, never memory. If you cannot open them, say so and answer carefully from general knowledge, marking what you are unsure of.
 
 How to answer:
 - Answer in the user's language (often Spanish or French). Keep the app's screen and button names as the app shows them in that language when you know them; otherwise give the English name in quotes.
