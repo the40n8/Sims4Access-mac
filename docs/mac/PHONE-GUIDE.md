@@ -32,7 +32,8 @@ an iPhone, often playing together with a sighted player on the Mac.
 - Swipe right from the top of the screen: first the **Pause / Resume** button
   (with the game speed, day and time), then the **tabs**, then the screen.
 - Use the VoiceOver rotor set to **Headings** to jump between sections.
-- Tabs: Live, Play, House, Sims, History, Settings, Help.
+- Tabs: Live, Play, House, Sims, Settings, Help (two rows of three).
+  History opens from Live with "Full history" (and has "Back to Live").
 - When the game asks a question, a card **"The game asks: …"** appears under
   the screen title on every tab, and VoiceOver announces it.
 
@@ -61,22 +62,25 @@ an iPhone, often playing together with a sighted player on the Mac.
   events. "Full history" opens History.
 
 ### Play
-- **Interact**: everything the controlled Sim can use, as in the game's
-  click menus:
-  - the Sim itself (self-care, phone actions on oneself...),
-  - the Sim's **phone** (calls, invitations, going out, services, travel),
-  - other Sims, then objects by category (Appliances, Plumbing, Comfort,
-    Surfaces, Electronics, Activities, Kids, Storage... Decorations, Lighting
-    and Build last).
-- Categories are folded; each is a button "Appliances, 3" that opens it. A
-  search opens every category that has results.
-- **Search** by type or name, in English, French or Spanish ("fridge",
-  "frigo", "nevera", "shower", "douche", "ducha"...). Several words narrow the
-  search. The keyboard's Search key closes the keyboard and goes to results.
-- Choose an object: its menu is the game's own pie menu, with categories.
-  Unavailable rows say why ("Lobster, unavailable: requires Cooking level 9").
-  Choosing a row adds the action to the Sim's queue.
-- Below: **Controlled Sim** (switch Sims) and **Game speed**.
+From top to bottom:
+- **Controlled Sim**: one button per Sim on the lot; the pressed one is the
+  Sim you play. Actions always run for this Sim.
+- **You**: the Sim itself (self-care, its own interactions) and the Sim's
+  **phone** (calls, invitations, going out, services, travel).
+- **Interact**:
+  - **Search** by type or name, in English, French or Spanish ("fridge",
+    "frigo", "nevera", "shower", "douche", "ducha"...). Several words narrow
+    the search. The keyboard's Search key closes the keyboard and goes to the
+    results; the number found is announced.
+  - **Sims nearby**, closest first.
+  - **Objects by category** (Appliances, Plumbing, Comfort, Surfaces,
+    Electronics, Activities, Kids, Storage... Decorations, Lighting and Build
+    last). Categories are folded: each is a button "Appliances, 3" that
+    opens it. A search opens every category with results.
+  - Choose a Sim or object: its menu is the game's own pie menu, with
+    categories. Unavailable rows say why ("Lobster, unavailable: requires
+    Cooking level 9"). Choosing a row adds the action to the Sim's queue.
+- **Game speed**: Pause, Play, Fast, Ultra fast.
 
 ### House
 - The home floor by floor (ground floor, floor 1, basement).

@@ -131,3 +131,9 @@ button[aria-disabled='true'] {
 		animation: none !important;
 	}
 }
+
+/* Long words and links (the AI help link) wrap instead of widening the page. */
+p,
+li {
+	overflow-wrap: anywhere;
+}

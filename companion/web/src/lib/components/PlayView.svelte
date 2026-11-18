@@ -61,23 +61,28 @@
 
 	const matches = (t: Target) => matchesWords(`${t.name} ${t.kind} ${t.keywords} ${groupLabel(t)}`, query);
 
+	// The Sim itself and its phone are shortcuts at the top; other Sims and
+	// objects are searched. Objects are grouped by catalog category.
+	const self = $derived((targets ?? []).find((t) => t.isSelf));
+	const phone = $derived((targets ?? []).find((t) => t.group === 'PHONE'));
+	const sims = $derived((targets ?? []).filter((t) => t.isSim && !t.isSelf && matches(t)));
 	const groups = $derived.by(() => {
-		const list = (targets ?? []).filter(matches).sort((a, b) => rank(a) - rank(b));
+		const list = (targets ?? [])
+			.filter((t) => !t.isSim && t.group !== 'PHONE' && matches(t))
+			.sort((a, b) => rank(a) - rank(b));
 		const out: { key: string; label: string; items: Target[] }[] = [];
 		for (const t of list) {
-			const key = t.isSelf ? 'SELF' : t.group;
-			let g = out.find((x) => x.key === key);
-			if (!g) out.push((g = { key, label: groupLabel(t), items: [] }));
+			let g = out.find((x) => x.key === t.group);
+			if (!g) out.push((g = { key: t.group, label: groupLabel(t), items: [] }));
 			g.items.push(t);
 		}
 		return out;
 	});
-	const found = $derived(groups.reduce((n, g) => n + g.items.length, 0));
+	const found = $derived(sims.length + groups.reduce((n, g) => n + g.items.length, 0));
 	const countText = $derived(targets === null ? '' : m.found_count({ count: found }));
 
-	// Categories start folded (except the few always-useful ones); a search
-	// unfolds everything it finds.
-	let opened = $state<string[]>(['SELF', 'PHONE', 'SIMS']);
+	// Categories start folded; a search unfolds everything it finds.
+	let opened = $state<string[]>([]);
 	const isOpen = (key: string) => query.trim() !== '' || opened.includes(key);
 	function toggleGroup(key: string) {
 		opened = opened.includes(key) ? opened.filter((k) => k !== key) : [...opened, key];
@@ -118,6 +123,42 @@
 	{#if selected}
 		<InteractionMenu target={selected} onBack={back} />
 	{:else}
+		{#if game.sims.filter((s) => s.here).length > 1}
+			<section class="card stack" aria-labelledby="control">
+				<h2 id="control">{m.control_sim_title()}</h2>
+				<div class="pair">
+					{#each game.sims.filter((s) => s.here) as sim (sim.id)}
+						<button
+							type="button"
+							aria-pressed={sim.active}
+							aria-disabled={busy}
+							onclick={() => selectSim(sim.id)}
+						>
+							{simName(sim)}
+						</button>
+					{/each}
+				</div>
+			</section>
+		{/if}
+
+		{#if self || phone}
+			<section class="card stack" aria-labelledby="you">
+				<h2 id="you">{m.you_title()}</h2>
+				<div class="pair">
+					{#if self}
+						<button type="button" id={`target-${self.id}`} onclick={() => open(self)}>
+							{m.target_self({ name: self.name })}
+						</button>
+					{/if}
+					{#if phone}
+						<button type="button" id={`target-${phone.id}`} onclick={() => open(phone)}>
+							{targetLabel(phone, me ? simName(me) : '')}
+						</button>
+					{/if}
+				</div>
+			</section>
+		{/if}
+
 		<section class="card stack" aria-labelledby="interact">
 			<h2 id="interact">{m.interact_title()}</h2>
 			<form role="search" class="stack" onsubmit={submitSearch}>
@@ -137,30 +178,42 @@
 			<p id="search-count" class="muted">{countText}</p>
 			{#if targets === null}
 				<p class="muted" role="status">{m.loading()}</p>
-			{:else if groups.length === 0}
+			{:else if found === 0}
 				<p class="muted">{m.nothing_found()}</p>
 			{:else}
 				<h3 class="visually-hidden" tabindex="-1" bind:this={resultsHeading}>{m.results_title()}</h3>
+				{#if sims.length}
+					<h3>{m.sims_nearby()}</h3>
+					<ul class="stack items">
+						{#each sims as t (t.id)}
+							<li>
+								<button type="button" class="row" id={`target-${t.id}`} onclick={() => open(t)}>
+									{targetLabel(t)}
+								</button>
+							</li>
+						{/each}
+					</ul>
+				{/if}
 				{#each groups as g (g.key)}
 					{@const expanded = isOpen(g.key)}
 					<h3 class="group">
 						<button
 							type="button"
-							class="row group-toggle"
+							class="group-toggle"
 							aria-expanded={expanded}
 							aria-controls={`group-${g.key}`}
 							onclick={() => toggleGroup(g.key)}
 						>
+							<span aria-hidden="true" class="chevron">{expanded ? '▾' : '▸'}</span>
 							<span>{m.group_count({ group: g.label, count: g.items.length })}</span>
-							<span aria-hidden="true">{expanded ? '▾' : '▸'}</span>
 						</button>
 					</h3>
 					{#if expanded}
-						<ul class="stack" id={`group-${g.key}`}>
+						<ul class="stack items" id={`group-${g.key}`}>
 							{#each g.items as t (t.id)}
 								<li>
 									<button type="button" class="row" id={`target-${t.id}`} onclick={() => open(t)}>
-										{targetLabel(t, me ? simName(me) : '')}
+										{targetLabel(t)}
 									</button>
 								</li>
 							{/each}
@@ -171,27 +224,9 @@
 			<button type="button" onclick={loadTargets}>{m.refresh()}</button>
 		</section>
 
-		{#if game.sims.filter((s) => s.here).length > 1}
-			<section class="card stack" aria-labelledby="control">
-				<h2 id="control">{m.control_sim_title()}</h2>
-				<div class="grid">
-					{#each game.sims.filter((s) => s.here) as sim (sim.id)}
-						<button
-							type="button"
-							aria-pressed={sim.active}
-							aria-disabled={busy}
-							onclick={() => selectSim(sim.id)}
-						>
-							{m.control_sim({ name: simName(sim) })}
-						</button>
-					{/each}
-				</div>
-			</section>
-		{/if}
-
 		<section class="card stack" aria-labelledby="speed">
 			<h2 id="speed">{m.speed_title()}</h2>
-			<div class="grid" role="group" aria-labelledby="speed">
+			<div class="speeds" role="group" aria-labelledby="speed">
 				{#each speeds as { speed, label } (speed)}
 					<button
 						type="button"
@@ -206,10 +241,18 @@
 {/if}
 
 <style>
-	.grid {
+	.pair {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+		grid-template-columns: 1fr 1fr;
 		gap: 0.5rem;
+	}
+	.speeds {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.35rem;
+	}
+	.speeds button {
+		padding-inline: 0.25rem;
 	}
 	.row {
 		width: 100%;
@@ -228,12 +271,29 @@
 	h3:focus {
 		outline: none;
 	}
+	/* Categories read as folders: bold title with an arrow, items indented below. */
 	.group {
-		margin: 0.5rem 0 0;
+		margin: 0.25rem 0 0;
+		border-bottom: 1px solid var(--line);
 	}
 	.group-toggle {
 		display: flex;
-		justify-content: space-between;
+		align-items: center;
+		gap: 0.6rem;
+		width: 100%;
+		min-height: var(--tap);
+		padding: 0.25rem 0;
+		border: none;
+		background: transparent;
+		font: inherit;
 		font-weight: 700;
+		color: var(--text);
+		text-align: start;
+	}
+	.chevron {
+		width: 1rem;
+	}
+	.items {
+		padding-inline-start: 1rem;
 	}
 </style>

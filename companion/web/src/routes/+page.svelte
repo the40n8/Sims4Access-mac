@@ -23,16 +23,18 @@
 		{ id: 'play', label: m.tab_play },
 		{ id: 'house', label: m.tab_house },
 		{ id: 'sims', label: m.tab_sims },
-		{ id: 'history', label: m.tab_history },
 		{ id: 'settings', label: m.tab_settings },
 		{ id: 'help', label: m.tab_help }
 	];
+	// History is opened from Live ("Full history"), not a tab of its own:
+	// six tabs fit two even rows.
+	const VIEWS: { id: Tab; label: () => string }[] = [...TABS, { id: 'history', label: m.tab_history }];
 	const TAB_KEY = 'ts4access.tab';
 
 	function savedTab(): Tab {
 		try {
 			const t = localStorage.getItem(TAB_KEY);
-			if (TABS.some((x) => x.id === t)) return t as Tab;
+			if (VIEWS.some((x) => x.id === t)) return t as Tab;
 		} catch {
 			// default tab
 		}
@@ -41,7 +43,7 @@
 
 	let tab = $state<Tab>(savedTab());
 	let heading: HTMLHeadingElement | undefined = $state();
-	const title = $derived(TABS.find((t) => t.id === tab)!.label());
+	const title = $derived(VIEWS.find((t) => t.id === tab)!.label());
 
 	async function show(next: Tab) {
 		tab = next;
@@ -108,6 +110,7 @@
 		{:else if tab === 'sims'}
 			<SimsView />
 		{:else if tab === 'history'}
+			<button type="button" onclick={() => show('live')}>{m.back_to_live()}</button>
 			<Feed />
 		{:else if tab === 'settings'}
 			<SettingsView />
@@ -137,7 +140,7 @@
 	}
 	nav {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		gap: 0.25rem;
 	}
 	nav button {

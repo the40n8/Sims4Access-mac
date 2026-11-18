@@ -18,7 +18,7 @@ const en: HelpSection[] = [
 		title: 'The top bar',
 		body: [
 			'The first button pauses the game, or resumes it at the speed it had before. Next to it: the game speed, the day and the time.',
-			'Below it are the tabs: Live, Play, House, Sims, History, Settings and Help.',
+			'Below it are the tabs: Live, Play, House, Sims, Settings and Help. History opens from Live (Full history).',
 			'When the game asks something (which recipe, who to invite, a name to type), a card "The game asks" appears right under the screen title on every tab. Choose an answer and press OK, or Cancel.'
 		]
 	},
@@ -34,10 +34,10 @@ const en: HelpSection[] = [
 		id: 'play',
 		title: 'Play',
 		body: [
-			'Interact lists everything the controlled Sim can use: the Sim itself, the Sim’s phone, other Sims, then objects by category (appliances, plumbing, comfort...). Categories are folded: open one with its button. Typing a search opens every category with matches.',
+			'From the top: Controlled Sim (which Sim you play), You (the Sim itself and its phone), then Interact: a search, the Sims nearby, and objects by category (appliances, plumbing, comfort...). Categories are folded: each one is a button that opens it. Typing a search opens every category with matches.',
 			'Search finds an object by its type or name, in French, Spanish or English ("frigo", "nevera", "fridge"). Press Search on the keyboard to close it and go to the results.',
 			'Choose an object to hear its menu, the same as clicking it in the game. Greyed rows say why they are unavailable. Choosing a row adds the action to the Sim’s queue.',
-			'Below: which Sim to control, and the four game speeds.'
+			'At the end: the four game speeds.'
 		]
 	},
 	{
@@ -107,7 +107,7 @@ const fr: HelpSection[] = [
 		title: 'La barre du haut',
 		body: [
 			'Le premier bouton met le jeu en pause, ou le relance à la vitesse d’avant. À côté : la vitesse, le jour et l’heure du jeu.',
-			'En dessous, les onglets : En direct, Jouer, Maison, Sims, Historique, Réglages et Aide.',
+			'En dessous, les onglets : En direct, Jouer, Maison, Sims, Réglages et Aide. L’historique s’ouvre depuis En direct (Tout l’historique).',
 			'Quand le jeu pose une question (quelle recette, qui inviter, un nom à taper), une carte « Le jeu demande » apparaît sous le titre, sur tous les onglets. Choisis une réponse puis OK, ou Annuler.'
 		]
 	},
@@ -123,10 +123,10 @@ const fr: HelpSection[] = [
 		id: 'play',
 		title: 'Jouer',
 		body: [
-			'Interagir liste tout ce que le Sim contrôlé peut utiliser : le Sim lui-même, son téléphone, les autres Sims, puis les objets par catégorie (électroménager, plomberie, confort...). Les catégories sont repliées : ouvre-en une avec son bouton. Une recherche ouvre toutes les catégories qui ont des résultats.',
+			'De haut en bas : Sim contrôlé (quel Sim tu joues), Toi (le Sim lui-même et son téléphone), puis Interagir : une recherche, les Sims à proximité et les objets par catégorie (électroménager, plomberie, confort...). Les catégories sont repliées : chacune est un bouton qui l’ouvre. Une recherche ouvre toutes les catégories qui ont des résultats.',
 			'La recherche trouve un objet par son type ou son nom, en français, espagnol ou anglais (« frigo », « nevera », « fridge »). Le bouton Rechercher du clavier ferme le clavier et mène aux résultats.',
 			'Choisis un objet pour entendre son menu, comme en cliquant dessus dans le jeu. Les lignes grisées disent pourquoi. Choisir une ligne ajoute l’action à la file du Sim.',
-			'Plus bas : quel Sim contrôler, et les quatre vitesses du jeu.'
+			'À la fin : les quatre vitesses du jeu.'
 		]
 	},
 	{
@@ -196,7 +196,7 @@ const es: HelpSection[] = [
 		title: 'La barra de arriba',
 		body: [
 			'El primer botón pausa el juego, o lo reanuda a la velocidad que tenía. Al lado: la velocidad, el día y la hora del juego.',
-			'Debajo están las pestañas: En directo, Jugar, Casa, Sims, Historial, Ajustes y Ayuda.',
+			'Debajo están las pestañas: En directo, Jugar, Casa, Sims, Ajustes y Ayuda. El historial se abre desde En directo (Todo el historial).',
 			'Cuando el juego pregunta algo (qué receta, a quién invitar, un nombre que escribir), aparece una tarjeta «El juego pregunta» bajo el título, en todas las pestañas. Elige una respuesta y pulsa Aceptar, o Cancelar.'
 		]
 	},
@@ -212,10 +212,10 @@ const es: HelpSection[] = [
 		id: 'play',
 		title: 'Jugar',
 		body: [
-			'Interactuar lista todo lo que el Sim controlado puede usar: el propio Sim, su teléfono, otros Sims y luego los objetos por categoría (electrodomésticos, fontanería, comodidad...). Las categorías están plegadas: abre una con su botón. Una búsqueda abre todas las que tienen resultados.',
+			'De arriba abajo: Sim controlado (qué Sim juegas), Tú (el propio Sim y su teléfono) y luego Interactuar: una búsqueda, los Sims cerca y los objetos por categoría (electrodomésticos, fontanería, comodidad...). Las categorías están plegadas: cada una es un botón que la abre. Una búsqueda abre todas las que tienen resultados.',
 			'La búsqueda encuentra un objeto por su tipo o nombre, en español, francés o inglés («nevera», «frigo», «fridge»). El botón Buscar del teclado lo cierra y lleva a los resultados.',
 			'Elige un objeto para oír su menú, como al hacer clic en el juego. Las líneas en gris dicen por qué. Elegir una línea añade la acción a la cola del Sim.',
-			'Más abajo: qué Sim controlar y las cuatro velocidades del juego.'
+			'Al final: las cuatro velocidades del juego.'
 		]
 	},
 	{

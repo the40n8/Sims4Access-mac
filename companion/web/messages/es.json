@@ -235,7 +235,7 @@
 	"room_POOL": "Piscina",
 	"tab_help": "Ayuda",
 	"help_contents": "Índice",
-	"pause_game": "Pausar el juego",
+	"pause_game": "Pausa",
 	"resume_game": "Reanudar",
 	"paused_now": "En pausa",
 	"resumed": "El juego continúa",
@@ -272,5 +272,8 @@
 	"qa_other_ways": "Otras opciones",
 	"qa_none": "Nada cerca puede hacerlo ahora. Aquí hay otras opciones.",
 	"qa_open_menu": "No se encontró con ese nombre: aquí está todo el menú.",
-	"control_now": "Ahora controlas a {name}"
+	"control_now": "Ahora controlas a {name}",
+	"you_title": "Tú",
+	"sims_nearby": "Sims cerca",
+	"back_to_live": "Volver a En directo"
 }

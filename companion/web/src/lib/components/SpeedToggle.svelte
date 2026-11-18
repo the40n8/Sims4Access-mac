@@ -47,15 +47,17 @@
 		gap: 0.75rem;
 	}
 	.bar button {
-		flex: none;
-		min-width: 9rem;
+		flex: 1;
 		font-weight: 700;
 	}
 	.bar button.paused {
 		background: var(--accent);
 		color: var(--accent-ink);
 	}
-	.bar span {
-		font-size: 0.95em;
+	.bar > span {
+		flex: none;
+		max-width: 45%;
+		text-align: end;
+		font-size: 0.9em;
 	}
 </style>

@@ -235,7 +235,7 @@
 	"room_POOL": "Pool",
 	"tab_help": "Help",
 	"help_contents": "Contents",
-	"pause_game": "Pause the game",
+	"pause_game": "Pause",
 	"resume_game": "Resume",
 	"paused_now": "Paused",
 	"resumed": "Playing again",
@@ -272,5 +272,8 @@
 	"qa_other_ways": "Other ways",
 	"qa_none": "Nothing nearby can do it right now. Here are other ways.",
 	"qa_open_menu": "Not found under that name: here is the whole menu.",
-	"control_now": "Now controlling {name}"
+	"control_now": "Now controlling {name}",
+	"you_title": "You",
+	"sims_nearby": "Sims nearby",
+	"back_to_live": "Back to Live"
 }
