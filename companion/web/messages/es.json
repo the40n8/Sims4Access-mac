@@ -302,5 +302,15 @@
 	"camera_follow": "Seguir a {name}",
 	"camera_close": "Primer plano de {name}",
 	"camera_free": "Cámara libre",
-	"camera_help": "Mueve la cámara del juego en el Mac hacia este Sim, para verlo y oírlo mejor."
+	"camera_help": "Mueve la cámara del juego en el Mac hacia este Sim, para verlo y oírlo mejor.",
+	"delta_friendship": "amistad {n}",
+	"delta_romance": "romance {n}",
+	"ev_social": "{sim} y {other}: {what}.",
+	"ev_relationship": "{sim} y {other}: ahora {label}.",
+	"social_title": "Conversaciones",
+	"social_help": "Lo que los Sims del hogar hacen con otros y cómo cambia la relación, en el historial y leído por VoiceOver.",
+	"social_off": "Desactivado",
+	"social_labels": "Solo nuevos niveles (Amigo, Pareja…)",
+	"social_normal": "Lo que hacen y cómo va (recomendado)",
+	"social_all": "Todo, incluso cambios pequeños"
 }

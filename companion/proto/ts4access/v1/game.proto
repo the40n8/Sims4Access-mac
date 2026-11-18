@@ -210,6 +210,11 @@ enum EventKind {
   EVENT_KIND_VISITOR = 16;
   // Bills arrived: subject is the amount owed.
   EVENT_KIND_BILLS = 17;
+  // A household Sim's relationship moved: subject is the other Sim, detail
+  // the action under way; deltas in friendship_delta / romance_delta.
+  EVENT_KIND_SOCIAL = 18;
+  // A relationship gained a label: subject is the other Sim, detail the label.
+  EVENT_KIND_RELATIONSHIP = 19;
 }
 
 // Something the controlled Sim can interact with.
@@ -251,6 +256,9 @@ message Event {
   string subject = 6;
   // Kind-specific detail: need level name, moodlet description, funds delta...
   string detail = 7;
+  // SOCIAL: how the relationship moved.
+  int32 friendship_delta = 8;
+  int32 romance_delta = 9;
 }
 
 // The house, room by room, for a mental map of the lot.

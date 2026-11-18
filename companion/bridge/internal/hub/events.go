@@ -37,6 +37,7 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 		add(v1.EventKind_EVENT_KIND_BILLS, nil, strconv.FormatInt(cur.GetBillsOwed(), 10), "")
 	}
 
+	seenPairs := map[string]bool{}
 	before := map[string]*v1.Sim{}
 	for _, s := range old.GetSims() {
 		before[s.GetId()] = s
@@ -62,6 +63,7 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 		if mk := s.GetMood().GetKey(); mk != "" && mk != prev.GetMood().GetKey() {
 			add(v1.EventKind_EVENT_KIND_MOOD, s, mk, s.GetMood().GetName())
 		}
+		diffSocial(prev, s, &out, seenPairs)
 		diffMoodlets(prev, s, add)
 		diffNeeds(prev, s, add)
 		if a := running(s); a != nil {
@@ -167,6 +169,49 @@ func diffVisitors(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string
 	for _, v := range cur.GetVisitors() {
 		if !here[v.GetSimId()] {
 			add(v1.EventKind_EVENT_KIND_VISITOR, nil, v.GetName(), "")
+		}
+	}
+}
+
+// diffSocial reports relationship moves of a household Sim: what it is
+// doing and by how much friendship and romance changed, plus new labels
+// ("Good Friends"). A pair of household Sims is reported once.
+func diffSocial(prev, cur *v1.Sim, out *[]*v1.Event, seen map[string]bool) {
+	was := map[string]*v1.Relationship{}
+	for _, r := range prev.GetRelationships() {
+		was[r.GetSimId()] = r
+	}
+	doing := ""
+	if a := running(cur); a != nil {
+		doing = a.GetName()
+	}
+	for _, r := range cur.GetRelationships() {
+		old, ok := was[r.GetSimId()]
+		if !ok {
+			continue
+		}
+		pair := cur.GetId() + "|" + r.GetSimId()
+		if cur.GetId() > r.GetSimId() {
+			pair = r.GetSimId() + "|" + cur.GetId()
+		}
+		if seen[pair] {
+			continue
+		}
+		df, dr := r.GetFriendship()-old.GetFriendship(), r.GetRomance()-old.GetRomance()
+		if df != 0 || dr != 0 {
+			seen[pair] = true
+			*out = append(*out, &v1.Event{Kind: v1.EventKind_EVENT_KIND_SOCIAL, SimId: cur.GetId(), SimName: cur.GetFirstName(),
+				Subject: r.GetName(), Detail: doing, FriendshipDelta: df, RomanceDelta: dr})
+		}
+		had := map[string]bool{}
+		for _, l := range old.GetLabels() {
+			had[l] = true
+		}
+		for _, l := range r.GetLabels() {
+			if !had[l] {
+				*out = append(*out, &v1.Event{Kind: v1.EventKind_EVENT_KIND_RELATIONSHIP, SimId: cur.GetId(),
+					SimName: cur.GetFirstName(), Subject: r.GetName(), Detail: l})
+			}
 		}
 	}
 }

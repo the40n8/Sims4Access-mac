@@ -149,3 +149,27 @@ func TestDiffVisitorsAndBills(t *testing.T) {
 		t.Fatalf("nothing new, got %v", ev)
 	}
 }
+
+func TestDiffSocial(t *testing.T) {
+	sim := func(f int32, labels ...string) *v1.Sim {
+		return &v1.Sim{Id: "1", FirstName: "Bella", Here: true,
+			Actions:       []*v1.Action{{Id: "a", Name: "Tell Joke", State: v1.ActionState_ACTION_STATE_RUNNING}},
+			Relationships: []*v1.Relationship{{SimId: "9", Name: "Nancy", Friendship: f, Labels: labels}}}
+	}
+	st := func(s *v1.Sim) *v1.GameState { return &v1.GameState{InGame: true, Sims: []*v1.Sim{s}} }
+	var social, label *v1.Event
+	for _, e := range Diff(st(sim(10)), st(sim(13, "Friend"))) {
+		switch e.GetKind() {
+		case v1.EventKind_EVENT_KIND_SOCIAL:
+			social = e
+		case v1.EventKind_EVENT_KIND_RELATIONSHIP:
+			label = e
+		}
+	}
+	if social == nil || social.GetFriendshipDelta() != 3 || social.GetDetail() != "Tell Joke" || social.GetSubject() != "Nancy" {
+		t.Fatalf("want social +3 during Tell Joke, got %v", social)
+	}
+	if label == nil || label.GetDetail() != "Friend" {
+		t.Fatalf("want new label Friend, got %v", label)
+	}
+}

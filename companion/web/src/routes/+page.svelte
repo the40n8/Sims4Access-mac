@@ -3,7 +3,7 @@
 	import { linkInAddressBar } from '$lib/session.js';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
-	import { groupOf, prefs } from '$lib/prefs.svelte.js';
+	import { groupOf, prefs, socialShown } from '$lib/prefs.svelte.js';
 	import { eventText } from '$lib/text.js';
 	import Announcer, { announce } from '$lib/components/Announcer.svelte';
 	import StatusBanner from '$lib/components/StatusBanner.svelte';
@@ -65,7 +65,9 @@
 		});
 		live.onEvent = (e) => {
 			const group = groupOf(e.kind);
-			if (group && group !== 'spoken' && prefs.announce[group]) announce(eventText(e));
+			if (group === 'social') {
+				if (socialShown(e)) announce(eventText(e));
+			} else if (group && group !== 'spoken' && prefs.announce[group]) announce(eventText(e));
 		};
 		live.start();
 		return () => live.stop();

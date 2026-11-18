@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
-	import { groupOf, prefs } from '$lib/prefs.svelte.js';
+	import { groupOf, prefs, socialShown } from '$lib/prefs.svelte.js';
 	import { eventText } from '$lib/text.js';
 
 	/** Show only the newest events (0 = all). */
 	let { limit = 0 }: { limit?: number } = $props();
 
 	const feed = $derived.by(() => {
-		const list = live.feed.filter((e) => prefs.showSpoken || groupOf(e.kind) !== 'spoken');
+		const list = live.feed.filter(
+			(e) => (prefs.showSpoken || groupOf(e.kind) !== 'spoken') && socialShown(e)
+		);
 		return limit > 0 ? list.slice(0, limit) : list;
 	});
 	const time = (at: bigint) =>

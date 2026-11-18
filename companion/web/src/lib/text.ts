@@ -165,6 +165,16 @@ export function eventText(e: Event): string {
 			return e.subject === 'school' ? m.ev_back_school({ sim }) : m.ev_back_work({ sim });
 		case EventKind.NOTIFICATION:
 			return e.detail ? m.ev_notification({ title: e.subject, text: e.detail }) : e.subject;
+		case EventKind.SOCIAL: {
+			const moves: string[] = [];
+			const signed = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+			if (e.friendshipDelta) moves.push(m.delta_friendship({ n: signed(e.friendshipDelta) }));
+			if (e.romanceDelta) moves.push(m.delta_romance({ n: signed(e.romanceDelta) }));
+			const what = [e.detail, moves.join(', ')].filter(Boolean).join(', ');
+			return m.ev_social({ sim, other: e.subject, what });
+		}
+		case EventKind.RELATIONSHIP:
+			return m.ev_relationship({ sim, other: e.subject, label: e.detail });
 		case EventKind.VISITOR:
 			return m.ev_visitor({ name: e.subject });
 		case EventKind.BILLS:

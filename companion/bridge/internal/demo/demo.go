@@ -129,6 +129,16 @@ func (g *game) step() {
 			g.addAction(s, name)
 		}
 	}
+	if rand.IntN(15) == 0 {
+		// A chat with Nancy: friendship moves, sometimes a new label.
+		s := st.Sims[0]
+		g.addAction(s, "Tell Joke")
+		r := s.Relationships[0]
+		r.Friendship = min(100, r.Friendship+int32(2+rand.IntN(4)))
+		if r.Friendship >= 50 && len(r.Labels) < 2 {
+			r.Labels = append(r.Labels, "Good Friends")
+		}
+	}
 	if rand.IntN(90) == 0 {
 		g.hub.AddEvent(&v1.Event{Kind: v1.EventKind_EVENT_KIND_NOTIFICATION, Subject: "Bills Due", Detail: "The household bills of §340 are due."})
 	}

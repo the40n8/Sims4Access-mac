@@ -302,5 +302,15 @@
 	"camera_follow": "Follow {name}",
 	"camera_close": "Close-up on {name}",
 	"camera_free": "Free camera",
-	"camera_help": "Moves the game camera on the Mac to this Sim, to see and hear them better."
+	"camera_help": "Moves the game camera on the Mac to this Sim, to see and hear them better.",
+	"delta_friendship": "friendship {n}",
+	"delta_romance": "romance {n}",
+	"ev_social": "{sim} and {other}: {what}.",
+	"ev_relationship": "{sim} and {other}: now {label}.",
+	"social_title": "Conversations",
+	"social_help": "What the household Sims do with others and how the relationship moves, in the feed and read by VoiceOver.",
+	"social_off": "Off",
+	"social_labels": "Only new relationship levels (Friend, Partner…)",
+	"social_normal": "What they do and how it goes (recommended)",
+	"social_all": "Everything, even small changes"
 }

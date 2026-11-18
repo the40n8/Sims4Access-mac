@@ -1,11 +1,25 @@
 // Per-phone preferences: which events VoiceOver announces automatically.
-import { EventKind } from './gen/ts4access/v1/game_pb.js';
+import { EventKind, type Event } from './gen/ts4access/v1/game_pb.js';
 
 export type Group = 'messages' | 'mood' | 'moodlet' | 'need' | 'action' | 'game';
 
 export const GROUPS: readonly Group[] = ['messages', 'mood', 'moodlet', 'need', 'action', 'game'];
 
-export function groupOf(kind: EventKind): Group | 'spoken' | null {
+// How much of the Sims' social life to follow.
+export type SocialLevel = 'off' | 'labels' | 'normal' | 'all';
+export const SOCIAL_LEVELS: readonly SocialLevel[] = ['off', 'labels', 'normal', 'all'];
+
+/** Whether a social event passes the chosen level (other events always do). */
+export function socialShown(e: Event, level: SocialLevel = prefs.social): boolean {
+	if (e.kind === EventKind.RELATIONSHIP) return level !== 'off';
+	if (e.kind !== EventKind.SOCIAL) return true;
+	if (level === 'all') return true;
+	if (level !== 'normal') return false;
+	// Small drifts (time passing) are left out; real interactions move 2+.
+	return Math.abs(e.friendshipDelta) >= 2 || Math.abs(e.romanceDelta) >= 2;
+}
+
+export function groupOf(kind: EventKind): Group | 'social' | 'spoken' | null {
 	switch (kind) {
 		case EventKind.MOOD:
 			return 'mood';
@@ -29,6 +43,9 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 		case EventKind.VISITOR:
 		case EventKind.BILLS:
 			return 'messages';
+		case EventKind.SOCIAL:
+		case EventKind.RELATIONSHIP:
+			return 'social';
 		case EventKind.SPOKEN:
 			return 'spoken';
 		default:
@@ -36,7 +53,12 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 	}
 }
 
-type Stored = { announce: Record<Group, boolean>; showSpoken: boolean; autoPause: boolean };
+type Stored = {
+	announce: Record<Group, boolean>;
+	showSpoken: boolean;
+	autoPause: boolean;
+	social: SocialLevel;
+};
 
 const KEY = 'ts4access.prefs';
 const DEFAULTS: Stored = {
@@ -44,7 +66,8 @@ const DEFAULTS: Stored = {
 	announce: { messages: true, mood: true, moodlet: true, need: true, action: false, game: true },
 	showSpoken: false,
 	// Pause while choosing an action, resume once it is queued (off: a choice).
-	autoPause: false
+	autoPause: false,
+	social: 'normal'
 };
 
 function load(): Stored {
@@ -55,7 +78,8 @@ function load(): Stored {
 			return {
 				announce: { ...DEFAULTS.announce, ...saved.announce },
 				showSpoken: saved.showSpoken ?? DEFAULTS.showSpoken,
-				autoPause: saved.autoPause ?? DEFAULTS.autoPause
+				autoPause: saved.autoPause ?? DEFAULTS.autoPause,
+				social: saved.social ?? DEFAULTS.social
 			};
 		}
 	} catch {

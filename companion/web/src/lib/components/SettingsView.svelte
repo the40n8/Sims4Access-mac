@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { LANGUAGES, changeLocale, i18n, isLocale } from '$lib/i18n/locale.svelte.js';
-	import { GROUPS, prefs, savePrefs, type Group } from '$lib/prefs.svelte.js';
+	import {
+		GROUPS,
+		SOCIAL_LEVELS,
+		prefs,
+		savePrefs,
+		type Group,
+		type SocialLevel
+	} from '$lib/prefs.svelte.js';
 	import { forgetToken } from '$lib/session.js';
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
@@ -31,6 +38,13 @@
 		need: m.kind_need,
 		action: m.kind_action,
 		game: m.kind_game
+	};
+
+	const socialLabels: Record<SocialLevel, () => string> = {
+		off: m.social_off,
+		labels: m.social_labels,
+		normal: m.social_normal,
+		all: m.social_all
 	};
 
 	function unpair() {
@@ -65,6 +79,17 @@
 		<input type="checkbox" bind:checked={prefs.showSpoken} onchange={savePrefs} />
 		{m.show_spoken()}
 	</label>
+</fieldset>
+
+<fieldset class="card stack">
+	<legend><h2>{m.social_title()}</h2></legend>
+	<p class="muted">{m.social_help()}</p>
+	{#each SOCIAL_LEVELS as level (level)}
+		<label class="check">
+			<input type="radio" name="social" value={level} bind:group={prefs.social} onchange={savePrefs} />
+			{socialLabels[level]()}
+		</label>
+	{/each}
 </fieldset>
 
 <section class="card stack" aria-labelledby="playing">
