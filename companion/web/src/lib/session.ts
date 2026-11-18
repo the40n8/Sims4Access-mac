@@ -35,6 +35,14 @@ function rememberForInstall(token: string): void {
 	try {
 		const secure = location.protocol === 'https:' ? '; Secure' : '';
 		document.cookie = `ts4k=${token}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`;
+		// Safari read the manifest before this cookie existed: make it read it
+		// again, so "Add to Home Screen" gets the start address with the key.
+		const link = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
+		if (link && !link.href.includes('paired=1')) {
+			const fresh = link.cloneNode() as HTMLLinkElement;
+			fresh.href = link.href.split('?')[0] + '?paired=1';
+			link.replaceWith(fresh);
+		}
 	} catch {
 		// cookies off: install from a scanned link still works in Safari
 	}
@@ -52,4 +60,17 @@ export function forgetToken(): void {
 /** True while the pairing link's token is still in the address bar. */
 export function linkInAddressBar(): boolean {
 	return /(?:^#|&)k=/.test(location.hash);
+}
+
+/** Pairs from a pasted link (or just its key): for an app already on the Home Screen. */
+export function pairFromText(text: string): boolean {
+	const match = /(?:k=)?([A-Za-z0-9_-]{20,})\s*$/.exec(text.trim());
+	if (!match) return false;
+	try {
+		localStorage.setItem(KEY, match[1]);
+	} catch {
+		return false;
+	}
+	rememberForInstall(match[1]);
+	return true;
 }

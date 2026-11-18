@@ -12,7 +12,7 @@
 	"status_no_game": "El juego no está abierto en el Mac.",
 	"status_menu": "Esperando una partida: el juego está en el menú o cargando.",
 	"pair_title": "Vincular este teléfono",
-	"pair_help": "Abre el enlace de vinculación enviado desde el Mac. En el Mac, ejecuta mac/phone-link.sh para copiarlo.",
+	"pair_help": "Escanea el código QR que muestra el Mac (Opción+Comando+A y luego phone companion), o pega su enlace abajo.",
 	"pair_rejected": "Este teléfono ya no está vinculado. Vuelve a abrir el enlace del Mac.",
 	"unpair": "Olvidar este Mac",
 	"live_title": "En directo",
@@ -340,5 +340,12 @@
 	"rf_headroom": "no hay suficiente altura",
 	"rf_blocked": "el paso está bloqueado",
 	"rf_no_path": "no hay camino, revisa puertas y escaleras",
-	"dialog_tap_one": "Toca una opción para responder."
+	"dialog_tap_one": "Toca una opción para responder.",
+	"pair_paste_label": "Enlace de conexión",
+	"pair_paste_button": "Conectar",
+	"pair_paste_failed": "No es un enlace de conexión. Copia el enlace completo de la página del código QR.",
+	"pairing_title": "Este teléfono",
+	"pairing_help": "Para usar la app desde la pantalla de inicio: copia aquí el enlace de conexión, abre la app de la pantalla de inicio, pégalo y pulsa Conectar. Basta una vez.",
+	"copy_pairing_link": "Copiar el enlace de conexión",
+	"pairing_copied": "Enlace de conexión copiado."
 }

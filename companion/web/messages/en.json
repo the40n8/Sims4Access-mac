@@ -12,7 +12,7 @@
 	"status_no_game": "The game is not running on the Mac.",
 	"status_menu": "Waiting for a game: the game is at the menu or loading.",
 	"pair_title": "Pair this phone",
-	"pair_help": "Open the pairing link sent from the Mac. On the Mac, run mac/phone-link.sh to copy it.",
+	"pair_help": "Scan the QR code shown on the Mac (Option+Command+A, then phone companion), or paste its link below.",
 	"pair_rejected": "This phone is no longer paired. Open the link from the Mac again.",
 	"unpair": "Forget this Mac",
 	"live_title": "Live",
@@ -340,5 +340,12 @@
 	"rf_headroom": "not enough room overhead",
 	"rf_blocked": "the way is blocked",
 	"rf_no_path": "no way to get there, check doors and stairs",
-	"dialog_tap_one": "Tap a choice to answer."
+	"dialog_tap_one": "Tap a choice to answer.",
+	"pair_paste_label": "Pairing link",
+	"pair_paste_button": "Pair",
+	"pair_paste_failed": "This is not a pairing link. Copy the whole link from the QR code page.",
+	"pairing_title": "This phone",
+	"pairing_help": "To use the app from the Home Screen: copy the pairing link here, open the Home Screen app, paste it and press Pair. Once is enough.",
+	"copy_pairing_link": "Copy pairing link",
+	"pairing_copied": "Pairing link copied."
 }

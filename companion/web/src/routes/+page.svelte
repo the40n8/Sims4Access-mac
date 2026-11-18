@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
-	import { linkInAddressBar } from '$lib/session.js';
+	import { linkInAddressBar, pairFromText } from '$lib/session.js';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
 	import { groupOf, prefs, socialShown } from '$lib/prefs.svelte.js';
@@ -42,6 +42,15 @@
 	}
 
 	let tab = $state<Tab>(savedTab());
+
+	// An app on the Home Screen cannot be scanned into: paste the link instead.
+	let pasted = $state('');
+	let pasteFailed = $state(false);
+	function pastePairing(e: SubmitEvent) {
+		e.preventDefault();
+		pasteFailed = !pairFromText(pasted);
+		if (!pasteFailed) location.reload();
+	}
 	let heading: HTMLHeadingElement | undefined = $state();
 	const title = $derived(VIEWS.find((t) => t.id === tab)!.label());
 
@@ -83,6 +92,14 @@
 	<main class="page stack">
 		<h1>{m.pair_title()}</h1>
 		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
+		<form class="stack" onsubmit={pastePairing}>
+			<label class="stack">
+				<span>{m.pair_paste_label()}</span>
+				<input type="url" bind:value={pasted} autocomplete="off" enterkeyhint="go" />
+			</label>
+			<button type="submit">{m.pair_paste_button()}</button>
+			{#if pasteFailed}<p role="alert">{m.pair_paste_failed()}</p>{/if}
+		</form>
 	</main>
 {:else}
 	<!-- First in reading order and on screen: pause, then the tabs. At the top so

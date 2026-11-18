@@ -9,7 +9,7 @@
 		type Group,
 		type SocialLevel
 	} from '$lib/prefs.svelte.js';
-	import { forgetToken } from '$lib/session.js';
+	import { forgetToken, loadToken } from '$lib/session.js';
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText } from '$lib/text.js';
@@ -59,6 +59,18 @@
 	function setMacGroup(group: Group, on: boolean) {
 		const groups = macAnnounce.groups.filter((g) => g !== group);
 		void setMacAnnounce({ ...macAnnounce, groups: on ? [...groups, group] : groups });
+	}
+
+	// For the app on the Home Screen (its own storage): paste this link there once.
+	async function copyLink() {
+		const token = loadToken();
+		if (!token) return;
+		try {
+			await navigator.clipboard.writeText(`${location.origin}/#k=${token}`);
+			announce(m.pairing_copied());
+		} catch {
+			announce(m.prompt_copy_failed());
+		}
 	}
 
 	function unpair() {
@@ -160,7 +172,10 @@
 	{/each}
 </fieldset>
 
-<section class="card">
+<section class="card stack" aria-labelledby="pairing">
+	<h2 id="pairing">{m.pairing_title()}</h2>
+	<p class="muted">{m.pairing_help()}</p>
+	<button type="button" onclick={copyLink}>{m.copy_pairing_link()}</button>
 	<button type="button" onclick={unpair}>{m.unpair()}</button>
 </section>
 

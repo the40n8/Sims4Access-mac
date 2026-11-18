@@ -12,7 +12,7 @@
 	"status_no_game": "Le jeu n'est pas lancé sur le Mac.",
 	"status_menu": "En attente d'une partie : le jeu est au menu ou en chargement.",
 	"pair_title": "Jumeler ce téléphone",
-	"pair_help": "Ouvre le lien de jumelage envoyé depuis le Mac. Sur le Mac, lance mac/phone-link.sh pour le copier.",
+	"pair_help": "Scanne le QR code affiché sur le Mac (Option+Commande+A, puis phone companion), ou colle son lien ci-dessous.",
 	"pair_rejected": "Ce téléphone n'est plus jumelé. Ouvre à nouveau le lien du Mac.",
 	"unpair": "Oublier ce Mac",
 	"live_title": "En direct",
@@ -340,5 +340,12 @@
 	"rf_headroom": "pas assez de hauteur",
 	"rf_blocked": "le passage est bloqué",
 	"rf_no_path": "aucun chemin pour y aller, vérifiez les portes et escaliers",
-	"dialog_tap_one": "Touche un choix pour répondre."
+	"dialog_tap_one": "Touche un choix pour répondre.",
+	"pair_paste_label": "Lien de connexion",
+	"pair_paste_button": "Connecter",
+	"pair_paste_failed": "Ce n’est pas un lien de connexion. Copie tout le lien de la page du QR code.",
+	"pairing_title": "Ce téléphone",
+	"pairing_help": "Pour utiliser l’appli depuis l’écran d’accueil : copie le lien de connexion ici, ouvre l’appli de l’écran d’accueil, colle-le et appuie sur Connecter. Une seule fois suffit.",
+	"copy_pairing_link": "Copier le lien de connexion",
+	"pairing_copied": "Lien de connexion copié."
 }
