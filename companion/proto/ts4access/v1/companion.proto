@@ -27,6 +27,8 @@ service CompanionService {
   rpc RespondDialog(RespondDialogRequest) returns (RespondDialogResponse);
   // Point the game camera at a Sim: follow, close-up, or let go.
   rpc SetCamera(SetCameraRequest) returns (SetCameraResponse);
+  // What the Mac voice announces by itself (bridge setting, not sent to the game).
+  rpc SetMacAnnounce(SetMacAnnounceRequest) returns (SetMacAnnounceResponse);
 }
 
 message WatchRequest {}
@@ -145,5 +147,13 @@ message SetCameraRequest {
 }
 
 message SetCameraResponse {
+  CommandOutcome outcome = 1;
+}
+
+message SetMacAnnounceRequest {
+  MacAnnounce mac_announce = 1;
+}
+
+message SetMacAnnounceResponse {
   CommandOutcome outcome = 1;
 }

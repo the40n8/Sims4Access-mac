@@ -30,6 +30,7 @@ import (
 	"time"
 
 	v1 "github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1"
+	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/announce"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/demo"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/hub"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pairing"
@@ -112,6 +113,9 @@ func run() error {
 	defer stop()
 
 	h := hub.New(nil)
+	// What the Mac voice announces: kept in the data folder, set from the phone.
+	h.SetMacAnnounceSaver(func(a *v1.MacAnnounce) error { return announce.Save(*dataDir, a) })
+	_ = h.SetMacAnnounce(announce.Load(*dataDir))
 
 	// Phone link: the Cloudflare tunnel when it is up (reachable from any
 	// network), else the Mac's local address. Shown at http://127.0.0.1:<port>/pair.
@@ -189,15 +193,27 @@ func run() error {
 			spk.Line("Q" + url.PathEscape("Phone link ready. Press Option Command A for the accessibility menu, then choose phone companion."))
 		}
 	}
-	announce := func(string) {
+	linkUp := func(string) {
 		linkReady.Store(true)
 		tell()
 	}
-	onTunnelReady.Store(&announce)
+	onTunnelReady.Store(&linkUp)
 	go func() {
+		// Only new events: Subscribe replays recent ones first.
+		since := h.LastEventSeq()
 		for msg := range h.Subscribe(ctx) {
 			if msg.GetState().GetInGame() {
 				tell()
+			}
+			e := msg.GetEvent()
+			if e == nil || e.GetSeq() <= since {
+				continue
+			}
+			// The Mac voice off (Option+Command+S) silences these too.
+			if a := h.MacAnnounce(); a != nil && h.State().GetNarration().GetMacVoice() && announce.Wants(a, e) {
+				if text := announce.Text(e); text != "" {
+					spk.Line("Q" + url.PathEscape(text))
+				}
 			}
 		}
 	}()

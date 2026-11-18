@@ -125,6 +125,16 @@ message GameState {
   int64 bills_owed = 11;
   // The Sim the camera follows ("" when free).
   string camera_follows = 12;
+  // What the Mac voice announces by itself (set from the phone, kept on the Mac).
+  MacAnnounce mac_announce = 13;
+}
+
+message MacAnnounce {
+  // Event groups, as the phone's settings name them: messages, mood,
+  // moodlet, need, action, game.
+  repeated string groups = 1;
+  // Conversations: off, labels, normal or all.
+  string social = 2;
 }
 
 message Visitor {

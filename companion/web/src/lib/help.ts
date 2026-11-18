@@ -66,7 +66,7 @@ const en: HelpSection[] = [
 		id: 'settings',
 		title: 'Settings',
 		body: [
-			'Language of the app (game names stay in the game’s language). What VoiceOver announces by itself. "Pause while I choose an action": the game pauses while a menu is open and resumes once the action is queued. The Mac voice switches. Unpair this phone.'
+			'Language of the app (game names stay in the game’s language). What VoiceOver announces by itself. "Pause while I choose an action": the game pauses while a menu is open and resumes once the action is queued. The Mac voice switches, and what the Mac voice announces by itself (for playing without the phone). Conversations: how much of the Sims' social life to follow. Unpair this phone.'
 		]
 	},
 	{
@@ -155,7 +155,7 @@ const fr: HelpSection[] = [
 		id: 'settings',
 		title: 'Réglages',
 		body: [
-			'Langue de l’appli (les noms du jeu restent dans la langue du jeu). Ce que VoiceOver annonce tout seul. « Pause pendant que je choisis une action » : le jeu se met en pause quand un menu est ouvert et repart une fois l’action ajoutée. Les interrupteurs de la voix du Mac. Dissocier ce téléphone.'
+			'Langue de l’appli (les noms du jeu restent dans la langue du jeu). Ce que VoiceOver annonce tout seul. « Pause pendant que je choisis une action » : le jeu se met en pause quand un menu est ouvert et repart une fois l’action ajoutée. Les interrupteurs de la voix du Mac, et ce que la voix du Mac annonce toute seule (pour jouer sans le téléphone). Conversations : combien suivre la vie sociale des Sims. Dissocier ce téléphone.'
 		]
 	},
 	{
@@ -244,7 +244,7 @@ const es: HelpSection[] = [
 		id: 'settings',
 		title: 'Ajustes',
 		body: [
-			'Idioma de la app (los nombres del juego siguen en el idioma del juego). Lo que VoiceOver anuncia solo. «Pausar mientras elijo una acción»: el juego se pausa mientras hay un menú abierto y sigue cuando la acción se añade. Los interruptores de la voz del Mac. Desvincular este teléfono.'
+			'Idioma de la app (los nombres del juego siguen en el idioma del juego). Lo que VoiceOver anuncia solo. «Pausar mientras elijo una acción»: el juego se pausa mientras hay un menú abierto y sigue cuando la acción se añade. Los interruptores de la voz del Mac, y lo que la voz del Mac anuncia sola (para jugar sin el teléfono). Conversaciones: cuánto seguir la vida social de los Sims. Desvincular este teléfono.'
 		]
 	},
 	{

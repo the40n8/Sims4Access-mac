@@ -117,6 +117,13 @@ func (s *service) SetCamera(ctx context.Context, req *connect.Request[v1.SetCame
 	return connect.NewResponse(&v1.SetCameraResponse{Outcome: out}), nil
 }
 
+func (s *service) SetMacAnnounce(ctx context.Context, req *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error) {
+	if err := s.hub.SetMacAnnounce(req.Msg.GetMacAnnounce()); err != nil {
+		return connect.NewResponse(&v1.SetMacAnnounceResponse{Outcome: &v1.CommandOutcome{Reason: "error"}}), nil
+	}
+	return connect.NewResponse(&v1.SetMacAnnounceResponse{Outcome: &v1.CommandOutcome{Ok: true}}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

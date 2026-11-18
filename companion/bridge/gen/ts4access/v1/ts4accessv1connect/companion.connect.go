@@ -65,6 +65,9 @@ const (
 	// CompanionServiceSetCameraProcedure is the fully-qualified name of the CompanionService's
 	// SetCamera RPC.
 	CompanionServiceSetCameraProcedure = "/ts4access.v1.CompanionService/SetCamera"
+	// CompanionServiceSetMacAnnounceProcedure is the fully-qualified name of the CompanionService's
+	// SetMacAnnounce RPC.
+	CompanionServiceSetMacAnnounceProcedure = "/ts4access.v1.CompanionService/SetMacAnnounce"
 )
 
 // CompanionServiceClient is a client for the ts4access.v1.CompanionService service.
@@ -87,6 +90,8 @@ type CompanionServiceClient interface {
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
 	// Point the game camera at a Sim: follow, close-up, or let go.
 	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
+	// What the Mac voice announces by itself (bridge setting, not sent to the game).
+	SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error)
 }
 
 // NewCompanionServiceClient constructs a client for the ts4access.v1.CompanionService service. By
@@ -166,6 +171,12 @@ func NewCompanionServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
 			connect.WithClientOptions(opts...),
 		),
+		setMacAnnounce: connect.NewClient[v1.SetMacAnnounceRequest, v1.SetMacAnnounceResponse](
+			httpClient,
+			baseURL+CompanionServiceSetMacAnnounceProcedure,
+			connect.WithSchema(companionServiceMethods.ByName("SetMacAnnounce")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -182,6 +193,7 @@ type companionServiceClient struct {
 	getHouseMap     *connect.Client[v1.GetHouseMapRequest, v1.GetHouseMapResponse]
 	respondDialog   *connect.Client[v1.RespondDialogRequest, v1.RespondDialogResponse]
 	setCamera       *connect.Client[v1.SetCameraRequest, v1.SetCameraResponse]
+	setMacAnnounce  *connect.Client[v1.SetMacAnnounceRequest, v1.SetMacAnnounceResponse]
 }
 
 // Watch calls ts4access.v1.CompanionService.Watch.
@@ -239,6 +251,11 @@ func (c *companionServiceClient) SetCamera(ctx context.Context, req *connect.Req
 	return c.setCamera.CallUnary(ctx, req)
 }
 
+// SetMacAnnounce calls ts4access.v1.CompanionService.SetMacAnnounce.
+func (c *companionServiceClient) SetMacAnnounce(ctx context.Context, req *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error) {
+	return c.setMacAnnounce.CallUnary(ctx, req)
+}
+
 // CompanionServiceHandler is an implementation of the ts4access.v1.CompanionService service.
 type CompanionServiceHandler interface {
 	// Current state first, then every change and event as it happens.
@@ -259,6 +276,8 @@ type CompanionServiceHandler interface {
 	RespondDialog(context.Context, *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error)
 	// Point the game camera at a Sim: follow, close-up, or let go.
 	SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error)
+	// What the Mac voice announces by itself (bridge setting, not sent to the game).
+	SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error)
 }
 
 // NewCompanionServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -334,6 +353,12 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 		connect.WithSchema(companionServiceMethods.ByName("SetCamera")),
 		connect.WithHandlerOptions(opts...),
 	)
+	companionServiceSetMacAnnounceHandler := connect.NewUnaryHandler(
+		CompanionServiceSetMacAnnounceProcedure,
+		svc.SetMacAnnounce,
+		connect.WithSchema(companionServiceMethods.ByName("SetMacAnnounce")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/ts4access.v1.CompanionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CompanionServiceWatchProcedure:
@@ -358,6 +383,8 @@ func NewCompanionServiceHandler(svc CompanionServiceHandler, opts ...connect.Han
 			companionServiceRespondDialogHandler.ServeHTTP(w, r)
 		case CompanionServiceSetCameraProcedure:
 			companionServiceSetCameraHandler.ServeHTTP(w, r)
+		case CompanionServiceSetMacAnnounceProcedure:
+			companionServiceSetMacAnnounceHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -409,4 +436,8 @@ func (UnimplementedCompanionServiceHandler) RespondDialog(context.Context, *conn
 
 func (UnimplementedCompanionServiceHandler) SetCamera(context.Context, *connect.Request[v1.SetCameraRequest]) (*connect.Response[v1.SetCameraResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.SetCamera is not implemented"))
+}
+
+func (UnimplementedCompanionServiceHandler) SetMacAnnounce(context.Context, *connect.Request[v1.SetMacAnnounceRequest]) (*connect.Response[v1.SetMacAnnounceResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("ts4access.v1.CompanionService.SetMacAnnounce is not implemented"))
 }

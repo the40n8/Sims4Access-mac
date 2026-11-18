@@ -47,6 +47,20 @@
 		all: m.social_all
 	};
 
+	// What the Mac voice says by itself: kept on the Mac, the same for every phone.
+	const macAnnounce = $derived({
+		groups: live.state?.macAnnounce?.groups ?? [],
+		social: live.state?.macAnnounce?.social || 'labels'
+	});
+	async function setMacAnnounce(next: { groups: string[]; social: string }) {
+		const out = await run(() => client.setMacAnnounce({ macAnnounce: next }));
+		announce(out.ok ? m.done() : m.failed({ reason: reasonText(out.reason) }));
+	}
+	function setMacGroup(group: Group, on: boolean) {
+		const groups = macAnnounce.groups.filter((g) => g !== group);
+		void setMacAnnounce({ ...macAnnounce, groups: on ? [...groups, group] : groups });
+	}
+
 	function unpair() {
 		forgetToken();
 		location.reload();
@@ -116,6 +130,35 @@
 		onclick={() => setNarration({ simActions: !narration?.simActions })}>{m.sim_actions()}</button
 	>
 </section>
+
+<fieldset class="card stack">
+	<legend><h2>{m.mac_announce_title()}</h2></legend>
+	<p class="muted">{m.mac_announce_help()}</p>
+	{#each GROUPS as group (group)}
+		<label class="check">
+			<input
+				type="checkbox"
+				checked={macAnnounce.groups.includes(group)}
+				aria-disabled={!live.gameConnected}
+				onchange={(e) => setMacGroup(group, e.currentTarget.checked)}
+			/>
+			{labels[group]()}
+		</label>
+	{/each}
+	<p>{m.social_title()}</p>
+	{#each SOCIAL_LEVELS as level (level)}
+		<label class="check">
+			<input
+				type="radio"
+				name="mac-social"
+				value={level}
+				checked={macAnnounce.social === level}
+				onchange={() => setMacAnnounce({ ...macAnnounce, social: level })}
+			/>
+			{socialLabels[level]()}
+		</label>
+	{/each}
+</fieldset>
 
 <section class="card">
 	<button type="button" onclick={unpair}>{m.unpair()}</button>

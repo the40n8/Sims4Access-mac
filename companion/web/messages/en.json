@@ -312,5 +312,7 @@
 	"social_off": "Off",
 	"social_labels": "Only new relationship levels (Friend, Partner…)",
 	"social_normal": "What they do and how it goes (recommended)",
-	"social_all": "Everything, even small changes"
+	"social_all": "Everything, even small changes",
+	"mac_announce_title": "The Mac voice announces",
+	"mac_announce_help": "For playing on the Mac without the phone. The mod already reads game windows and notifications itself, and Sim actions with its own switch above."
 }

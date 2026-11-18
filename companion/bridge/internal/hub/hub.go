@@ -29,6 +29,9 @@ type Hub struct {
 	events    []*v1.Event
 	eventSeq  uint64
 	subs      map[chan *v1.WatchResponse]struct{}
+	// Bridge-side settings shown in every state (not sent by the game).
+	macAnnounce *v1.MacAnnounce
+	persist     func(*v1.MacAnnounce) error
 
 	send    Sender
 	nextID  atomic.Uint64
@@ -107,12 +110,59 @@ func (h *Hub) SetState(s *v1.GameState) {
 	if h.state != nil && proto.Equal(h.state, s) {
 		return
 	}
+	if h.macAnnounce != nil {
+		s.MacAnnounce = h.macAnnounce
+	}
+	if h.state != nil && proto.Equal(h.state, s) {
+		return
+	}
 	events := Diff(h.state, s)
 	h.state = s
 	h.broadcast(&v1.WatchResponse{Payload: &v1.WatchResponse_State{State: s}})
 	for _, e := range events {
 		h.addEventLocked(e)
 	}
+}
+
+// SetMacAnnounce changes what the Mac voice announces, saves it (when a
+// saver is set) and shows it to every phone.
+func (h *Hub) SetMacAnnounce(a *v1.MacAnnounce) error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.persist != nil {
+		if err := h.persist(a); err != nil {
+			return err
+		}
+	}
+	h.macAnnounce = a
+	if h.state != nil {
+		s := proto.Clone(h.state).(*v1.GameState)
+		s.MacAnnounce = a
+		h.state = s
+		h.broadcast(&v1.WatchResponse{Payload: &v1.WatchResponse_State{State: s}})
+	}
+	return nil
+}
+
+// MacAnnounce is the current Mac voice setting (nil before one is set).
+func (h *Hub) MacAnnounce() *v1.MacAnnounce {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.macAnnounce
+}
+
+// SetMacAnnounceSaver keeps the setting across sessions.
+func (h *Hub) SetMacAnnounceSaver(save func(*v1.MacAnnounce) error) {
+	h.mu.Lock()
+	h.persist = save
+	h.mu.Unlock()
+}
+
+// LastEventSeq is the sequence number of the newest event (0 if none).
+func (h *Hub) LastEventSeq() uint64 {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.eventSeq
 }
 
 func (h *Hub) State() *v1.GameState {

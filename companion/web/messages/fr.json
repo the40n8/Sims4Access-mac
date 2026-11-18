@@ -312,5 +312,7 @@
 	"social_off": "Désactivé",
 	"social_labels": "Seulement les nouveaux liens (Ami, Partenaire…)",
 	"social_normal": "Ce qu’ils font et comment ça se passe (conseillé)",
-	"social_all": "Tout, même les petits changements"
+	"social_all": "Tout, même les petits changements",
+	"mac_announce_title": "La voix du Mac annonce",
+	"mac_announce_help": "Pour jouer sur le Mac sans le téléphone. Le mod lit déjà lui-même les fenêtres et notifications du jeu, et les actions des Sims avec son interrupteur plus haut."
 }

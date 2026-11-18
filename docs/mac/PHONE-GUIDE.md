@@ -130,6 +130,12 @@ From top to bottom:
 - **Pause while I choose an action** (off by default): the game pauses when a
   menu opens and resumes once the action is queued or the menu closes.
 - Mac voice: hover reading on/off, Sim action announcements on/off.
+- **Conversations**: off, only new relationship levels, what they do and how
+  it goes (default), or everything.
+- **The Mac voice announces**: the same choices, for the Mac's own voice
+  (kept on the Mac, for playing without the phone). By default moods, low
+  needs and new relationship levels; the mod already reads game windows and
+  notifications itself.
 - Unpair this phone.
 
 ### Help
