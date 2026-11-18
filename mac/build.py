@@ -15,7 +15,11 @@ from importlib.util import MAGIC_NUMBER
 # sync-upstream.sh deletes them: the game imports every module at load, and
 # these need ctypes, which the Mac game does not have.
 SKIP_DIRS = {'ctypes', '__pycache__'}
-SKIP_FILES = {'tyjokr_a11y_prism.py'}
+SKIP_FILES = {'tyjokr_a11y_prism.py',
+              # Windows screen/DPI measurement and the SAPI kernel job (ctypes at load);
+              # only the Windows build helpers that move the real mouse import them.
+              'tyjokr_a11y_build_coordinates.py', 'tyjokr_a11y_display_diagnostic.py',
+              'tyjokr_a11y_speech_process.py'}
 
 
 def main():

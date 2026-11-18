@@ -1,9 +1,9 @@
 {
   "comment": "Upstream release whose TS4_Access_UI.package (the patched Flash UI) this fork ships. The UI is not built here: it needs EA's movies and FFDec. Update with mac/pin-ui.sh <release-tag>.",
   "repo": "LeonianUniverse478/Sims4Access",
-  "release": "build-2026-11-12_220652",
+  "release": "build-2026-11-18_091845",
   "asset": "TS4_Access_Update.zip",
-  "sha256": "54798d8f3d07ce665c8e7b8faf5f26a4a89cfbdb8df66fd4278f7c6f599e33f7",
-  "source_commit": "adb868c",
+  "sha256": "cebdef6d83b5baa039cc05acef303e69ed162e85a3d07c8b5c2d73ee594d4f40",
+  "source_commit": "0fd551c",
   "game_version": "1.129.39"
 }

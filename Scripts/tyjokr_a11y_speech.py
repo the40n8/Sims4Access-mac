@@ -1,6 +1,10 @@
 """Screen-reader output through Prism, with configurable Windows speech fallback."""
 import os
 import sys
+try:
+    import atexit
+except ImportError:
+    atexit = None  # Kernel job ownership also covers trimmed game Python.
 import threading
 import time
 
@@ -71,6 +75,8 @@ _prism = None
 #   off      speech only, no braille
 braille_mode = 'concise'
 _sapi_proc = None
+_sapi_job = None
+_sapi_lock = threading.RLock()
 _backend_name = 'uninitialized'
 _last_text = None
 _last_time = 0.0
@@ -236,36 +242,80 @@ def _try_init_mac_say():
         return False
 
 
+def _dispose_sapi_locked():
+    global _sapi_proc, _sapi_job
+    proc, job = _sapi_proc, _sapi_job
+    _sapi_proc, _sapi_job = None, None
+    # Closing the kernel job also handles a stuck PowerShell startup.
+    if job is not None:
+        job.close()
+    if proc is not None:
+        try:
+            if proc.poll() is None:
+                proc.kill()
+            proc.wait(timeout=1)
+        except Exception as ex:
+            log_line('SAPI child cleanup failed: {!r}'.format(ex))
+        finally:
+            if proc.stdin is not None:
+                try:
+                    proc.stdin.close()
+                except Exception:
+                    pass
+
+
 def _try_init_sapi():
-    global _sapi_proc
+    global _sapi_proc, _sapi_job
     if IS_MAC:
         return _try_init_mac_say()
     if subprocess is None:
         return False
-    try:
-        CREATE_NO_WINDOW = 0x08000000
-        _sapi_proc = subprocess.Popen(
-            ['powershell', '-NoProfile', '-NonInteractive', '-Command', _sapi_script()],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            creationflags=CREATE_NO_WINDOW)
-        return True
-    except Exception as ex:
-        log_line('SAPI backend init failed: {!r}'.format(ex))
-        return False
+    with _sapi_lock:
+        if _sapi_proc is not None:
+            if _sapi_proc.poll() is None:
+                return True
+            _dispose_sapi_locked()
+        job = proc = None
+        try:
+            from tyjokr_a11y_speech_process import SpeechJob
+            job = SpeechJob()
+            proc = subprocess.Popen(
+                ['powershell', '-NoProfile', '-NonInteractive', '-Command', _sapi_script()],
+                stdin=subprocess.PIPE, stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL, creationflags=0x08000000,
+                close_fds=True)
+            job.assign(proc)
+            _sapi_proc, _sapi_job = proc, job
+            return True
+        except Exception as ex:
+            # Never retain an unowned helper if native ownership is refused.
+            _sapi_proc, _sapi_job = proc, job
+            _dispose_sapi_locked()
+            log_line('SAPI backend init failed: {!r}'.format(ex))
+            return False
+
+
+def _write_sapi(data, action):
+    with _sapi_lock:
+        proc = _sapi_proc
+    if proc is not None:
+        try:
+            # Never hold the lifecycle lock during pipe I/O: restart/exit must
+            # still be able to kill a helper that is stuck before reading stdin.
+            proc.stdin.write(data)
+            proc.stdin.flush()
+        except Exception as ex:
+            log_line('SAPI {} failed: {!r}'.format(action, ex))
 
 
 def restart_sapi():
-    """Apply changed sapi_* options: kill the child; the next utterance
-    respawns it with fresh settings."""
-    global _sapi_proc
-    if _sapi_proc is not None:
-        try:
-            _sapi_proc.kill()
-        except Exception:
-            pass
-        _sapi_proc = None
+    """Release and reap the owned child; the next utterance uses fresh options."""
+    with _sapi_lock:
+        _dispose_sapi_locked()
+
+
+if atexit is not None:
+    atexit.register(restart_sapi)
 
 
 def list_voices():
@@ -610,12 +660,7 @@ def stop():
         except Exception as ex:
             log_line('Prism stop failed: {!r}'.format(ex))
     # Always cancel any fallback that may still be speaking after a switch.
-    if _sapi_proc is not None:
-        try:
-            _sapi_proc.stdin.write(b'I\n')
-            _sapi_proc.stdin.flush()
-        except Exception as ex:
-            log_line('SAPI stop failed: {!r}'.format(ex))
+    _write_sapi(b'I\n', 'stop')
 
 
 def request_hush(grace=0.8):
@@ -738,14 +783,10 @@ def _speak_now(text, source='tooltip'):
             log_line('Prism output failed: {!r}'.format(ex))
     if braille_mode == 'only':
         return
-    if _backend_name in ('prism', 'sapi') and _sapi_proc is None:
-        # No available screen reader; use the configured Windows voice.
-        _try_init_sapi()
-    if _sapi_proc is not None:
-        try:
-            from urllib.parse import quote
-            line = ('I' if interrupt else 'Q') + quote(text) + '\n'
-            _sapi_proc.stdin.write(line.encode('ascii'))
-            _sapi_proc.stdin.flush()
-        except Exception as ex:
-            log_line('SAPI speak failed: {!r}'.format(ex))
+    with _sapi_lock:
+        if _backend_name in ('prism', 'sapi') and _sapi_proc is None:
+            # No available screen reader; use the configured Windows voice.
+            _try_init_sapi()
+    from urllib.parse import quote
+    line = ('I' if interrupt else 'Q') + quote(text) + '\n'
+    _write_sapi(line.encode('ascii'), 'speak')
