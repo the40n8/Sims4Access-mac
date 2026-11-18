@@ -275,5 +275,10 @@
 	"control_now": "Ahora controlas a {name}",
 	"you_title": "Tú",
 	"sims_nearby": "Sims cerca",
-	"back_to_live": "Volver a En directo"
+	"back_to_live": "Volver a En directo",
+	"copy_prompt": "Copiar la petición",
+	"open_chatgpt": "Abrir ChatGPT",
+	"prompt_copied": "Copiado. Pégalo en ChatGPT u otro asistente.",
+	"prompt_copy_failed": "No se pudo copiar: selecciona el texto de arriba.",
+	"queue_title": "Acciones de {name}"
 }

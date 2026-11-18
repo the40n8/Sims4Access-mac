@@ -67,6 +67,9 @@ an iPhone, often playing together with a sighted player on the Mac.
 From top to bottom:
 - **Controlled Sim**: one button per Sim on the lot; the pressed one is the
   Sim you play. Actions always run for this Sim.
+- **<Name>'s actions**: the action running now and the ones waiting in the
+  queue, each with a **Cancel** button (as in the game, only for the
+  controlled Sim). The Sims tab shows every Sim's queue too.
 - **You**: the Sim itself (self-care, its own interactions) and the Sim's
   **phone** (calls, invitations, going out, services, travel).
 - **Interact**:

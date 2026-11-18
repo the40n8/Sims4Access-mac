@@ -34,7 +34,7 @@ const en: HelpSection[] = [
 		id: 'play',
 		title: 'Play',
 		body: [
-			'From the top: Controlled Sim (which Sim you play), You (the Sim itself and its phone), then Interact: a search, the Sims nearby, and objects by category (appliances, plumbing, comfort...). Categories are folded: each one is a button that opens it. Typing a search opens every category with matches.',
+			'From the top: Controlled Sim (which Sim you play), the Sim’s actions (running and waiting, each with a Cancel button), You (the Sim itself and its phone), then Interact: a search, the Sims nearby, and objects by category (appliances, plumbing, comfort...). Categories are folded: each one is a button that opens it. Typing a search opens every category with matches.',
 			'Search finds an object by its type or name, in French, Spanish or English ("frigo", "nevera", "fridge"). Press Search on the keyboard to close it and go to the results.',
 			'Choose an object to hear its menu, the same as clicking it in the game. Greyed rows say why they are unavailable. Choosing a row adds the action to the Sim’s queue.',
 			'At the end: the four game speeds.'
@@ -88,7 +88,7 @@ const en: HelpSection[] = [
 		id: 'ai',
 		title: 'Ask an AI',
 		body: [
-			'To talk about this app with ChatGPT or another assistant, ask it to read https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt first.'
+			'To talk about this app with ChatGPT or another assistant, copy the prompt below and paste it there, or open ChatGPT with it already filled in.'
 		]
 	}
 ];
@@ -123,7 +123,7 @@ const fr: HelpSection[] = [
 		id: 'play',
 		title: 'Jouer',
 		body: [
-			'De haut en bas : Sim contrôlé (quel Sim tu joues), Toi (le Sim lui-même et son téléphone), puis Interagir : une recherche, les Sims à proximité et les objets par catégorie (électroménager, plomberie, confort...). Les catégories sont repliées : chacune est un bouton qui l’ouvre. Une recherche ouvre toutes les catégories qui ont des résultats.',
+			'De haut en bas : Sim contrôlé (quel Sim tu joues), les actions du Sim (en cours et en attente, chacune avec un bouton Annuler), Toi (le Sim lui-même et son téléphone), puis Interagir : une recherche, les Sims à proximité et les objets par catégorie (électroménager, plomberie, confort...). Les catégories sont repliées : chacune est un bouton qui l’ouvre. Une recherche ouvre toutes les catégories qui ont des résultats.',
 			'La recherche trouve un objet par son type ou son nom, en français, espagnol ou anglais (« frigo », « nevera », « fridge »). Le bouton Rechercher du clavier ferme le clavier et mène aux résultats.',
 			'Choisis un objet pour entendre son menu, comme en cliquant dessus dans le jeu. Les lignes grisées disent pourquoi. Choisir une ligne ajoute l’action à la file du Sim.',
 			'À la fin : les quatre vitesses du jeu.'
@@ -177,7 +177,7 @@ const fr: HelpSection[] = [
 		id: 'ai',
 		title: 'Demander à une IA',
 		body: [
-			'Pour parler de cette appli avec ChatGPT ou un autre assistant, demande-lui d’abord de lire https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt.'
+			'Pour parler de cette appli avec ChatGPT ou un autre assistant, copie la demande ci-dessous et colle-la, ou ouvre ChatGPT avec la demande déjà remplie.'
 		]
 	}
 ];
@@ -212,7 +212,7 @@ const es: HelpSection[] = [
 		id: 'play',
 		title: 'Jugar',
 		body: [
-			'De arriba abajo: Sim controlado (qué Sim juegas), Tú (el propio Sim y su teléfono) y luego Interactuar: una búsqueda, los Sims cerca y los objetos por categoría (electrodomésticos, fontanería, comodidad...). Las categorías están plegadas: cada una es un botón que la abre. Una búsqueda abre todas las que tienen resultados.',
+			'De arriba abajo: Sim controlado (qué Sim juegas), las acciones del Sim (en curso y en espera, cada una con un botón Cancelar), Tú (el propio Sim y su teléfono) y luego Interactuar: una búsqueda, los Sims cerca y los objetos por categoría (electrodomésticos, fontanería, comodidad...). Las categorías están plegadas: cada una es un botón que la abre. Una búsqueda abre todas las que tienen resultados.',
 			'La búsqueda encuentra un objeto por su tipo o nombre, en español, francés o inglés («nevera», «frigo», «fridge»). El botón Buscar del teclado lo cierra y lleva a los resultados.',
 			'Elige un objeto para oír su menú, como al hacer clic en el juego. Las líneas en gris dicen por qué. Elegir una línea añade la acción a la cola del Sim.',
 			'Al final: las cuatro velocidades del juego.'
@@ -266,9 +266,18 @@ const es: HelpSection[] = [
 		id: 'ai',
 		title: 'Preguntar a una IA',
 		body: [
-			'Para hablar de esta app con ChatGPT u otro asistente, pídele primero que lea https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt.'
+			'Para hablar de esta app con ChatGPT u otro asistente, copia la petición de abajo y pégala, o abre ChatGPT con la petición ya escrita.'
 		]
 	}
 ];
 
 export const HELP: Record<Locale, HelpSection[]> = { en, fr, es } as Record<Locale, HelpSection[]>;
+
+const LLMS = 'https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt';
+
+/** A ready-made question for ChatGPT or another assistant, in the app's language. */
+export const AI_PROMPT: Record<Locale, string> = {
+	en: `Read ${LLMS} and the guides it links to, then help me play The Sims 4 with the TS4 Access mod and its phone app. I use VoiceOver on an iPhone: give step-by-step instructions with the screen, heading and button names. Answer in English.`,
+	fr: `Lis ${LLMS} et les guides qu’il indique, puis aide-moi à jouer aux Sims 4 avec le mod TS4 Access et son appli téléphone. J’utilise VoiceOver sur iPhone : donne des étapes précises avec les noms des écrans, titres et boutons. Réponds en français.`,
+	es: `Lee ${LLMS} y las guías que enlaza, y ayúdame a jugar a Los Sims 4 con el mod TS4 Access y su app del teléfono. Uso VoiceOver en un iPhone: dame pasos concretos con los nombres de pantallas, encabezados y botones. Responde en español.`
+} as Record<Locale, string>;

@@ -4,7 +4,7 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
-	import { Speed, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { ActionState, Speed, type Action, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
 	import type { CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
 	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
 	import { matchesWords } from '$lib/search.js';
@@ -38,6 +38,8 @@
 	}
 	const changeSpeed = (speed: Speed) => act(() => setSpeed(speed));
 	const selectSim = (simId: string) => act(() => run(() => client.selectSim({ simId })));
+	const cancelAction = (action: Action) =>
+		me && act(() => run(() => client.cancelAction({ simId: me.id, actionId: action.id })));
 
 	async function loadTargets() {
 		targets = null;
@@ -141,6 +143,33 @@
 			</section>
 		{/if}
 
+		{#if me}
+			<section class="card stack" aria-labelledby="queue">
+				<h2 id="queue">{m.queue_title({ name: simName(me) })}</h2>
+				{#if me.actions.length === 0}
+					<p class="muted">{m.actions_none()}</p>
+				{:else}
+					<ul class="stack">
+						{#each me.actions as action (action.id)}
+							<li class="queued">
+								<span>
+									{action.name}
+									<span class="muted">
+										· {action.state === ActionState.RUNNING ? m.action_running() : m.action_queued()}
+									</span>
+								</span>
+								{#if action.cancelable}
+									<button type="button" aria-disabled={busy} onclick={() => cancelAction(action)}>
+										{m.cancel_action({ action: action.name })}
+									</button>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</section>
+		{/if}
+
 		{#if self || phone}
 			<section class="card stack" aria-labelledby="you">
 				<h2 id="you">{m.you_title()}</h2>
@@ -204,7 +233,13 @@
 							aria-controls={`group-${g.key}`}
 							onclick={() => toggleGroup(g.key)}
 						>
-							<span aria-hidden="true" class="chevron">{expanded ? '▾' : '▸'}</span>
+							<svg
+								class="chevron"
+								class:open={expanded}
+								viewBox="0 0 16 16"
+								aria-hidden="true"
+								focusable="false"><path d="M6 3l5 5-5 5z" /></svg
+							>
 							<span>{m.group_count({ group: g.label, count: g.items.length })}</span>
 						</button>
 					</h3>
@@ -241,6 +276,10 @@
 {/if}
 
 <style>
+	.queued {
+		display: grid;
+		gap: 0.4rem;
+	}
 	.pair {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -292,6 +331,13 @@
 	}
 	.chevron {
 		width: 1rem;
+		height: 1rem;
+		flex: none;
+		fill: currentColor;
+		transition: transform 0.15s;
+	}
+	.chevron.open {
+		transform: rotate(90deg);
 	}
 	.items {
 		padding-inline-start: 1rem;

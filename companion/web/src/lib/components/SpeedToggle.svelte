@@ -33,7 +33,20 @@
 			aria-disabled={busy || !live.gameConnected}
 			onclick={toggle}
 		>
-			<span aria-hidden="true">{paused ? '▶' : '⏸'}</span>
+			<!-- Drawn icons (not emoji), hidden from VoiceOver: the words say it. -->
+			<svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+				{#if paused}
+					<path d="M4 2.5v11l9-5.5z" />
+				{:else}
+					<rect x="3.5" y="2.5" width="3" height="11" rx="0.5" /><rect
+						x="9.5"
+						y="2.5"
+						width="3"
+						height="11"
+						rx="0.5"
+					/>
+				{/if}
+			</svg>
 			{paused ? m.resume_game() : m.pause_game()}
 		</button>
 		<span id="clock-status" class="muted">{speedName(clock.speed)}, {clock.day} {clock.time}</span>
@@ -45,6 +58,13 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
+	}
+	.icon {
+		width: 1em;
+		height: 1em;
+		fill: currentColor;
+		vertical-align: -0.125em;
+		margin-inline-end: 0.35em;
 	}
 	.bar button {
 		flex: 1;
