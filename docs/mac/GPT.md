@@ -18,6 +18,13 @@ each person makes their own; the content below is the same for every route.
 
 ### As a ChatGPT plugin
 
+Quickest: in ChatGPT's **Work** mode, ask **Plugin Creator** to create a
+plugin from this spec and send it the link
+https://github.com/the40n8/Sims4Access-mac/blob/main/docs/mac/PLUGIN.md
+(it reads the name, workflow, integrations and examples from there).
+
+By hand:
+
 1. In ChatGPT, open **GPTs** (or Plugins) and choose **Create plugin**.
 2. Name and description: use the Name and Description blocks below.
 3. Add a **skill** (the plugin's instructions) and paste the **Instructions**
