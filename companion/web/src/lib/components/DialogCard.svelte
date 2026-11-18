@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { reasonText } from '$lib/text.js';
@@ -23,6 +24,14 @@
 			picked = dialog.rows.filter((r) => r.selected).map((r) => r.id);
 			text = dialog.textDefault;
 		}
+	});
+
+	// A new question takes VoiceOver to it (and scrolls to it): no hunting
+	// for it at the top of the screen.
+	let headingEl: HTMLHeadingElement | undefined = $state();
+	onMount(() => {
+		headingEl?.scrollIntoView({ block: 'start' });
+		headingEl?.focus();
 	});
 
 	const single = $derived(dialog.maxSelectable <= 1);
@@ -70,7 +79,7 @@
 </script>
 
 <section class="card stack ask" aria-labelledby={`dialog-${dialog.id}`}>
-	<h2 id={`dialog-${dialog.id}`}>{m.dialog_title()}: {heading}</h2>
+	<h2 id={`dialog-${dialog.id}`} tabindex="-1" bind:this={headingEl}>{m.dialog_title()}: {heading}</h2>
 	{#if dialog.title && dialog.text}<p>{dialog.text}</p>{/if}
 
 	{#if dialog.rows.length}
@@ -121,6 +130,9 @@
 <style>
 	.ask {
 		border: 3px solid var(--accent);
+	}
+	h2:focus {
+		outline: none;
 	}
 	fieldset {
 		border: none;

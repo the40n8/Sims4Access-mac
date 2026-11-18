@@ -278,6 +278,8 @@ message HouseMap {
   // Ground floor is 0, basements are negative.
   repeated int32 floors = 2;
   repeated Stairs stairs = 3;
+  // Some names were still loading: ask again in a moment.
+  bool names_pending = 4;
 }
 
 message Stairs {

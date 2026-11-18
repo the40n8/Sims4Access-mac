@@ -298,9 +298,12 @@ def _run(cmd):
         return True, ''
     if 'getHouseMap' in cmd:
         import tyjokr_a11y_housemap as housemap
+        misses = _loc_misses
         house = housemap.build()
         if house is None:
             return False, 'not_in_game'
+        if _loc_misses != misses:
+            house['namesPending'] = True
         return True, '', {'houseMap': house}
     if 'getInteractions' in cmd:
         return get_interactions(cmd['getInteractions'].get('targetId', ''))
@@ -399,17 +402,35 @@ def _fill_tokens(template, tokens):
             return last
         if name in ('SimName', 'SimFullName'):
             return '{} {}'.format(first, last).strip()
-        if name == 'Number':
-            return str(getattr(t, 'number', ''))
-        if name in ('String', 'RawText'):
-            return getattr(t, 'raw_text', '') or ''
-        return ''
+        if name in ('Number', 'Money'):
+            n = getattr(t, 'number', 0) or 0
+            text = str(int(n)) if float(n).is_integer() else '{:g}'.format(n)
+            return ('§' + text) if name == 'Money' else text
+        return _token_text(t)
 
     # {S.Cereal}{P.Bowls of Cereal}: one item, so the singular form.
     text = _PLURAL.sub(lambda m: m.group(2) if m.group(1) == 'S' else '', template)
     text = _TOKEN.sub(gender, text)
     text = _FIELD.sub(field, text)
     return re.sub(r'\{[^}]*\}', '', text).replace('  ', ' ').strip()
+
+
+def _token_text(t):
+    """A token's own text: a nested game string, raw text, or an object's name."""
+    try:
+        if t.HasField('text_string'):
+            return text_of(t.text_string)
+    except Exception:
+        pass
+    for attr in ('raw_text', 'custom_name'):
+        value = getattr(t, attr, '') or ''
+        if value:
+            return value
+    key = getattr(t, 'catalog_name_key', 0) or 0
+    return _loc_key_text(key) if key else ''
+
+
+_loc_misses = 0   # game strings asked for but not known yet (names still loading)
 
 
 def text_of(value, fallback=''):
@@ -425,6 +446,8 @@ def text_of(value, fallback=''):
         return fallback
     cached = _loc_cache().get(key)
     if cached is None:
+        global _loc_misses
+        _loc_misses += 1
         _loc_wanted.add(key)
         return fallback
     tokens = list(getattr(loc, 'tokens', []) or [])
@@ -1094,6 +1117,8 @@ def _object_name(obj):
         return fallback
     cached = _loc_cache().get(key)
     if cached is None:
+        global _loc_misses
+        _loc_misses += 1
         _loc_wanted.add(key)
         return fallback
     return _fill_tokens(cached, []) or fallback
@@ -1105,6 +1130,8 @@ def _loc_key_text(key):
         return ''
     cached = _loc_cache().get(key)
     if cached is None:
+        global _loc_misses
+        _loc_misses += 1
         _loc_wanted.add(key)
         return ''
     return _fill_tokens(cached, [])
@@ -1249,6 +1276,7 @@ def _menu_rows(target_id, sim, menu):
     tutorial = services.get_tutorial_service()
     rows, options = [], {}
     pending = False
+    misses = _loc_misses
     for option_id, item in menu:
         aop = item.aop
         affordance = aop.affordance
@@ -1277,7 +1305,7 @@ def _menu_rows(target_id, sim, menu):
             log('menu row skipped: {!r}'.format(ex))
     _menus.clear()            # only the latest menu can be run
     _menus[str(target_id)] = options
-    return True, '', {'interactions': rows, 'namesPending': pending}
+    return True, '', {'interactions': rows, 'namesPending': pending or _loc_misses != misses}
 
 
 def run_interaction(target_id, option_id):

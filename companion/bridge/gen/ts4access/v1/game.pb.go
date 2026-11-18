@@ -1844,8 +1844,10 @@ type HouseMap struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Rooms []*Room                `protobuf:"bytes,1,rep,name=rooms,proto3" json:"rooms,omitempty"`
 	// Ground floor is 0, basements are negative.
-	Floors        []int32   `protobuf:"varint,2,rep,packed,name=floors,proto3" json:"floors,omitempty"`
-	Stairs        []*Stairs `protobuf:"bytes,3,rep,name=stairs,proto3" json:"stairs,omitempty"`
+	Floors []int32   `protobuf:"varint,2,rep,packed,name=floors,proto3" json:"floors,omitempty"`
+	Stairs []*Stairs `protobuf:"bytes,3,rep,name=stairs,proto3" json:"stairs,omitempty"`
+	// Some names were still loading: ask again in a moment.
+	NamesPending  bool `protobuf:"varint,4,opt,name=names_pending,json=namesPending,proto3" json:"names_pending,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1899,6 +1901,13 @@ func (x *HouseMap) GetStairs() []*Stairs {
 		return x.Stairs
 	}
 	return nil
+}
+
+func (x *HouseMap) GetNamesPending() bool {
+	if x != nil {
+		return x.NamesPending
+	}
+	return false
 }
 
 type Stairs struct {
@@ -2810,11 +2819,12 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\asubject\x18\x06 \x01(\tR\asubject\x12\x16\n" +
 	"\x06detail\x18\a \x01(\tR\x06detail\x12)\n" +
 	"\x10friendship_delta\x18\b \x01(\x05R\x0ffriendshipDelta\x12#\n" +
-	"\rromance_delta\x18\t \x01(\x05R\fromanceDelta\"z\n" +
+	"\rromance_delta\x18\t \x01(\x05R\fromanceDelta\"\x9f\x01\n" +
 	"\bHouseMap\x12(\n" +
 	"\x05rooms\x18\x01 \x03(\v2\x12.ts4access.v1.RoomR\x05rooms\x12\x16\n" +
 	"\x06floors\x18\x02 \x03(\x05R\x06floors\x12,\n" +
-	"\x06stairs\x18\x03 \x03(\v2\x14.ts4access.v1.StairsR\x06stairs\"x\n" +
+	"\x06stairs\x18\x03 \x03(\v2\x14.ts4access.v1.StairsR\x06stairs\x12#\n" +
+	"\rnames_pending\x18\x04 \x01(\bR\fnamesPending\"x\n" +
 	"\x06Stairs\x12\x14\n" +
 	"\x05floor\x18\x01 \x01(\x05R\x05floor\x12\x12\n" +
 	"\x04part\x18\x02 \x01(\tR\x04part\x12$\n" +

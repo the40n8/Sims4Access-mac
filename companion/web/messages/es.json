@@ -327,5 +327,8 @@
 	"promotion_title": "Para el próximo ascenso",
 	"att_needs_other": "{sim}: {needs}",
 	"show_all_actions": "Mostrar las {count} acciones",
-	"show_fewer": "Mostrar menos"
+	"show_fewer": "Mostrar menos",
+	"submenu_label": "{name}, {count} opciones",
+	"back_to_menu": "Volver a {name}",
+	"submenu_label_one": "{name}, 1 opción"
 }

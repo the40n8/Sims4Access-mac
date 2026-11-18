@@ -290,10 +290,19 @@ def respond(dialog_id, choice_id, row_ids, text):
                 picked.append(int(r))
             except ValueError:
                 picked.append(r)
-        service.dialog_pick_result(key, picked_results=picked)
+        msg = _msgs.get(key)
+        if msg is not None and msg.HasField('picker_data') and msg.picker_data.HasField('recipe_picker_data'):
+            # Like the game's recipe window: "Use Fresh Ingredients" is ticked by
+            # default; without it the cook action cancels itself.
+            service.dialog_pick_result(key, picked_results=picked, ingredient_check=True,
+                                       prepped_ingredient_check=False)
+        else:
+            service.dialog_pick_result(key, picked_results=picked)
     if text and choice != _CANCEL:
         msg = _msgs.get(key)
         name = msg.text_input.text_input_name if msg is not None and msg.HasField('text_input') else 'value'
         service.dialog_text_input(key, name or 'value', text)
     service.dialog_respond(key, choice)
+    _log('answered {} ({}) with {} rows {}; still open: {}'.format(
+        key, type(dialog).__name__, choice, list(row_ids), service.get_dialog(key) is not None))
     return True, ''

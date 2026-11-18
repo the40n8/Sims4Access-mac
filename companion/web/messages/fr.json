@@ -327,5 +327,8 @@
 	"promotion_title": "Pour la prochaine promotion",
 	"att_needs_other": "{sim} : {needs}",
 	"show_all_actions": "Afficher les {count} actions",
-	"show_fewer": "Afficher moins"
+	"show_fewer": "Afficher moins",
+	"submenu_label": "{name}, {count} choix",
+	"back_to_menu": "Retour à {name}",
+	"submenu_label_one": "{name}, 1 choix"
 }

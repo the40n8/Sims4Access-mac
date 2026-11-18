@@ -23,6 +23,16 @@
 	async function load() {
 		house = null;
 		failed = false;
+		await fetchHouse();
+		// Names still loading in the game (shown as placeholders): ask again
+		// quietly a few times, keeping the screen as it is.
+		for (let attempt = 0; attempt < 4 && (house as HouseMap | null)?.namesPending; attempt++) {
+			await new Promise((r) => setTimeout(r, 1500));
+			await fetchHouse();
+		}
+	}
+
+	async function fetchHouse() {
 		try {
 			const res = await client.getHouseMap({});
 			if (!res.outcome?.ok) {
@@ -31,11 +41,17 @@
 				return;
 			}
 			house = res.map ?? null;
-			// Keep the open room up to date (Sims move, objects change).
+			// Keep the open room up to date (Sims move, objects change, names arrive).
 			if (room) room = house?.rooms.find((r) => r.id === room!.id) ?? null;
+			if (target) target = findTarget(target.id) ?? target;
 		} catch {
 			failed = true;
 		}
+	}
+
+	function findTarget(id: string): Target | undefined {
+		for (const r of house?.rooms ?? []) for (const i of r.items) if (i.target?.id === id) return i.target;
+		return undefined;
 	}
 
 	let loaded = false;

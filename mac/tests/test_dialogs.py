@@ -34,7 +34,7 @@ class Service:
     def get_dialog(self, key):
         return self._active_dialogs.get(key)
 
-    def dialog_pick_result(self, key, picked_results):
+    def dialog_pick_result(self, key, picked_results, **kw):
         CALLS.append(('pick', key, picked_results))
 
     def dialog_text_input(self, key, name, value):
