@@ -50,6 +50,7 @@ Then, with the game closed:
 
 ```sh
 mac/build.sh      # -> dist/TS4_Access (mod, bridge + phone app, speaker, UI package)
+mac/test.sh       # offline checks (fake game for the Mac-only mod code, Go tests)
 mac/install.sh    # backs up Options.ini and saves, installs, enables script mods
 ```
 
