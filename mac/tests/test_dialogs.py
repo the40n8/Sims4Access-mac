@@ -81,6 +81,25 @@ class DialogsTest(unittest.TestCase):
         self.assertEqual(CALLS, [('respond', 7, 10002)])
         self.assertEqual(DIALOG.picked_results, [])
 
+    def test_rows_from_the_game_message(self):
+        base = lambda i, name, enabled=True: Msg(option_id=i, name=Loc(name) if name else None, description=None,
+                                                tooltip=None, is_enable=enabled, is_selected=False)
+        picker = Msg(recipe_picker_data=Msg(row_data=[Msg(base_data=base(21, 3), price=12, sim_id=0, object_id=0)]),
+                     sim_picker_data=None, object_picker_data=None, outfit_picker_data=None,
+                     shop_picker_data=None, lot_picker_data=None, odd_job_picker_data=None, row_picker_data=[])
+        rows = dialogs._msg_rows(Msg(picker_data=picker))
+        self.assertEqual([(r['id'], r['name'], r['description']) for r in rows], [('21', 'Pancakes', '§12')])
+
+    def test_sim_picker_gets_names(self):
+        module('services', ui_dialog_service=lambda: SERVICE,
+               sim_info_manager=lambda: Msg(get=lambda i: Msg(first_name='Nancy', last_name='Landgraab')))
+        base = Msg(option_id=9, name=None, description=None, tooltip=None, is_enable=True, is_selected=False)
+        picker = Msg(recipe_picker_data=None, sim_picker_data=Msg(row_data=[Msg(base_data=base, sim_id=9)]),
+                     object_picker_data=None, outfit_picker_data=None, shop_picker_data=None,
+                     lot_picker_data=None, odd_job_picker_data=None, row_picker_data=[])
+        rows = dialogs._msg_rows(Msg(picker_data=picker))
+        self.assertEqual(rows[0]['name'], 'Nancy Landgraab')
+
     def test_closed_window(self):
         self.assertEqual(dialogs.respond('8', 10001, [], ''), (False, 'dialog_closed'))
 

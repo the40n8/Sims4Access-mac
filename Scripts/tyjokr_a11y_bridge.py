@@ -1235,7 +1235,7 @@ def get_interactions(target_id):
         menu.add_potential_aops(target, context, target.potential_interactions(context, **parameters), None)
         if getattr(target, 'is_sim', False) and target is not sim:
             try:
-                sim.fill_choices_menu_with_si_state_aops(target, context, menu)
+                sim.fill_choices_menu_with_si_state_aops(target, context, menu, None)
             except Exception as ex:
                 log('social rows unavailable: {!r}'.format(ex))
     return _menu_rows(target_id, sim, menu)

@@ -26,6 +26,14 @@
 	});
 
 	const single = $derived(dialog.maxSelectable <= 1);
+
+	// Lighter to listen to: choices that can be picked first (game order kept
+	// within each part), and only the first sentence of each description.
+	const rows = $derived([...dialog.rows.filter((r) => r.enabled), ...dialog.rows.filter((r) => !r.enabled)]);
+	function short(text: string): string {
+		const first = text.split(/(?<=[.!?])\s|\n/)[0].trim();
+		return first.length > 90 ? first.slice(0, 87).trimEnd() + '…' : first;
+	}
 	const heading = $derived(dialog.title || dialog.text || m.dialog_loading());
 
 	function label(c: DialogChoice): string {
@@ -70,7 +78,7 @@
 			<legend>
 				{single ? m.dialog_pick_one() : m.dialog_pick_many({ max: dialog.maxSelectable })}
 			</legend>
-			{#each dialog.rows as row (row.id)}
+			{#each rows as row (row.id)}
 				<label class="pick" class:off={!row.enabled}>
 					<input
 						type={single ? 'radio' : 'checkbox'}
@@ -87,7 +95,7 @@
 						{:else}
 							{m.unavailable({ name: row.name })}
 						{/if}
-						{#if row.description}<span class="muted"> · {row.description}</span>{/if}
+						{#if row.description}<span class="muted"> · {short(row.description)}</span>{/if}
 					</span>
 				</label>
 			{/each}

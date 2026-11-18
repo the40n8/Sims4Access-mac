@@ -123,7 +123,76 @@ def _limit(value, default):
         return default
 
 
-def _rows(dialog):
+# Where each kind of picker keeps its rows in the dialog message, and whether
+# a row wraps the common fields in base_data.
+_ROW_KINDS = ('recipe_picker_data', 'sim_picker_data', 'object_picker_data', 'outfit_picker_data',
+              'shop_picker_data', 'lot_picker_data', 'odd_job_picker_data')
+
+
+def _sim_name(sim_id):
+    try:
+        import services
+        info = services.sim_info_manager().get(int(sim_id))
+        if info is not None:
+            return '{} {}'.format(info.first_name, info.last_name).strip()
+    except Exception:
+        pass
+    return ''
+
+
+def _object_label(object_id):
+    try:
+        import services
+        obj = services.object_manager().get(int(object_id))
+        if obj is not None:
+            return _bridge()._object_name(obj)
+    except Exception:
+        pass
+    return ''
+
+
+def _msg_rows(msg):
+    """Rows as the game sent them to its own screen: names already built.
+    Sim pickers show faces, not names, so the Sim's name is filled in."""
+    if msg is None or not msg.HasField('picker_data'):
+        return []
+    picker = msg.picker_data
+    rows = []
+    for kind in _ROW_KINDS:
+        if picker.HasField(kind):
+            rows = [(row, row.base_data) for row in getattr(picker, kind).row_data]
+            break
+    if not rows:
+        rows = [(row, row) for row in getattr(picker, 'row_picker_data', None) or ()]
+    out = []
+    for row, base in rows:
+        name = _text(base.name) if base.HasField('name') else ''
+        if not name and getattr(row, 'sim_id', 0):
+            name = _sim_name(row.sim_id)
+        if not name and getattr(row, 'object_id', 0):
+            name = _object_label(row.object_id)
+        if not name and getattr(row, 'customer_name', None) is not None and row.HasField('customer_name'):
+            name = _text(row.customer_name)
+        enabled = bool(base.is_enable)
+        entry = {'id': str(base.option_id), 'name': name,
+                 'description': _text(base.description) if base.HasField('description') else '',
+                 'enabled': enabled, 'selected': bool(base.is_selected)}
+        price = getattr(row, 'price', 0) or getattr(row, 'cost', 0)
+        if price and '§' not in entry['description']:
+            entry['description'] = ('§{} · {}'.format(price, entry['description'])
+                                    if entry['description'] else '§{}'.format(price))
+        if not enabled and base.HasField('tooltip'):
+            entry['reason'] = _text(base.tooltip)
+        out.append(entry)
+    return out
+
+
+def _rows(dialog, msg=None):
+    """Picker rows: from the game's own message when it has them, else from
+    the dialog's row objects (mod pickers)."""
+    rows = _msg_rows(msg)
+    if rows:
+        return rows
     out = []
     for row in list(getattr(dialog, 'picker_rows', None) or ()):
         try:
@@ -135,6 +204,8 @@ def _rows(dialog):
                 entry['reason'] = _text(getattr(row, 'row_tooltip', None))
             if not entry['name']:
                 entry['name'] = _text(getattr(row, 'display_name', None))
+            if not entry['name'] and getattr(row, 'sim_id', None):
+                entry['name'] = _sim_name(row.sim_id)
             out.append(entry)
         except Exception as ex:
             _log('row skipped: {!r}'.format(ex))
@@ -154,7 +225,7 @@ def _dialog(dialog_id, dialog, msg):
         if choice.HasField('disabled_text'):
             c['reason'] = _text(choice.disabled_text)
         choices.append(c)
-    rows = _rows(dialog)
+    rows = _rows(dialog, msg)
     if rows:
         entry['rows'] = rows
         picker = msg.picker_data if msg.HasField('picker_data') else None
