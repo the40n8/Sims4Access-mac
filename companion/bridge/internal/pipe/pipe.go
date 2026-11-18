@@ -30,6 +30,7 @@ type Handlers struct {
 	Event  func(*v1.Event)
 	Result func(*v1.CommandResult)
 	Voice  func(*v1.Voice)
+	Grab   func(*v1.GrabKeys)
 }
 
 type Pipe struct {
@@ -85,6 +86,8 @@ func (p *Pipe) Run(h Handlers) error {
 			call(h.Result, m.Result)
 		case *v1.ToBridge_Voice:
 			call(h.Voice, m.Voice)
+		case *v1.ToBridge_Grab:
+			call(h.Grab, m.Grab)
 		}
 	}
 	return sc.Err()

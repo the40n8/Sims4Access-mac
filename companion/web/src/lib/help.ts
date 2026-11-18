@@ -73,7 +73,7 @@ const en: HelpSection[] = [
 		id: 'mac',
 		title: 'On the Mac',
 		body: [
-			'Option+Command+S turns the Mac’s speech on or off. Option+Command+A opens the TS4 Access menu. The accessibility icon in the macOS menu bar has the same actions and "Phone companion…", which shows the QR code.'
+			'Option+Command+S turns the Mac’s speech on or off. Option+Command+A opens the TS4 Access menu. The accessibility icon in the macOS menu bar has the same actions and "Phone companion…", which shows the QR code. The original mod’s keyboard works with Mac keys while the game is in front: Control+Shift for its Ctrl+Alt keys, Option+Shift for its Alt keys.'
 		]
 	},
 	{
@@ -162,7 +162,7 @@ const fr: HelpSection[] = [
 		id: 'mac',
 		title: 'Sur le Mac',
 		body: [
-			'Option+Commande+S coupe ou rallume la voix du Mac. Option+Commande+A ouvre le menu TS4 Access. L’icône d’accessibilité dans la barre des menus propose les mêmes actions et « Phone companion… », qui affiche le QR code.'
+			'Option+Commande+S coupe ou rallume la voix du Mac. Option+Commande+A ouvre le menu TS4 Access. L’icône d’accessibilité dans la barre des menus propose les mêmes actions et « Phone companion… », qui affiche le QR code. Le clavier du mod d’origine marche avec les touches Mac quand le jeu est au premier plan : Contrôle+Maj pour ses touches Ctrl+Alt, Option+Maj pour ses touches Alt.'
 		]
 	},
 	{
@@ -251,7 +251,7 @@ const es: HelpSection[] = [
 		id: 'mac',
 		title: 'En el Mac',
 		body: [
-			'Opción+Comando+S apaga o enciende la voz del Mac. Opción+Comando+A abre el menú de TS4 Access. El icono de accesibilidad en la barra de menús tiene las mismas acciones y «Phone companion…», que muestra el código QR.'
+			'Opción+Comando+S apaga o enciende la voz del Mac. Opción+Comando+A abre el menú de TS4 Access. El icono de accesibilidad en la barra de menús tiene las mismas acciones y «Phone companion…», que muestra el código QR. El teclado del mod original funciona con teclas de Mac cuando el juego está delante: Control+Mayús para sus teclas Ctrl+Alt, Opción+Mayús para sus teclas Alt.'
 		]
 	},
 	{

@@ -150,6 +150,8 @@ From top to bottom:
 - **Option+Command+A**: the TS4 Access menu.
 - Accessibility icon in the macOS menu bar: the same, plus Phone companion….
 - Cheat console (Cmd+Shift+C): `a11y.hub` (menu), `a11y.companion` (QR code).
+- The original mod's keyboard works too, with Mac keys (Control+Shift for its
+  Ctrl+Alt keys, Option+Shift for its Alt keys): see [KEYBOARD.md](KEYBOARD.md).
 
 ## Troubleshooting
 

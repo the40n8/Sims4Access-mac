@@ -41,6 +41,9 @@ message ToBridge {
     Event event = 3;
     CommandResult result = 4;
     Voice voice = 5;
+    // Bare keys the mod owns right now (Windows VK codes, "+shift" variants),
+    // for the Mac key helper to take while the game is in front.
+    GrabKeys grab = 6;
   }
 }
 
@@ -58,6 +61,7 @@ message ToGame {
     OpenMenuRequest open_menu = 10;
     RespondDialogRequest respond_dialog = 11;
     SetCameraRequest set_camera = 12;
+    KeyEvent key = 13;
   }
 }
 
@@ -66,4 +70,19 @@ message ToGame {
 message OpenMenuRequest {
   // "hub": the TS4 Access menu (a11y.hub).
   string menu = 1;
+}
+
+message GrabKeys {
+  repeated string keys = 1;
+}
+
+// A key from the Mac key helper, in the original mod's terms.
+message KeyEvent {
+  // chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),
+  // plain (bare key the mod owns) or focus (the game lost focus).
+  string family = 1;
+  // Windows virtual-key code.
+  int32 vk = 2;
+  bool down = 3;
+  bool shift = 4;
 }

@@ -172,6 +172,11 @@ def _tick():
         _request_localization()
         if _dialogs is not None:
             _dialogs.flush_notes()
+    if _mackeys is not None:
+        try:
+            _mackeys.tick(send)
+        except Exception as ex:
+            log('keys tick failed: {!r}'.format(ex))
     if now - _last_state_time >= STATE_INTERVAL:
         _last_state_time = now
         _publish_state()
@@ -267,6 +272,16 @@ def _run(cmd):
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
     if 'listTargets' in cmd:
         return True, '', {'targets': list_targets()}
+    if 'key' in cmd:
+        # Keys only reach a loaded game (the in-game check above drops the rest).
+        k = cmd['key']
+        if _mackeys is None:
+            return False, 'error'
+        if k.get('family') == 'focus':
+            _mackeys.focus_lost()
+            return True, ''
+        return _mackeys.handle(k.get('family', ''), int(k.get('vk', 0)), bool(k.get('down')),
+                               bool(k.get('shift'))), 'not_owned'
     if 'setCamera' in cmd:
         c = cmd['setCamera']
         return _set_camera(c.get('simId', ''), c.get('mode', 'CAMERA_MODE_FOLLOW'))
@@ -1314,7 +1329,13 @@ except Exception as _ex:
 # ---------------------------------------------------------------- startup
 
 _dialogs = None
+_mackeys = None
 if IS_MAC:
+    try:
+        import tyjokr_a11y_mackeys as _mackeys
+    except Exception as _ex:
+        _mackeys = None
+        log('keyboard unavailable: {!r}'.format(_ex))
     try:
         import tyjokr_a11y_dialogs as _dialogs
         _dialogs.install()

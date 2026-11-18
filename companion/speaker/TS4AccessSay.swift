@@ -10,8 +10,12 @@
 // With --hotkey (from the bridge): system shortcuts that work while the game
 // has focus, Option+Command+S (speech on/off) and Option+Command+A (TS4
 // Access menu), and a menu bar icon with the same actions plus the phone
-// companion. Each prints "K voice", "K hub" or "K phone" on stdout. System
-// hot keys need no Accessibility permission.
+// companion. Each prints "K voice", "K hub" or "K phone" on stdout.
+// While The Sims 4 is the front app it also takes the original mod's
+// keyboard (Control+Shift for its Ctrl+Alt keys, Option+Shift for its Alt
+// keys, and the bare keys the game says the mod owns, sent as "G vk,..."
+// lines on stdin) and prints "K key <family> <vk> <down|up> <shift>".
+// System hot keys need no Accessibility permission.
 //
 // Options: --voice <name or identifier substring>  --lang <bcp47, e.g. fr-FR>
 //          --rate <-10..10, SAPI scale>  --volume <0..100>  --list-voices  --hotkey
@@ -30,6 +34,11 @@ final class Speaker: NSObject {
 
     func handle(_ line: String) {
         guard let kind = line.first else { return }
+        if kind == "G" {
+            // Bare keys the mod owns now (from the game, through the bridge).
+            Controls.shared?.setGrabs(String(line.dropFirst()))
+            return
+        }
         let body = String(line.dropFirst())
         if kind != "Q" {
             synth.stopSpeaking(at: .immediate)
@@ -126,35 +135,191 @@ func keyCode(typing letter: Character, fallback: Int) -> Int {
     }
 }
 
+/// One registered hot key: Mac key code + modifiers, reported as
+/// "K <name>" (global ones) or "K key <family> <Windows VK> <down|up> <shift>".
+struct HotKey {
+    let code: Int
+    let mods: Int
+    let name: String     // global: "voice", "hub"
+    let family: String   // game keys: chord, needs, plus, plain
+    let vk: Int
+    let shift: Bool
+}
+
+// Windows VK codes of the keys the original mod uses, and the Mac key that
+// types them: letters follow the keyboard layout, the rest are positions.
+func macKey(forVK vk: Int) -> Int? {
+    switch vk {
+    case 0x41...0x5A:
+        let letter = Character(UnicodeScalar(UInt8(vk + 32)))
+        return keyCode(typing: letter, fallback: -1) >= 0 ? keyCode(typing: letter, fallback: -1) : nil
+    case 0x31: return kVK_ANSI_1
+    case 0x32: return kVK_ANSI_2
+    case 0x33: return kVK_ANSI_3
+    case 0x34: return kVK_ANSI_4
+    case 0x35: return kVK_ANSI_5
+    case 0x36: return kVK_ANSI_6
+    case 0x37: return kVK_ANSI_7
+    case 0x38: return kVK_ANSI_8
+    case 0x25: return kVK_LeftArrow
+    case 0x26: return kVK_UpArrow
+    case 0x27: return kVK_RightArrow
+    case 0x28: return kVK_DownArrow
+    case 0x21: return kVK_PageUp
+    case 0x22: return kVK_PageDown
+    case 0x24: return kVK_Home
+    case 0x2E: return kVK_ForwardDelete
+    case 0x0D: return kVK_Return
+    case 0x20: return kVK_Space
+    case 0x08: return kVK_Delete
+    case 0x09: return kVK_Tab
+    case 0x1B: return kVK_Escape
+    case 0xBC: return kVK_ANSI_Comma
+    case 0xBE: return kVK_ANSI_Period
+    case 0xDB: return kVK_ANSI_LeftBracket
+    case 0xDD: return kVK_ANSI_RightBracket
+    default: return nil
+    }
+}
+
+func vk(_ c: Character) -> Int { Int(c.asciiValue!) }
+
+// The original's Ctrl+Alt+key chords (Mac: Control+Shift+key).
+let chordVKs: [Int] = [0x26, 0x28, 0x25, 0x27, 0x21, 0x22, 0x0D, 0x20, 0x08, 0xBC, 0xBE, 0xDB, 0xDD]
+    + "SWRHCPEGQLVMKOIUDJBTZYXF".map(vk) + Array(0x31...0x38)
+// The original's Alt+key Plus shortcuts (Mac: Option+Shift+key; with Command
+// for the Shift variant of the drawing-cursor arrows).
+let plusVKs: [Int] = "AQNLTRWCBXSZD".map(vk) + [0x25, 0x26, 0x27, 0x28]
+
 final class Controls: NSObject {
-    static let keys: [(code: Int, name: String)] = [
-        (keyCode(typing: "s", fallback: kVK_ANSI_S), "voice"),
-        (keyCode(typing: "a", fallback: kVK_ANSI_A), "hub"),
-    ]
-    var hotKeys: [EventHotKeyRef?] = []
+    static var shared: Controls?
+    // TS4ACCESS_GAME_BUNDLE: another app counts as the game (for testing).
+    static let gameBundle = ProcessInfo.processInfo.environment["TS4ACCESS_GAME_BUNDLE"] ?? "com.ea.mac.thesims4"
+
+    var table: [UInt32: HotKey] = [:]
+    var global: [EventHotKeyRef] = []
+    var game: [EventHotKeyRef] = []
+    var grabs = ""
+    var gameFront = false
     var item: NSStatusItem?
 
     func install() {
-        var pressed = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
+        Controls.shared = self
+        var events = [EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed)),
+                      EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyReleased))]
         InstallEventHandler(GetApplicationEventTarget(), { _, event, _ in
             var id = EventHotKeyID()
             GetEventParameter(event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID),
                               nil, MemoryLayout<EventHotKeyID>.size, nil, &id)
-            let index = Int(id.id)
-            if index < Controls.keys.count { report(Controls.keys[index].name) }
+            let down = GetEventKind(event) == UInt32(kEventHotKeyPressed)
+            Controls.shared?.fired(id.id, down: down)
             return noErr
-        }, 1, &pressed, nil, nil)
-        for (index, key) in Controls.keys.enumerated() {
-            var ref: EventHotKeyRef?
-            let status = RegisterEventHotKey(UInt32(key.code), UInt32(optionKey | cmdKey),
-                                             EventHotKeyID(signature: 0x5453_4141, id: UInt32(index)), // "TSAA"
-                                             GetApplicationEventTarget(), 0, &ref)
-            if status != noErr {
-                FileHandle.standardError.write("hot key \(key.name) unavailable (\(status))\n".data(using: .utf8)!)
+        }, 2, &events, nil, nil)
+
+        // Always: speech on/off and the TS4 Access menu.
+        for (name, letter) in [("voice", Character("s")), ("hub", Character("a"))] {
+            let code = keyCode(typing: letter, fallback: letter == "s" ? kVK_ANSI_S : kVK_ANSI_A)
+            if let ref = register(HotKey(code: code, mods: optionKey | cmdKey, name: name, family: "", vk: 0, shift: false)) {
+                global.append(ref)
             }
-            hotKeys.append(ref)
         }
 
+        // Game keys: only while The Sims 4 is the front app.
+        let center = NSWorkspace.shared.notificationCenter
+        center.addObserver(self, selector: #selector(activated(_:)),
+                           name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        updateFront(NSWorkspace.shared.frontmostApplication)
+        installMenu()
+    }
+
+    var nextID: UInt32 = 1
+    func register(_ key: HotKey) -> EventHotKeyRef? {
+        var ref: EventHotKeyRef?
+        let id = nextID
+        nextID += 1
+        let status = RegisterEventHotKey(UInt32(key.code), UInt32(key.mods), EventHotKeyID(signature: 0x5453_4141, id: id),
+                                         GetApplicationEventTarget(), 0, &ref)
+        if status != noErr {
+            FileHandle.standardError.write("hot key \(key.name)\(key.family) \(key.vk) unavailable (\(status))\n".data(using: .utf8)!)
+            return nil
+        }
+        table[id] = key
+        return ref
+    }
+
+    func fired(_ id: UInt32, down: Bool) {
+        guard let key = table[id] else { return }
+        if key.family.isEmpty {
+            if down { report(key.name) }
+            return
+        }
+        report("key \(key.family) \(key.vk) \(down ? "down" : "up") \(key.shift ? 1 : 0)")
+    }
+
+    @objc func activated(_ note: Notification) {
+        updateFront(note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)
+    }
+
+    func updateFront(_ app: NSRunningApplication?) {
+        let front = app?.bundleIdentifier == Controls.gameBundle
+        if front == gameFront { return }
+        gameFront = front
+        if front {
+            registerGameKeys()
+        } else {
+            unregisterGameKeys()
+            report("key focus 0 up 0")   // release anything held
+        }
+    }
+
+    func registerGameKeys() {
+        unregisterGameKeys()
+        let chord = controlKey | shiftKey
+        for v in chordVKs {
+            if let code = macKey(forVK: v),
+               let ref = register(HotKey(code: code, mods: chord, name: "", family: "chord", vk: v, shift: false)) {
+                game.append(ref)
+            }
+        }
+        if let code = macKey(forVK: vk("N")),
+           let ref = register(HotKey(code: code, mods: chord, name: "", family: "needs", vk: vk("N"), shift: false)) {
+            game.append(ref)
+        }
+        for v in plusVKs {
+            guard let code = macKey(forVK: v) else { continue }
+            if let ref = register(HotKey(code: code, mods: optionKey | shiftKey, name: "", family: "plus", vk: v, shift: false)) {
+                game.append(ref)
+            }
+            if (0x25...0x28).contains(v),
+               let ref = register(HotKey(code: code, mods: optionKey | shiftKey | cmdKey, name: "", family: "plus", vk: v, shift: true)) {
+                game.append(ref)
+            }
+        }
+        for item in grabs.split(separator: ",") {
+            let parts = item.split(separator: "+")
+            guard let v = Int(parts[0]), let code = macKey(forVK: v) else { continue }
+            let shifted = parts.count > 1
+            if let ref = register(HotKey(code: code, mods: shifted ? shiftKey : 0, name: "", family: "plain", vk: v, shift: shifted)) {
+                game.append(ref)
+            }
+        }
+    }
+
+    func unregisterGameKeys() {
+        for ref in game { UnregisterEventHotKey(ref) }
+        game.removeAll()
+        table = table.filter { $0.value.family.isEmpty }
+    }
+
+    /// "vk,vk+shift,...": the bare keys the mod owns; taken only while the game is in front.
+    func setGrabs(_ list: String) {
+        let trimmed = list.trimmingCharacters(in: .whitespaces)
+        if trimmed == grabs { return }
+        grabs = trimmed
+        if gameFront { registerGameKeys() }
+    }
+
+    func installMenu() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = item.button {
             if let image = NSImage(systemSymbolName: "accessibility", accessibilityDescription: "TS4 Access") {

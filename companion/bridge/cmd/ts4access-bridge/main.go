@@ -223,8 +223,28 @@ func run() error {
 	h.SetSender(p.Send)
 	h.SetConnected(true)
 	defer h.SetConnected(false)
+	keyQueue := make(chan *v1.KeyEvent, 64)
+	go func() {
+		for ev := range keyQueue {
+			kctx, cancel := context.WithTimeout(ctx, hub.CommandTimeout)
+			h.Command(kctx, &v1.ToGame{Command: &v1.ToGame_Key{Key: ev}})
+			cancel()
+		}
+	}()
 	pairPage := "http://127.0.0.1:" + strconv.Itoa(cfg.Port) + "/pair"
 	spk.Listen(func(name string) {
+		if rest, ok := strings.CutPrefix(name, "key "); ok {
+			// "key <family> <vk> <down|up> <shift 0|1>" from the key helper,
+			// passed on in order (a key-up must not overtake its key-down).
+			if ev := parseKey(rest); ev != nil {
+				select {
+				case keyQueue <- ev:
+				default:
+					slog.Warn("key dropped: the game is not answering")
+				}
+			}
+			return
+		}
 		switch name {
 		case "voice":
 			go toggleVoice(h)
@@ -251,6 +271,7 @@ func run() error {
 			Event:  h.AddEvent,
 			Result: h.Resolve,
 			Voice:  spk.SetVoice,
+			Grab:   func(g *v1.GrabKeys) { spk.Grab(g.GetKeys()) },
 		})
 	}()
 	select {
@@ -274,6 +295,19 @@ func toggleVoice(h *hub.Hub) {
 	if !out.GetOk() {
 		slog.Warn("speech toggle failed", "reason", out.GetReason())
 	}
+}
+
+// parseKey reads "<family> <vk> <down|up> <0|1>" from the key helper.
+func parseKey(s string) *v1.KeyEvent {
+	f := strings.Fields(s)
+	if len(f) != 4 {
+		return nil
+	}
+	vk, err := strconv.Atoi(f[1])
+	if err != nil {
+		return nil
+	}
+	return &v1.KeyEvent{Family: f[0], Vk: int32(vk), Down: f[2] == "down", Shift: f[3] == "1"}
 }
 
 // openMenu opens one of the mod's menus in the game (Option+Command+A, menu bar).

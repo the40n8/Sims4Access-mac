@@ -23,6 +23,9 @@ type Speaker struct {
 	cmd    *exec.Cmd
 	stdin  io.WriteCloser
 	closed bool
+	// Bare keys to take while the game is in front ("G vk,vk+shift"),
+	// sent again whenever the speaker restarts.
+	grab string
 }
 
 func New(path string, voice *v1.Voice) *Speaker {
@@ -80,6 +83,9 @@ func (s *Speaker) startLocked() error {
 		return err
 	}
 	s.cmd, s.stdin = cmd, stdin
+	if s.grab != "" {
+		_, _ = io.WriteString(stdin, s.grab+"\n")
+	}
 	onKey := s.onKey
 	go func() {
 		sc := bufio.NewScanner(stdout)
@@ -129,6 +135,18 @@ func (s *Speaker) Line(line string) {
 	if _, err := io.WriteString(s.stdin, line+"\n"); err != nil {
 		slog.Warn("speaker write failed, restarting next line", "err", err)
 		s.stopLocked()
+	}
+}
+
+// Grab tells the speaker which bare keys the mod owns now.
+func (s *Speaker) Grab(keys []string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.grab = "G " + strings.Join(keys, ",")
+	if s.stdin != nil {
+		if _, err := io.WriteString(s.stdin, s.grab+"\n"); err != nil {
+			slog.Warn("speaker grab failed", "err", err)
+		}
 	}
 }
 

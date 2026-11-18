@@ -235,6 +235,7 @@ type ToBridge struct {
 	//	*ToBridge_Event
 	//	*ToBridge_Result
 	//	*ToBridge_Voice
+	//	*ToBridge_Grab
 	Payload       isToBridge_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -322,6 +323,15 @@ func (x *ToBridge) GetVoice() *Voice {
 	return nil
 }
 
+func (x *ToBridge) GetGrab() *GrabKeys {
+	if x != nil {
+		if x, ok := x.Payload.(*ToBridge_Grab); ok {
+			return x.Grab
+		}
+	}
+	return nil
+}
+
 type isToBridge_Payload interface {
 	isToBridge_Payload()
 }
@@ -346,6 +356,12 @@ type ToBridge_Voice struct {
 	Voice *Voice `protobuf:"bytes,5,opt,name=voice,proto3,oneof"`
 }
 
+type ToBridge_Grab struct {
+	// Bare keys the mod owns right now (Windows VK codes, "+shift" variants),
+	// for the Mac key helper to take while the game is in front.
+	Grab *GrabKeys `protobuf:"bytes,6,opt,name=grab,proto3,oneof"`
+}
+
 func (*ToBridge_Hello) isToBridge_Payload() {}
 
 func (*ToBridge_State) isToBridge_Payload() {}
@@ -355,6 +371,8 @@ func (*ToBridge_Event) isToBridge_Payload() {}
 func (*ToBridge_Result) isToBridge_Payload() {}
 
 func (*ToBridge_Voice) isToBridge_Payload() {}
+
+func (*ToBridge_Grab) isToBridge_Payload() {}
 
 type ToGame struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -372,6 +390,7 @@ type ToGame struct {
 	//	*ToGame_OpenMenu
 	//	*ToGame_RespondDialog
 	//	*ToGame_SetCamera
+	//	*ToGame_Key
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -520,6 +539,15 @@ func (x *ToGame) GetSetCamera() *SetCameraRequest {
 	return nil
 }
 
+func (x *ToGame) GetKey() *KeyEvent {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_Key); ok {
+			return x.Key
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -568,6 +596,10 @@ type ToGame_SetCamera struct {
 	SetCamera *SetCameraRequest `protobuf:"bytes,12,opt,name=set_camera,json=setCamera,proto3,oneof"`
 }
 
+type ToGame_Key struct {
+	Key *KeyEvent `protobuf:"bytes,13,opt,name=key,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -589,6 +621,8 @@ func (*ToGame_OpenMenu) isToGame_Command() {}
 func (*ToGame_RespondDialog) isToGame_Command() {}
 
 func (*ToGame_SetCamera) isToGame_Command() {}
+
+func (*ToGame_Key) isToGame_Command() {}
 
 // Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
 // menu bar icon, not from the phone).
@@ -637,6 +671,122 @@ func (x *OpenMenuRequest) GetMenu() string {
 	return ""
 }
 
+type GrabKeys struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Keys          []string               `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GrabKeys) Reset() {
+	*x = GrabKeys{}
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GrabKeys) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GrabKeys) ProtoMessage() {}
+
+func (x *GrabKeys) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GrabKeys.ProtoReflect.Descriptor instead.
+func (*GrabKeys) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_pipe_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GrabKeys) GetKeys() []string {
+	if x != nil {
+		return x.Keys
+	}
+	return nil
+}
+
+// A key from the Mac key helper, in the original mod's terms.
+type KeyEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),
+	// plain (bare key the mod owns) or focus (the game lost focus).
+	Family string `protobuf:"bytes,1,opt,name=family,proto3" json:"family,omitempty"`
+	// Windows virtual-key code.
+	Vk            int32 `protobuf:"varint,2,opt,name=vk,proto3" json:"vk,omitempty"`
+	Down          bool  `protobuf:"varint,3,opt,name=down,proto3" json:"down,omitempty"`
+	Shift         bool  `protobuf:"varint,4,opt,name=shift,proto3" json:"shift,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *KeyEvent) Reset() {
+	*x = KeyEvent{}
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *KeyEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KeyEvent) ProtoMessage() {}
+
+func (x *KeyEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_pipe_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KeyEvent.ProtoReflect.Descriptor instead.
+func (*KeyEvent) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_pipe_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *KeyEvent) GetFamily() string {
+	if x != nil {
+		return x.Family
+	}
+	return ""
+}
+
+func (x *KeyEvent) GetVk() int32 {
+	if x != nil {
+		return x.Vk
+	}
+	return 0
+}
+
+func (x *KeyEvent) GetDown() bool {
+	if x != nil {
+		return x.Down
+	}
+	return false
+}
+
+func (x *KeyEvent) GetShift() bool {
+	if x != nil {
+		return x.Shift
+	}
+	return false
+}
+
 var File_ts4access_v1_pipe_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_pipe_proto_rawDesc = "" +
@@ -657,14 +807,15 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\atargets\x18\x03 \x03(\v2\x14.ts4access.v1.TargetR\atargets\x12=\n" +
 	"\finteractions\x18\x04 \x03(\v2\x19.ts4access.v1.InteractionR\finteractions\x12#\n" +
 	"\rnames_pending\x18\x05 \x01(\bR\fnamesPending\x123\n" +
-	"\thouse_map\x18\x06 \x01(\v2\x16.ts4access.v1.HouseMapR\bhouseMap\"\x84\x02\n" +
+	"\thouse_map\x18\x06 \x01(\v2\x16.ts4access.v1.HouseMapR\bhouseMap\"\xb2\x02\n" +
 	"\bToBridge\x12+\n" +
 	"\x05hello\x18\x01 \x01(\v2\x13.ts4access.v1.HelloH\x00R\x05hello\x12/\n" +
 	"\x05state\x18\x02 \x01(\v2\x17.ts4access.v1.GameStateH\x00R\x05state\x12+\n" +
 	"\x05event\x18\x03 \x01(\v2\x13.ts4access.v1.EventH\x00R\x05event\x125\n" +
 	"\x06result\x18\x04 \x01(\v2\x1b.ts4access.v1.CommandResultH\x00R\x06result\x12+\n" +
-	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voiceB\t\n" +
-	"\apayload\"\xb4\x06\n" +
+	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voice\x12,\n" +
+	"\x04grab\x18\x06 \x01(\v2\x16.ts4access.v1.GrabKeysH\x00R\x04grabB\t\n" +
+	"\apayload\"\xe0\x06\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1d.ts4access.v1.SetSpeedRequestH\x00R\bsetSpeed\x12?\n" +
@@ -680,10 +831,18 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	" \x01(\v2\x1d.ts4access.v1.OpenMenuRequestH\x00R\bopenMenu\x12K\n" +
 	"\x0erespond_dialog\x18\v \x01(\v2\".ts4access.v1.RespondDialogRequestH\x00R\rrespondDialog\x12?\n" +
 	"\n" +
-	"set_camera\x18\f \x01(\v2\x1e.ts4access.v1.SetCameraRequestH\x00R\tsetCameraB\t\n" +
+	"set_camera\x18\f \x01(\v2\x1e.ts4access.v1.SetCameraRequestH\x00R\tsetCamera\x12*\n" +
+	"\x03key\x18\r \x01(\v2\x16.ts4access.v1.KeyEventH\x00R\x03keyB\t\n" +
 	"\acommand\"%\n" +
 	"\x0fOpenMenuRequest\x12\x12\n" +
-	"\x04menu\x18\x01 \x01(\tR\x04menuB\xc0\x01\n" +
+	"\x04menu\x18\x01 \x01(\tR\x04menu\"\x1e\n" +
+	"\bGrabKeys\x12\x12\n" +
+	"\x04keys\x18\x01 \x03(\tR\x04keys\"\\\n" +
+	"\bKeyEvent\x12\x16\n" +
+	"\x06family\x18\x01 \x01(\tR\x06family\x12\x0e\n" +
+	"\x02vk\x18\x02 \x01(\x05R\x02vk\x12\x12\n" +
+	"\x04down\x18\x03 \x01(\bR\x04down\x12\x14\n" +
+	"\x05shift\x18\x04 \x01(\bR\x05shiftB\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tPipeProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -698,7 +857,7 @@ func file_ts4access_v1_pipe_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_pipe_proto_rawDescData
 }
 
-var file_ts4access_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_ts4access_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_ts4access_v1_pipe_proto_goTypes = []any{
 	(*Voice)(nil),                  // 0: ts4access.v1.Voice
 	(*Hello)(nil),                  // 1: ts4access.v1.Hello
@@ -706,49 +865,53 @@ var file_ts4access_v1_pipe_proto_goTypes = []any{
 	(*ToBridge)(nil),               // 3: ts4access.v1.ToBridge
 	(*ToGame)(nil),                 // 4: ts4access.v1.ToGame
 	(*OpenMenuRequest)(nil),        // 5: ts4access.v1.OpenMenuRequest
-	(*CommandOutcome)(nil),         // 6: ts4access.v1.CommandOutcome
-	(*Target)(nil),                 // 7: ts4access.v1.Target
-	(*Interaction)(nil),            // 8: ts4access.v1.Interaction
-	(*HouseMap)(nil),               // 9: ts4access.v1.HouseMap
-	(*GameState)(nil),              // 10: ts4access.v1.GameState
-	(*Event)(nil),                  // 11: ts4access.v1.Event
-	(*SetSpeedRequest)(nil),        // 12: ts4access.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),       // 13: ts4access.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),    // 14: ts4access.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),    // 15: ts4access.v1.SetNarrationRequest
-	(*ListTargetsRequest)(nil),     // 16: ts4access.v1.ListTargetsRequest
-	(*GetInteractionsRequest)(nil), // 17: ts4access.v1.GetInteractionsRequest
-	(*RunInteractionRequest)(nil),  // 18: ts4access.v1.RunInteractionRequest
-	(*GetHouseMapRequest)(nil),     // 19: ts4access.v1.GetHouseMapRequest
-	(*RespondDialogRequest)(nil),   // 20: ts4access.v1.RespondDialogRequest
-	(*SetCameraRequest)(nil),       // 21: ts4access.v1.SetCameraRequest
+	(*GrabKeys)(nil),               // 6: ts4access.v1.GrabKeys
+	(*KeyEvent)(nil),               // 7: ts4access.v1.KeyEvent
+	(*CommandOutcome)(nil),         // 8: ts4access.v1.CommandOutcome
+	(*Target)(nil),                 // 9: ts4access.v1.Target
+	(*Interaction)(nil),            // 10: ts4access.v1.Interaction
+	(*HouseMap)(nil),               // 11: ts4access.v1.HouseMap
+	(*GameState)(nil),              // 12: ts4access.v1.GameState
+	(*Event)(nil),                  // 13: ts4access.v1.Event
+	(*SetSpeedRequest)(nil),        // 14: ts4access.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),       // 15: ts4access.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),    // 16: ts4access.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),    // 17: ts4access.v1.SetNarrationRequest
+	(*ListTargetsRequest)(nil),     // 18: ts4access.v1.ListTargetsRequest
+	(*GetInteractionsRequest)(nil), // 19: ts4access.v1.GetInteractionsRequest
+	(*RunInteractionRequest)(nil),  // 20: ts4access.v1.RunInteractionRequest
+	(*GetHouseMapRequest)(nil),     // 21: ts4access.v1.GetHouseMapRequest
+	(*RespondDialogRequest)(nil),   // 22: ts4access.v1.RespondDialogRequest
+	(*SetCameraRequest)(nil),       // 23: ts4access.v1.SetCameraRequest
 }
 var file_ts4access_v1_pipe_proto_depIdxs = []int32{
-	6,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
-	7,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
-	8,  // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
-	9,  // 3: ts4access.v1.CommandResult.house_map:type_name -> ts4access.v1.HouseMap
+	8,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
+	9,  // 1: ts4access.v1.CommandResult.targets:type_name -> ts4access.v1.Target
+	10, // 2: ts4access.v1.CommandResult.interactions:type_name -> ts4access.v1.Interaction
+	11, // 3: ts4access.v1.CommandResult.house_map:type_name -> ts4access.v1.HouseMap
 	1,  // 4: ts4access.v1.ToBridge.hello:type_name -> ts4access.v1.Hello
-	10, // 5: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
-	11, // 6: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
+	12, // 5: ts4access.v1.ToBridge.state:type_name -> ts4access.v1.GameState
+	13, // 6: ts4access.v1.ToBridge.event:type_name -> ts4access.v1.Event
 	2,  // 7: ts4access.v1.ToBridge.result:type_name -> ts4access.v1.CommandResult
 	0,  // 8: ts4access.v1.ToBridge.voice:type_name -> ts4access.v1.Voice
-	12, // 9: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
-	13, // 10: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
-	14, // 11: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
-	15, // 12: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
-	16, // 13: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
-	17, // 14: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
-	18, // 15: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
-	19, // 16: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
-	5,  // 17: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
-	20, // 18: ts4access.v1.ToGame.respond_dialog:type_name -> ts4access.v1.RespondDialogRequest
-	21, // 19: ts4access.v1.ToGame.set_camera:type_name -> ts4access.v1.SetCameraRequest
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	6,  // 9: ts4access.v1.ToBridge.grab:type_name -> ts4access.v1.GrabKeys
+	14, // 10: ts4access.v1.ToGame.set_speed:type_name -> ts4access.v1.SetSpeedRequest
+	15, // 11: ts4access.v1.ToGame.select_sim:type_name -> ts4access.v1.SelectSimRequest
+	16, // 12: ts4access.v1.ToGame.cancel_action:type_name -> ts4access.v1.CancelActionRequest
+	17, // 13: ts4access.v1.ToGame.set_narration:type_name -> ts4access.v1.SetNarrationRequest
+	18, // 14: ts4access.v1.ToGame.list_targets:type_name -> ts4access.v1.ListTargetsRequest
+	19, // 15: ts4access.v1.ToGame.get_interactions:type_name -> ts4access.v1.GetInteractionsRequest
+	20, // 16: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
+	21, // 17: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
+	5,  // 18: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
+	22, // 19: ts4access.v1.ToGame.respond_dialog:type_name -> ts4access.v1.RespondDialogRequest
+	23, // 20: ts4access.v1.ToGame.set_camera:type_name -> ts4access.v1.SetCameraRequest
+	7,  // 21: ts4access.v1.ToGame.key:type_name -> ts4access.v1.KeyEvent
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_pipe_proto_init() }
@@ -764,6 +927,7 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToBridge_Event)(nil),
 		(*ToBridge_Result)(nil),
 		(*ToBridge_Voice)(nil),
+		(*ToBridge_Grab)(nil),
 	}
 	file_ts4access_v1_pipe_proto_msgTypes[4].OneofWrappers = []any{
 		(*ToGame_SetSpeed)(nil),
@@ -777,6 +941,7 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToGame_OpenMenu)(nil),
 		(*ToGame_RespondDialog)(nil),
 		(*ToGame_SetCamera)(nil),
+		(*ToGame_Key)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -784,7 +949,7 @@ func file_ts4access_v1_pipe_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_pipe_proto_rawDesc), len(file_ts4access_v1_pipe_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

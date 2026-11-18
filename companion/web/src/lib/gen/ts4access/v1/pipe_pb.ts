@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/pipe.proto.
  */
 export const file_ts4access_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAi4AEKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSABCCQoHcGF5bG9hZCKgBQoGVG9HYW1lEgoKAmlkGAEgASgJEjIKCXNldF9zcGVlZBgCIAEoCzIdLnRzNGFjY2Vzcy52MS5TZXRTcGVlZFJlcXVlc3RIABI0CgpzZWxlY3Rfc2ltGAMgASgLMh4udHM0YWNjZXNzLnYxLlNlbGVjdFNpbVJlcXVlc3RIABI6Cg1jYW5jZWxfYWN0aW9uGAQgASgLMiEudHM0YWNjZXNzLnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI6Cg1zZXRfbmFycmF0aW9uGAUgASgLMiEudHM0YWNjZXNzLnYxLlNldE5hcnJhdGlvblJlcXVlc3RIABI4CgxsaXN0X3RhcmdldHMYBiABKAsyIC50czRhY2Nlc3MudjEuTGlzdFRhcmdldHNSZXF1ZXN0SAASQAoQZ2V0X2ludGVyYWN0aW9ucxgHIAEoCzIkLnRzNGFjY2Vzcy52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPgoPcnVuX2ludGVyYWN0aW9uGAggASgLMiMudHM0YWNjZXNzLnYxLlJ1bkludGVyYWN0aW9uUmVxdWVzdEgAEjkKDWdldF9ob3VzZV9tYXAYCSABKAsyIC50czRhY2Nlc3MudjEuR2V0SG91c2VNYXBSZXF1ZXN0SAASMgoJb3Blbl9tZW51GAogASgLMh0udHM0YWNjZXNzLnYxLk9wZW5NZW51UmVxdWVzdEgAEjwKDnJlc3BvbmRfZGlhbG9nGAsgASgLMiIudHM0YWNjZXNzLnYxLlJlc3BvbmREaWFsb2dSZXF1ZXN0SAASNAoKc2V0X2NhbWVyYRgMIAEoCzIeLnRzNGFjY2Vzcy52MS5TZXRDYW1lcmFSZXF1ZXN0SABCCQoHY29tbWFuZCIfCg9PcGVuTWVudVJlcXVlc3QSDAoEbWVudRgBIAEoCWIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
+  fileDesc("Chd0czRhY2Nlc3MvdjEvcGlwZS5wcm90bxIMdHM0YWNjZXNzLnYxIkEKBVZvaWNlEgwKBHJhdGUYASABKAUSDgoGdm9sdW1lGAIgASgFEgwKBG5hbWUYAyABKAkSDAoEbGFuZxgEIAEoCSIyCgVIZWxsbxITCgttb2RfdmVyc2lvbhgBIAEoCRIUCgxnYW1lX3ZlcnNpb24YAiABKAki5AEKDUNvbW1hbmRSZXN1bHQSCgoCaWQYASABKAkSLQoHb3V0Y29tZRgCIAEoCzIcLnRzNGFjY2Vzcy52MS5Db21tYW5kT3V0Y29tZRIlCgd0YXJnZXRzGAMgAygLMhQudHM0YWNjZXNzLnYxLlRhcmdldBIvCgxpbnRlcmFjdGlvbnMYBCADKAsyGS50czRhY2Nlc3MudjEuSW50ZXJhY3Rpb24SFQoNbmFtZXNfcGVuZGluZxgFIAEoCBIpCglob3VzZV9tYXAYBiABKAsyFi50czRhY2Nlc3MudjEuSG91c2VNYXAiiAIKCFRvQnJpZGdlEiQKBWhlbGxvGAEgASgLMhMudHM0YWNjZXNzLnYxLkhlbGxvSAASKAoFc3RhdGUYAiABKAsyFy50czRhY2Nlc3MudjEuR2FtZVN0YXRlSAASJAoFZXZlbnQYAyABKAsyEy50czRhY2Nlc3MudjEuRXZlbnRIABItCgZyZXN1bHQYBCABKAsyGy50czRhY2Nlc3MudjEuQ29tbWFuZFJlc3VsdEgAEiQKBXZvaWNlGAUgASgLMhMudHM0YWNjZXNzLnYxLlZvaWNlSAASJgoEZ3JhYhgGIAEoCzIWLnRzNGFjY2Vzcy52MS5HcmFiS2V5c0gAQgkKB3BheWxvYWQixwUKBlRvR2FtZRIKCgJpZBgBIAEoCRIyCglzZXRfc3BlZWQYAiABKAsyHS50czRhY2Nlc3MudjEuU2V0U3BlZWRSZXF1ZXN0SAASNAoKc2VsZWN0X3NpbRgDIAEoCzIeLnRzNGFjY2Vzcy52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOgoNY2FuY2VsX2FjdGlvbhgEIAEoCzIhLnRzNGFjY2Vzcy52MS5DYW5jZWxBY3Rpb25SZXF1ZXN0SAASOgoNc2V0X25hcnJhdGlvbhgFIAEoCzIhLnRzNGFjY2Vzcy52MS5TZXROYXJyYXRpb25SZXF1ZXN0SAASOAoMbGlzdF90YXJnZXRzGAYgASgLMiAudHM0YWNjZXNzLnYxLkxpc3RUYXJnZXRzUmVxdWVzdEgAEkAKEGdldF9pbnRlcmFjdGlvbnMYByABKAsyJC50czRhY2Nlc3MudjEuR2V0SW50ZXJhY3Rpb25zUmVxdWVzdEgAEj4KD3J1bl9pbnRlcmFjdGlvbhgIIAEoCzIjLnRzNGFjY2Vzcy52MS5SdW5JbnRlcmFjdGlvblJlcXVlc3RIABI5Cg1nZXRfaG91c2VfbWFwGAkgASgLMiAudHM0YWNjZXNzLnYxLkdldEhvdXNlTWFwUmVxdWVzdEgAEjIKCW9wZW5fbWVudRgKIAEoCzIdLnRzNGFjY2Vzcy52MS5PcGVuTWVudVJlcXVlc3RIABI8Cg5yZXNwb25kX2RpYWxvZxgLIAEoCzIiLnRzNGFjY2Vzcy52MS5SZXNwb25kRGlhbG9nUmVxdWVzdEgAEjQKCnNldF9jYW1lcmEYDCABKAsyHi50czRhY2Nlc3MudjEuU2V0Q2FtZXJhUmVxdWVzdEgAEiUKA2tleRgNIAEoCzIWLnRzNGFjY2Vzcy52MS5LZXlFdmVudEgAQgkKB2NvbW1hbmQiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAkiGAoIR3JhYktleXMSDAoEa2V5cxgBIAMoCSJDCghLZXlFdmVudBIOCgZmYW1pbHkYASABKAkSCgoCdmsYAiABKAUSDAoEZG93bhgDIAEoCBINCgVzaGlmdBgEIAEoCGIGcHJvdG8z", [file_ts4access_v1_companion, file_ts4access_v1_game]);
 
 /**
  * @generated from message ts4access.v1.Voice
@@ -159,6 +159,15 @@ export type ToBridge = Message<"ts4access.v1.ToBridge"> & {
      */
     value: Voice;
     case: "voice";
+  } | {
+    /**
+     * Bare keys the mod owns right now (Windows VK codes, "+shift" variants),
+     * for the Mac key helper to take while the game is in front.
+     *
+     * @generated from field: ts4access.v1.GrabKeys grab = 6;
+     */
+    value: GrabKeys;
+    case: "grab";
   } | { case: undefined; value?: undefined };
 };
 
@@ -247,6 +256,12 @@ export type ToGame = Message<"ts4access.v1.ToGame"> & {
      */
     value: SetCameraRequest;
     case: "setCamera";
+  } | {
+    /**
+     * @generated from field: ts4access.v1.KeyEvent key = 13;
+     */
+    value: KeyEvent;
+    case: "key";
   } | { case: undefined; value?: undefined };
 };
 
@@ -278,4 +293,60 @@ export type OpenMenuRequest = Message<"ts4access.v1.OpenMenuRequest"> & {
  */
 export const OpenMenuRequestSchema: GenMessage<OpenMenuRequest> = /*@__PURE__*/
   messageDesc(file_ts4access_v1_pipe, 5);
+
+/**
+ * @generated from message ts4access.v1.GrabKeys
+ */
+export type GrabKeys = Message<"ts4access.v1.GrabKeys"> & {
+  /**
+   * @generated from field: repeated string keys = 1;
+   */
+  keys: string[];
+};
+
+/**
+ * Describes the message ts4access.v1.GrabKeys.
+ * Use `create(GrabKeysSchema)` to create a new message.
+ */
+export const GrabKeysSchema: GenMessage<GrabKeys> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_pipe, 6);
+
+/**
+ * A key from the Mac key helper, in the original mod's terms.
+ *
+ * @generated from message ts4access.v1.KeyEvent
+ */
+export type KeyEvent = Message<"ts4access.v1.KeyEvent"> & {
+  /**
+   * chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),
+   * plain (bare key the mod owns) or focus (the game lost focus).
+   *
+   * @generated from field: string family = 1;
+   */
+  family: string;
+
+  /**
+   * Windows virtual-key code.
+   *
+   * @generated from field: int32 vk = 2;
+   */
+  vk: number;
+
+  /**
+   * @generated from field: bool down = 3;
+   */
+  down: boolean;
+
+  /**
+   * @generated from field: bool shift = 4;
+   */
+  shift: boolean;
+};
+
+/**
+ * Describes the message ts4access.v1.KeyEvent.
+ * Use `create(KeyEventSchema)` to create a new message.
+ */
+export const KeyEventSchema: GenMessage<KeyEvent> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_pipe, 7);
 

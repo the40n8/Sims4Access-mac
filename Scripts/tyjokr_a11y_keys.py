@@ -1572,6 +1572,10 @@ def _loop():
 
 def start():
     global _thread, _running
+    import sys
+    if sys.platform == 'darwin':
+        # macOS port: the key helper reads the keyboard (tyjokr_a11y_mackeys).
+        return True
     if ctypes is None:
         speech.log_line('keys: ctypes unavailable ({}), keyboard navigation off'.format(
             globals().get('_ctypes_error', 'unknown')))
