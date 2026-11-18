@@ -207,6 +207,8 @@ const (
 	EventKind_EVENT_KIND_NOTIFICATION EventKind = 13
 	// The game asks something: subject is the dialog title or text.
 	EventKind_EVENT_KIND_DIALOG EventKind = 14
+	// Something to deal with appeared: subject is the Problem kind, detail the object name.
+	EventKind_EVENT_KIND_PROBLEM EventKind = 15
 )
 
 // Enum value maps for EventKind.
@@ -227,6 +229,7 @@ var (
 		12: "EVENT_KIND_AWAY_ENDED",
 		13: "EVENT_KIND_NOTIFICATION",
 		14: "EVENT_KIND_DIALOG",
+		15: "EVENT_KIND_PROBLEM",
 	}
 	EventKind_value = map[string]int32{
 		"EVENT_KIND_UNSPECIFIED":     0,
@@ -244,6 +247,7 @@ var (
 		"EVENT_KIND_AWAY_ENDED":      12,
 		"EVENT_KIND_NOTIFICATION":    13,
 		"EVENT_KIND_DIALOG":          14,
+		"EVENT_KIND_PROBLEM":         15,
 	}
 )
 
@@ -849,7 +853,9 @@ type GameState struct {
 	Sims          []*Sim     `protobuf:"bytes,6,rep,name=sims,proto3" json:"sims,omitempty"`
 	Narration     *Narration `protobuf:"bytes,7,opt,name=narration,proto3" json:"narration,omitempty"`
 	// Windows the game is waiting on (questions, pickers), oldest first.
-	Dialogs       []*Dialog `protobuf:"bytes,8,rep,name=dialogs,proto3" json:"dialogs,omitempty"`
+	Dialogs []*Dialog `protobuf:"bytes,8,rep,name=dialogs,proto3" json:"dialogs,omitempty"`
+	// Things on the lot to deal with, most urgent first.
+	Problems      []*Problem `protobuf:"bytes,9,rep,name=problems,proto3" json:"problems,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -940,6 +946,82 @@ func (x *GameState) GetDialogs() []*Dialog {
 	return nil
 }
 
+func (x *GameState) GetProblems() []*Problem {
+	if x != nil {
+		return x.Problems
+	}
+	return nil
+}
+
+type Problem struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// FIRE, BROKEN, PUDDLE or SPOILED.
+	Kind          string `protobuf:"bytes,1,opt,name=kind,proto3" json:"kind,omitempty"`
+	TargetId      string `protobuf:"bytes,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Distance      int32  `protobuf:"varint,4,opt,name=distance,proto3" json:"distance,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Problem) Reset() {
+	*x = Problem{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Problem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Problem) ProtoMessage() {}
+
+func (x *Problem) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Problem.ProtoReflect.Descriptor instead.
+func (*Problem) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Problem) GetKind() string {
+	if x != nil {
+		return x.Kind
+	}
+	return ""
+}
+
+func (x *Problem) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
+}
+
+func (x *Problem) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Problem) GetDistance() int32 {
+	if x != nil {
+		return x.Distance
+	}
+	return 0
+}
+
 // A game window waiting for an answer: a question with buttons, a list to
 // pick from (recipes, Sims, objects...) or a text box.
 type Dialog struct {
@@ -961,7 +1043,7 @@ type Dialog struct {
 
 func (x *Dialog) Reset() {
 	*x = Dialog{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	mi := &file_ts4access_v1_game_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -973,7 +1055,7 @@ func (x *Dialog) String() string {
 func (*Dialog) ProtoMessage() {}
 
 func (x *Dialog) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[8]
+	mi := &file_ts4access_v1_game_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -986,7 +1068,7 @@ func (x *Dialog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Dialog.ProtoReflect.Descriptor instead.
 func (*Dialog) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{8}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Dialog) GetId() string {
@@ -1065,7 +1147,7 @@ type DialogChoice struct {
 
 func (x *DialogChoice) Reset() {
 	*x = DialogChoice{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[9]
+	mi := &file_ts4access_v1_game_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1077,7 +1159,7 @@ func (x *DialogChoice) String() string {
 func (*DialogChoice) ProtoMessage() {}
 
 func (x *DialogChoice) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[9]
+	mi := &file_ts4access_v1_game_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1090,7 +1172,7 @@ func (x *DialogChoice) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DialogChoice.ProtoReflect.Descriptor instead.
 func (*DialogChoice) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{9}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DialogChoice) GetId() int32 {
@@ -1128,7 +1210,7 @@ type DialogRow struct {
 
 func (x *DialogRow) Reset() {
 	*x = DialogRow{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[10]
+	mi := &file_ts4access_v1_game_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1140,7 +1222,7 @@ func (x *DialogRow) String() string {
 func (*DialogRow) ProtoMessage() {}
 
 func (x *DialogRow) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[10]
+	mi := &file_ts4access_v1_game_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1153,7 +1235,7 @@ func (x *DialogRow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DialogRow.ProtoReflect.Descriptor instead.
 func (*DialogRow) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{10}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DialogRow) GetId() string {
@@ -1220,7 +1302,7 @@ type Target struct {
 
 func (x *Target) Reset() {
 	*x = Target{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[11]
+	mi := &file_ts4access_v1_game_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1232,7 +1314,7 @@ func (x *Target) String() string {
 func (*Target) ProtoMessage() {}
 
 func (x *Target) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[11]
+	mi := &file_ts4access_v1_game_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1245,7 +1327,7 @@ func (x *Target) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Target.ProtoReflect.Descriptor instead.
 func (*Target) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{11}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Target) GetId() string {
@@ -1320,7 +1402,7 @@ type Interaction struct {
 
 func (x *Interaction) Reset() {
 	*x = Interaction{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[12]
+	mi := &file_ts4access_v1_game_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1332,7 +1414,7 @@ func (x *Interaction) String() string {
 func (*Interaction) ProtoMessage() {}
 
 func (x *Interaction) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[12]
+	mi := &file_ts4access_v1_game_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1345,7 +1427,7 @@ func (x *Interaction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Interaction.ProtoReflect.Descriptor instead.
 func (*Interaction) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{12}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Interaction) GetId() string {
@@ -1401,7 +1483,7 @@ type Event struct {
 
 func (x *Event) Reset() {
 	*x = Event{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[13]
+	mi := &file_ts4access_v1_game_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1413,7 +1495,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[13]
+	mi := &file_ts4access_v1_game_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1426,7 +1508,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{13}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Event) GetSeq() uint64 {
@@ -1490,7 +1572,7 @@ type HouseMap struct {
 
 func (x *HouseMap) Reset() {
 	*x = HouseMap{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[14]
+	mi := &file_ts4access_v1_game_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1502,7 +1584,7 @@ func (x *HouseMap) String() string {
 func (*HouseMap) ProtoMessage() {}
 
 func (x *HouseMap) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[14]
+	mi := &file_ts4access_v1_game_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1515,7 +1597,7 @@ func (x *HouseMap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HouseMap.ProtoReflect.Descriptor instead.
 func (*HouseMap) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{14}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *HouseMap) GetRooms() []*Room {
@@ -1564,7 +1646,7 @@ type Room struct {
 
 func (x *Room) Reset() {
 	*x = Room{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[15]
+	mi := &file_ts4access_v1_game_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1576,7 +1658,7 @@ func (x *Room) String() string {
 func (*Room) ProtoMessage() {}
 
 func (x *Room) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[15]
+	mi := &file_ts4access_v1_game_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1589,7 +1671,7 @@ func (x *Room) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Room.ProtoReflect.Descriptor instead.
 func (*Room) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{15}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Room) GetId() string {
@@ -1711,7 +1793,7 @@ type RoomLink struct {
 
 func (x *RoomLink) Reset() {
 	*x = RoomLink{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[16]
+	mi := &file_ts4access_v1_game_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1723,7 +1805,7 @@ func (x *RoomLink) String() string {
 func (*RoomLink) ProtoMessage() {}
 
 func (x *RoomLink) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[16]
+	mi := &file_ts4access_v1_game_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1736,7 +1818,7 @@ func (x *RoomLink) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomLink.ProtoReflect.Descriptor instead.
 func (*RoomLink) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{16}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *RoomLink) GetRoomId() string {
@@ -1771,7 +1853,7 @@ type RoomItem struct {
 
 func (x *RoomItem) Reset() {
 	*x = RoomItem{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[17]
+	mi := &file_ts4access_v1_game_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1783,7 +1865,7 @@ func (x *RoomItem) String() string {
 func (*RoomItem) ProtoMessage() {}
 
 func (x *RoomItem) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[17]
+	mi := &file_ts4access_v1_game_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1796,7 +1878,7 @@ func (x *RoomItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomItem.ProtoReflect.Descriptor instead.
 func (*RoomItem) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{17}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *RoomItem) GetTarget() *Target {
@@ -1828,7 +1910,7 @@ type Relationship struct {
 
 func (x *Relationship) Reset() {
 	*x = Relationship{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[18]
+	mi := &file_ts4access_v1_game_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1840,7 +1922,7 @@ func (x *Relationship) String() string {
 func (*Relationship) ProtoMessage() {}
 
 func (x *Relationship) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[18]
+	mi := &file_ts4access_v1_game_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1853,7 +1935,7 @@ func (x *Relationship) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Relationship.ProtoReflect.Descriptor instead.
 func (*Relationship) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{18}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *Relationship) GetSimId() string {
@@ -1903,7 +1985,7 @@ type Skill struct {
 
 func (x *Skill) Reset() {
 	*x = Skill{}
-	mi := &file_ts4access_v1_game_proto_msgTypes[19]
+	mi := &file_ts4access_v1_game_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1915,7 +1997,7 @@ func (x *Skill) String() string {
 func (*Skill) ProtoMessage() {}
 
 func (x *Skill) ProtoReflect() protoreflect.Message {
-	mi := &file_ts4access_v1_game_proto_msgTypes[19]
+	mi := &file_ts4access_v1_game_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1928,7 +2010,7 @@ func (x *Skill) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Skill.ProtoReflect.Descriptor instead.
 func (*Skill) Descriptor() ([]byte, []int) {
-	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{19}
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *Skill) GetKey() string {
@@ -2014,7 +2096,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\tNarration\x12\x1b\n" +
 	"\tmac_voice\x18\x01 \x01(\bR\bmacVoice\x12\x1f\n" +
 	"\vsim_actions\x18\x02 \x01(\bR\n" +
-	"simActions\"\xac\x02\n" +
+	"simActions\"\xdf\x02\n" +
 	"\tGameState\x12\x10\n" +
 	"\x03seq\x18\x01 \x01(\x04R\x03seq\x12\x17\n" +
 	"\ain_game\x18\x02 \x01(\bR\x06inGame\x12)\n" +
@@ -2023,7 +2105,13 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x0ehousehold_name\x18\x05 \x01(\tR\rhouseholdName\x12%\n" +
 	"\x04sims\x18\x06 \x03(\v2\x11.ts4access.v1.SimR\x04sims\x125\n" +
 	"\tnarration\x18\a \x01(\v2\x17.ts4access.v1.NarrationR\tnarration\x12.\n" +
-	"\adialogs\x18\b \x03(\v2\x14.ts4access.v1.DialogR\adialogs\"\xb5\x02\n" +
+	"\adialogs\x18\b \x03(\v2\x14.ts4access.v1.DialogR\adialogs\x121\n" +
+	"\bproblems\x18\t \x03(\v2\x15.ts4access.v1.ProblemR\bproblems\"j\n" +
+	"\aProblem\x12\x12\n" +
+	"\x04kind\x18\x01 \x01(\tR\x04kind\x12\x1b\n" +
+	"\ttarget_id\x18\x02 \x01(\tR\btargetId\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1a\n" +
+	"\bdistance\x18\x04 \x01(\x05R\bdistance\"\xb5\x02\n" +
 	"\x06Dialog\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
@@ -2127,7 +2215,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\vActionState\x12\x1c\n" +
 	"\x18ACTION_STATE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14ACTION_STATE_RUNNING\x10\x01\x12\x17\n" +
-	"\x13ACTION_STATE_QUEUED\x10\x02*\x96\x03\n" +
+	"\x13ACTION_STATE_QUEUED\x10\x02*\xae\x03\n" +
 	"\tEventKind\x12\x1a\n" +
 	"\x16EVENT_KIND_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fEVENT_KIND_MOOD\x10\x01\x12\x1c\n" +
@@ -2144,7 +2232,8 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x17EVENT_KIND_AWAY_STARTED\x10\v\x12\x19\n" +
 	"\x15EVENT_KIND_AWAY_ENDED\x10\f\x12\x1b\n" +
 	"\x17EVENT_KIND_NOTIFICATION\x10\r\x12\x15\n" +
-	"\x11EVENT_KIND_DIALOG\x10\x0eB\xc0\x01\n" +
+	"\x11EVENT_KIND_DIALOG\x10\x0e\x12\x16\n" +
+	"\x12EVENT_KIND_PROBLEM\x10\x0fB\xc0\x01\n" +
 	"\x10com.ts4access.v1B\tGameProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -2160,7 +2249,7 @@ func file_ts4access_v1_game_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_game_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_ts4access_v1_game_proto_goTypes = []any{
 	(Speed)(0),           // 0: ts4access.v1.Speed
 	(NeedLevel)(0),       // 1: ts4access.v1.NeedLevel
@@ -2174,18 +2263,19 @@ var file_ts4access_v1_game_proto_goTypes = []any{
 	(*Sim)(nil),          // 9: ts4access.v1.Sim
 	(*Narration)(nil),    // 10: ts4access.v1.Narration
 	(*GameState)(nil),    // 11: ts4access.v1.GameState
-	(*Dialog)(nil),       // 12: ts4access.v1.Dialog
-	(*DialogChoice)(nil), // 13: ts4access.v1.DialogChoice
-	(*DialogRow)(nil),    // 14: ts4access.v1.DialogRow
-	(*Target)(nil),       // 15: ts4access.v1.Target
-	(*Interaction)(nil),  // 16: ts4access.v1.Interaction
-	(*Event)(nil),        // 17: ts4access.v1.Event
-	(*HouseMap)(nil),     // 18: ts4access.v1.HouseMap
-	(*Room)(nil),         // 19: ts4access.v1.Room
-	(*RoomLink)(nil),     // 20: ts4access.v1.RoomLink
-	(*RoomItem)(nil),     // 21: ts4access.v1.RoomItem
-	(*Relationship)(nil), // 22: ts4access.v1.Relationship
-	(*Skill)(nil),        // 23: ts4access.v1.Skill
+	(*Problem)(nil),      // 12: ts4access.v1.Problem
+	(*Dialog)(nil),       // 13: ts4access.v1.Dialog
+	(*DialogChoice)(nil), // 14: ts4access.v1.DialogChoice
+	(*DialogRow)(nil),    // 15: ts4access.v1.DialogRow
+	(*Target)(nil),       // 16: ts4access.v1.Target
+	(*Interaction)(nil),  // 17: ts4access.v1.Interaction
+	(*Event)(nil),        // 18: ts4access.v1.Event
+	(*HouseMap)(nil),     // 19: ts4access.v1.HouseMap
+	(*Room)(nil),         // 20: ts4access.v1.Room
+	(*RoomLink)(nil),     // 21: ts4access.v1.RoomLink
+	(*RoomItem)(nil),     // 22: ts4access.v1.RoomItem
+	(*Relationship)(nil), // 23: ts4access.v1.Relationship
+	(*Skill)(nil),        // 24: ts4access.v1.Skill
 }
 var file_ts4access_v1_game_proto_depIdxs = []int32{
 	0,  // 0: ts4access.v1.Clock.speed:type_name -> ts4access.v1.Speed
@@ -2195,24 +2285,25 @@ var file_ts4access_v1_game_proto_depIdxs = []int32{
 	5,  // 4: ts4access.v1.Sim.needs:type_name -> ts4access.v1.Need
 	7,  // 5: ts4access.v1.Sim.moodlets:type_name -> ts4access.v1.Moodlet
 	8,  // 6: ts4access.v1.Sim.actions:type_name -> ts4access.v1.Action
-	22, // 7: ts4access.v1.Sim.relationships:type_name -> ts4access.v1.Relationship
-	23, // 8: ts4access.v1.Sim.skills:type_name -> ts4access.v1.Skill
+	23, // 7: ts4access.v1.Sim.relationships:type_name -> ts4access.v1.Relationship
+	24, // 8: ts4access.v1.Sim.skills:type_name -> ts4access.v1.Skill
 	4,  // 9: ts4access.v1.GameState.clock:type_name -> ts4access.v1.Clock
 	9,  // 10: ts4access.v1.GameState.sims:type_name -> ts4access.v1.Sim
 	10, // 11: ts4access.v1.GameState.narration:type_name -> ts4access.v1.Narration
-	12, // 12: ts4access.v1.GameState.dialogs:type_name -> ts4access.v1.Dialog
-	13, // 13: ts4access.v1.Dialog.choices:type_name -> ts4access.v1.DialogChoice
-	14, // 14: ts4access.v1.Dialog.rows:type_name -> ts4access.v1.DialogRow
-	3,  // 15: ts4access.v1.Event.kind:type_name -> ts4access.v1.EventKind
-	19, // 16: ts4access.v1.HouseMap.rooms:type_name -> ts4access.v1.Room
-	20, // 17: ts4access.v1.Room.links:type_name -> ts4access.v1.RoomLink
-	21, // 18: ts4access.v1.Room.items:type_name -> ts4access.v1.RoomItem
-	15, // 19: ts4access.v1.RoomItem.target:type_name -> ts4access.v1.Target
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	13, // 12: ts4access.v1.GameState.dialogs:type_name -> ts4access.v1.Dialog
+	12, // 13: ts4access.v1.GameState.problems:type_name -> ts4access.v1.Problem
+	14, // 14: ts4access.v1.Dialog.choices:type_name -> ts4access.v1.DialogChoice
+	15, // 15: ts4access.v1.Dialog.rows:type_name -> ts4access.v1.DialogRow
+	3,  // 16: ts4access.v1.Event.kind:type_name -> ts4access.v1.EventKind
+	20, // 17: ts4access.v1.HouseMap.rooms:type_name -> ts4access.v1.Room
+	21, // 18: ts4access.v1.Room.links:type_name -> ts4access.v1.RoomLink
+	22, // 19: ts4access.v1.Room.items:type_name -> ts4access.v1.RoomItem
+	16, // 20: ts4access.v1.RoomItem.target:type_name -> ts4access.v1.Target
+	21, // [21:21] is the sub-list for method output_type
+	21, // [21:21] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_game_proto_init() }
@@ -2227,7 +2318,7 @@ func file_ts4access_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_game_proto_rawDesc), len(file_ts4access_v1_game_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   20,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

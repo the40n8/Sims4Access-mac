@@ -115,6 +115,16 @@ message GameState {
   Narration narration = 7;
   // Windows the game is waiting on (questions, pickers), oldest first.
   repeated Dialog dialogs = 8;
+  // Things on the lot to deal with, most urgent first.
+  repeated Problem problems = 9;
+}
+
+message Problem {
+  // FIRE, BROKEN, PUDDLE or SPOILED.
+  string kind = 1;
+  string target_id = 2;
+  string name = 3;
+  int32 distance = 4;
 }
 
 // A game window waiting for an answer: a question with buttons, a list to
@@ -171,6 +181,8 @@ enum EventKind {
   EVENT_KIND_NOTIFICATION = 13;
   // The game asks something: subject is the dialog title or text.
   EVENT_KIND_DIALOG = 14;
+  // Something to deal with appeared: subject is the Problem kind, detail the object name.
+  EVENT_KIND_PROBLEM = 15;
 }
 
 // Something the controlled Sim can interact with.

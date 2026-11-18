@@ -12,6 +12,7 @@
 	const narration = $derived(live.state?.narration);
 	let busy = $state(false);
 	async function setNarration(change: Partial<Narration>) {
+		if (busy || !live.gameConnected) return;
 		const current = narration ?? { macVoice: true, simActions: true };
 		busy = true;
 		const out = await run(() =>
@@ -66,18 +67,27 @@
 	</label>
 </fieldset>
 
+<section class="card stack" aria-labelledby="playing">
+	<h2 id="playing">{m.playing_title()}</h2>
+	<label class="check">
+		<input type="checkbox" bind:checked={prefs.autoPause} onchange={savePrefs} />
+		{m.auto_pause()}
+	</label>
+	<p class="muted">{m.auto_pause_help()}</p>
+</section>
+
 <section class="card stack" aria-labelledby="narration">
 	<h2 id="narration">{m.narration_title()}</h2>
 	<button
 		type="button"
 		aria-pressed={narration?.macVoice ?? false}
-		disabled={busy || !live.gameConnected}
+		aria-disabled={busy || !live.gameConnected}
 		onclick={() => setNarration({ macVoice: !narration?.macVoice })}>{m.mac_voice()}</button
 	>
 	<button
 		type="button"
 		aria-pressed={narration?.simActions ?? false}
-		disabled={busy || !live.gameConnected}
+		aria-disabled={busy || !live.gameConnected}
 		onclick={() => setNarration({ simActions: !narration?.simActions })}>{m.sim_actions()}</button
 	>
 </section>

@@ -11,6 +11,7 @@
 	let busy = $state(false);
 
 	async function toggle() {
+		if (busy || !live.gameConnected) return;
 		busy = true;
 		const out = await run(() =>
 			client.setNarration({ narration: { macVoice: !on, simActions: narration?.simActions ?? true } })
@@ -26,7 +27,7 @@
 		type="button"
 		role="switch"
 		aria-checked={on}
-		disabled={busy || !live.gameConnected}
+		aria-disabled={busy || !live.gameConnected}
 		onclick={toggle}
 	>
 		<span>{m.narration_title()}</span>

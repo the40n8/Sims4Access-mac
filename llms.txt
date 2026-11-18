@@ -1,0 +1,15 @@
+# TS4 Access for Mac
+
+> Accessibility mod for The Sims 4 on macOS (fork of TS4 Access by tyjokr and LeonianUniverse), with a VoiceOver-friendly phone companion app that shows and controls the game. Read the player guide first.
+
+## Guides
+
+- [Player guide: phone companion](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md): every screen, quick actions, shortcuts, troubleshooting
+- [Mac install and play notes](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/mac/PLAYERS.md): installing, defaults, phone companion summary
+- [Fork overview](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/.github/README.md): what the fork is, how it is built
+
+## Original mod (Windows keyboard controls, mostly not used on Mac)
+
+- [README](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/README.txt)
+- [Controls](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/CONTROLS.txt)
+- [Cheats](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/CHEATS.txt)

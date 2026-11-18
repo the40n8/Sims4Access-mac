@@ -10,8 +10,14 @@ hearing what happens. Keyboard-only play (scanner, build cursor, Ctrl+Alt
 shortcuts) is Windows-only for now.
 
 **Status:** works in game on an Apple Silicon Mac, game 1.129.39.1230
-(hover narration, Sim actions). The phone companion is new and not yet
-tested in game. Early: expect rough edges.
+(hover narration, Sim actions). The phone companion works in game (status,
+feed, speed, Play menus, House map); its newest parts (game questions,
+notifications, Needs attention) are still being tried. Early: expect rough
+edges.
+
+**Players:** read the [phone guide](../docs/mac/PHONE-GUIDE.md) (also in the
+app's Help tab). To ask ChatGPT or another assistant about the mod, point it
+at [`llms.txt`](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt).
 
 ## How it differs from upstream
 
@@ -54,11 +60,11 @@ switches narration from outside the game.
 
 ## Phone companion
 
-While the game runs, `ts4access-bridge` serves a small web app on the home
-network: live household status (needs, mood, moodlets, actions, clock,
-money), a feed of what happens (announced by VoiceOver), and controls (game
-speed, controlled Sim, cancel an action, Mac voice on/off). Nothing leaves
-the local network.
+While the game runs, `ts4access-bridge` serves a small web app: live
+household status, a feed announced by VoiceOver, the game's own interaction
+menus, a room-by-room house map, game questions answered from the phone, and
+quick actions for what needs attention. See the
+[phone guide](../docs/mac/PHONE-GUIDE.md). No server of ours is involved.
 
 1. Start the game. The bridge opens a Cloudflare quick tunnel by itself
    (bundled `cloudflared`, no account) so the phone works from any network;
@@ -71,6 +77,8 @@ the local network.
 4. To revoke the pairing token, delete
    `~/Library/Application Support/TS4AccessCompanion/config.json`.
    `ts4access-bridge --tunnel=false` keeps everything on the local network.
+   `mac/wifi-test.sh` checks whether the phone reaches the Mac directly over
+   Wi-Fi (works without the game).
 
 The first time, macOS may ask whether `ts4access-bridge` may accept incoming
 connections: allow it, or the phone cannot connect.

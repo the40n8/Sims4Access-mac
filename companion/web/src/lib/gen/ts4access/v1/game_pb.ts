@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/game.proto.
  */
 export const file_ts4access_v1_game: GenFile = /*@__PURE__*/
-  fileDesc("Chd0czRhY2Nlc3MvdjEvZ2FtZS5wcm90bxIMdHM0YWNjZXNzLnYxIkYKBUNsb2NrEgsKA2RheRgBIAEoCRIMCgR0aW1lGAIgASgJEiIKBXNwZWVkGAMgASgOMhMudHM0YWNjZXNzLnYxLlNwZWVkIkwKBE5lZWQSCwoDa2V5GAEgASgJEg8KB3BlcmNlbnQYAiABKAUSJgoFbGV2ZWwYAyABKA4yFy50czRhY2Nlc3MudjEuTmVlZExldmVsIjQKBE1vb2QSCwoDa2V5GAEgASgJEgwKBG5hbWUYAiABKAkSEQoJaW50ZW5zaXR5GAMgASgFInEKB01vb2RsZXQSDAoEbmFtZRgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIQCghtb29kX2tleRgDIAEoCRIOCgZ3ZWlnaHQYBCABKAUSFAoMbWludXRlc19sZWZ0GAUgASgFEgsKA2tleRgGIAEoCSJgCgZBY3Rpb24SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIoCgVzdGF0ZRgDIAEoDjIZLnRzNGFjY2Vzcy52MS5BY3Rpb25TdGF0ZRISCgpjYW5jZWxhYmxlGAQgASgIIrEDCgNTaW0SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDgoGYWN0aXZlGAQgASgIEgwKBGhlcmUYBSABKAgSIAoEbW9vZBgGIAEoCzISLnRzNGFjY2Vzcy52MS5Nb29kEiEKBW5lZWRzGAcgAygLMhIudHM0YWNjZXNzLnYxLk5lZWQSJwoIbW9vZGxldHMYCCADKAsyFS50czRhY2Nlc3MudjEuTW9vZGxldBIlCgdhY3Rpb25zGAkgAygLMhQudHM0YWNjZXNzLnYxLkFjdGlvbhIPCgdhd2F5X2F0GAogASgJEg4KBmNhcmVlchgLIAEoCRINCgV1bnRpbBgMIAEoCRISCgpuZXh0X3NoaWZ0GA0gASgJEhgKC3BlcmZvcm1hbmNlGA4gASgFSACIAQESMQoNcmVsYXRpb25zaGlwcxgPIAMoCzIaLnRzNGFjY2Vzcy52MS5SZWxhdGlvbnNoaXASIwoGc2tpbGxzGBAgAygLMhMudHM0YWNjZXNzLnYxLlNraWxsQg4KDF9wZXJmb3JtYW5jZSIzCglOYXJyYXRpb24SEQoJbWFjX3ZvaWNlGAEgASgIEhMKC3NpbV9hY3Rpb25zGAIgASgIIugBCglHYW1lU3RhdGUSCwoDc2VxGAEgASgEEg8KB2luX2dhbWUYAiABKAgSIgoFY2xvY2sYAyABKAsyEy50czRhY2Nlc3MudjEuQ2xvY2sSDQoFZnVuZHMYBCABKAMSFgoOaG91c2Vob2xkX25hbWUYBSABKAkSHwoEc2ltcxgGIAMoCzIRLnRzNGFjY2Vzcy52MS5TaW0SKgoJbmFycmF0aW9uGAcgASgLMhcudHM0YWNjZXNzLnYxLk5hcnJhdGlvbhIlCgdkaWFsb2dzGAggAygLMhQudHM0YWNjZXNzLnYxLkRpYWxvZyLfAQoGRGlhbG9nEgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEgwKBHRleHQYAyABKAkSKwoHY2hvaWNlcxgEIAMoCzIaLnRzNGFjY2Vzcy52MS5EaWFsb2dDaG9pY2USJQoEcm93cxgFIAMoCzIXLnRzNGFjY2Vzcy52MS5EaWFsb2dSb3cSFgoObWluX3NlbGVjdGFibGUYBiABKAUSFgoObWF4X3NlbGVjdGFibGUYByABKAUSEgoKdGV4dF9pbnB1dBgIIAEoCRIUCgx0ZXh0X2RlZmF1bHQYCSABKAkiOAoMRGlhbG9nQ2hvaWNlEgoKAmlkGAEgASgFEgwKBHRleHQYAiABKAkSDgoGcmVhc29uGAMgASgJIm0KCURpYWxvZ1JvdxIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg8KB2VuYWJsZWQYBCABKAgSDgoGcmVhc29uGAUgASgJEhAKCHNlbGVjdGVkGAYgASgIIoQBCgZUYXJnZXQSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIOCgZpc19zaW0YAyABKAgSDwoHaXNfc2VsZhgEIAEoCBINCgVncm91cBgFIAEoCRIQCghkaXN0YW5jZRgGIAEoBRIMCgRraW5kGAcgASgJEhAKCGtleXdvcmRzGAggASgJIloKC0ludGVyYWN0aW9uEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIY2F0ZWdvcnkYAyABKAkSDwoHZW5hYmxlZBgEIAEoCBIOCgZyZWFzb24YBSABKAkiigEKBUV2ZW50EgsKA3NlcRgBIAEoBBIKCgJhdBgCIAEoAxIlCgRraW5kGAMgASgOMhcudHM0YWNjZXNzLnYxLkV2ZW50S2luZBIOCgZzaW1faWQYBCABKAkSEAoIc2ltX25hbWUYBSABKAkSDwoHc3ViamVjdBgGIAEoCRIOCgZkZXRhaWwYByABKAkiPQoISG91c2VNYXASIQoFcm9vbXMYASADKAsyEi50czRhY2Nlc3MudjEuUm9vbRIOCgZmbG9vcnMYAiADKAUimwIKBFJvb20SCgoCaWQYASABKAkSDAoEa2luZBgCIAEoCRIOCgZudW1iZXIYAyABKAUSEwoLY3VzdG9tX25hbWUYBCABKAkSDQoFZmxvb3IYBSABKAUSDQoFd2lkdGgYBiABKAUSDQoFZGVwdGgYByABKAUSDAoEYXJlYRgIIAEoBRIMCgRwYXJ0GAkgASgJEgwKBGhlcmUYCiABKAgSEAoIZGlzdGFuY2UYCyABKAUSDwoHYmVhcmluZxgMIAEoCRIlCgVsaW5rcxgNIAMoCzIWLnRzNGFjY2Vzcy52MS5Sb29tTGluaxIlCgVpdGVtcxgOIAMoCzIWLnRzNGFjY2Vzcy52MS5Sb29tSXRlbRIMCgRzaW1zGA8gAygJIjcKCFJvb21MaW5rEg8KB3Jvb21faWQYASABKAkSDAoEZG9vchgCIAEoCBIMCgRzaWRlGAMgASgJIj4KCFJvb21JdGVtEiQKBnRhcmdldBgBIAEoCzIULnRzNGFjY2Vzcy52MS5UYXJnZXQSDAoEc2lkZRgCIAEoCSJhCgxSZWxhdGlvbnNoaXASDgoGc2ltX2lkGAEgASgJEgwKBG5hbWUYAiABKAkSEgoKZnJpZW5kc2hpcBgDIAEoBRIPCgdyb21hbmNlGAQgASgFEg4KBmxhYmVscxgFIAMoCSJECgVTa2lsbBILCgNrZXkYASABKAkSDAoEbmFtZRgCIAEoCRINCgVsZXZlbBgDIAEoBRIRCgltYXhfbGV2ZWwYBCABKAUqdAoFU3BlZWQSFQoRU1BFRURfVU5TUEVDSUZJRUQQABIQCgxTUEVFRF9QQVVTRUQQARIQCgxTUEVFRF9OT1JNQUwQAhIOCgpTUEVFRF9GQVNUEAMSDwoLU1BFRURfVUxUUkEQBBIPCgtTUEVFRF9TVVBFUhAFKn4KCU5lZWRMZXZlbBIaChZORUVEX0xFVkVMX1VOU1BFQ0lGSUVEEAASEwoPTkVFRF9MRVZFTF9HT09EEAESEwoPTkVFRF9MRVZFTF9PS0FZEAISEgoOTkVFRF9MRVZFTF9MT1cQAxIXChNORUVEX0xFVkVMX0NSSVRJQ0FMEAQqXgoLQWN0aW9uU3RhdGUSHAoYQUNUSU9OX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUQUNUSU9OX1NUQVRFX1JVTk5JTkcQARIXChNBQ1RJT05fU1RBVEVfUVVFVUVEEAIqlgMKCUV2ZW50S2luZBIaChZFVkVOVF9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRVZFTlRfS0lORF9NT09EEAESHAoYRVZFTlRfS0lORF9NT09ETEVUX0FEREVEEAISHgoaRVZFTlRfS0lORF9NT09ETEVUX1JFTU9WRUQQAxITCg9FVkVOVF9LSU5EX05FRUQQBBIdChlFVkVOVF9LSU5EX0FDVElPTl9TVEFSVEVEEAUSHAoYRVZFTlRfS0lORF9BQ1RJT05fUVVFVUVEEAYSGQoVRVZFTlRfS0lORF9BQ1RJVkVfU0lNEAcSFAoQRVZFTlRfS0lORF9TUEVFRBAIEhQKEEVWRU5UX0tJTkRfRlVORFMQCRIVChFFVkVOVF9LSU5EX1NQT0tFThAKEhsKF0VWRU5UX0tJTkRfQVdBWV9TVEFSVEVEEAsSGQoVRVZFTlRfS0lORF9BV0FZX0VOREVEEAwSGwoXRVZFTlRfS0lORF9OT1RJRklDQVRJT04QDRIVChFFVkVOVF9LSU5EX0RJQUxPRxAOYgZwcm90bzM");
+  fileDesc("Chd0czRhY2Nlc3MvdjEvZ2FtZS5wcm90bxIMdHM0YWNjZXNzLnYxIkYKBUNsb2NrEgsKA2RheRgBIAEoCRIMCgR0aW1lGAIgASgJEiIKBXNwZWVkGAMgASgOMhMudHM0YWNjZXNzLnYxLlNwZWVkIkwKBE5lZWQSCwoDa2V5GAEgASgJEg8KB3BlcmNlbnQYAiABKAUSJgoFbGV2ZWwYAyABKA4yFy50czRhY2Nlc3MudjEuTmVlZExldmVsIjQKBE1vb2QSCwoDa2V5GAEgASgJEgwKBG5hbWUYAiABKAkSEQoJaW50ZW5zaXR5GAMgASgFInEKB01vb2RsZXQSDAoEbmFtZRgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIQCghtb29kX2tleRgDIAEoCRIOCgZ3ZWlnaHQYBCABKAUSFAoMbWludXRlc19sZWZ0GAUgASgFEgsKA2tleRgGIAEoCSJgCgZBY3Rpb24SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIoCgVzdGF0ZRgDIAEoDjIZLnRzNGFjY2Vzcy52MS5BY3Rpb25TdGF0ZRISCgpjYW5jZWxhYmxlGAQgASgIIrEDCgNTaW0SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDgoGYWN0aXZlGAQgASgIEgwKBGhlcmUYBSABKAgSIAoEbW9vZBgGIAEoCzISLnRzNGFjY2Vzcy52MS5Nb29kEiEKBW5lZWRzGAcgAygLMhIudHM0YWNjZXNzLnYxLk5lZWQSJwoIbW9vZGxldHMYCCADKAsyFS50czRhY2Nlc3MudjEuTW9vZGxldBIlCgdhY3Rpb25zGAkgAygLMhQudHM0YWNjZXNzLnYxLkFjdGlvbhIPCgdhd2F5X2F0GAogASgJEg4KBmNhcmVlchgLIAEoCRINCgV1bnRpbBgMIAEoCRISCgpuZXh0X3NoaWZ0GA0gASgJEhgKC3BlcmZvcm1hbmNlGA4gASgFSACIAQESMQoNcmVsYXRpb25zaGlwcxgPIAMoCzIaLnRzNGFjY2Vzcy52MS5SZWxhdGlvbnNoaXASIwoGc2tpbGxzGBAgAygLMhMudHM0YWNjZXNzLnYxLlNraWxsQg4KDF9wZXJmb3JtYW5jZSIzCglOYXJy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dAoFU3BlZWQSFQoRU1BFRURfVU5TUEVDSUZJRUQQABIQCgxTUEVFRF9QQVVTRUQQARIQCgxTUEVFRF9OT1JNQUwQAhIOCgpTUEVFRF9GQVNUEAMSDwoLU1BFRURfVUxUUkEQBBIPCgtTUEVFRF9TVVBFUhAFKn4KCU5lZWRMZXZlbBIaChZORUVEX0xFVkVMX1VOU1BFQ0lGSUVEEAASEwoPTkVFRF9MRVZFTF9HT09EEAESEwoPTkVFRF9MRVZFTF9PS0FZEAISEgoOTkVFRF9MRVZFTF9MT1cQAxIXChNORUVEX0xFVkVMX0NSSVRJQ0FMEAQqXgoLQWN0aW9uU3RhdGUSHAoYQUNUSU9OX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUQUNUSU9OX1NUQVRFX1JVTk5JTkcQARIXChNBQ1RJT05fU1RBVEVfUVVFVUVEEAIqrgMKCUV2ZW50S2luZBIaChZFVkVOVF9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRVZFTlRfS0lORF9NT09EEAESHAoYRVZFTlRfS0lORF9NT09ETEVUX0FEREVEEAISHgoaRVZFTlRfS0lORF9NT09ETEVUX1JFTU9WRUQQAxITCg9FVkVOVF9LSU5EX05FRUQQBBIdChlFVkVOVF9LSU5EX0FDVElPTl9TVEFSVEVEEAUSHAoYRVZFTlRfS0lORF9BQ1RJT05fUVVFVUVEEAYSGQoVRVZFTlRfS0lORF9BQ1RJVkVfU0lNEAcSFAoQRVZFTlRfS0lORF9TUEVFRBAIEhQKEEVWRU5UX0tJTkRfRlVORFMQCRIVChFFVkVOVF9LSU5EX1NQT0tFThAKEhsKF0VWRU5UX0tJTkRfQVdBWV9TVEFSVEVEEAsSGQoVRVZFTlRfS0lORF9BV0FZX0VOREVEEAwSGwoXRVZFTlRfS0lORF9OT1RJRklDQVRJT04QDRIVChFFVkVOVF9LSU5EX0RJQUxPRxAOEhYKEkVWRU5UX0tJTkRfUFJPQkxFTRAPYgZwcm90bzM");
 
 /**
  * @generated from message ts4access.v1.Clock
@@ -358,6 +358,13 @@ export type GameState = Message<"ts4access.v1.GameState"> & {
    * @generated from field: repeated ts4access.v1.Dialog dialogs = 8;
    */
   dialogs: Dialog[];
+
+  /**
+   * Things on the lot to deal with, most urgent first.
+   *
+   * @generated from field: repeated ts4access.v1.Problem problems = 9;
+   */
+  problems: Problem[];
 };
 
 /**
@@ -366,6 +373,40 @@ export type GameState = Message<"ts4access.v1.GameState"> & {
  */
 export const GameStateSchema: GenMessage<GameState> = /*@__PURE__*/
   messageDesc(file_ts4access_v1_game, 7);
+
+/**
+ * @generated from message ts4access.v1.Problem
+ */
+export type Problem = Message<"ts4access.v1.Problem"> & {
+  /**
+   * FIRE, BROKEN, PUDDLE or SPOILED.
+   *
+   * @generated from field: string kind = 1;
+   */
+  kind: string;
+
+  /**
+   * @generated from field: string target_id = 2;
+   */
+  targetId: string;
+
+  /**
+   * @generated from field: string name = 3;
+   */
+  name: string;
+
+  /**
+   * @generated from field: int32 distance = 4;
+   */
+  distance: number;
+};
+
+/**
+ * Describes the message ts4access.v1.Problem.
+ * Use `create(ProblemSchema)` to create a new message.
+ */
+export const ProblemSchema: GenMessage<Problem> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 8);
 
 /**
  * A game window waiting for an answer: a question with buttons, a list to
@@ -429,7 +470,7 @@ export type Dialog = Message<"ts4access.v1.Dialog"> & {
  * Use `create(DialogSchema)` to create a new message.
  */
 export const DialogSchema: GenMessage<Dialog> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 8);
+  messageDesc(file_ts4access_v1_game, 9);
 
 /**
  * @generated from message ts4access.v1.DialogChoice
@@ -460,7 +501,7 @@ export type DialogChoice = Message<"ts4access.v1.DialogChoice"> & {
  * Use `create(DialogChoiceSchema)` to create a new message.
  */
 export const DialogChoiceSchema: GenMessage<DialogChoice> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 9);
+  messageDesc(file_ts4access_v1_game, 10);
 
 /**
  * @generated from message ts4access.v1.DialogRow
@@ -502,7 +543,7 @@ export type DialogRow = Message<"ts4access.v1.DialogRow"> & {
  * Use `create(DialogRowSchema)` to create a new message.
  */
 export const DialogRowSchema: GenMessage<DialogRow> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 10);
+  messageDesc(file_ts4access_v1_game, 11);
 
 /**
  * Something the controlled Sim can interact with.
@@ -566,7 +607,7 @@ export type Target = Message<"ts4access.v1.Target"> & {
  * Use `create(TargetSchema)` to create a new message.
  */
 export const TargetSchema: GenMessage<Target> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 11);
+  messageDesc(file_ts4access_v1_game, 12);
 
 /**
  * One row of the game's pie menu for a target.
@@ -609,7 +650,7 @@ export type Interaction = Message<"ts4access.v1.Interaction"> & {
  * Use `create(InteractionSchema)` to create a new message.
  */
 export const InteractionSchema: GenMessage<Interaction> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 12);
+  messageDesc(file_ts4access_v1_game, 13);
 
 /**
  * @generated from message ts4access.v1.Event
@@ -662,7 +703,7 @@ export type Event = Message<"ts4access.v1.Event"> & {
  * Use `create(EventSchema)` to create a new message.
  */
 export const EventSchema: GenMessage<Event> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 13);
+  messageDesc(file_ts4access_v1_game, 14);
 
 /**
  * The house, room by room, for a mental map of the lot.
@@ -688,7 +729,7 @@ export type HouseMap = Message<"ts4access.v1.HouseMap"> & {
  * Use `create(HouseMapSchema)` to create a new message.
  */
 export const HouseMapSchema: GenMessage<HouseMap> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 14);
+  messageDesc(file_ts4access_v1_game, 15);
 
 /**
  * @generated from message ts4access.v1.Room
@@ -792,7 +833,7 @@ export type Room = Message<"ts4access.v1.Room"> & {
  * Use `create(RoomSchema)` to create a new message.
  */
 export const RoomSchema: GenMessage<Room> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 15);
+  messageDesc(file_ts4access_v1_game, 16);
 
 /**
  * @generated from message ts4access.v1.RoomLink
@@ -825,7 +866,7 @@ export type RoomLink = Message<"ts4access.v1.RoomLink"> & {
  * Use `create(RoomLinkSchema)` to create a new message.
  */
 export const RoomLinkSchema: GenMessage<RoomLink> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 16);
+  messageDesc(file_ts4access_v1_game, 17);
 
 /**
  * @generated from message ts4access.v1.RoomItem
@@ -849,7 +890,7 @@ export type RoomItem = Message<"ts4access.v1.RoomItem"> & {
  * Use `create(RoomItemSchema)` to create a new message.
  */
 export const RoomItemSchema: GenMessage<RoomItem> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 17);
+  messageDesc(file_ts4access_v1_game, 18);
 
 /**
  * @generated from message ts4access.v1.Relationship
@@ -890,7 +931,7 @@ export type Relationship = Message<"ts4access.v1.Relationship"> & {
  * Use `create(RelationshipSchema)` to create a new message.
  */
 export const RelationshipSchema: GenMessage<Relationship> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 18);
+  messageDesc(file_ts4access_v1_game, 19);
 
 /**
  * @generated from message ts4access.v1.Skill
@@ -922,7 +963,7 @@ export type Skill = Message<"ts4access.v1.Skill"> & {
  * Use `create(SkillSchema)` to create a new message.
  */
 export const SkillSchema: GenMessage<Skill> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 19);
+  messageDesc(file_ts4access_v1_game, 20);
 
 /**
  * @generated from enum ts4access.v1.Speed
@@ -1117,6 +1158,13 @@ export enum EventKind {
    * @generated from enum value: EVENT_KIND_DIALOG = 14;
    */
   DIALOG = 14,
+
+  /**
+   * Something to deal with appeared: subject is the Problem kind, detail the object name.
+   *
+   * @generated from enum value: EVENT_KIND_PROBLEM = 15;
+   */
+  PROBLEM = 15,
 }
 
 /**

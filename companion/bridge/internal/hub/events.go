@@ -31,6 +31,7 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 	}
 
 	diffDialogs(old, cur, add)
+	diffProblems(old, cur, add)
 
 	before := map[string]*v1.Sim{}
 	for _, s := range old.GetSims() {
@@ -136,6 +137,19 @@ func diffDialogs(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string,
 	for _, d := range cur.GetDialogs() {
 		if w := words(d); w != "" && !known[d.GetId()] {
 			add(v1.EventKind_EVENT_KIND_DIALOG, nil, w, d.GetText())
+		}
+	}
+}
+
+// diffProblems announces each new thing to deal with (puddle, fire...).
+func diffProblems(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string, string)) {
+	seen := map[string]bool{}
+	for _, p := range old.GetProblems() {
+		seen[p.GetKind()+p.GetTargetId()] = true
+	}
+	for _, p := range cur.GetProblems() {
+		if !seen[p.GetKind()+p.GetTargetId()] {
+			add(v1.EventKind_EVENT_KIND_PROBLEM, nil, p.GetKind(), p.GetName())
 		}
 	}
 }

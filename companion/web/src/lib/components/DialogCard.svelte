@@ -46,6 +46,7 @@
 		c.id !== CANCEL && dialog.rows.length > 0 && picked.length < Math.max(1, dialog.minSelectable);
 
 	async function answer(c: DialogChoice) {
+		if (busy || blocked(c)) return;
 		busy = true;
 		const out = await run(() =>
 			client.respondDialog({
@@ -75,7 +76,7 @@
 						type={single ? 'radio' : 'checkbox'}
 						name={`dialog-${dialog.id}`}
 						checked={picked.includes(row.id)}
-						disabled={!row.enabled || busy}
+						disabled={!row.enabled}
 						onchange={(e) => toggle(row.id, e.currentTarget.checked)}
 					/>
 					<span>
@@ -96,13 +97,13 @@
 	{#if dialog.textInput}
 		<label class="stack">
 			<span>{m.dialog_answer()}</span>
-			<input type="text" bind:value={text} disabled={busy} autocomplete="off" />
+			<input type="text" bind:value={text} autocomplete="off" />
 		</label>
 	{/if}
 
 	<div class="buttons">
 		{#each dialog.choices as c (c.id)}
-			<button type="button" disabled={busy || blocked(c)} onclick={() => answer(c)}>
+			<button type="button" aria-disabled={busy || blocked(c)} onclick={() => answer(c)}>
 				{label(c)}{#if c.reason}<span class="muted"> · {c.reason}</span>{/if}
 			</button>
 		{/each}

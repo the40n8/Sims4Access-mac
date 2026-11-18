@@ -713,7 +713,101 @@ def build_state():
         'sims': [_sim(info, client) for info in household.sim_info_gen()],
         'narration': _narration(),
         'dialogs': _open_dialogs(),
+        'problems': _problems(),
     }
+
+
+# ---------------------------------------------------------------- things to deal with
+# Puddles, broken objects, spoiled food, fire on the lot: listed for the
+# phone's "Needs attention" card. Scanning every object takes a moment, so
+# it runs every few seconds and the state reuses the last answer.
+
+PROBLEM_INTERVAL = 4.0
+_problem_cache = {'at': 0.0, 'items': []}
+
+
+def _problems():
+    now = time.monotonic()
+    if now - _problem_cache['at'] < PROBLEM_INTERVAL:
+        return _problem_cache['items']
+    _problem_cache['at'] = now
+    try:
+        _problem_cache['items'] = _scan_problems()
+    except Exception as ex:
+        log('problems failed: {!r}'.format(ex))
+        _problem_cache['items'] = []
+    return _problem_cache['items']
+
+
+def _scan_problems():
+    import services
+    sim = services.get_active_sim()
+    try:
+        from objects.puddles.puddle import Puddle
+    except Exception:
+        Puddle = None
+    try:
+        from objects.fire.fire import Fire
+    except Exception:
+        Fire = None
+    try:
+        from objects.components.state import StateComponent
+        broken_states = tuple(StateComponent.BROKEN_STATE_SET or ())
+    except Exception:
+        broken_states = ()
+    try:
+        from crafting.crafting_tunable import CraftingTuning
+        spoiled = CraftingTuning.SPOILED_STATE_VALUE
+    except Exception:
+        spoiled = None
+
+    def has(obj, value):
+        try:
+            return value is not None and obj.has_state(value.state) and obj.get_state(value.state) is value
+        except Exception:
+            return False
+
+    out = []
+    for obj in services.object_manager().get_valid_objects_gen():
+        try:
+            if getattr(obj, 'is_sim', False) or obj.is_hidden():
+                continue
+            on_lot = getattr(obj, 'is_on_active_lot', None)
+            if on_lot is not None and not on_lot():
+                continue
+            in_inventory = getattr(obj, 'is_in_inventory', None)
+            if in_inventory is not None and in_inventory():
+                continue
+            kind = None
+            if Fire is not None and isinstance(obj, Fire):
+                kind = 'FIRE'
+            elif Puddle is not None and isinstance(obj, Puddle):
+                kind = 'PUDDLE'
+            elif has(obj, spoiled):
+                kind = 'SPOILED'
+            elif broken_states and any(_state_active(obj, v) for v in broken_states):
+                kind = 'BROKEN'
+            if kind is None:
+                continue
+            entry = {'kind': kind, 'targetId': str(obj.id), 'name': _object_name(obj)}
+            if sim is not None:
+                entry['distance'] = int(round(((obj.position.x - sim.position.x) ** 2 +
+                                               (obj.position.z - sim.position.z) ** 2) ** 0.5))
+            out.append(entry)
+        except Exception:
+            continue
+    order = {'FIRE': 0, 'BROKEN': 1, 'PUDDLE': 2, 'SPOILED': 3}
+    out.sort(key=lambda e: (order[e['kind']], e.get('distance', 0)))
+    # Fire burns in several pieces: one line is enough.
+    fires = [e for e in out if e['kind'] == 'FIRE']
+    return fires[:1] + [e for e in out if e['kind'] != 'FIRE'][:12]
+
+
+def _state_active(obj, value):
+    try:
+        return bool(obj.state_value_active(value))
+    except Exception:
+        return False
 
 
 def _open_dialogs():

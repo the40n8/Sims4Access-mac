@@ -5,12 +5,14 @@
 	import { Speed } from '$lib/gen/ts4access/v1/game_pb.js';
 	import Feed from './Feed.svelte';
 	import VoiceToggle from './VoiceToggle.svelte';
+	import AttentionCard from './AttentionCard.svelte';
 
 	let { onSeeAll }: { onSeeAll: () => void } = $props();
 	const game = $derived(live.state);
 </script>
 
 {#if game?.inGame}
+	<AttentionCard />
 	<section class="card"><VoiceToggle /></section>
 	<section class="card stack" aria-labelledby="household">
 		<h2 id="household">{m.household_title({ name: game.householdName })}</h2>

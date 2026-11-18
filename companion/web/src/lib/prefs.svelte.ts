@@ -33,13 +33,15 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 	}
 }
 
-type Stored = { announce: Record<Group, boolean>; showSpoken: boolean };
+type Stored = { announce: Record<Group, boolean>; showSpoken: boolean; autoPause: boolean };
 
 const KEY = 'ts4access.prefs';
 const DEFAULTS: Stored = {
 	// Actions start often; off by default so announcements stay meaningful.
 	announce: { messages: true, mood: true, moodlet: true, need: true, action: false, game: true },
-	showSpoken: false
+	showSpoken: false,
+	// Pause while choosing an action, resume once it is queued (off: a choice).
+	autoPause: false
 };
 
 function load(): Stored {
@@ -49,7 +51,8 @@ function load(): Stored {
 			const saved = JSON.parse(raw) as Partial<Stored>;
 			return {
 				announce: { ...DEFAULTS.announce, ...saved.announce },
-				showSpoken: saved.showSpoken ?? DEFAULTS.showSpoken
+				showSpoken: saved.showSpoken ?? DEFAULTS.showSpoken,
+				autoPause: saved.autoPause ?? DEFAULTS.autoPause
 			};
 		}
 	} catch {

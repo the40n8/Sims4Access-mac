@@ -13,16 +13,19 @@
 	import PlayView from '$lib/components/PlayView.svelte';
 	import HouseView from '$lib/components/HouseView.svelte';
 	import SettingsView from '$lib/components/SettingsView.svelte';
+	import HelpView from '$lib/components/HelpView.svelte';
+	import SpeedToggle from '$lib/components/SpeedToggle.svelte';
 	import Feed from '$lib/components/Feed.svelte';
 
-	type Tab = 'live' | 'play' | 'house' | 'sims' | 'history' | 'settings';
+	type Tab = 'live' | 'play' | 'house' | 'sims' | 'history' | 'settings' | 'help';
 	const TABS: { id: Tab; label: () => string }[] = [
 		{ id: 'live', label: m.tab_live },
 		{ id: 'play', label: m.tab_play },
 		{ id: 'house', label: m.tab_house },
 		{ id: 'sims', label: m.tab_sims },
 		{ id: 'history', label: m.tab_history },
-		{ id: 'settings', label: m.tab_settings }
+		{ id: 'settings', label: m.tab_settings },
+		{ id: 'help', label: m.tab_help }
 	];
 	const TAB_KEY = 'ts4access.tab';
 
@@ -77,14 +80,18 @@
 		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
 	</main>
 {:else}
-	<!-- First in reading order so VoiceOver reaches the tabs at once; drawn at the bottom. -->
-	<nav aria-label={m.nav_label()}>
-		{#each TABS as t (t.id)}
-			<button type="button" aria-current={tab === t.id ? 'page' : undefined} onclick={() => show(t.id)}>
-				{t.label()}
-			</button>
-		{/each}
-	</nav>
+	<!-- First in reading order and on screen: pause, then the tabs. At the top so
+	     they are never confused with Safari's address bar at the bottom. -->
+	<header class="top stack">
+		<SpeedToggle />
+		<nav aria-label={m.nav_label()}>
+			{#each TABS as t (t.id)}
+				<button type="button" aria-current={tab === t.id ? 'page' : undefined} onclick={() => show(t.id)}>
+					{t.label()}
+				</button>
+			{/each}
+		</nav>
+	</header>
 
 	<main class="page stack" aria-labelledby="title">
 		<h1 id="title" tabindex="-1" bind:this={heading}>{title}</h1>
@@ -102,30 +109,36 @@
 			<SimsView />
 		{:else if tab === 'history'}
 			<Feed />
-		{:else}
+		{:else if tab === 'settings'}
 			<SettingsView />
+		{:else}
+			<HelpView />
 		{/if}
 	</main>
 {/if}
 
 <style>
+	.top {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		gap: 0.5rem;
+		padding: calc(env(safe-area-inset-top) + 0.5rem) var(--gap) 0.5rem;
+		background: var(--surface);
+		border-bottom: 1px solid var(--line);
+	}
 	.page {
 		max-width: 40rem;
 		margin: 0 auto;
-		padding: calc(env(safe-area-inset-top) + 1rem) var(--gap) calc(env(safe-area-inset-bottom) + 6rem);
+		padding: 1rem var(--gap) calc(env(safe-area-inset-bottom) + 2rem);
 	}
 	h1:focus {
 		outline: none;
 	}
 	nav {
-		position: fixed;
-		inset: auto 0 0 0;
 		display: grid;
-		grid-template-columns: repeat(6, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 0.25rem;
-		padding: 0.5rem 0.5rem calc(env(safe-area-inset-bottom) + 0.5rem);
-		background: var(--surface);
-		border-top: 1px solid var(--line);
 	}
 	nav button {
 		border: none;

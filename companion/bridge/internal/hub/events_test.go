@@ -121,3 +121,15 @@ func TestDiffDialogs(t *testing.T) {
 		t.Fatalf("same window again, want no event, got %v", ev)
 	}
 }
+
+func TestDiffProblems(t *testing.T) {
+	st := func(ps ...*v1.Problem) *v1.GameState { return &v1.GameState{InGame: true, Problems: ps} }
+	puddle := &v1.Problem{Kind: "PUDDLE", TargetId: "5", Name: "Puddle"}
+	ev := Diff(st(), st(puddle))
+	if len(ev) != 1 || ev[0].GetKind() != v1.EventKind_EVENT_KIND_PROBLEM || ev[0].GetSubject() != "PUDDLE" {
+		t.Fatalf("want one problem event, got %v", ev)
+	}
+	if ev := Diff(st(puddle), st(puddle)); len(ev) != 0 {
+		t.Fatalf("same puddle, want nothing, got %v", ev)
+	}
+}

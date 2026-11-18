@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onDestroy, tick } from 'svelte';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { reasonText } from '$lib/text.js';
 	import type { Interaction, Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { menuDone, menuOpened } from '$lib/speed.svelte.js';
 	import { announce } from './Announcer.svelte';
 
 	// The game's pie menu for one Sim or object.
@@ -16,6 +17,10 @@
 	$effect(() => {
 		void load(target.id);
 	});
+
+	// Optional: pause while choosing, resume once done (Settings).
+	void menuOpened().then((paused) => paused && announce(m.paused_to_choose()));
+	onDestroy(() => void menuDone());
 
 	async function load(targetId: string) {
 		menu = null;
@@ -53,6 +58,7 @@
 	});
 
 	async function choose(i: Interaction) {
+		if (busy) return;
 		if (!i.enabled) {
 			announce(
 				i.reason ? m.unavailable_because({ name: i.name, reason: i.reason }) : m.unavailable({ name: i.name })
@@ -63,6 +69,7 @@
 		const out = await run(() => client.runInteraction({ targetId: target.id, interactionId: i.id }));
 		busy = false;
 		announce(out.ok ? m.queued({ name: i.name }) : m.failed({ reason: reasonText(out.reason) }));
+		if (out.ok && (await menuDone())) announce(m.resumed());
 	}
 </script>
 
@@ -81,13 +88,7 @@
 			<ul class="stack">
 				{#each g.items as i (i.id)}
 					<li>
-						<button
-							type="button"
-							class="row"
-							aria-disabled={!i.enabled}
-							disabled={busy}
-							onclick={() => choose(i)}
-						>
+						<button type="button" class="row" aria-disabled={!i.enabled} onclick={() => choose(i)}>
 							{#if i.enabled}
 								{i.name}
 							{:else if i.reason}

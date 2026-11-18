@@ -92,7 +92,8 @@ button[aria-pressed='true'] {
 	border-color: var(--accent);
 	font-weight: 700;
 }
-button:disabled {
+button:disabled,
+button[aria-disabled='true'] {
 	opacity: 0.55;
 	cursor: default;
 }

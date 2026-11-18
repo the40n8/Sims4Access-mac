@@ -32,6 +32,8 @@ func Run(ctx context.Context, h *hub.Hub) {
 		HouseholdName: "Goth",
 		Clock:         &v1.Clock{Speed: v1.Speed_SPEED_NORMAL},
 		Narration:     &v1.Narration{MacVoice: true, SimActions: true},
+		Problems: []*v1.Problem{{Kind: "BROKEN", TargetId: "o3", Name: "Shower", Distance: 8},
+			{Kind: "PUDDLE", TargetId: "o10", Name: "Puddle", Distance: 7}},
 		Sims: []*v1.Sim{
 			g.sim("1001", "Bella", "Goth", true),
 			g.sim("1002", "Mortimer", "Goth", false),
@@ -175,10 +177,12 @@ var demoMenus = map[string][]*v1.Interaction{
 	"sim":  {{Id: "1", Name: "Chat", Category: "Friendly", Enabled: true}, {Id: "2", Name: "Tell Joke", Category: "Funny", Enabled: true}, {Id: "3", Name: "Ask to Be Boyfriend", Category: "Romance", Reason: "Relationship too low"}},
 	"o1":   {{Id: "1", Name: "Quick Meal", Category: "Grab", Enabled: true}, {Id: "2", Name: "Cook", Enabled: true}},
 	"o2":   {{Id: "1", Name: "Sit", Enabled: true}, {Id: "2", Name: "Nap", Enabled: true}},
-	"o3":   {{Id: "1", Name: "Take Shower", Enabled: true}},
+	"o3":   {{Id: "1", Name: "Take Shower", Reason: "Broken", Enabled: false}, {Id: "2", Name: "Repair", Enabled: true}},
+	"o10":  {{Id: "1", Name: "Mop Up", Enabled: true}},
 	"o4":   {{Id: "1", Name: "Play Games", Enabled: true}, {Id: "2", Name: "Browse Web", Enabled: true}},
 	"phone": {{Id: "1", Name: "Call to Chat...", Category: "Social", Enabled: true}, {Id: "2", Name: "Invite Over...", Category: "Social", Enabled: true},
-		{Id: "3", Name: "Order Pizza", Category: "Household", Enabled: true}, {Id: "4", Name: "Travel", Category: "Travel", Enabled: true}},
+		{Id: "3", Name: "Order Pizza", Category: "Household", Enabled: true},
+		{Id: "5", Name: "Hire a Maid", Category: "Household", Enabled: true}, {Id: "6", Name: "Hire a Repair Technician", Category: "Household", Enabled: true}, {Id: "4", Name: "Travel", Category: "Travel", Enabled: true}},
 }
 
 func item(t *v1.Target, side string) *v1.RoomItem { return &v1.RoomItem{Target: t, Side: side} }
@@ -244,11 +248,14 @@ func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 			})
 			return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
 		}
-		for _, s := range g.state.Sims {
-			if s.Active {
-				g.addAction(s, "Interaction "+ri.GetInteractionId())
+		// Fixing a problem clears it.
+		for i, p := range g.state.Problems {
+			if p.GetTargetId() == ri.GetTargetId() {
+				g.state.Problems = append(g.state.Problems[:i], g.state.Problems[i+1:]...)
+				break
 			}
 		}
+		g.addAction(g.active(), "Interaction "+ri.GetTargetId()+"/"+ri.GetInteractionId())
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
 	case *v1.ToGame_RespondDialog:
 		rd := cmd.RespondDialog
