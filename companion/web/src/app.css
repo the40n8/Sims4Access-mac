@@ -142,3 +142,23 @@ li {
 html {
 	scroll-padding-top: 10rem;
 }
+
+/* iPhone zooms the whole page into any field with text under 16 px. */
+input,
+select,
+textarea {
+	font-size: max(16px, 1em);
+}
+input[type='url'],
+input[type='text'],
+input[type='search'] {
+	font-family: inherit;
+	width: 100%;
+	min-height: var(--tap);
+	border-radius: var(--r);
+	border: 2px solid var(--line);
+	background: var(--surface-2);
+	color: var(--text);
+	padding: 0 0.75rem;
+	box-sizing: border-box;
+}
