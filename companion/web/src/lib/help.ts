@@ -66,7 +66,7 @@ const en: HelpSection[] = [
 		id: 'settings',
 		title: 'Settings',
 		body: [
-			'Language of the app (game names stay in the game’s language). What VoiceOver announces by itself. "Pause while I choose an action": the game pauses while a menu is open and resumes once the action is queued. The Mac voice switches, and what the Mac voice announces by itself (for playing without the phone). Conversations: how much of the Sims' social life to follow. Unpair this phone.'
+			'Language of the app (game names stay in the game’s language). What VoiceOver announces by itself. "Pause while I choose an action": the game pauses while a menu is open and resumes once the action is queued. The Mac voice switches, and what the Mac voice announces by itself (for playing without the phone). Conversations: how much of the Sims’ social life to follow. Unpair this phone.'
 		]
 	},
 	{
