@@ -4,12 +4,13 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
-	import { ActionState, Speed, type Action, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { Speed, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
 	import { CameraMode, type CommandOutcome } from '$lib/gen/ts4access/v1/companion_pb.js';
 	import { groupLabel, rank, targetLabel } from '$lib/targets.js';
 	import { matchesWords } from '$lib/search.js';
 	import { announce } from './Announcer.svelte';
 	import InteractionMenu from './InteractionMenu.svelte';
+	import ActionQueue from './ActionQueue.svelte';
 	import { setSpeed } from '$lib/speed.svelte.js';
 
 	const game = $derived(live.state);
@@ -23,7 +24,6 @@
 	];
 
 	let busy = $state(false);
-	let showAllActions = $state(false);
 	let targets = $state<Target[] | null>(null);
 	let query = $state('');
 	let selected = $state<Target | null>(null);
@@ -40,8 +40,6 @@
 	const changeSpeed = (speed: Speed) => act(() => setSpeed(speed));
 	const selectSim = (simId: string) => act(() => run(() => client.selectSim({ simId })));
 	const camera = (mode: CameraMode) => me && act(() => run(() => client.setCamera({ simId: me.id, mode })));
-	const cancelAction = (action: Action) =>
-		me && act(() => run(() => client.cancelAction({ simId: me.id, actionId: action.id })));
 
 	async function loadTargets() {
 		targets = null;
@@ -168,49 +166,7 @@
 			</section>
 		{/if}
 
-		{#if me}
-			<section class="card stack" aria-labelledby="queue">
-				<h2 id="queue">{m.queue_title({ name: simName(me) })}</h2>
-				{#if me.actions.length === 0}
-					<p class="muted">{m.actions_none()}</p>
-				{:else}
-					<!-- The running action and the next few; the rest on demand, so the
-					     screen below stays one swipe away. -->
-					<ul class="stack" id="queue-list">
-						{#each showAllActions ? me.actions : me.actions.slice(0, 4) as action, n (action.id)}
-							<li class="queued">
-								<span id={`action-${action.id}`}>
-									{n + 1}. {action.name}
-									<span class="muted">
-										· {action.state === ActionState.RUNNING ? m.action_running() : m.action_queued()}
-									</span>
-								</span>
-								{#if action.cancelable}
-									<button
-										type="button"
-										aria-describedby={`action-${action.id}`}
-										aria-disabled={busy}
-										onclick={() => cancelAction(action)}
-									>
-										{m.cancel_action({ action: action.name })}
-									</button>
-								{/if}
-							</li>
-						{/each}
-					</ul>
-					{#if me.actions.length > 4}
-						<button
-							type="button"
-							aria-expanded={showAllActions}
-							aria-controls="queue-list"
-							onclick={() => (showAllActions = !showAllActions)}
-						>
-							{showAllActions ? m.show_fewer() : m.show_all_actions({ count: me.actions.length })}
-						</button>
-					{/if}
-				{/if}
-			</section>
-		{/if}
+		{#if me}<ActionQueue sim={me} />{/if}
 
 		{#if self || phone}
 			<section class="card stack" aria-labelledby="you">
@@ -318,10 +274,6 @@
 {/if}
 
 <style>
-	.queued {
-		display: grid;
-		gap: 0.4rem;
-	}
 	.pair {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

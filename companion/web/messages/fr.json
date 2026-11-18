@@ -339,5 +339,6 @@
 	"rf_slope": "l’endroit est en pente",
 	"rf_headroom": "pas assez de hauteur",
 	"rf_blocked": "le passage est bloqué",
-	"rf_no_path": "aucun chemin pour y aller, vérifiez les portes et escaliers"
+	"rf_no_path": "aucun chemin pour y aller, vérifiez les portes et escaliers",
+	"dialog_tap_one": "Touche un choix pour répondre."
 }

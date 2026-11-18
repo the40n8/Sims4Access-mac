@@ -6,6 +6,7 @@
 	import Feed from './Feed.svelte';
 	import VoiceToggle from './VoiceToggle.svelte';
 	import AttentionCard from './AttentionCard.svelte';
+	import ActionQueue from './ActionQueue.svelte';
 
 	let { onSeeAll }: { onSeeAll: () => void } = $props();
 	const game = $derived(live.state);
@@ -13,6 +14,7 @@
 
 {#if game?.inGame}
 	<AttentionCard />
+	{#if game.sims.find((x) => x.active)}<ActionQueue sim={game.sims.find((x) => x.active)!} />{/if}
 	<section class="card"><VoiceToggle /></section>
 	<section class="card stack" aria-labelledby="household">
 		<h2 id="household">{m.household_title({ name: game.householdName })}</h2>

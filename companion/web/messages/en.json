@@ -339,5 +339,6 @@
 	"rf_slope": "the spot is on a slope",
 	"rf_headroom": "not enough room overhead",
 	"rf_blocked": "the way is blocked",
-	"rf_no_path": "no way to get there, check doors and stairs"
+	"rf_no_path": "no way to get there, check doors and stairs",
+	"dialog_tap_one": "Tap a choice to answer."
 }

@@ -339,5 +339,6 @@
 	"rf_slope": "el sitio está en pendiente",
 	"rf_headroom": "no hay suficiente altura",
 	"rf_blocked": "el paso está bloqueado",
-	"rf_no_path": "no hay camino, revisa puertas y escaleras"
+	"rf_no_path": "no hay camino, revisa puertas y escaleras",
+	"dialog_tap_one": "Toca una opción para responder."
 }
