@@ -118,6 +118,9 @@ From top to bottom:
   (actions can be cancelled), skills (level of 10), relationships (friendship
   and romance from -100 to 100, with labels like "Good Friends", "Spouse").
 - Sims at work or school say where they are and until when.
+- **Goals**: the aspiration and its current milestone with each step (done
+  or to do), wants and fears, today's work tasks, and what the next
+  promotion needs.
 
 ### History
 - Every event, newest first.

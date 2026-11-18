@@ -91,6 +91,48 @@
 			{/if}
 		{/if}
 
+		{#if sim.goals && (sim.goals.aspiration || sim.goals.wants.length || sim.goals.workTasks.length || sim.goals.promotionSteps.length)}
+			{@const g = sim.goals}
+			<details>
+				<summary>{m.goals_title()}</summary>
+				<div class="stack">
+					{#if g.aspiration}
+						<p>{m.goal_aspiration({ name: g.aspiration })}</p>
+						{#if g.milestone}<p>{m.goal_milestone({ name: g.milestone })}</p>{/if}
+						{#if g.milestoneSteps.length}
+							<ul class="stack">
+								{#each g.milestoneSteps as step, i (i)}
+									<li>{step.done ? m.step_done({ name: step.name }) : m.step_todo({ name: step.name })}</li>
+								{/each}
+							</ul>
+						{/if}
+					{/if}
+					{#if g.wants.length}
+						<h4>{m.wants_title()}</h4>
+						<ul class="stack">
+							{#each g.wants as w, i (i)}
+								<li>{w.fear ? m.fear_line({ name: w.name }) : m.want_line({ name: w.name })}</li>
+							{/each}
+						</ul>
+					{/if}
+					{#if g.workTasks.length}
+						<h4>{m.work_tasks_title()}</h4>
+						<ul class="stack">
+							{#each g.workTasks as t, i (i)}<li>{t.name}</li>{/each}
+						</ul>
+					{/if}
+					{#if g.promotionSteps.length}
+						<h4>{m.promotion_title()}</h4>
+						<ul class="stack">
+							{#each g.promotionSteps as step, i (i)}
+								<li>{step.done ? m.step_done({ name: step.name }) : m.step_todo({ name: step.name })}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+			</details>
+		{/if}
+
 		<details>
 			<summary>{m.skills_title()}</summary>
 			{#if sim.skills.length === 0}

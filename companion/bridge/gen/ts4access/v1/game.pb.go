@@ -662,6 +662,7 @@ type Sim struct {
 	Skills        []*Skill        `protobuf:"bytes,16,rep,name=skills,proto3" json:"skills,omitempty"`
 	// The room the Sim is in, when on the home lot.
 	Room          *RoomRef `protobuf:"bytes,17,opt,name=room,proto3" json:"room,omitempty"`
+	Goals         *Goals   `protobuf:"bytes,18,opt,name=goals,proto3" json:"goals,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -811,6 +812,13 @@ func (x *Sim) GetSkills() []*Skill {
 func (x *Sim) GetRoom() *RoomRef {
 	if x != nil {
 		return x.Room
+	}
+	return nil
+}
+
+func (x *Sim) GetGoals() *Goals {
+	if x != nil {
+		return x.Goals
 	}
 	return nil
 }
@@ -2471,6 +2479,198 @@ func (x *Skill) GetMaxLevel() int32 {
 	return 0
 }
 
+// What a Sim is working towards.
+type Goals struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Aspiration name, its current milestone and that milestone's steps.
+	Aspiration     string       `protobuf:"bytes,1,opt,name=aspiration,proto3" json:"aspiration,omitempty"`
+	Milestone      string       `protobuf:"bytes,2,opt,name=milestone,proto3" json:"milestone,omitempty"`
+	MilestoneSteps []*Objective `protobuf:"bytes,3,rep,name=milestone_steps,json=milestoneSteps,proto3" json:"milestone_steps,omitempty"`
+	// Wants and fears shown in the game's wants panel.
+	Wants []*Want `protobuf:"bytes,4,rep,name=wants,proto3" json:"wants,omitempty"`
+	// Today's work tasks and what the next promotion needs.
+	WorkTasks      []*Objective `protobuf:"bytes,5,rep,name=work_tasks,json=workTasks,proto3" json:"work_tasks,omitempty"`
+	PromotionSteps []*Objective `protobuf:"bytes,6,rep,name=promotion_steps,json=promotionSteps,proto3" json:"promotion_steps,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *Goals) Reset() {
+	*x = Goals{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Goals) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Goals) ProtoMessage() {}
+
+func (x *Goals) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Goals.ProtoReflect.Descriptor instead.
+func (*Goals) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *Goals) GetAspiration() string {
+	if x != nil {
+		return x.Aspiration
+	}
+	return ""
+}
+
+func (x *Goals) GetMilestone() string {
+	if x != nil {
+		return x.Milestone
+	}
+	return ""
+}
+
+func (x *Goals) GetMilestoneSteps() []*Objective {
+	if x != nil {
+		return x.MilestoneSteps
+	}
+	return nil
+}
+
+func (x *Goals) GetWants() []*Want {
+	if x != nil {
+		return x.Wants
+	}
+	return nil
+}
+
+func (x *Goals) GetWorkTasks() []*Objective {
+	if x != nil {
+		return x.WorkTasks
+	}
+	return nil
+}
+
+func (x *Goals) GetPromotionSteps() []*Objective {
+	if x != nil {
+		return x.PromotionSteps
+	}
+	return nil
+}
+
+type Objective struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Done          bool                   `protobuf:"varint,2,opt,name=done,proto3" json:"done,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Objective) Reset() {
+	*x = Objective{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Objective) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Objective) ProtoMessage() {}
+
+func (x *Objective) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Objective.ProtoReflect.Descriptor instead.
+func (*Objective) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *Objective) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Objective) GetDone() bool {
+	if x != nil {
+		return x.Done
+	}
+	return false
+}
+
+type Want struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Fear          bool                   `protobuf:"varint,2,opt,name=fear,proto3" json:"fear,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Want) Reset() {
+	*x = Want{}
+	mi := &file_ts4access_v1_game_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Want) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Want) ProtoMessage() {}
+
+func (x *Want) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_game_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Want.ProtoReflect.Descriptor instead.
+func (*Want) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_game_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *Want) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Want) GetFear() bool {
+	if x != nil {
+		return x.Fear
+	}
+	return false
+}
+
 var File_ts4access_v1_game_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_game_proto_rawDesc = "" +
@@ -2501,7 +2701,7 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x05state\x18\x03 \x01(\x0e2\x19.ts4access.v1.ActionStateR\x05state\x12\x1e\n" +
 	"\n" +
 	"cancelable\x18\x04 \x01(\bR\n" +
-	"cancelable\"\xe9\x04\n" +
+	"cancelable\"\x94\x05\n" +
 	"\x03Sim\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -2522,7 +2722,8 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\vperformance\x18\x0e \x01(\x05H\x00R\vperformance\x88\x01\x01\x12@\n" +
 	"\rrelationships\x18\x0f \x03(\v2\x1a.ts4access.v1.RelationshipR\rrelationships\x12+\n" +
 	"\x06skills\x18\x10 \x03(\v2\x13.ts4access.v1.SkillR\x06skills\x12)\n" +
-	"\x04room\x18\x11 \x01(\v2\x15.ts4access.v1.RoomRefR\x04roomB\x0e\n" +
+	"\x04room\x18\x11 \x01(\v2\x15.ts4access.v1.RoomRefR\x04room\x12)\n" +
+	"\x05goals\x18\x12 \x01(\v2\x13.ts4access.v1.GoalsR\x05goalsB\x0e\n" +
 	"\f_performance\"I\n" +
 	"\tNarration\x12\x1b\n" +
 	"\tmac_voice\x18\x01 \x01(\bR\bmacVoice\x12\x1f\n" +
@@ -2662,7 +2863,23 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05level\x18\x03 \x01(\x05R\x05level\x12\x1b\n" +
-	"\tmax_level\x18\x04 \x01(\x05R\bmaxLevel*t\n" +
+	"\tmax_level\x18\x04 \x01(\x05R\bmaxLevel\"\xab\x02\n" +
+	"\x05Goals\x12\x1e\n" +
+	"\n" +
+	"aspiration\x18\x01 \x01(\tR\n" +
+	"aspiration\x12\x1c\n" +
+	"\tmilestone\x18\x02 \x01(\tR\tmilestone\x12@\n" +
+	"\x0fmilestone_steps\x18\x03 \x03(\v2\x17.ts4access.v1.ObjectiveR\x0emilestoneSteps\x12(\n" +
+	"\x05wants\x18\x04 \x03(\v2\x12.ts4access.v1.WantR\x05wants\x126\n" +
+	"\n" +
+	"work_tasks\x18\x05 \x03(\v2\x17.ts4access.v1.ObjectiveR\tworkTasks\x12@\n" +
+	"\x0fpromotion_steps\x18\x06 \x03(\v2\x17.ts4access.v1.ObjectiveR\x0epromotionSteps\"3\n" +
+	"\tObjective\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
+	"\x04done\x18\x02 \x01(\bR\x04done\".\n" +
+	"\x04Want\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
+	"\x04fear\x18\x02 \x01(\bR\x04fear*t\n" +
 	"\x05Speed\x12\x15\n" +
 	"\x11SPEED_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fSPEED_PAUSED\x10\x01\x12\x10\n" +
@@ -2718,7 +2935,7 @@ func file_ts4access_v1_game_proto_rawDescGZIP() []byte {
 }
 
 var file_ts4access_v1_game_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_ts4access_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_ts4access_v1_game_proto_goTypes = []any{
 	(Speed)(0),           // 0: ts4access.v1.Speed
 	(NeedLevel)(0),       // 1: ts4access.v1.NeedLevel
@@ -2750,6 +2967,9 @@ var file_ts4access_v1_game_proto_goTypes = []any{
 	(*RoomItem)(nil),     // 27: ts4access.v1.RoomItem
 	(*Relationship)(nil), // 28: ts4access.v1.Relationship
 	(*Skill)(nil),        // 29: ts4access.v1.Skill
+	(*Goals)(nil),        // 30: ts4access.v1.Goals
+	(*Objective)(nil),    // 31: ts4access.v1.Objective
+	(*Want)(nil),         // 32: ts4access.v1.Want
 }
 var file_ts4access_v1_game_proto_depIdxs = []int32{
 	0,  // 0: ts4access.v1.Clock.speed:type_name -> ts4access.v1.Speed
@@ -2762,28 +2982,33 @@ var file_ts4access_v1_game_proto_depIdxs = []int32{
 	28, // 7: ts4access.v1.Sim.relationships:type_name -> ts4access.v1.Relationship
 	29, // 8: ts4access.v1.Sim.skills:type_name -> ts4access.v1.Skill
 	14, // 9: ts4access.v1.Sim.room:type_name -> ts4access.v1.RoomRef
-	4,  // 10: ts4access.v1.GameState.clock:type_name -> ts4access.v1.Clock
-	9,  // 11: ts4access.v1.GameState.sims:type_name -> ts4access.v1.Sim
-	10, // 12: ts4access.v1.GameState.narration:type_name -> ts4access.v1.Narration
-	16, // 13: ts4access.v1.GameState.dialogs:type_name -> ts4access.v1.Dialog
-	15, // 14: ts4access.v1.GameState.problems:type_name -> ts4access.v1.Problem
-	13, // 15: ts4access.v1.GameState.visitors:type_name -> ts4access.v1.Visitor
-	12, // 16: ts4access.v1.GameState.mac_announce:type_name -> ts4access.v1.MacAnnounce
-	14, // 17: ts4access.v1.Visitor.room:type_name -> ts4access.v1.RoomRef
-	17, // 18: ts4access.v1.Dialog.choices:type_name -> ts4access.v1.DialogChoice
-	18, // 19: ts4access.v1.Dialog.rows:type_name -> ts4access.v1.DialogRow
-	3,  // 20: ts4access.v1.Event.kind:type_name -> ts4access.v1.EventKind
-	24, // 21: ts4access.v1.HouseMap.rooms:type_name -> ts4access.v1.Room
-	23, // 22: ts4access.v1.HouseMap.stairs:type_name -> ts4access.v1.Stairs
-	26, // 23: ts4access.v1.Room.links:type_name -> ts4access.v1.RoomLink
-	27, // 24: ts4access.v1.Room.items:type_name -> ts4access.v1.RoomItem
-	25, // 25: ts4access.v1.Room.areas:type_name -> ts4access.v1.RoomArea
-	19, // 26: ts4access.v1.RoomItem.target:type_name -> ts4access.v1.Target
-	27, // [27:27] is the sub-list for method output_type
-	27, // [27:27] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	30, // 10: ts4access.v1.Sim.goals:type_name -> ts4access.v1.Goals
+	4,  // 11: ts4access.v1.GameState.clock:type_name -> ts4access.v1.Clock
+	9,  // 12: ts4access.v1.GameState.sims:type_name -> ts4access.v1.Sim
+	10, // 13: ts4access.v1.GameState.narration:type_name -> ts4access.v1.Narration
+	16, // 14: ts4access.v1.GameState.dialogs:type_name -> ts4access.v1.Dialog
+	15, // 15: ts4access.v1.GameState.problems:type_name -> ts4access.v1.Problem
+	13, // 16: ts4access.v1.GameState.visitors:type_name -> ts4access.v1.Visitor
+	12, // 17: ts4access.v1.GameState.mac_announce:type_name -> ts4access.v1.MacAnnounce
+	14, // 18: ts4access.v1.Visitor.room:type_name -> ts4access.v1.RoomRef
+	17, // 19: ts4access.v1.Dialog.choices:type_name -> ts4access.v1.DialogChoice
+	18, // 20: ts4access.v1.Dialog.rows:type_name -> ts4access.v1.DialogRow
+	3,  // 21: ts4access.v1.Event.kind:type_name -> ts4access.v1.EventKind
+	24, // 22: ts4access.v1.HouseMap.rooms:type_name -> ts4access.v1.Room
+	23, // 23: ts4access.v1.HouseMap.stairs:type_name -> ts4access.v1.Stairs
+	26, // 24: ts4access.v1.Room.links:type_name -> ts4access.v1.RoomLink
+	27, // 25: ts4access.v1.Room.items:type_name -> ts4access.v1.RoomItem
+	25, // 26: ts4access.v1.Room.areas:type_name -> ts4access.v1.RoomArea
+	19, // 27: ts4access.v1.RoomItem.target:type_name -> ts4access.v1.Target
+	31, // 28: ts4access.v1.Goals.milestone_steps:type_name -> ts4access.v1.Objective
+	32, // 29: ts4access.v1.Goals.wants:type_name -> ts4access.v1.Want
+	31, // 30: ts4access.v1.Goals.work_tasks:type_name -> ts4access.v1.Objective
+	31, // 31: ts4access.v1.Goals.promotion_steps:type_name -> ts4access.v1.Objective
+	32, // [32:32] is the sub-list for method output_type
+	32, // [32:32] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_game_proto_init() }
@@ -2798,7 +3023,7 @@ func file_ts4access_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_game_proto_rawDesc), len(file_ts4access_v1_game_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   26,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

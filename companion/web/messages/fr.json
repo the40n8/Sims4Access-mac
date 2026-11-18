@@ -314,5 +314,15 @@
 	"social_normal": "Ce qu’ils font et comment ça se passe (conseillé)",
 	"social_all": "Tout, même les petits changements",
 	"mac_announce_title": "La voix du Mac annonce",
-	"mac_announce_help": "Pour jouer sur le Mac sans le téléphone. Le mod lit déjà lui-même les fenêtres et notifications du jeu, et les actions des Sims avec son interrupteur plus haut."
+	"mac_announce_help": "Pour jouer sur le Mac sans le téléphone. Le mod lit déjà lui-même les fenêtres et notifications du jeu, et les actions des Sims avec son interrupteur plus haut.",
+	"goals_title": "Objectifs",
+	"goal_aspiration": "Aspiration : {name}",
+	"goal_milestone": "Étape en cours : {name}",
+	"step_done": "{name} : fait",
+	"step_todo": "{name} : à faire",
+	"wants_title": "Envies et peurs",
+	"want_line": "Envie : {name}",
+	"fear_line": "Peur : {name}",
+	"work_tasks_title": "Aujourd’hui au travail",
+	"promotion_title": "Pour la prochaine promotion"
 }

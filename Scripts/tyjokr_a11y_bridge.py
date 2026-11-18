@@ -593,6 +593,83 @@ def _career(info, entry):
         return
 
 
+# ---------------------------------------------------------------- goals
+# Aspiration milestone, wants and fears, work tasks and promotion steps.
+# Read only; every part is optional (packs and ages differ).
+
+def _done(tracker, key, kind):
+    try:
+        check = getattr(tracker, 'objective_completed' if kind == 'objective' else 'milestone_completed')
+        return bool(check(key))
+    except Exception:
+        return False
+
+
+def _objectives(aspiration, tracker):
+    out = []
+    for objective in list(getattr(aspiration, 'objectives', None) or ()):
+        name = text_of(getattr(objective, 'display_text', None), '')
+        if not name:
+            continue
+        out.append({'name': name, 'done': _done(tracker, objective, 'objective')})
+    return out
+
+
+def _goals(info):
+    goals = {}
+    tracker = getattr(info, 'aspiration_tracker', None)
+    track = getattr(info, 'primary_aspiration', None)
+    if track is not None and tracker is not None:
+        try:
+            goals['aspiration'] = text_of(getattr(track, 'display_text', None), '')
+            aspirations = track.get_aspirations()
+            items = aspirations.items() if hasattr(aspirations, 'items') else enumerate(aspirations)
+            for _level, milestone in sorted(items, key=lambda kv: kv[0]):
+                if not _done(tracker, milestone, 'milestone'):
+                    goals['milestone'] = text_of(getattr(milestone, 'display_name', None), '')
+                    goals['milestoneSteps'] = _objectives(milestone, tracker)
+                    break
+        except Exception as ex:
+            log('aspiration of {} unavailable: {!r}'.format(info.first_name, ex))
+    whims = getattr(info, 'whim_tracker', None)
+    if whims is not None:
+        wants = []
+        for slot in list(getattr(whims, '_whim_slots', None) or ()):
+            try:
+                goal = getattr(slot, 'goal_instance', None)
+                if goal is None:
+                    continue
+                name = text_of(goal.get_display_name(), '')
+                if name:
+                    kind = getattr(getattr(slot, 'whim_type', None), 'name', '')
+                    wants.append({'name': name, 'fear': kind == 'CONFRONTATION'})
+            except Exception:
+                continue
+        if wants:
+            goals['wants'] = wants
+    careers = getattr(info, 'career_tracker', None)
+    if careers is not None:
+        for career in list(careers.careers.values())[:1]:
+            try:
+                level = career.current_level_tuning
+                tasks = []
+                for metric in list(getattr(level.performance_metrics, 'statistic_metrics', None) or ()):
+                    tip = getattr(metric, 'tooltip_text', None)
+                    name = text_of(getattr(tip, 'general_description', None), '') if tip is not None else ''
+                    if name:
+                        tasks.append({'name': name, 'done': False})
+                if tasks:
+                    goals['workTasks'] = tasks
+                promotion = getattr(level, 'aspiration', None)
+                if promotion is not None and tracker is not None:
+                    steps = _objectives(promotion, tracker)
+                    if steps:
+                        goals['promotionSteps'] = steps
+            except Exception as ex:
+                log('work goals of {} unavailable: {!r}'.format(info.first_name, ex))
+    return goals
+
+
 MAX_RELATIONSHIPS = 12
 
 
@@ -677,7 +754,8 @@ def _sim(info, client):
         _career(info, entry)
     except Exception as ex:
         log('career of {} unavailable: {!r}'.format(info.first_name, ex))
-    for key, fn in (('relationships', lambda: _relationships(info)), ('skills', lambda: _skills(info))):
+    for key, fn in (('relationships', lambda: _relationships(info)), ('skills', lambda: _skills(info)),
+                    ('goals', lambda: _goals(info))):
         try:
             value = fn()
             if value:

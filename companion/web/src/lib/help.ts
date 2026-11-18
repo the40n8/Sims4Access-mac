@@ -52,7 +52,7 @@ const en: HelpSection[] = [
 		id: 'sims',
 		title: 'Sims',
 		body: [
-			'Each Sim of the household: job and work performance, mood, needs (lowest first), moodlets, and the action queue, where an action can be cancelled. Skills and Relationships open with their buttons. Relationships go from -100 to 100.'
+			'Each Sim of the household: job and work performance, mood, needs (lowest first), moodlets, and the action queue, where an action can be cancelled. Goals (aspiration milestone, wants and fears, today’s work tasks, what the next promotion needs), Skills and Relationships open with their buttons. Relationships go from -100 to 100.'
 		]
 	},
 	{
@@ -141,7 +141,7 @@ const fr: HelpSection[] = [
 		id: 'sims',
 		title: 'Sims',
 		body: [
-			'Chaque Sim du foyer : métier et performance, humeur, besoins (les plus bas d’abord), émotions, et la file d’actions, où l’on peut annuler une action. Compétences et Relations s’ouvrent avec leur bouton. Les relations vont de -100 à 100.'
+			'Chaque Sim du foyer : métier et performance, humeur, besoins (les plus bas d’abord), émotions, et la file d’actions, où l’on peut annuler une action. Objectifs (étape d’aspiration, envies et peurs, tâches du jour au travail, ce qu’il faut pour la promotion), Compétences et Relations s’ouvrent avec leur bouton. Les relations vont de -100 à 100.'
 		]
 	},
 	{
@@ -230,7 +230,7 @@ const es: HelpSection[] = [
 		id: 'sims',
 		title: 'Sims',
 		body: [
-			'Cada Sim del hogar: trabajo y rendimiento, ánimo, necesidades (las más bajas primero), emociones y la cola de acciones, donde se puede cancelar una acción. Habilidades y Relaciones se abren con su botón. Las relaciones van de -100 a 100.'
+			'Cada Sim del hogar: trabajo y rendimiento, ánimo, necesidades (las más bajas primero), emociones y la cola de acciones, donde se puede cancelar una acción. Objetivos (hito de aspiración, deseos y miedos, tareas del día en el trabajo, lo que pide el próximo ascenso), Habilidades y Relaciones se abren con su botón. Las relaciones van de -100 a 100.'
 		]
 	},
 	{

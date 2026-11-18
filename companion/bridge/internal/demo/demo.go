@@ -78,7 +78,12 @@ func (g *game) sim(id, first, last string, active bool) *v1.Sim {
 	s.Skills = []*v1.Skill{{Key: "cooking", Name: "Cooking", Level: 4, MaxLevel: 10}, {Key: "charisma", Name: "Charisma", Level: 2, MaxLevel: 10}}
 	s.Relationships = []*v1.Relationship{{SimId: "2001", Name: "Nancy Landgraab", Friendship: 35, Labels: []string{"Friend"}},
 		{SimId: "2002", Name: "Eliza Pancakes", Friendship: -20, Labels: []string{"Disliked"}}}
+	s.Goals = &v1.Goals{Aspiration: "Master Chef", Milestone: "Kitchen Novice",
+		MilestoneSteps: []*v1.Objective{{Name: "Reach Cooking skill 3", Done: true}, {Name: "Cook 5 meals", Done: false}},
+		Wants:          []*v1.Want{{Name: "Chat with Nancy"}, {Name: "Fear of being alone", Fear: true}}}
 	if active {
+		s.Goals.WorkTasks = []*v1.Objective{{Name: "Practice cooking at home"}}
+		s.Goals.PromotionSteps = []*v1.Objective{{Name: "Reach Cooking skill 4", Done: false}}
 		perf := int32(62)
 		s.Career, s.Performance = "Line Cook", &perf
 	}

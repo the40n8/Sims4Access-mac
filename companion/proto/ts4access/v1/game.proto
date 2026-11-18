@@ -98,6 +98,7 @@ message Sim {
   repeated Skill skills = 16;
   // The room the Sim is in, when on the home lot.
   RoomRef room = 17;
+  Goals goals = 18;
 }
 
 message Narration {
@@ -358,4 +359,27 @@ message Skill {
   string name = 2;
   int32 level = 3;
   int32 max_level = 4;
+}
+
+// What a Sim is working towards.
+message Goals {
+  // Aspiration name, its current milestone and that milestone's steps.
+  string aspiration = 1;
+  string milestone = 2;
+  repeated Objective milestone_steps = 3;
+  // Wants and fears shown in the game's wants panel.
+  repeated Want wants = 4;
+  // Today's work tasks and what the next promotion needs.
+  repeated Objective work_tasks = 5;
+  repeated Objective promotion_steps = 6;
+}
+
+message Objective {
+  string name = 1;
+  bool done = 2;
+}
+
+message Want {
+  string name = 1;
+  bool fear = 2;
 }
