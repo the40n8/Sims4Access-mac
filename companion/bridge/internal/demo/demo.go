@@ -66,6 +66,13 @@ func (g *game) sim(id, first, last string, active bool) *v1.Sim {
 	}
 	s.Moodlets = []*v1.Moodlet{{Name: "Well Rested", Description: "Slept like a log.", MoodKey: "energized", Weight: 1, MinutesLeft: 240}}
 	g.addAction(s, activities[rand.IntN(len(activities))])
+	s.Skills = []*v1.Skill{{Key: "cooking", Name: "Cooking", Level: 4, MaxLevel: 10}, {Key: "charisma", Name: "Charisma", Level: 2, MaxLevel: 10}}
+	s.Relationships = []*v1.Relationship{{SimId: "2001", Name: "Nancy Landgraab", Friendship: 35, Labels: []string{"Friend"}},
+		{SimId: "2002", Name: "Eliza Pancakes", Friendship: -20, Labels: []string{"Disliked"}}}
+	if active {
+		perf := int32(62)
+		s.Career, s.Performance = "Line Cook", &perf
+	}
 	return s
 }
 
@@ -113,6 +120,9 @@ func (g *game) step() {
 			g.addAction(s, name)
 		}
 	}
+	if rand.IntN(90) == 0 {
+		g.hub.AddEvent(&v1.Event{Kind: v1.EventKind_EVENT_KIND_NOTIFICATION, Subject: "Bills Due", Detail: "The household bills of §340 are due."})
+	}
 	if rand.IntN(20) == 0 {
 		s := st.Sims[rand.IntN(len(st.Sims))]
 		moods := []struct{ key, name string }{{"happy", "Happy"}, {"energized", "Energized"}, {"playful", "Playful"}, {"bored", "Bored"}, {"tense", "Tense"}}
@@ -139,6 +149,20 @@ func (g *game) find(id string) *v1.Sim {
 	return nil
 }
 
+const (
+	okID     = 10001
+	cancelID = 10002
+)
+
+func (g *game) active() *v1.Sim {
+	for _, s := range g.state.Sims {
+		if s.Active {
+			return s
+		}
+	}
+	return g.state.Sims[0]
+}
+
 var demoTargets = []*v1.Target{
 	{Id: "o1", Name: "Fridge", Group: "APPLIANCES", Distance: 3},
 	{Id: "o2", Name: "Sofa", Group: "COMFORT", Distance: 5},
@@ -153,6 +177,8 @@ var demoMenus = map[string][]*v1.Interaction{
 	"o2":   {{Id: "1", Name: "Sit", Enabled: true}, {Id: "2", Name: "Nap", Enabled: true}},
 	"o3":   {{Id: "1", Name: "Take Shower", Enabled: true}},
 	"o4":   {{Id: "1", Name: "Play Games", Enabled: true}, {Id: "2", Name: "Browse Web", Enabled: true}},
+	"phone": {{Id: "1", Name: "Call to Chat...", Category: "Social", Enabled: true}, {Id: "2", Name: "Invite Over...", Category: "Social", Enabled: true},
+		{Id: "3", Name: "Order Pizza", Category: "Household", Enabled: true}, {Id: "4", Name: "Travel", Category: "Travel", Enabled: true}},
 }
 
 func item(t *v1.Target, side string) *v1.RoomItem { return &v1.RoomItem{Target: t, Side: side} }
@@ -161,16 +187,19 @@ func item(t *v1.Target, side string) *v1.RoomItem { return &v1.RoomItem{Target: 
 func demoHouse() *v1.HouseMap {
 	return &v1.HouseMap{Floors: []int32{0, 1}, Rooms: []*v1.Room{
 		{Id: "r1", Kind: "KITCHEN", Floor: 0, Width: 4, Depth: 5, Area: 20, Part: "NW", Here: true, Sims: []string{"Bella"},
-			Links: []*v1.RoomLink{{RoomId: "r2", Door: false, Side: "E"}, {RoomId: "", Door: true, Side: "N"}},
+			Links: []*v1.RoomLink{{RoomId: "r2", Door: false, Side: "E"}, {RoomId: "outside:0", Door: true, Side: "N"}},
 			Items: []*v1.RoomItem{item(demoTargets[0], "N"), item(&v1.Target{Id: "o5", Name: "Counter", Group: "SURFACE", Kind: "Counters"}, "W")}},
 		{Id: "r2", Kind: "LIVING", Floor: 0, Width: 6, Depth: 5, Area: 30, Part: "NE", Distance: 5, Bearing: "E",
-			Links: []*v1.RoomLink{{RoomId: "r1", Side: "W"}, {RoomId: "r3", Door: true, Side: "S"}, {RoomId: "", Door: true, Side: "E"}},
+			Links: []*v1.RoomLink{{RoomId: "r1", Side: "W"}, {RoomId: "r3", Door: true, Side: "S"}, {RoomId: "outside:0", Door: true, Side: "E"}},
 			Items: []*v1.RoomItem{item(demoTargets[1], "C"), item(&v1.Target{Id: "o6", Name: "TV", Group: "ELECTRONICS", Kind: "Televisions"}, "N")}},
 		{Id: "r3", Kind: "BATHROOM", Floor: 0, Width: 2, Depth: 3, Area: 6, Part: "S", Distance: 8, Bearing: "SE",
 			Links: []*v1.RoomLink{{RoomId: "r2", Door: true, Side: "N"}},
 			Items: []*v1.RoomItem{item(demoTargets[2], "E")}},
 		{Id: "r4", Kind: "BEDROOM", Number: 0, Floor: 1, Width: 4, Depth: 4, Area: 16, Part: "C", Distance: 9, Bearing: "N",
 			Items: []*v1.RoomItem{item(demoTargets[3], "S"), item(&v1.Target{Id: "o7", Name: "Double Bed", Group: "COMFORT", Kind: "Beds"}, "N")}},
+		{Id: "outside:0", Kind: "OUTSIDE", Floor: 0, Width: 20, Depth: 15, Area: 200, Part: "C", Distance: 6, Bearing: "S",
+			Links: []*v1.RoomLink{{RoomId: "r2", Door: true, Side: "E"}, {RoomId: "r1", Door: true, Side: "N"}},
+			Items: []*v1.RoomItem{item(&v1.Target{Id: "o8", Name: "Grill", Group: "APPLIANCES", Kind: "Grills"}, "S"), item(&v1.Target{Id: "o9", Name: "Mailbox", Group: "MISC", Kind: "Mailboxes"}, "E")}},
 	}}
 }
 
@@ -182,6 +211,9 @@ func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 		var targets []*v1.Target
 		for _, s := range g.state.Sims {
 			targets = append(targets, &v1.Target{Id: s.Id, Name: s.FirstName + " " + s.LastName, IsSim: true, IsSelf: s.Active, Group: "SIMS", Distance: 2})
+			if s.Active {
+				targets = append(targets, &v1.Target{Id: "phone", Name: "Phone", Group: "PHONE"})
+			}
 		}
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Targets: append(targets, demoTargets...)}
 	case *v1.ToGame_GetInteractions:
@@ -198,12 +230,43 @@ func (g *game) call(c *v1.ToGame) *v1.CommandResult {
 		}
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}, Interactions: menu}
 	case *v1.ToGame_RunInteraction:
+		ri := cmd.RunInteraction
+		if ri.GetTargetId() == "o1" && ri.GetInteractionId() == "2" {
+			g.nextID++
+			g.state.Dialogs = append(g.state.Dialogs, &v1.Dialog{
+				Id: fmt.Sprint(g.nextID), Title: "Cook", Text: "What should Bella cook?",
+				Choices: []*v1.DialogChoice{{Id: okID}, {Id: cancelID}}, MinSelectable: 1, MaxSelectable: 1,
+				Rows: []*v1.DialogRow{
+					{Id: "11", Name: "Mac and Cheese", Description: "§12, 4 servings", Enabled: true},
+					{Id: "12", Name: "Pancakes", Description: "§9, 4 servings", Enabled: true},
+					{Id: "13", Name: "Lobster Thermidor", Description: "§80", Reason: "Requires Cooking level 9"},
+				},
+			})
+			return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
+		}
 		for _, s := range g.state.Sims {
 			if s.Active {
-				g.addAction(s, "Interaction "+cmd.RunInteraction.GetInteractionId())
+				g.addAction(s, "Interaction "+ri.GetInteractionId())
 			}
 		}
 		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
+	case *v1.ToGame_RespondDialog:
+		rd := cmd.RespondDialog
+		for i, d := range g.state.Dialogs {
+			if d.GetId() != rd.GetDialogId() {
+				continue
+			}
+			g.state.Dialogs = append(g.state.Dialogs[:i], g.state.Dialogs[i+1:]...)
+			if rd.GetChoiceId() == okID && len(rd.GetRowIds()) > 0 {
+				for _, r := range d.GetRows() {
+					if r.GetId() == rd.GetRowIds()[0] {
+						g.addAction(g.active(), "Cook "+r.GetName())
+					}
+				}
+			}
+			return &v1.CommandResult{Outcome: &v1.CommandOutcome{Ok: true}}
+		}
+		return &v1.CommandResult{Outcome: &v1.CommandOutcome{Reason: "dialog_closed"}}
 	}
 	return &v1.CommandResult{Outcome: g.apply(c)}
 }

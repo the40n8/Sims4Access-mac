@@ -92,6 +92,10 @@ message Sim {
   string until = 12;
   // Otherwise: when the next shift starts ("Wed 9:00 AM").
   string next_shift = 13;
+  // Work performance towards the next promotion, 0-100.
+  optional int32 performance = 14;
+  repeated Relationship relationships = 15;
+  repeated Skill skills = 16;
 }
 
 message Narration {
@@ -109,6 +113,41 @@ message GameState {
   string household_name = 5;
   repeated Sim sims = 6;
   Narration narration = 7;
+  // Windows the game is waiting on (questions, pickers), oldest first.
+  repeated Dialog dialogs = 8;
+}
+
+// A game window waiting for an answer: a question with buttons, a list to
+// pick from (recipes, Sims, objects...) or a text box.
+message Dialog {
+  string id = 1;
+  string title = 2;
+  string text = 3;
+  repeated DialogChoice choices = 4;
+  // Picker rows; empty for a plain question.
+  repeated DialogRow rows = 5;
+  int32 min_selectable = 6;
+  int32 max_selectable = 7;
+  // A text box (name a Sim, a household...): its name for the answer.
+  string text_input = 8;
+  string text_default = 9;
+}
+
+message DialogChoice {
+  // The game's response id (OK is 10001, Cancel 10002, custom buttons...).
+  int32 id = 1;
+  // Empty: the phone names it from the id.
+  string text = 2;
+  string reason = 3;
+}
+
+message DialogRow {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  bool enabled = 4;
+  string reason = 5;
+  bool selected = 6;
 }
 
 enum EventKind {
@@ -128,6 +167,10 @@ enum EventKind {
   EVENT_KIND_AWAY_STARTED = 11;
   // Back from work or school (subject: where from).
   EVENT_KIND_AWAY_ENDED = 12;
+  // A game notification (corner message): subject is the title, detail the text.
+  EVENT_KIND_NOTIFICATION = 13;
+  // The game asks something: subject is the dialog title or text.
+  EVENT_KIND_DIALOG = 14;
 }
 
 // Something the controlled Sim can interact with.
@@ -218,4 +261,21 @@ message RoomItem {
   Target target = 1;
   // Where in the room: N, NE... or C for the middle.
   string side = 2;
+}
+
+message Relationship {
+  string sim_id = 1;
+  string name = 2;
+  // -100..100.
+  int32 friendship = 3;
+  int32 romance = 4;
+  // Game labels: "Good Friends", "Spouse", "Son"...
+  repeated string labels = 5;
+}
+
+message Skill {
+  string key = 1;
+  string name = 2;
+  int32 level = 3;
+  int32 max_level = 4;
 }

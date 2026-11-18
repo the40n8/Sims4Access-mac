@@ -12,6 +12,7 @@ export function groupLabel(t: Target): string {
 // Things a player uses most first; lights, decorations and doors last.
 export const GROUP_ORDER = [
 	'SELF',
+	'PHONE',
 	'SIMS',
 	'APPLIANCES',
 	'PLUMBING',
@@ -42,8 +43,9 @@ export function objectName(t: Target): string {
 	return t.kind ? `${t.kind}: ${t.name}` : t.name;
 }
 
-export function targetLabel(t: Target): string {
+export function targetLabel(t: Target, owner = ''): string {
 	if (t.isSelf) return m.target_self({ name: t.name });
+	if (t.group === 'PHONE') return owner ? m.target_phone({ name: owner }) : m.group_PHONE();
 	const name = objectName(t);
 	return t.distance > 0 ? m.target_distance({ name, meters: t.distance }) : name;
 }

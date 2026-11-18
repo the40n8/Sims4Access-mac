@@ -1,9 +1,9 @@
 // Per-phone preferences: which events VoiceOver announces automatically.
 import { EventKind } from './gen/ts4access/v1/game_pb.js';
 
-export type Group = 'mood' | 'moodlet' | 'need' | 'action' | 'game';
+export type Group = 'messages' | 'mood' | 'moodlet' | 'need' | 'action' | 'game';
 
-export const GROUPS: readonly Group[] = ['mood', 'moodlet', 'need', 'action', 'game'];
+export const GROUPS: readonly Group[] = ['messages', 'mood', 'moodlet', 'need', 'action', 'game'];
 
 export function groupOf(kind: EventKind): Group | 'spoken' | null {
 	switch (kind) {
@@ -23,6 +23,9 @@ export function groupOf(kind: EventKind): Group | 'spoken' | null {
 		case EventKind.SPEED:
 		case EventKind.FUNDS:
 			return 'game';
+		case EventKind.NOTIFICATION:
+		case EventKind.DIALOG:
+			return 'messages';
 		case EventKind.SPOKEN:
 			return 'spoken';
 		default:
@@ -35,7 +38,7 @@ type Stored = { announce: Record<Group, boolean>; showSpoken: boolean };
 const KEY = 'ts4access.prefs';
 const DEFAULTS: Stored = {
 	// Actions start often; off by default so announcements stay meaningful.
-	announce: { mood: true, moodlet: true, need: true, action: false, game: true },
+	announce: { messages: true, mood: true, moodlet: true, need: true, action: false, game: true },
 	showSpoken: false
 };
 

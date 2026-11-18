@@ -112,17 +112,42 @@ def build():
     if not found:
         return {'rooms': [], 'floors': []}
 
-    def room_at(level, i, j):
+    def indoor_at(level, i, j):
         room = grid.get((level, i, j))
         return room if room is not None and (room.rid, room.level) in found else None
 
+    # Around the rooms: the garden ("outside", also beyond walls upstairs)
+    # and any pool in it.
+    outside = _Room('outside', 0)
+    outside.kind = 'OUTSIDE'
+    pool = _Room('pool', 0)
+    pool.kind = 'POOL'
+    outdoor = {}
+    for i in range(nu):
+        for j in range(nv):
+            if indoor_at(0, i, j) is None:
+                x, z = world(i, j)
+                area = pool if _is_pool(x, z, 0) else outside
+                area.cells.append((i, j))
+                area.tiles.append((x, z))
+                outdoor[(i, j)] = area
+
+    def room_at(level, i, j):
+        room = indoor_at(level, i, j)
+        if room is not None:
+            return room
+        return outdoor.get((i, j), outside) if level == 0 else outside
+
     def room_at_world(x, z, level):
-        return found.get((rooms.room_id_at(x, z, level), level))
+        room = found.get((rooms.room_id_at(x, z, level), level))
+        if room is not None:
+            return room
+        return pool if level == 0 and pool.cells and _is_pool(x, z, 0) else outside
 
     # Walls and openings: neighbouring cells that belong to another room or outside.
     steps = ((1, 0, ux / nu, uz / nu), (-1, 0, -ux / nu, -uz / nu),
              (0, 1, vx / nv, vz / nv), (0, -1, -vx / nv, -vz / nv))
-    for room in found.values():
+    for room in list(found.values()) + [pool]:
         for (i, j) in room.cells:
             for (di, dj, dx, dz) in steps:
                 other = room_at(room.level, i + di, j + dj)
@@ -151,18 +176,24 @@ def build():
                 continue
             if not list(obj.super_affordances()):
                 continue
-            room = room_at_world(pos.x, pos.z, level)
-            if room is not None:
-                room.objects.append(obj)
+            room_at_world(pos.x, pos.z, level).objects.append(obj)
         except Exception:
             continue
     for other in services.sim_info_manager().instanced_sims_gen():
         try:
             room = room_at_world(other.position.x, other.position.z, int(other.level))
-            if room is not None:
-                room.sims.append(other)
+            on_lot = getattr(other, 'is_on_active_lot', None)
+            if room is outside and on_lot is not None and not on_lot():
+                continue            # out on the street, not in the garden
+            room.sims.append(other)
         except Exception:
             continue
+    # The garden and the pool open onto the rooms that open onto them.
+    for room in list(found.values()) + [pool]:
+        for other, info in list(room.links.items()):
+            if other in (outside, pool) and other is not room:
+                sides = info['doors'] or info['sides']
+                other.link(room, max(sides.items(), key=lambda kv: kv[1])[0], door=info['door'])
 
     _name(list(found.values()))
 
@@ -171,7 +202,9 @@ def build():
     for room in found.values():
         middles.setdefault(room.level, []).extend(room.tiles)
     out = []
-    for room in sorted(found.values(), key=lambda r: (r.level, r.kind, r.number, -len(r.cells))):
+    middles.setdefault(0, list(outside.tiles))
+    extra = [area for area in (pool, outside) if area.cells]
+    for room in sorted(found.values(), key=lambda r: (r.level, r.kind, r.number, -len(r.cells))) + extra:
         cx, cz = room.center
         tiles = middles[room.level]
         mx = sum(t[0] for t in tiles) / len(tiles)
@@ -194,8 +227,10 @@ def build():
         for other, info in room.links.items():
             sides = info['doors'] or info['sides']
             side = max(sides.items(), key=lambda kv: kv[1])[0]
-            links.append({'roomId': other.key if other is not None else '', 'door': info['door'], 'side': side})
-        links.sort(key=lambda l: (not l['door'], l['roomId'] == '', COMPASS.index(l['side'])))
+            if other is room:
+                continue
+            links.append({'roomId': other.key, 'door': info['door'], 'side': side})
+        links.sort(key=lambda l: (not l['door'], l['roomId'] == outside.key, COMPASS.index(l['side'])))
         entry['links'] = links
         half = max(entry['width'], entry['depth']) / 2.0
         items = []
@@ -215,6 +250,18 @@ def build():
         entry['items'] = items
         out.append(entry)
     return {'rooms': out, 'floors': sorted(middles)}
+
+
+def _is_pool(x, z, level):
+    import build_buy
+    import services
+    import sims4.math
+    import terrain
+    try:
+        y = terrain.get_terrain_height(x, z)
+        return bool(build_buy.is_location_pool(sims4.math.Vector3(float(x), float(y), float(z)), int(level)))
+    except Exception:
+        return False
 
 
 def _name(found):

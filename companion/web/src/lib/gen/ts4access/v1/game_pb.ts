@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ts4access/v1/game.proto.
  */
 export const file_ts4access_v1_game: GenFile = /*@__PURE__*/
-  fileDesc("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BnRhcmdldBgBIAEoCzIULnRzNGFjY2Vzcy52MS5UYXJnZXQSDAoEc2lkZRgCIAEoCSp0CgVTcGVlZBIVChFTUEVFRF9VTlNQRUNJRklFRBAAEhAKDFNQRUVEX1BBVVNFRBABEhAKDFNQRUVEX05PUk1BTBACEg4KClNQRUVEX0ZBU1QQAxIPCgtTUEVFRF9VTFRSQRAEEg8KC1NQRUVEX1NVUEVSEAUqfgoJTmVlZExldmVsEhoKFk5FRURfTEVWRUxfVU5TUEVDSUZJRUQQABITCg9ORUVEX0xFVkVMX0dPT0QQARITCg9ORUVEX0xFVkVMX09LQVkQAhISCg5ORUVEX0xFVkVMX0xPVxADEhcKE05FRURfTEVWRUxfQ1JJVElDQUwQBCpeCgtBY3Rpb25TdGF0ZRIcChhBQ1RJT05fU1RBVEVfVU5TUEVDSUZJRUQQABIYChRBQ1RJT05fU1RBVEVfUlVOTklORxABEhcKE0FDVElPTl9TVEFURV9RVUVVRUQQAiriAgoJRXZlbnRLaW5kEhoKFkVWRU5UX0tJTkRfVU5TUEVDSUZJRUQQABITCg9FVkVOVF9LSU5EX01PT0QQARIcChhFVkVOVF9LSU5EX01PT0RMRVRfQURERUQQAhIeChpFVkVOVF9LSU5EX01PT0RMRVRfUkVNT1ZFRBADEhMKD0VWRU5UX0tJTkRfTkVFRBAEEh0KGUVWRU5UX0tJTkRfQUNUSU9OX1NUQVJURUQQBRIcChhFVkVOVF9LSU5EX0FDVElPTl9RVUVVRUQQBhIZChVFVkVOVF9LSU5EX0FDVElWRV9TSU0QBxIUChBFVkVOVF9LSU5EX1NQRUVEEAgSFAoQRVZFTlRfS0lORF9GVU5EUxAJEhUKEUVWRU5UX0tJTkRfU1BPS0VOEAoSGwoXRVZFTlRfS0lORF9BV0FZX1NUQVJURUQQCxIZChVFVkVOVF9LSU5EX0FXQVlfRU5ERUQQDGIGcHJvdG8z");
+  fileDesc("Chd0czRhY2Nlc3MvdjEvZ2FtZS5wcm90bxIMdHM0YWNjZXNzLnYxIkYKBUNsb2NrEgsKA2RheRgBIAEoCRIMCgR0aW1lGAIgASgJEiIKBXNwZWVkGAMgASgOMhMudHM0YWNjZXNzLnYxLlNwZWVkIkwKBE5lZWQSCwoDa2V5GAEgASgJEg8KB3BlcmNlbnQYAiABKAUSJgoFbGV2ZWwYAyABKA4yFy50czRhY2Nlc3MudjEuTmVlZExldmVsIjQKBE1vb2QSCwoDa2V5GAEgASgJEgwKBG5hbWUYAiABKAkSEQoJaW50ZW5zaXR5GAMgASgFInEKB01vb2RsZXQSDAoEbmFtZRgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIQCghtb29kX2tleRgDIAEoCRIOCgZ3ZWlnaHQYBCABKAUSFAoMbWludXRlc19sZWZ0GAUgASgFEgsKA2tleRgGIAEoCSJgCgZBY3Rpb24SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIoCgVzdGF0ZRgDIAEoDjIZLnRzNGFjY2Vzcy52MS5BY3Rpb25TdGF0ZRISCgpjYW5jZWxhYmxlGAQgASgIIrEDCgNTaW0SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDgoGYWN0aXZlGAQgASgIEgwKBGhlcmUYBSABKAgSIAoEbW9vZBgGIAEoCzISLnRzNGFjY2Vzcy52MS5Nb29kEiEKBW5lZWRzGAcgAygLMhIudHM0YWNjZXNzLnYxLk5lZWQSJwoIbW9vZGxldHMYCCADKAsyFS50czRhY2Nlc3MudjEuTW9vZGxldBIlCgdhY3Rpb25zGAkgAygLMhQudHM0YWNjZXNzLnYxLkFjdGlvbhIPCgdhd2F5X2F0GAogASgJEg4KBmNhcmVlchgLIAEoCRINCgV1bnRpbBgMIAEoCRISCgpuZXh0X3NoaWZ0GA0gASgJEhgKC3BlcmZvcm1hbmNlGA4gASgFSACIAQESMQoNcmVsYXRpb25zaGlwcxgPIAMoCzIaLnRzNGFjY2Vzcy52MS5SZWxhdGlvbnNoaXASIwoGc2tpbGxzGBAgAygLMhMudHM0YWNjZXNzLnYxLlNraWxsQg4KDF9wZXJmb3JtYW5jZSIzCglOYXJy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Kn4KCU5lZWRMZXZlbBIaChZORUVEX0xFVkVMX1VOU1BFQ0lGSUVEEAASEwoPTkVFRF9MRVZFTF9HT09EEAESEwoPTkVFRF9MRVZFTF9PS0FZEAISEgoOTkVFRF9MRVZFTF9MT1cQAxIXChNORUVEX0xFVkVMX0NSSVRJQ0FMEAQqXgoLQWN0aW9uU3RhdGUSHAoYQUNUSU9OX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUQUNUSU9OX1NUQVRFX1JVTk5JTkcQARIXChNBQ1RJT05fU1RBVEVfUVVFVUVEEAIqlgMKCUV2ZW50S2luZBIaChZFVkVOVF9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRVZFTlRfS0lORF9NT09EEAESHAoYRVZFTlRfS0lORF9NT09ETEVUX0FEREVEEAISHgoaRVZFTlRfS0lORF9NT09ETEVUX1JFTU9WRUQQAxITCg9FVkVOVF9LSU5EX05FRUQQBBIdChlFVkVOVF9LSU5EX0FDVElPTl9TVEFSVEVEEAUSHAoYRVZFTlRfS0lORF9BQ1RJT05fUVVFVUVEEAYSGQoVRVZFTlRfS0lORF9BQ1RJVkVfU0lNEAcSFAoQRVZFTlRfS0lORF9TUEVFRBAIEhQKEEVWRU5UX0tJTkRfRlVORFMQCRIVChFFVkVOVF9LSU5EX1NQT0tFThAKEhsKF0VWRU5UX0tJTkRfQVdBWV9TVEFSVEVEEAsSGQoVRVZFTlRfS0lORF9BV0FZX0VOREVEEAwSGwoXRVZFTlRfS0lORF9OT1RJRklDQVRJT04QDRIVChFFVkVOVF9LSU5EX0RJQUxPRxAOYgZwcm90bzM");
 
 /**
  * @generated from message ts4access.v1.Clock
@@ -261,6 +261,23 @@ export type Sim = Message<"ts4access.v1.Sim"> & {
    * @generated from field: string next_shift = 13;
    */
   nextShift: string;
+
+  /**
+   * Work performance towards the next promotion, 0-100.
+   *
+   * @generated from field: optional int32 performance = 14;
+   */
+  performance?: number | undefined;
+
+  /**
+   * @generated from field: repeated ts4access.v1.Relationship relationships = 15;
+   */
+  relationships: Relationship[];
+
+  /**
+   * @generated from field: repeated ts4access.v1.Skill skills = 16;
+   */
+  skills: Skill[];
 };
 
 /**
@@ -334,6 +351,13 @@ export type GameState = Message<"ts4access.v1.GameState"> & {
    * @generated from field: ts4access.v1.Narration narration = 7;
    */
   narration?: Narration | undefined;
+
+  /**
+   * Windows the game is waiting on (questions, pickers), oldest first.
+   *
+   * @generated from field: repeated ts4access.v1.Dialog dialogs = 8;
+   */
+  dialogs: Dialog[];
 };
 
 /**
@@ -342,6 +366,143 @@ export type GameState = Message<"ts4access.v1.GameState"> & {
  */
 export const GameStateSchema: GenMessage<GameState> = /*@__PURE__*/
   messageDesc(file_ts4access_v1_game, 7);
+
+/**
+ * A game window waiting for an answer: a question with buttons, a list to
+ * pick from (recipes, Sims, objects...) or a text box.
+ *
+ * @generated from message ts4access.v1.Dialog
+ */
+export type Dialog = Message<"ts4access.v1.Dialog"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string title = 2;
+   */
+  title: string;
+
+  /**
+   * @generated from field: string text = 3;
+   */
+  text: string;
+
+  /**
+   * @generated from field: repeated ts4access.v1.DialogChoice choices = 4;
+   */
+  choices: DialogChoice[];
+
+  /**
+   * Picker rows; empty for a plain question.
+   *
+   * @generated from field: repeated ts4access.v1.DialogRow rows = 5;
+   */
+  rows: DialogRow[];
+
+  /**
+   * @generated from field: int32 min_selectable = 6;
+   */
+  minSelectable: number;
+
+  /**
+   * @generated from field: int32 max_selectable = 7;
+   */
+  maxSelectable: number;
+
+  /**
+   * A text box (name a Sim, a household...): its name for the answer.
+   *
+   * @generated from field: string text_input = 8;
+   */
+  textInput: string;
+
+  /**
+   * @generated from field: string text_default = 9;
+   */
+  textDefault: string;
+};
+
+/**
+ * Describes the message ts4access.v1.Dialog.
+ * Use `create(DialogSchema)` to create a new message.
+ */
+export const DialogSchema: GenMessage<Dialog> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 8);
+
+/**
+ * @generated from message ts4access.v1.DialogChoice
+ */
+export type DialogChoice = Message<"ts4access.v1.DialogChoice"> & {
+  /**
+   * The game's response id (OK is 10001, Cancel 10002, custom buttons...).
+   *
+   * @generated from field: int32 id = 1;
+   */
+  id: number;
+
+  /**
+   * Empty: the phone names it from the id.
+   *
+   * @generated from field: string text = 2;
+   */
+  text: string;
+
+  /**
+   * @generated from field: string reason = 3;
+   */
+  reason: string;
+};
+
+/**
+ * Describes the message ts4access.v1.DialogChoice.
+ * Use `create(DialogChoiceSchema)` to create a new message.
+ */
+export const DialogChoiceSchema: GenMessage<DialogChoice> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 9);
+
+/**
+ * @generated from message ts4access.v1.DialogRow
+ */
+export type DialogRow = Message<"ts4access.v1.DialogRow"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string description = 3;
+   */
+  description: string;
+
+  /**
+   * @generated from field: bool enabled = 4;
+   */
+  enabled: boolean;
+
+  /**
+   * @generated from field: string reason = 5;
+   */
+  reason: string;
+
+  /**
+   * @generated from field: bool selected = 6;
+   */
+  selected: boolean;
+};
+
+/**
+ * Describes the message ts4access.v1.DialogRow.
+ * Use `create(DialogRowSchema)` to create a new message.
+ */
+export const DialogRowSchema: GenMessage<DialogRow> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 10);
 
 /**
  * Something the controlled Sim can interact with.
@@ -405,7 +566,7 @@ export type Target = Message<"ts4access.v1.Target"> & {
  * Use `create(TargetSchema)` to create a new message.
  */
 export const TargetSchema: GenMessage<Target> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 8);
+  messageDesc(file_ts4access_v1_game, 11);
 
 /**
  * One row of the game's pie menu for a target.
@@ -448,7 +609,7 @@ export type Interaction = Message<"ts4access.v1.Interaction"> & {
  * Use `create(InteractionSchema)` to create a new message.
  */
 export const InteractionSchema: GenMessage<Interaction> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 9);
+  messageDesc(file_ts4access_v1_game, 12);
 
 /**
  * @generated from message ts4access.v1.Event
@@ -501,7 +662,7 @@ export type Event = Message<"ts4access.v1.Event"> & {
  * Use `create(EventSchema)` to create a new message.
  */
 export const EventSchema: GenMessage<Event> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 10);
+  messageDesc(file_ts4access_v1_game, 13);
 
 /**
  * The house, room by room, for a mental map of the lot.
@@ -527,7 +688,7 @@ export type HouseMap = Message<"ts4access.v1.HouseMap"> & {
  * Use `create(HouseMapSchema)` to create a new message.
  */
 export const HouseMapSchema: GenMessage<HouseMap> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 11);
+  messageDesc(file_ts4access_v1_game, 14);
 
 /**
  * @generated from message ts4access.v1.Room
@@ -631,7 +792,7 @@ export type Room = Message<"ts4access.v1.Room"> & {
  * Use `create(RoomSchema)` to create a new message.
  */
 export const RoomSchema: GenMessage<Room> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 12);
+  messageDesc(file_ts4access_v1_game, 15);
 
 /**
  * @generated from message ts4access.v1.RoomLink
@@ -664,7 +825,7 @@ export type RoomLink = Message<"ts4access.v1.RoomLink"> & {
  * Use `create(RoomLinkSchema)` to create a new message.
  */
 export const RoomLinkSchema: GenMessage<RoomLink> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 13);
+  messageDesc(file_ts4access_v1_game, 16);
 
 /**
  * @generated from message ts4access.v1.RoomItem
@@ -688,7 +849,80 @@ export type RoomItem = Message<"ts4access.v1.RoomItem"> & {
  * Use `create(RoomItemSchema)` to create a new message.
  */
 export const RoomItemSchema: GenMessage<RoomItem> = /*@__PURE__*/
-  messageDesc(file_ts4access_v1_game, 14);
+  messageDesc(file_ts4access_v1_game, 17);
+
+/**
+ * @generated from message ts4access.v1.Relationship
+ */
+export type Relationship = Message<"ts4access.v1.Relationship"> & {
+  /**
+   * @generated from field: string sim_id = 1;
+   */
+  simId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * -100..100.
+   *
+   * @generated from field: int32 friendship = 3;
+   */
+  friendship: number;
+
+  /**
+   * @generated from field: int32 romance = 4;
+   */
+  romance: number;
+
+  /**
+   * Game labels: "Good Friends", "Spouse", "Son"...
+   *
+   * @generated from field: repeated string labels = 5;
+   */
+  labels: string[];
+};
+
+/**
+ * Describes the message ts4access.v1.Relationship.
+ * Use `create(RelationshipSchema)` to create a new message.
+ */
+export const RelationshipSchema: GenMessage<Relationship> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 18);
+
+/**
+ * @generated from message ts4access.v1.Skill
+ */
+export type Skill = Message<"ts4access.v1.Skill"> & {
+  /**
+   * @generated from field: string key = 1;
+   */
+  key: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: int32 level = 3;
+   */
+  level: number;
+
+  /**
+   * @generated from field: int32 max_level = 4;
+   */
+  maxLevel: number;
+};
+
+/**
+ * Describes the message ts4access.v1.Skill.
+ * Use `create(SkillSchema)` to create a new message.
+ */
+export const SkillSchema: GenMessage<Skill> = /*@__PURE__*/
+  messageDesc(file_ts4access_v1_game, 19);
 
 /**
  * @generated from enum ts4access.v1.Speed
@@ -869,6 +1103,20 @@ export enum EventKind {
    * @generated from enum value: EVENT_KIND_AWAY_ENDED = 12;
    */
   AWAY_ENDED = 12,
+
+  /**
+   * A game notification (corner message): subject is the title, detail the text.
+   *
+   * @generated from enum value: EVENT_KIND_NOTIFICATION = 13;
+   */
+  NOTIFICATION = 13,
+
+  /**
+   * The game asks something: subject is the dialog title or text.
+   *
+   * @generated from enum value: EVENT_KIND_DIALOG = 14;
+   */
+  DIALOG = 14,
 }
 
 /**

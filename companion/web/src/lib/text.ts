@@ -161,6 +161,10 @@ export function eventText(e: Event): string {
 			return e.subject === 'school' ? m.ev_left_school({ sim }) : m.ev_left_work({ sim });
 		case EventKind.AWAY_ENDED:
 			return e.subject === 'school' ? m.ev_back_school({ sim }) : m.ev_back_work({ sim });
+		case EventKind.NOTIFICATION:
+			return e.detail ? m.ev_notification({ title: e.subject, text: e.detail }) : e.subject;
+		case EventKind.DIALOG:
+			return m.ev_dialog({ text: e.subject });
 		default:
 			return e.subject;
 	}
@@ -173,7 +177,11 @@ export function reasonText(reason: string): string {
 		sim_unavailable: m.reason_sim_unavailable,
 		not_cancelable: m.reason_not_cancelable,
 		action_finished: m.reason_action_finished,
-		not_in_game: m.reason_not_in_game
+		not_in_game: m.reason_not_in_game,
+		menu_expired: m.reason_menu_expired,
+		refused: m.reason_refused,
+		target_unavailable: m.reason_target_unavailable,
+		dialog_closed: m.reason_dialog_closed
 	};
 	return (map[reason] ?? m.reason_other)();
 }

@@ -27,6 +27,7 @@
 					>{/if}
 			</p>
 		{/if}
+		{#if sim.performance !== undefined}<p>{m.performance_line({ percent: sim.performance })}</p>{/if}
 		{#if !sim.here}
 			<p class="muted">{awaySentence(sim)}</p>
 		{:else}
@@ -89,6 +90,38 @@
 				</ul>
 			{/if}
 		{/if}
+
+		<details>
+			<summary>{m.skills_title()}</summary>
+			{#if sim.skills.length === 0}
+				<p class="muted">{m.skills_none()}</p>
+			{:else}
+				<ul class="stack">
+					{#each sim.skills as skill (skill.key)}
+						<li>{m.skill_line({ name: skill.name, level: skill.level, max: skill.maxLevel })}</li>
+					{/each}
+				</ul>
+			{/if}
+		</details>
+
+		<details>
+			<summary>{m.relationships_title()}</summary>
+			{#if sim.relationships.length === 0}
+				<p class="muted">{m.relationships_none()}</p>
+			{:else}
+				<p class="muted">{m.relationships_help()}</p>
+				<ul class="stack">
+					{#each sim.relationships as rel (rel.simId)}
+						<li>
+							{rel.romance
+								? m.rel_both({ name: rel.name, friendship: rel.friendship, romance: rel.romance })
+								: m.rel_friend({ name: rel.name, friendship: rel.friendship })}
+							{#if rel.labels.length}<span class="muted"> · {rel.labels.join(', ')}</span>{/if}
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</details>
 	</section>
 {/each}
 
@@ -117,6 +150,13 @@
 	}
 	.critical {
 		font-weight: 700;
+	}
+	summary {
+		font-weight: 600;
+		min-height: var(--tap);
+		display: flex;
+		align-items: center;
+		cursor: pointer;
 	}
 	.action {
 		display: grid;

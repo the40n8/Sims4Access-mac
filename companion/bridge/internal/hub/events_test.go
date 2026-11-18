@@ -105,3 +105,19 @@ func TestDiffNeedRecoveringIsQuiet(t *testing.T) {
 		t.Fatalf("recovering need produced %v", kinds(got))
 	}
 }
+
+func TestDiffDialogs(t *testing.T) {
+	base := func(ds ...*v1.Dialog) *v1.GameState { return &v1.GameState{InGame: true, Dialogs: ds} }
+	pending := &v1.Dialog{Id: "7"}
+	named := &v1.Dialog{Id: "7", Title: "Cook what?"}
+	if ev := Diff(base(), base(pending)); len(ev) != 0 {
+		t.Fatalf("no words yet, want no event, got %v", ev)
+	}
+	ev := Diff(base(pending), base(named))
+	if len(ev) != 1 || ev[0].GetKind() != v1.EventKind_EVENT_KIND_DIALOG || ev[0].GetSubject() != "Cook what?" {
+		t.Fatalf("want one dialog event, got %v", ev)
+	}
+	if ev := Diff(base(named), base(named)); len(ev) != 0 {
+		t.Fatalf("same window again, want no event, got %v", ev)
+	}
+}

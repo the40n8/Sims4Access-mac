@@ -69,7 +69,7 @@
 <section class="card stack" aria-labelledby="menu-title">
 	<button type="button" onclick={onBack}>{m.back_to_list()}</button>
 	<h2 id="menu-title" tabindex="-1" bind:this={heading}>
-		{m.interactions_of({ name: target.name })}
+		{m.interactions_of({ name: target.group === 'PHONE' ? m.group_PHONE() : target.name })}
 	</h2>
 	{#if menu === null}
 		<p class="muted" role="status">{m.loading()}</p>

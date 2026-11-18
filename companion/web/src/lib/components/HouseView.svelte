@@ -70,8 +70,14 @@
 		return r ? roomName(r) : m.outside();
 	};
 
+	// The garden and the pool are listed like rooms but not counted as rooms.
+	const OUTDOOR = ['OUTSIDE', 'POOL'];
+
 	function roomLine(r: Room): string {
-		const bits = [roomName(r), part(r.part), m.room_size({ width: r.width, depth: r.depth })];
+		const bits =
+			r.kind === 'OUTSIDE'
+				? [roomName(r)]
+				: [roomName(r), part(r.part), m.room_size({ width: r.width, depth: r.depth })];
 		if (r.here) bits.push(m.room_sims({ names: r.sims.join(', ') }));
 		else {
 			if (r.bearing) bits.push(m.room_away({ meters: r.distance, dir: dir(r.bearing) }));
@@ -86,7 +92,7 @@
 	const current = $derived(house?.rooms.find((r) => r.here));
 	const summary = $derived.by(() => {
 		if (!house) return '';
-		const rooms = house.rooms.length;
+		const rooms = house.rooms.filter((r) => !OUTDOOR.includes(r.kind)).length;
 		const count =
 			house.floors.length > 1
 				? m.house_floors({ rooms, floors: house.floors.length })
@@ -135,7 +141,11 @@
 			<button type="button" onclick={backToHouse}>{m.back_to_house()}</button>
 			<h2 id="room-title" tabindex="-1" bind:this={roomHeading}>{roomName(room)}</h2>
 			<p>
-				{floorName(room.floor)}, {part(room.part)}, {m.room_size({ width: room.width, depth: room.depth })}.
+				{#if room.kind === 'OUTSIDE'}
+					{floorName(room.floor)}.
+				{:else}
+					{floorName(room.floor)}, {part(room.part)}, {m.room_size({ width: room.width, depth: room.depth })}.
+				{/if}
 				{#if !room.here && room.bearing}{m.room_away({ meters: room.distance, dir: dir(room.bearing) })}.{/if}
 			</p>
 			{#if room.sims.length}<p>{m.room_sims({ names: room.sims.join(', ') })}</p>{/if}

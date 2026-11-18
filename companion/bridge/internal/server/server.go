@@ -104,6 +104,14 @@ func (s *service) GetHouseMap(ctx context.Context, req *connect.Request[v1.GetHo
 	return connect.NewResponse(&v1.GetHouseMapResponse{Outcome: res.GetOutcome(), Map: res.GetHouseMap()}), nil
 }
 
+func (s *service) RespondDialog(ctx context.Context, req *connect.Request[v1.RespondDialogRequest]) (*connect.Response[v1.RespondDialogResponse], error) {
+	if req.Msg.GetDialogId() == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("dialog_id is required"))
+	}
+	out := s.hub.Command(ctx, &v1.ToGame{Command: &v1.ToGame_RespondDialog{RespondDialog: req.Msg}})
+	return connect.NewResponse(&v1.RespondDialogResponse{Outcome: out}), nil
+}
+
 // authInterceptor accepts only requests carrying the pairing token.
 func authInterceptor(token string) connect.Interceptor {
 	check := func(h http.Header) error {

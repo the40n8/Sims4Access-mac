@@ -30,6 +30,8 @@ func Diff(old, cur *v1.GameState) []*v1.Event {
 		add(v1.EventKind_EVENT_KIND_FUNDS, nil, strconv.FormatInt(cur.GetFunds(), 10), strconv.FormatInt(delta, 10))
 	}
 
+	diffDialogs(old, cur, add)
+
 	before := map[string]*v1.Sim{}
 	for _, s := range old.GetSims() {
 		before[s.GetId()] = s
@@ -116,4 +118,24 @@ func running(s *v1.Sim) *v1.Action {
 		}
 	}
 	return nil
+}
+
+// diffDialogs announces a game window once its words are known (they can
+// arrive a moment after the window itself).
+func diffDialogs(old, cur *v1.GameState, add func(v1.EventKind, *v1.Sim, string, string)) {
+	words := func(d *v1.Dialog) string {
+		if d.GetTitle() != "" {
+			return d.GetTitle()
+		}
+		return d.GetText()
+	}
+	known := map[string]bool{}
+	for _, d := range old.GetDialogs() {
+		known[d.GetId()] = words(d) != ""
+	}
+	for _, d := range cur.GetDialogs() {
+		if w := words(d); w != "" && !known[d.GetId()] {
+			add(v1.EventKind_EVENT_KIND_DIALOG, nil, w, d.GetText())
+		}
+	}
 }

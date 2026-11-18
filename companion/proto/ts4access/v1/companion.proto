@@ -23,6 +23,8 @@ service CompanionService {
   rpc RunInteraction(RunInteractionRequest) returns (RunInteractionResponse);
   // The house room by room, with what is in each room.
   rpc GetHouseMap(GetHouseMapRequest) returns (GetHouseMapResponse);
+  // Answer a game window: press a button, pick rows, or type text.
+  rpc RespondDialog(RespondDialogRequest) returns (RespondDialogResponse);
 }
 
 message WatchRequest {}
@@ -109,4 +111,18 @@ message GetHouseMapRequest {}
 message GetHouseMapResponse {
   CommandOutcome outcome = 1;
   HouseMap map = 2;
+}
+
+message RespondDialogRequest {
+  string dialog_id = 1;
+  // Button pressed (DialogChoice.id).
+  int32 choice_id = 2;
+  // Picker rows chosen (DialogRow.id), when the window is a picker.
+  repeated string row_ids = 3;
+  // Text typed, when the window has a text box.
+  string text = 4;
+}
+
+message RespondDialogResponse {
+  CommandOutcome outcome = 1;
 }

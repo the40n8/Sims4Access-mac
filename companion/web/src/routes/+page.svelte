@@ -7,6 +7,7 @@
 	import { eventText } from '$lib/text.js';
 	import Announcer, { announce } from '$lib/components/Announcer.svelte';
 	import StatusBanner from '$lib/components/StatusBanner.svelte';
+	import DialogCard from '$lib/components/DialogCard.svelte';
 	import LiveView from '$lib/components/LiveView.svelte';
 	import SimsView from '$lib/components/SimsView.svelte';
 	import PlayView from '$lib/components/PlayView.svelte';
@@ -88,6 +89,9 @@
 	<main class="page stack" aria-labelledby="title">
 		<h1 id="title" tabindex="-1" bind:this={heading}>{title}</h1>
 		<StatusBanner />
+		{#each live.state?.inGame ? live.state.dialogs : [] as dialog (dialog.id)}
+			<DialogCard {dialog} />
+		{/each}
 		{#if tab === 'live'}
 			<LiveView onSeeAll={() => show('history')} />
 		{:else if tab === 'play'}

@@ -170,6 +170,8 @@ def _tick():
         _last_poll = now
         _read_commands()
         _request_localization()
+        if _dialogs is not None:
+            _dialogs.flush_notes()
     if now - _last_state_time >= STATE_INTERVAL:
         _last_state_time = now
         _publish_state()
@@ -265,6 +267,11 @@ def _run(cmd):
         return hub.select_sim(int(cmd['selectSim'].get('simId', '0'))), 'sim_unavailable'
     if 'listTargets' in cmd:
         return True, '', {'targets': list_targets()}
+    if 'respondDialog' in cmd:
+        if _dialogs is None:
+            return False, 'error'
+        c = cmd['respondDialog']
+        return _dialogs.respond(c.get('dialogId', ''), c.get('choiceId', 0), c.get('rowIds', []), c.get('text', ''))
     if 'openMenu' in cmd:
         if cmd['openMenu'].get('menu') != 'hub':
             return False, 'unknown_command'
@@ -563,6 +570,9 @@ def _career(info, entry):
             except Exception:
                 title = ''
         entry['career'] = title or _pretty(type(career).__name__, ('career_',))
+        performance = _performance(career)
+        if performance is not None:
+            entry['performance'] = performance
         now = services.time_service().sim_now
         if career.currently_at_work:
             entry['awayAt'] = word
@@ -580,6 +590,79 @@ def _career(info, entry):
         return
 
 
+MAX_RELATIONSHIPS = 12
+
+
+def _relationships(info):
+    """Strongest relationships first: friendship, romance and the game's labels."""
+    from relationships.relationship_track import RelationshipTrack
+    tracker = info.relationship_tracker
+    friendship = getattr(RelationshipTrack, 'FRIENDSHIP_TRACK', None)
+    romance = getattr(RelationshipTrack, 'ROMANCE_TRACK', None)
+    rows = []
+    for other in list(tracker.get_target_sim_infos() or ()):
+        if other is None:
+            continue
+        try:
+            if tracker.is_hidden(other.sim_id):
+                continue
+        except Exception:
+            pass
+        f = r = 0
+        try:
+            f = int(round(tracker.get_relationship_score(other.sim_id, friendship) or 0)) if friendship else 0
+            r = int(round(tracker.get_relationship_score(other.sim_id, romance) or 0)) if romance else 0
+        except Exception:
+            pass
+        labels = []
+        try:
+            bits = [b for b in tracker.get_all_bits(other.sim_id) if getattr(b, 'visible', False)]
+            bits.sort(key=lambda b: -(getattr(b, 'priority', 0) or 0))
+            for bit in bits[:3]:
+                label = text_of(getattr(bit, 'display_name', None))
+                if label and label not in labels:
+                    labels.append(label)
+        except Exception:
+            pass
+        rows.append((max(abs(f), abs(r)) + (100 if labels else 0),
+                     {'simId': str(other.sim_id), 'name': '{} {}'.format(other.first_name, other.last_name).strip(),
+                      'friendship': f, 'romance': r, 'labels': labels}))
+    rows.sort(key=lambda pair: -pair[0])
+    return [row for _score, row in rows[:MAX_RELATIONSHIPS]]
+
+
+def _skills(info):
+    out = []
+    for skill in list(info.all_skills()):
+        try:
+            if getattr(skill, 'hidden', False):
+                continue
+            level = int(skill.get_user_value())
+            if level < 1:
+                continue
+            name = type(skill).__name__
+            out.append({'key': name, 'name': text_of(getattr(skill, 'stat_name', None),
+                                                    _pretty(name, ('statistic_skill_adultmajor_', 'statistic_skill_',
+                                                                   'skill_', 'adultmajor_'))),
+                        'level': level, 'maxLevel': int(getattr(skill, 'max_level', 10) or 10)})
+        except Exception:
+            continue
+    out.sort(key=lambda s: (-s['level'], s['name']))
+    return out
+
+
+def _performance(career):
+    """Work performance towards the next promotion, 0-100, or None."""
+    try:
+        value = float(career.work_performance)
+        goal = float(career._get_promote_performance_level())
+    except Exception:
+        return None
+    if goal <= 0:
+        return None
+    return max(0, min(100, int(round(100.0 * value / goal))))
+
+
 def _sim(info, client):
     sim = info.get_sim_instance()
     entry = {'id': str(info.sim_id), 'firstName': info.first_name or '', 'lastName': info.last_name or '',
@@ -588,6 +671,13 @@ def _sim(info, client):
         _career(info, entry)
     except Exception as ex:
         log('career of {} unavailable: {!r}'.format(info.first_name, ex))
+    for key, fn in (('relationships', lambda: _relationships(info)), ('skills', lambda: _skills(info))):
+        try:
+            value = fn()
+            if value:
+                entry[key] = value
+        except Exception as ex:
+            log('{} of {} unavailable: {!r}'.format(key, info.first_name, ex))
     for key, fn in (('mood', lambda: _mood(info)), ('needs', lambda: _needs(info)),
                     ('moodlets', lambda: _moodlets(info)), ('actions', lambda: _actions(sim) if sim else [])):
         if key != 'mood' and sim is None:
@@ -622,7 +712,18 @@ def build_state():
         'householdName': household.name or '',
         'sims': [_sim(info, client) for info in household.sim_info_gen()],
         'narration': _narration(),
+        'dialogs': _open_dialogs(),
     }
+
+
+def _open_dialogs():
+    if _dialogs is None:
+        return []
+    try:
+        return _dialogs.active()
+    except Exception as ex:
+        log('dialogs failed: {!r}'.format(ex))
+        return []
 
 
 def _publish_state():
@@ -649,6 +750,7 @@ def _publish_state():
 MAX_OBJECTS = 600         # nearest objects listed (a big house has a few hundred)
 MAX_DISTANCE = 60.0       # metres
 _menus = {}               # target id -> {option id: (aop, context)}
+PHONE_ID = 'phone'        # the controlled Sim's phone, a target of its own
 
 
 def _sim_and_client():
@@ -722,7 +824,8 @@ def list_targets():
         return ((float(pos.x) - float(origin.x)) ** 2 + (float(pos.z) - float(origin.z)) ** 2) ** 0.5
 
     targets = [{'id': str(sim.id), 'name': '{} {}'.format(sim.sim_info.first_name, sim.sim_info.last_name).strip(),
-                'isSim': True, 'isSelf': True, 'group': 'SIMS', 'distance': 0}]
+                'isSim': True, 'isSelf': True, 'group': 'SIMS', 'distance': 0},
+               {'id': PHONE_ID, 'name': 'Phone', 'group': 'PHONE'}]
     others = []
     for other in services.sim_info_manager().instanced_sims_gen():
         if other is sim:
@@ -788,6 +891,12 @@ def get_interactions(target_id):
     sim, client = _sim_and_client()
     if sim is None or client is None:
         return False, 'sim_unavailable'
+    menu = ChoiceMenu(sim)
+    if target_id == PHONE_ID:
+        # The Sim's own phone: calls, invitations, travel, services...
+        context = client.create_interaction_context(sim)
+        menu.add_potential_aops(None, context, sim.potential_phone_interactions(context), None)
+        return _menu_rows(target_id, sim, menu)
     obj = _target(target_id, sim)
     if obj is None:
         return False, 'target_unavailable'
@@ -801,7 +910,6 @@ def get_interactions(target_id):
     except Exception:
         level = 0
     pick_type = PickType.PICK_SIM if getattr(obj, 'is_sim', False) else PickType.PICK_OBJECT
-    menu = ChoiceMenu(sim)
     targets = [obj] + [t for t in (getattr(obj, 'forwarded_pick_targets', None) or ()) if t is not None and t is not obj]
     for target in targets:
         pick = PickInfo(pick_type=pick_type, target=target, location=obj.position,
@@ -814,6 +922,13 @@ def get_interactions(target_id):
                 sim.fill_choices_menu_with_si_state_aops(target, context, menu)
             except Exception as ex:
                 log('social rows unavailable: {!r}'.format(ex))
+    return _menu_rows(target_id, sim, menu)
+
+
+def _menu_rows(target_id, sim, menu):
+    """Rows of a ChoiceMenu as the game shows them (visible, named, greyed reasons)."""
+    import services
+    import sims4.resources
     categories = services.get_instance_manager(sims4.resources.Types.PIE_MENU_CATEGORY)
     tutorial = services.get_tutorial_service()
     rows, options = [], {}
@@ -897,7 +1012,14 @@ except Exception as _ex:
 
 # ---------------------------------------------------------------- startup
 
+_dialogs = None
 if IS_MAC:
+    try:
+        import tyjokr_a11y_dialogs as _dialogs
+        _dialogs.install()
+    except Exception as _ex:
+        _dialogs = None
+        log('dialogs unavailable: {!r}'.format(_ex))
     try:
         _install_tick()
         start()

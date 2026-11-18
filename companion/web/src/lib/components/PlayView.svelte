@@ -13,6 +13,7 @@
 	import VoiceToggle from './VoiceToggle.svelte';
 
 	const game = $derived(live.state);
+	const me = $derived(game?.sims.find((x) => x.active));
 	// Buttons say what they do ("Play"); the status line says the state ("Normal speed").
 	const speeds: { speed: Speed; label: () => string }[] = [
 		{ speed: Speed.PAUSED, label: m.btn_pause },
@@ -134,7 +135,7 @@
 						{#each g.items as t (t.id)}
 							<li>
 								<button type="button" class="row" id={`target-${t.id}`} onclick={() => open(t)}>
-									{targetLabel(t)}
+									{targetLabel(t, me ? simName(me) : '')}
 								</button>
 							</li>
 						{/each}

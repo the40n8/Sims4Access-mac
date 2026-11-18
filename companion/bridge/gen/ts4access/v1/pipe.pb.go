@@ -370,6 +370,7 @@ type ToGame struct {
 	//	*ToGame_RunInteraction
 	//	*ToGame_GetHouseMap
 	//	*ToGame_OpenMenu
+	//	*ToGame_RespondDialog
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -500,6 +501,15 @@ func (x *ToGame) GetOpenMenu() *OpenMenuRequest {
 	return nil
 }
 
+func (x *ToGame) GetRespondDialog() *RespondDialogRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_RespondDialog); ok {
+			return x.RespondDialog
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -540,6 +550,10 @@ type ToGame_OpenMenu struct {
 	OpenMenu *OpenMenuRequest `protobuf:"bytes,10,opt,name=open_menu,json=openMenu,proto3,oneof"`
 }
 
+type ToGame_RespondDialog struct {
+	RespondDialog *RespondDialogRequest `protobuf:"bytes,11,opt,name=respond_dialog,json=respondDialog,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -557,6 +571,8 @@ func (*ToGame_RunInteraction) isToGame_Command() {}
 func (*ToGame_GetHouseMap) isToGame_Command() {}
 
 func (*ToGame_OpenMenu) isToGame_Command() {}
+
+func (*ToGame_RespondDialog) isToGame_Command() {}
 
 // Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
 // menu bar icon, not from the phone).
@@ -632,7 +648,7 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x05event\x18\x03 \x01(\v2\x13.ts4access.v1.EventH\x00R\x05event\x125\n" +
 	"\x06result\x18\x04 \x01(\v2\x1b.ts4access.v1.CommandResultH\x00R\x06result\x12+\n" +
 	"\x05voice\x18\x05 \x01(\v2\x13.ts4access.v1.VoiceH\x00R\x05voiceB\t\n" +
-	"\apayload\"\xa6\x05\n" +
+	"\apayload\"\xf3\x05\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1d.ts4access.v1.SetSpeedRequestH\x00R\bsetSpeed\x12?\n" +
@@ -645,7 +661,8 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x0frun_interaction\x18\b \x01(\v2#.ts4access.v1.RunInteractionRequestH\x00R\x0erunInteraction\x12F\n" +
 	"\rget_house_map\x18\t \x01(\v2 .ts4access.v1.GetHouseMapRequestH\x00R\vgetHouseMap\x12<\n" +
 	"\topen_menu\x18\n" +
-	" \x01(\v2\x1d.ts4access.v1.OpenMenuRequestH\x00R\bopenMenuB\t\n" +
+	" \x01(\v2\x1d.ts4access.v1.OpenMenuRequestH\x00R\bopenMenu\x12K\n" +
+	"\x0erespond_dialog\x18\v \x01(\v2\".ts4access.v1.RespondDialogRequestH\x00R\rrespondDialogB\t\n" +
 	"\acommand\"%\n" +
 	"\x0fOpenMenuRequest\x12\x12\n" +
 	"\x04menu\x18\x01 \x01(\tR\x04menuB\xc0\x01\n" +
@@ -685,6 +702,7 @@ var file_ts4access_v1_pipe_proto_goTypes = []any{
 	(*GetInteractionsRequest)(nil), // 17: ts4access.v1.GetInteractionsRequest
 	(*RunInteractionRequest)(nil),  // 18: ts4access.v1.RunInteractionRequest
 	(*GetHouseMapRequest)(nil),     // 19: ts4access.v1.GetHouseMapRequest
+	(*RespondDialogRequest)(nil),   // 20: ts4access.v1.RespondDialogRequest
 }
 var file_ts4access_v1_pipe_proto_depIdxs = []int32{
 	6,  // 0: ts4access.v1.CommandResult.outcome:type_name -> ts4access.v1.CommandOutcome
@@ -705,11 +723,12 @@ var file_ts4access_v1_pipe_proto_depIdxs = []int32{
 	18, // 15: ts4access.v1.ToGame.run_interaction:type_name -> ts4access.v1.RunInteractionRequest
 	19, // 16: ts4access.v1.ToGame.get_house_map:type_name -> ts4access.v1.GetHouseMapRequest
 	5,  // 17: ts4access.v1.ToGame.open_menu:type_name -> ts4access.v1.OpenMenuRequest
-	18, // [18:18] is the sub-list for method output_type
-	18, // [18:18] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	20, // 18: ts4access.v1.ToGame.respond_dialog:type_name -> ts4access.v1.RespondDialogRequest
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_pipe_proto_init() }
@@ -736,6 +755,7 @@ func file_ts4access_v1_pipe_proto_init() {
 		(*ToGame_RunInteraction)(nil),
 		(*ToGame_GetHouseMap)(nil),
 		(*ToGame_OpenMenu)(nil),
+		(*ToGame_RespondDialog)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

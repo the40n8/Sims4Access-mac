@@ -56,6 +56,7 @@ message ToGame {
     RunInteractionRequest run_interaction = 8;
     GetHouseMapRequest get_house_map = 9;
     OpenMenuRequest open_menu = 10;
+    RespondDialogRequest respond_dialog = 11;
   }
 }
 

@@ -24,6 +24,7 @@
 	}
 
 	const labels: Record<Group, () => string> = {
+		messages: m.kind_messages,
 		mood: m.kind_mood,
 		moodlet: m.kind_moodlet,
 		need: m.kind_need,

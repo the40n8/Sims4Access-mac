@@ -948,6 +948,121 @@ func (x *GetHouseMapResponse) GetMap() *HouseMap {
 	return nil
 }
 
+type RespondDialogRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	DialogId string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
+	// Button pressed (DialogChoice.id).
+	ChoiceId int32 `protobuf:"varint,2,opt,name=choice_id,json=choiceId,proto3" json:"choice_id,omitempty"`
+	// Picker rows chosen (DialogRow.id), when the window is a picker.
+	RowIds []string `protobuf:"bytes,3,rep,name=row_ids,json=rowIds,proto3" json:"row_ids,omitempty"`
+	// Text typed, when the window has a text box.
+	Text          string `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RespondDialogRequest) Reset() {
+	*x = RespondDialogRequest{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespondDialogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespondDialogRequest) ProtoMessage() {}
+
+func (x *RespondDialogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespondDialogRequest.ProtoReflect.Descriptor instead.
+func (*RespondDialogRequest) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *RespondDialogRequest) GetDialogId() string {
+	if x != nil {
+		return x.DialogId
+	}
+	return ""
+}
+
+func (x *RespondDialogRequest) GetChoiceId() int32 {
+	if x != nil {
+		return x.ChoiceId
+	}
+	return 0
+}
+
+func (x *RespondDialogRequest) GetRowIds() []string {
+	if x != nil {
+		return x.RowIds
+	}
+	return nil
+}
+
+func (x *RespondDialogRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+type RespondDialogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Outcome       *CommandOutcome        `protobuf:"bytes,1,opt,name=outcome,proto3" json:"outcome,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RespondDialogResponse) Reset() {
+	*x = RespondDialogResponse{}
+	mi := &file_ts4access_v1_companion_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespondDialogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespondDialogResponse) ProtoMessage() {}
+
+func (x *RespondDialogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ts4access_v1_companion_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespondDialogResponse.ProtoReflect.Descriptor instead.
+func (*RespondDialogResponse) Descriptor() ([]byte, []int) {
+	return file_ts4access_v1_companion_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *RespondDialogResponse) GetOutcome() *CommandOutcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return nil
+}
+
 var File_ts4access_v1_companion_proto protoreflect.FileDescriptor
 
 const file_ts4access_v1_companion_proto_rawDesc = "" +
@@ -997,7 +1112,14 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\x12GetHouseMapRequest\"w\n" +
 	"\x13GetHouseMapResponse\x126\n" +
 	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome\x12(\n" +
-	"\x03map\x18\x02 \x01(\v2\x16.ts4access.v1.HouseMapR\x03map2\x82\x06\n" +
+	"\x03map\x18\x02 \x01(\v2\x16.ts4access.v1.HouseMapR\x03map\"}\n" +
+	"\x14RespondDialogRequest\x12\x1b\n" +
+	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12\x1b\n" +
+	"\tchoice_id\x18\x02 \x01(\x05R\bchoiceId\x12\x17\n" +
+	"\arow_ids\x18\x03 \x03(\tR\x06rowIds\x12\x12\n" +
+	"\x04text\x18\x04 \x01(\tR\x04text\"O\n" +
+	"\x15RespondDialogResponse\x126\n" +
+	"\aoutcome\x18\x01 \x01(\v2\x1c.ts4access.v1.CommandOutcomeR\aoutcome2\xdc\x06\n" +
 	"\x10CompanionService\x12B\n" +
 	"\x05Watch\x12\x1a.ts4access.v1.WatchRequest\x1a\x1b.ts4access.v1.WatchResponse0\x01\x12I\n" +
 	"\bSetSpeed\x12\x1d.ts4access.v1.SetSpeedRequest\x1a\x1e.ts4access.v1.SetSpeedResponse\x12L\n" +
@@ -1007,7 +1129,8 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\vListTargets\x12 .ts4access.v1.ListTargetsRequest\x1a!.ts4access.v1.ListTargetsResponse\x12^\n" +
 	"\x0fGetInteractions\x12$.ts4access.v1.GetInteractionsRequest\x1a%.ts4access.v1.GetInteractionsResponse\x12[\n" +
 	"\x0eRunInteraction\x12#.ts4access.v1.RunInteractionRequest\x1a$.ts4access.v1.RunInteractionResponse\x12R\n" +
-	"\vGetHouseMap\x12 .ts4access.v1.GetHouseMapRequest\x1a!.ts4access.v1.GetHouseMapResponseB\xc5\x01\n" +
+	"\vGetHouseMap\x12 .ts4access.v1.GetHouseMapRequest\x1a!.ts4access.v1.GetHouseMapResponse\x12X\n" +
+	"\rRespondDialog\x12\".ts4access.v1.RespondDialogRequest\x1a#.ts4access.v1.RespondDialogResponseB\xc5\x01\n" +
 	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
@@ -1022,7 +1145,7 @@ func file_ts4access_v1_companion_proto_rawDescGZIP() []byte {
 	return file_ts4access_v1_companion_proto_rawDescData
 }
 
-var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_ts4access_v1_companion_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_ts4access_v1_companion_proto_goTypes = []any{
 	(*WatchRequest)(nil),            // 0: ts4access.v1.WatchRequest
 	(*WatchResponse)(nil),           // 1: ts4access.v1.WatchResponse
@@ -1043,53 +1166,58 @@ var file_ts4access_v1_companion_proto_goTypes = []any{
 	(*CommandOutcome)(nil),          // 16: ts4access.v1.CommandOutcome
 	(*GetHouseMapRequest)(nil),      // 17: ts4access.v1.GetHouseMapRequest
 	(*GetHouseMapResponse)(nil),     // 18: ts4access.v1.GetHouseMapResponse
-	(*GameState)(nil),               // 19: ts4access.v1.GameState
-	(*Event)(nil),                   // 20: ts4access.v1.Event
-	(Speed)(0),                      // 21: ts4access.v1.Speed
-	(*Narration)(nil),               // 22: ts4access.v1.Narration
-	(*Target)(nil),                  // 23: ts4access.v1.Target
-	(*Interaction)(nil),             // 24: ts4access.v1.Interaction
-	(*HouseMap)(nil),                // 25: ts4access.v1.HouseMap
+	(*RespondDialogRequest)(nil),    // 19: ts4access.v1.RespondDialogRequest
+	(*RespondDialogResponse)(nil),   // 20: ts4access.v1.RespondDialogResponse
+	(*GameState)(nil),               // 21: ts4access.v1.GameState
+	(*Event)(nil),                   // 22: ts4access.v1.Event
+	(Speed)(0),                      // 23: ts4access.v1.Speed
+	(*Narration)(nil),               // 24: ts4access.v1.Narration
+	(*Target)(nil),                  // 25: ts4access.v1.Target
+	(*Interaction)(nil),             // 26: ts4access.v1.Interaction
+	(*HouseMap)(nil),                // 27: ts4access.v1.HouseMap
 }
 var file_ts4access_v1_companion_proto_depIdxs = []int32{
-	19, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
-	20, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
-	21, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
-	22, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
+	21, // 0: ts4access.v1.WatchResponse.state:type_name -> ts4access.v1.GameState
+	22, // 1: ts4access.v1.WatchResponse.event:type_name -> ts4access.v1.Event
+	23, // 2: ts4access.v1.SetSpeedRequest.speed:type_name -> ts4access.v1.Speed
+	24, // 3: ts4access.v1.SetNarrationRequest.narration:type_name -> ts4access.v1.Narration
 	16, // 4: ts4access.v1.SetSpeedResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 5: ts4access.v1.SelectSimResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 6: ts4access.v1.CancelActionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 7: ts4access.v1.SetNarrationResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 8: ts4access.v1.ListTargetsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	23, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
+	25, // 9: ts4access.v1.ListTargetsResponse.targets:type_name -> ts4access.v1.Target
 	16, // 10: ts4access.v1.GetInteractionsResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	24, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
+	26, // 11: ts4access.v1.GetInteractionsResponse.interactions:type_name -> ts4access.v1.Interaction
 	16, // 12: ts4access.v1.RunInteractionResponse.outcome:type_name -> ts4access.v1.CommandOutcome
 	16, // 13: ts4access.v1.GetHouseMapResponse.outcome:type_name -> ts4access.v1.CommandOutcome
-	25, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
-	0,  // 15: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
-	2,  // 16: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
-	3,  // 17: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
-	4,  // 18: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
-	5,  // 19: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
-	10, // 20: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
-	12, // 21: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
-	14, // 22: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
-	17, // 23: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
-	1,  // 24: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
-	6,  // 25: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
-	7,  // 26: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
-	8,  // 27: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
-	9,  // 28: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
-	11, // 29: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
-	13, // 30: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
-	15, // 31: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
-	18, // 32: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
-	24, // [24:33] is the sub-list for method output_type
-	15, // [15:24] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	27, // 14: ts4access.v1.GetHouseMapResponse.map:type_name -> ts4access.v1.HouseMap
+	16, // 15: ts4access.v1.RespondDialogResponse.outcome:type_name -> ts4access.v1.CommandOutcome
+	0,  // 16: ts4access.v1.CompanionService.Watch:input_type -> ts4access.v1.WatchRequest
+	2,  // 17: ts4access.v1.CompanionService.SetSpeed:input_type -> ts4access.v1.SetSpeedRequest
+	3,  // 18: ts4access.v1.CompanionService.SelectSim:input_type -> ts4access.v1.SelectSimRequest
+	4,  // 19: ts4access.v1.CompanionService.CancelAction:input_type -> ts4access.v1.CancelActionRequest
+	5,  // 20: ts4access.v1.CompanionService.SetNarration:input_type -> ts4access.v1.SetNarrationRequest
+	10, // 21: ts4access.v1.CompanionService.ListTargets:input_type -> ts4access.v1.ListTargetsRequest
+	12, // 22: ts4access.v1.CompanionService.GetInteractions:input_type -> ts4access.v1.GetInteractionsRequest
+	14, // 23: ts4access.v1.CompanionService.RunInteraction:input_type -> ts4access.v1.RunInteractionRequest
+	17, // 24: ts4access.v1.CompanionService.GetHouseMap:input_type -> ts4access.v1.GetHouseMapRequest
+	19, // 25: ts4access.v1.CompanionService.RespondDialog:input_type -> ts4access.v1.RespondDialogRequest
+	1,  // 26: ts4access.v1.CompanionService.Watch:output_type -> ts4access.v1.WatchResponse
+	6,  // 27: ts4access.v1.CompanionService.SetSpeed:output_type -> ts4access.v1.SetSpeedResponse
+	7,  // 28: ts4access.v1.CompanionService.SelectSim:output_type -> ts4access.v1.SelectSimResponse
+	8,  // 29: ts4access.v1.CompanionService.CancelAction:output_type -> ts4access.v1.CancelActionResponse
+	9,  // 30: ts4access.v1.CompanionService.SetNarration:output_type -> ts4access.v1.SetNarrationResponse
+	11, // 31: ts4access.v1.CompanionService.ListTargets:output_type -> ts4access.v1.ListTargetsResponse
+	13, // 32: ts4access.v1.CompanionService.GetInteractions:output_type -> ts4access.v1.GetInteractionsResponse
+	15, // 33: ts4access.v1.CompanionService.RunInteraction:output_type -> ts4access.v1.RunInteractionResponse
+	18, // 34: ts4access.v1.CompanionService.GetHouseMap:output_type -> ts4access.v1.GetHouseMapResponse
+	20, // 35: ts4access.v1.CompanionService.RespondDialog:output_type -> ts4access.v1.RespondDialogResponse
+	26, // [26:36] is the sub-list for method output_type
+	16, // [16:26] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_ts4access_v1_companion_proto_init() }
@@ -1109,7 +1237,7 @@ func file_ts4access_v1_companion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ts4access_v1_companion_proto_rawDesc), len(file_ts4access_v1_companion_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
