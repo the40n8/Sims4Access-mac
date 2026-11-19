@@ -3015,8 +3015,8 @@ const file_ts4access_v1_game_proto_rawDesc = "" +
 	"\x10EVENT_KIND_BILLS\x10\x11\x12\x15\n" +
 	"\x11EVENT_KIND_SOCIAL\x10\x12\x12\x1b\n" +
 	"\x17EVENT_KIND_RELATIONSHIP\x10\x13\x12\x19\n" +
-	"\x15EVENT_KIND_ROUTE_FAIL\x10\x14B\xc0\x01\n" +
-	"\x10com.ts4access.v1B\tGameProtoP\x01ZPgithub.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
+	"\x15EVENT_KIND_ROUTE_FAIL\x10\x14B\xc3\x01\n" +
+	"\x10com.ts4access.v1B\tGameProtoP\x01ZSgithub.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
 	file_ts4access_v1_game_proto_rawDescOnce sync.Once

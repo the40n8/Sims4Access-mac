@@ -885,8 +885,8 @@ const file_ts4access_v1_pipe_proto_rawDesc = "" +
 	"\x06family\x18\x01 \x01(\tR\x06family\x12\x0e\n" +
 	"\x02vk\x18\x02 \x01(\x05R\x02vk\x12\x12\n" +
 	"\x04down\x18\x03 \x01(\bR\x04down\x12\x14\n" +
-	"\x05shift\x18\x04 \x01(\bR\x05shiftB\xc0\x01\n" +
-	"\x10com.ts4access.v1B\tPipeProtoP\x01ZPgithub.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
+	"\x05shift\x18\x04 \x01(\bR\x05shiftB\xc3\x01\n" +
+	"\x10com.ts4access.v1B\tPipeProtoP\x01ZSgithub.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
 	file_ts4access_v1_pipe_proto_rawDescOnce sync.Once
