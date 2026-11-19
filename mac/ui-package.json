@@ -1,5 +1,5 @@
 {
-  "comment": "Upstream release whose TS4_Access_UI.package (the patched Flash UI) this fork ships. The UI is not built here: it needs EA's movies and FFDec. Update with mac/pin-ui.sh <release-tag>.",
+  "comment": "TS4 Access release whose TS4_Access_UI.package (the patched Flash UI) SimSight ships as SimSight_UI.package. The UI is not built here: it needs EA's movies and FFDec. Update with mac/pin-ui.sh <release-tag>.",
   "repo": "LeonianUniverse478/Sims4Access",
   "release": "build-2026-11-18_091845",
   "asset": "TS4_Access_Update.zip",

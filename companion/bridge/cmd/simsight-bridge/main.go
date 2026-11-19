@@ -72,7 +72,6 @@ func run() error {
 	)
 	flag.Parse()
 
-	pairing.MoveOldFolder(*dataDir)
 	if err := os.MkdirAll(*dataDir, 0o700); err != nil {
 		return err
 	}
@@ -360,7 +359,6 @@ func printLink(args []string) error {
 	base := fs.String("base", "", "public address to link to instead of the Mac's (e.g. a tunnel URL)")
 	_ = fs.Parse(args)
 
-	pairing.MoveOldFolder(*dataDir)
 	cfg, err := pairing.Load(*dataDir)
 	if err != nil {
 		return err

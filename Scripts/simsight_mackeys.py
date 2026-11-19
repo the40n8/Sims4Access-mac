@@ -6,9 +6,9 @@ captures the keys with system hot keys while The Sims 4 is the front app and
 the bridge passes them here. This module feeds them into the same entry
 points the Windows reader uses, on the game's tick (no threads):
 
-- "chord": the original Ctrl+Alt+key (Mac: Control+Shift+key) -> keys._chord
+- "chord": the Windows Ctrl+Alt+key (Mac: Control+Shift+key) -> keys._chord
 - "needs": Ctrl+Shift+N (Mac: Control+Shift+N) -> A11yNeeds
-- "plus":  the original Alt+key (Mac: Option+Shift+key) -> plus_core.HOTKEYS
+- "plus":  the Windows Alt+key (Mac: Option+Shift+key) -> plus_core.HOTKEYS
 - "plain": bare keys (arrows, Tab, Enter...) the mod owns right now
   (keys._plain_message decides, like the Windows reader) -> keys._send
 

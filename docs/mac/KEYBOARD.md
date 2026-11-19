@@ -1,11 +1,11 @@
 # SimSight keyboard on a Mac
 
-The original mod's keyboard (CONTROLS.txt) works on the Mac with Mac keys.
+SimSight's keyboard on the Mac (Windows keys in brackets).
 The keys are taken only while The Sims 4 is the front app, so other apps,
 macOS and VoiceOver keep their own shortcuts. Letters follow the letters
 printed on your keyboard (AZERTY, QWERTZ...).
 
-| Original (Windows) | Mac |
+| Windows | Mac |
 |---|---|
 | Ctrl+Alt+key | **Control+Shift+key** (⌃⇧) |
 | Alt+key (SimSight Plus) | **Option+Shift+key** (⌥⇧) |
@@ -27,7 +27,7 @@ console (Command+Shift+C). Bare keys are only taken while the mod owns
 them (a menu or dialog is open, scanner mode is on, or the Build cursor is
 active); otherwise the game gets them as usual.
 
-## Control+Shift keys (the original's Ctrl+Alt)
+## Control+Shift keys (Ctrl+Alt on Windows)
 
 | Key | Action |
 |---|---|
@@ -55,11 +55,11 @@ active); otherwise the game gets them as usual.
 | ⌃⇧ [ / ] | rotate left / right |
 | ⌃⇧ Z / Y / X | undo / redo / sell |
 
-## Option+Shift keys (the original's Alt, SimSight Plus)
+## Option+Shift keys (Alt on Windows, SimSight Plus)
 
 | Key | Action |
 |---|---|
-| ⌥⇧ A | Access Plus menu |
+| ⌥⇧ A | SimSight Plus menu |
 | ⌥⇧ Q | action queue |
 | ⌥⇧ N | needs |
 | ⌥⇧ L | last notifications |

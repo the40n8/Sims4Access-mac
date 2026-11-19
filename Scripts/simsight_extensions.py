@@ -1,4 +1,4 @@
-"""Load only local extensions not integrated into upstream TS4 Access."""
+"""Load only local extensions not integrated into SimSight itself."""
 import simsight_speech as speech
 
 _installed = False
@@ -9,7 +9,7 @@ def install():
         return
     _installed = True
     # Scanner ranges, moving furniture, room labels, wall/surface placement
-    # and layer keys now belong to upstream's native modules and key loop.
+    # and layer keys now belong to the native modules and key loop.
     import importlib
     for name, explicit in (
         ('simsight_chair_alignment', False),
@@ -28,5 +28,5 @@ def install():
                 module.install()
         except Exception as exc:
             speech.log_line('local extension {} failed: {!r}'.format(name, exc))
-    speech.log_line('local extensions installed on upstream-native contributions')
+    speech.log_line('local extensions installed')
 

@@ -1,4 +1,4 @@
-"""House map for the phone companion (macOS fork).
+"""House map for the phone companion (macOS).
 
 The house room by room: what each room is, how big, where it sits on the
 floor, which rooms it opens onto, and what is in it. Built from the game's

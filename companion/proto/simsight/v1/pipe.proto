@@ -8,7 +8,7 @@ import "simsight/v1/game.proto";
 // Game <-> bridge pipe. One message per line, protobuf JSON (camelCase
 // field names, enum value names as strings). The game writes ToBridge lines
 // on the bridge's stdin and reads ToGame lines from its stdout. Lines that
-// start with "I" or "Q" instead of "{" are speech, in the original
+// start with "I" or "Q" instead of "{" are speech, in the mod's
 // SimSight fallback-voice format (I = interrupt, Q = queue, then the
 // percent-encoded text).
 
@@ -79,7 +79,7 @@ message GrabKeys {
   repeated string keys = 1;
 }
 
-// A key from the Mac key helper, in the original mod's terms.
+// A key from the Mac key helper, in the mod's (Windows) key terms.
 message KeyEvent {
   // chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),
   // plain (bare key the mod owns) or focus (the game lost focus).

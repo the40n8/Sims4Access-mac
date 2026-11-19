@@ -3,8 +3,8 @@
 #   SimSight.ts4script     compiled from Scripts/ with Python 3.7
 #   simsight-bridge        phone companion: web app + API (Go, universal)
 #   simsight-say           speech companion (Swift, universal)
-#   SimSight_UI.package    from the pinned upstream release (checksum verified;
-#                          upstream names it TS4_Access_UI.package)
+#   SimSight_UI.package    from the pinned TS4 Access release (checksum verified;
+#                          the TS4 Access release names it TS4_Access_UI.package)
 #   cloudflared            Cloudflare's tunnel client, pinned and signature-checked
 # Env: PY37 = a Python 3.7 interpreter (default: micromamba env below).
 # Needs: swiftc (Xcode Command Line Tools), go, pnpm.
@@ -45,7 +45,7 @@ done
 lipo -create -output "$DIST/simsight-bridge" "$CACHE/simsight-bridge-arm64" "$CACHE/simsight-bridge-amd64"
 chmod +x "$DIST/simsight-say" "$DIST/simsight-bridge"
 
-echo "== UI package (upstream release)"
+echo "== Game interface (TS4 Access release)"
 read -r REPO RELEASE ASSET SHA < <(python3 -I -c '
 import json, sys; p = json.load(open(sys.argv[1]))
 print(p["repo"], p["release"], p["asset"], p["sha256"])' "$MAC/ui-package.json")
@@ -56,9 +56,10 @@ if [[ ! -f "$ZIP" ]]; then
 fi
 GOT=$(shasum -a 256 "$ZIP" | cut -d' ' -f1)
 [[ "$GOT" == "$SHA" ]] || { rm -f "$ZIP"; echo "Checksum mismatch for $ASSET ($GOT). Not used."; exit 1; }
-unzip -o -q -j "$ZIP" "Mods/TS4_Access/TS4_Access_UI.package" \
-  "Mods/TS4_Access/README.txt" "Mods/TS4_Access/CONTROLS.txt" "Mods/TS4_Access/CHEATS.txt" -d "$DIST"
-mv -f "$DIST/TS4_Access_UI.package" "$DIST/SimSight_UI.package"
+# The game interface (prebuilt Flash UI) comes from the TS4 Access release.
+unzip -o -q -j "$ZIP" "Mods/TS4_Access/TS4_Access_UI.package" -d "$CACHE"
+cp -f "$CACHE/TS4_Access_UI.package" "$DIST/SimSight_UI.package"
+rm -f "$DIST/README.txt" "$DIST/CONTROLS.txt" "$DIST/CHEATS.txt" "$DIST/README-MAC.md"
 
 echo "== cloudflared (Cloudflare quick tunnel)"
 read -r CF_VER CF_TEAM CF_ARM CF_AMD < <(python3 -I -c '
@@ -80,6 +81,7 @@ CF_SIG=$(codesign -dv "$DIST/cloudflared" 2>&1)   # captured: grep -q on a pipe 
 cp "$CACHE/cloudflared-LICENSE-$CF_VER" "$DIST/cloudflared-LICENSE.txt"
 
 cp "$ROOT/LICENSE" "$DIST/LICENSE.txt"
-cp "$MAC/PLAYERS.md" "$DIST/README-MAC.md"
+cp "$MAC/PLAYERS.md" "$DIST/README.md"
+cp "$ROOT/docs/mac/KEYBOARD.md" "$ROOT/docs/mac/COMMANDS.md" "$DIST/"
 echo "== Done: $DIST"
 ls -l "$DIST"

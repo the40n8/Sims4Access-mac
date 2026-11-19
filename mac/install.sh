@@ -54,21 +54,7 @@ print -r -- "Backup: $BACKUP"
 
 tell "Step 2 of 3: copying the mod."
 mkdir -p "$DEST"
-# Before the rename the mod lived in Mods/SimSight: keep its settings and
-# the names given to rooms and buildings, then set that folder aside (two
-# copies of the mod must never load together).
-OLDNAME="TS4_""Access"   # split: mac/rebrand.py must not rename it
-OLD="$MODS/$OLDNAME"
-if [[ -d "$OLD" ]]; then
-  for f in "$OLD"/${OLDNAME}*.(cfg|json|txt)(N); do
-    n="${f:t}"; n="SimSight${n#$OLDNAME}"
-    [[ -e "$DEST/$n" ]] || cp -p "$f" "$DEST/$n"
-  done
-  mkdir -p "$BACKUP/Mods"
-  mv "$OLD" "$BACKUP/Mods/"
-  tell "The previous version was moved to the backups; your settings were kept."
-fi
-for f in SimSight.ts4script SimSight_UI.package simsight-say simsight-bridge cloudflared cloudflared-LICENSE.txt README.txt CONTROLS.txt CHEATS.txt LICENSE.txt README-MAC.md; do
+for f in SimSight.ts4script SimSight_UI.package simsight-say simsight-bridge cloudflared cloudflared-LICENSE.txt LICENSE.txt README.md KEYBOARD.md COMMANDS.md; do
   cp -p "$SRC/$f" "$DEST/$f.new" && mv -f "$DEST/$f.new" "$DEST/$f"
 done
 cp -p "$HERE/uninstall.sh" "$DEST/uninstall.sh" 2>/dev/null || true
@@ -81,7 +67,7 @@ chmod +x "$DEST/simsight-say" "$DEST/simsight-bridge" "$DEST/cloudflared" "$DEST
 xattr -dr com.apple.quarantine "$DEST" 2>/dev/null || true
 
 tell "Step 3 of 3: allowing mods in the game settings."
-# Same change the Windows TS4 Access Helper makes: allow mods and script mods.
+# Allow mods and script mods in the game settings.
 sed -i '' -E 's/^([[:space:]]*scriptmodsenabled[[:space:]]*=[[:space:]]*)[0-9]+/\11/; s/^([[:space:]]*modsdisabled[[:space:]]*=[[:space:]]*)[0-9]+/\10/' "$USERDIR/Options.ini"
 grep -E '^(scriptmodsenabled|modsdisabled)' "$USERDIR/Options.ini" || true
 print -r -- "Installed to: $DEST"

@@ -23,8 +23,7 @@ zip from the latest release and its **Install SimSight Companion.command**.
 
 ## Controls that matter on Mac
 
-Cheat console: Cmd+Shift+C (Ctrl+Shift+C on some keyboards), then type
-(the older `a11y.` names still work too):
+Cheat console: Cmd+Shift+C (Ctrl+Shift+C on some keyboards), then type:
 
 - `simsight.speechmode off` / `simsight.speechmode hover` — silence / resume narration
 - `simsight.simactions on|off` — announce what the active Sim starts doing
@@ -86,5 +85,4 @@ simplified menus would change menus for the mouse player). Narration is in
   needs a Windows API, and its listener thread crashed the Mac game).
 - No braille, no VoiceOver integration (VoiceOver can stay on, but the mod
   speaks with its own voice).
-- Not tested by the SimSight team on macOS. Report problems to this port,
-  not upstream, unless they also happen on Windows.
+- Report problems at https://github.com/the40n8/simsight-companion/issues.

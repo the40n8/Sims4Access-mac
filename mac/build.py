@@ -1,7 +1,6 @@
 """Compile Scripts/ into SimSight.ts4script for the macOS game.
 
-Same output format as upstream compile.py (Python 3.7 .pyc, PEP 552 header,
-stored zip), but it writes only to the given folder and never deploys.
+Python 3.7 .pyc (PEP 552 header) in a stored zip, but it writes only to the given folder and never deploys.
 Usage: <python3.7> mac/build.py <repo root> <out dir>
 """
 import marshal
@@ -11,9 +10,8 @@ import sys
 import zipfile
 from importlib.util import MAGIC_NUMBER
 
-# Never shipped on macOS even if an upstream merge brings them back before
-# sync-upstream.sh deletes them: the game imports every module at load, and
-# these need ctypes, which the Mac game does not have.
+# Windows-only modules, never shipped on macOS: the game imports every module
+# at load, and these need ctypes, which the Mac game does not have.
 SKIP_DIRS = {'ctypes', '__pycache__'}
 SKIP_FILES = {'simsight_prism.py',
               # Windows screen/DPI measurement and the SAPI kernel job (ctypes at load);

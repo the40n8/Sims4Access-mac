@@ -157,15 +157,3 @@ func (c *Config) WriteLinkFile(dir string) (string, error) {
 	return path, os.WriteFile(path, []byte(strings.Join(c.Links(), "\n")+"\n"), 0o600)
 }
 
-// MoveOldFolder renames the folder used before the project was renamed
-// to SimSight, so the pairing key, the fixed address settings
-// and the meeting point stay: paired phones keep working.
-func MoveOldFolder(dir string) {
-	if _, err := os.Stat(dir); err == nil {
-		return
-	}
-	old := filepath.Join(filepath.Dir(dir), "TS4"+"AccessCompanion") // split: mac/rebrand.py must not rename it
-	if _, err := os.Stat(old); err == nil {
-		_ = os.Rename(old, dir)
-	}
-}

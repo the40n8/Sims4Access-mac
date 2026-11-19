@@ -788,7 +788,7 @@ def open_hub():
 
 
 def _companion_rows():
-    """macOS fork: the phone companion's QR code page."""
+    """macOS: the phone companion's QR code page."""
     import sys
     bridge = sys.modules.get('simsight_bridge')
     if sys.platform != 'darwin' or bridge is None:

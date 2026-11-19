@@ -11,7 +11,7 @@
 // has focus, Option+Command+S (speech on/off) and Option+Command+A (TS4
 // Access menu), and a menu bar icon with the same actions plus the phone
 // companion. Each prints "K voice", "K hub" or "K phone" on stdout.
-// While The Sims 4 is the front app it also takes the original mod's
+// While The Sims 4 is the front app it also takes the mod's
 // keyboard (Control+Shift for its Ctrl+Alt keys, Option+Shift for its Alt
 // keys, and the bare keys the game says the mod owns, sent as "G vk,..."
 // lines on stdin) and prints "K key <family> <vk> <down|up> <shift>".
@@ -146,7 +146,7 @@ struct HotKey {
     let shift: Bool
 }
 
-// Windows VK codes of the keys the original mod uses, and the Mac key that
+// Windows VK codes of the keys the mod uses, and the Mac key that
 // types them: letters follow the keyboard layout, the rest are positions.
 func macKey(forVK vk: Int) -> Int? {
     switch vk {

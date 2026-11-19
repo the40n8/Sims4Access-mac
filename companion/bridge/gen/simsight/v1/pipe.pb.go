@@ -755,7 +755,7 @@ func (x *GrabKeys) GetKeys() []string {
 	return nil
 }
 
-// A key from the Mac key helper, in the original mod's terms.
+// A key from the Mac key helper, in the mod's (Windows) key terms.
 type KeyEvent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),

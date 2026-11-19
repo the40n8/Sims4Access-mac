@@ -1,5 +1,6 @@
 #!/bin/zsh
-# Pin the upstream release whose TS4_Access_UI.package we ship.
+# Pin the TS4 Access release whose prebuilt game interface (TS4_Access_UI.package,
+# shipped as SimSight_UI.package) SimSight uses.
 #   mac/pin-ui.sh build-2026-11-12_220652
 # Uses the release's published .sha256 file; does not download the zip.
 set -euo pipefail

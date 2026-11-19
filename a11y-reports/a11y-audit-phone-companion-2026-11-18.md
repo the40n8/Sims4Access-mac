@@ -1,4 +1,4 @@
-# Accessibility Audit — TS4 Access phone companion
+# Accessibility Audit — SimSight phone companion
 
 **Verdict:** Can a blind VoiceOver user follow and play the game from the phone app independently? **Yes, with the fixes below applied; real-device VoiceOver testing still pending.**
 

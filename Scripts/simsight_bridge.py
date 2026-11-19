@@ -1,4 +1,4 @@
-"""Companion bridge (macOS fork): game <-> simsight-bridge <-> phone.
+"""Companion bridge (macOS): game <-> simsight-bridge <-> phone.
 
 The bridge is a child process started here, on the game's loading thread.
 - Speech: the speech module writes its usual "I..."/"Q..." lines to the

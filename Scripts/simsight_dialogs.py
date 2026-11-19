@@ -1,4 +1,4 @@
-"""Game windows and notifications for the phone companion (macOS fork).
+"""Game windows and notifications for the phone companion (macOS).
 
 - Dialogs: every window the game waits on (a question with buttons, a picker
   such as the recipe list, a text box) is listed in the state with its words,

@@ -49,7 +49,7 @@ cp -Rp companion/meeting-point/src "$PKG/meeting-point/src"
 cp -Rp companion/web/build "$PKG/meeting-point/app"
 sed 's#"directory": "../web/build"#"directory": "./app"#' companion/meeting-point/wrangler.jsonc > "$PKG/meeting-point/wrangler.jsonc"
 grep -q '"./app"' "$PKG/meeting-point/wrangler.jsonc"
-printf 'release=%s\ncommit=%s\ngame=%s\nupstream=%s\n' "$TAG" "$(git rev-parse --short HEAD)" "$GAME" "$UPSTREAM" > "$PKG/VERSION"
+printf 'release=%s\ncommit=%s\ngame=%s\nui=%s\n' "$TAG" "$(git rev-parse --short HEAD)" "$GAME" "$UPSTREAM" > "$PKG/VERSION"
 cat > "$PKG/READ ME FIRST.txt" <<TXT
 SimSight Companion ($TAG), accessibility mod for The Sims 4 on Mac (game $GAME),
 with a phone companion app. Based on TS4 Access by tyjokr, LeonianUniverse
@@ -77,7 +77,7 @@ echo "Release $TAG built:"; ls -la "$OUT"; cat "$OUT/SHA256SUMS"
 if (( PUBLISH )); then
   NOTES="$OUT/notes.md"
   cat > "$NOTES" <<MD
-SimSight Companion for The Sims 4 $GAME on Mac (UI from upstream $UPSTREAM).
+SimSight Companion for The Sims 4 $GAME on Mac (game interface from TS4 Access $UPSTREAM).
 
 **Install or update** (quit the game first), in Terminal:
 

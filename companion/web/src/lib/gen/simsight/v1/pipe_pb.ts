@@ -329,7 +329,7 @@ export const GrabKeysSchema: GenMessage<GrabKeys> = /*@__PURE__*/
   messageDesc(file_simsight_v1_pipe, 6);
 
 /**
- * A key from the Mac key helper, in the original mod's terms.
+ * A key from the Mac key helper, in the mod's (Windows) key terms.
  *
  * @generated from message simsight.v1.KeyEvent
  */

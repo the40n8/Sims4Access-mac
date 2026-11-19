@@ -46,19 +46,15 @@ app works right away (QR code or 6-digit code each session). Optional later:
 a [fixed address](../docs/mac/FIXED-ADDRESS.md) (your own domain) or a
 [meeting point](../docs/mac/MEETING-POINT.md) (free Cloudflare account).
 
-## How it differs from upstream
+## On the Mac
 
-| | Windows (upstream) | macOS (this fork) |
-|---|---|---|
-| Speech | NVDA/JAWS via Prism, or a SAPI voice | `simsight-say` companion (AVSpeechSynthesizer) |
-| Keyboard navigation, scanner | Windows key hooks | Off (the Mac game's Python has no `ctypes`) |
-| Main menu / Create a Sim speech | Loopback socket | Off (Windows-only peer check; its thread crashed the Mac game) |
-| UI package (patched Flash UI) | Built from `flash/` | Same file, taken from the pinned upstream release |
-| Helper / updater .exe | Yes | One Terminal line (`mac/get.sh`), or `mac/install.sh` from source |
-
-The Python changes are small `sys.platform == 'darwin'` branches in four
-modules (`speech`, `settings`, `startup`, `plus_core`), so upstream changes
-merge cleanly. Windows-only files are removed (see `mac/windows-paths.txt`).
+| | |
+|---|---|
+| Speech | `simsight-say` companion (macOS voices, AVSpeechSynthesizer) |
+| Keyboard | Mac keys while the game is in front (see [KEYBOARD.md](../docs/mac/KEYBOARD.md)) |
+| Main menu / Create a Sim speech | Not yet |
+| Game interface (patched Flash UI) | Prebuilt file from the TS4 Access release (`mac/ui-package.json`) |
+| Install | One Terminal line (`mac/get.sh`), or `mac/install.sh` from source |
 
 ## Build from source
 
@@ -114,32 +110,21 @@ quick actions for what needs attention. See the
 The first time, macOS may ask whether `simsight-bridge` may accept incoming
 connections: allow it, or the phone cannot connect.
 
-## Keeping up with upstream
-
-```sh
-mac/sync-upstream.sh   # merge upstream/dev, re-remove Windows files, report conflicts
-mac/pin-ui.sh <tag>    # when upstream publishes a release matching the merged source
-mac/build.sh && mac/install.sh
-```
-
-Conflicts can only come from the four patched modules: keep upstream's
-change and re-apply the `darwin` branch.
-
 ## Layout
 
 ```
-Scripts/              the mod's Python (upstream + macOS branches)
-  simsight_bridge.py   game side of the phone companion (new in this fork)
+Scripts/              the mod's Python
+  simsight_bridge.py  game side of the phone companion
 companion/
   proto/              API and pipe messages (buf, simsight.v1)
   bridge/             Go: pipe to the game, Connect API, pairing, event detection
   web/                SvelteKit phone app (fr/en/es), embedded in the bridge
   speaker/            SimSightSay.swift (macOS voices)
-mac/                  build, install, sync, docs
-  ui-package.json     pinned upstream release for SimSight_UI.package
-docs/mac/             player guides (phone app, keyboard, fixed address, AI helper)
-docs/plus/            the original's player guides (SimSight Plus)
-flash/                the original's patched game interface source (reference)
+companion/meeting-point/  optional Cloudflare Worker (fixed app address)
+mac/                  build, install, release, tests, player notes
+  ui-package.json     pinned TS4 Access release for SimSight_UI.package
+docs/mac/             player guides (phone app, keyboard, commands, fixed address,
+                      meeting point, AI helper)
 ```
 
 ## Development
@@ -156,15 +141,11 @@ flash/                the original's patched game interface source (reference)
 - Game-side rules on macOS: the game's Python has no `ctypes`, and a
   background thread importing a not-yet-loaded module crashed the game. Run
   game work from the game's tick (see `simsight_bridge.py`), never import
-  inside a thread, and keep macOS changes as small `sys.platform == 'darwin'`
-  branches so upstream merges stay clean. The original's Windows developer
-  material (its build tooling, baselines and docs) is not kept in this fork:
-  mac/windows-paths.txt lists it and mac/sync-upstream.sh removes it again
-  after each merge.
+  inside a thread.
 
 ## Licence and credits
 
-MIT, as upstream (see `LICENSE`). TS4 Access by **tyjokr**; lead development
-**LeonianUniverse**; SimSight Plus by **Michael Maslo**; Build cursor and
-scanner additions by **DaRainbowGirlXX**. macOS port by the40n8.
-Please report Mac-specific problems here, not upstream.
+MIT (see `LICENSE`). SimSight by the40n8, based on TS4 Access by **tyjokr**
+(lead development **LeonianUniverse**; Plus add-on by **Michael Maslo**;
+Build cursor and scanner additions by **DaRainbowGirlXX**).
+Please report problems here, not to the TS4 Access project.
