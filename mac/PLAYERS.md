@@ -24,7 +24,7 @@ zip from the latest release and its **Install SimSight Companion.command**.
 ## Controls that matter on Mac
 
 Cheat console: Cmd+Shift+C (Ctrl+Shift+C on some keyboards), then type
-(the older `a11y.` names, from SimSight, still work too):
+(the older `a11y.` names still work too):
 
 - `simsight.speechmode off` / `simsight.speechmode hover` — silence / resume narration
 - `simsight.simactions on|off` — announce what the active Sim starts doing
