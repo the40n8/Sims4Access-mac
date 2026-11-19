@@ -1,7 +1,7 @@
 #!/bin/zsh
-# Build a player release: dist/release/TS4_Access-mac.zip, its SHA256SUMS and
+# Build a player release: dist/release/SimSight-Companion-mac.zip, its SHA256SUMS and
 # install.sh (the one-command installer, mac/get.sh). Nothing is published
-# unless --publish is given (then: a GitHub release on the40n8/Sims4Access-mac).
+# unless --publish is given (then: a GitHub release on the40n8/simsight-companion).
 #
 #   mac/release.sh             build and check the files only
 #   mac/release.sh --publish   also create the GitHub release (public)
@@ -26,17 +26,17 @@ UPSTREAM=$(python3 -c 'import json;print(json.load(open("mac/ui-package.json"))[
 ./mac/test.sh
 
 OUT="$ROOT/dist/release"
-PKG="$OUT/TS4_Access-mac"
+PKG="$OUT/SimSight-Companion"
 rm -rf "$OUT" && mkdir -p "$PKG"
 cp -Rp dist/TS4_Access "$PKG/TS4_Access"
 cp -p mac/install.sh mac/uninstall.sh "$PKG/"
-cat > "$PKG/Install TS4 Access.command" <<'CMD'
+cat > "$PKG/Install SimSight Companion.command" <<'CMD'
 #!/bin/zsh
 # Double-click to install or update TS4 Access (quit the game first).
 cd "${0:A:h}" && ./install.sh
 echo; echo "You can close this window."
 CMD
-cat > "$PKG/Uninstall TS4 Access.command" <<'CMD'
+cat > "$PKG/Uninstall SimSight Companion.command" <<'CMD'
 #!/bin/zsh
 # Double-click to remove TS4 Access (saves are not touched).
 cd "${0:A:h}" && ./uninstall.sh
@@ -51,13 +51,14 @@ sed 's#"directory": "../web/build"#"directory": "./app"#' companion/meeting-poin
 grep -q '"./app"' "$PKG/meeting-point/wrangler.jsonc"
 printf 'release=%s\ncommit=%s\ngame=%s\nupstream=%s\n' "$TAG" "$(git rev-parse --short HEAD)" "$GAME" "$UPSTREAM" > "$PKG/VERSION"
 cat > "$PKG/READ ME FIRST.txt" <<TXT
-TS4 Access for Mac ($TAG), accessibility mod for The Sims 4 (game $GAME).
-Unofficial Mac port of TS4 Access by tyjokr, LeonianUniverse and contributors.
+SimSight Companion ($TAG), accessibility mod for The Sims 4 on Mac (game $GAME),
+with a phone companion app. Based on TS4 Access by tyjokr, LeonianUniverse
+and contributors (MIT licence).
 
 Install (quit the game first). Easiest, in Terminal:
-  curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+  curl -fsSL https://github.com/the40n8/simsight-companion/releases/latest/download/install.sh | zsh
 
-Or double-click "Install TS4 Access.command". macOS may say it cannot
+Or double-click "Install SimSight Companion.command". macOS may say it cannot
 verify the developer: then open System Settings > Privacy & Security, find
 the message about it near the bottom and choose Open Anyway, then
 double-click it again.
@@ -65,29 +66,29 @@ double-click it again.
 Then start The Sims 4 and load a household. Option+Command+A opens the
 accessibility menu; "phone companion" there connects a phone.
 
-Guides: https://github.com/the40n8/Sims4Access-mac/tree/main/docs/mac
-Remove: double-click "Uninstall TS4 Access.command" (saves are not touched).
+Guides: https://github.com/the40n8/simsight-companion/tree/main/docs/mac
+Remove: double-click "Uninstall SimSight Companion.command" (saves are not touched).
 TXT
-( cd "$OUT" && ditto -c -k --sequesterRsrc --keepParent TS4_Access-mac TS4_Access-mac.zip )
+( cd "$OUT" && ditto -c -k --sequesterRsrc --keepParent SimSight-Companion SimSight-Companion-mac.zip )
 cp -p mac/get.sh "$OUT/install.sh"
-( cd "$OUT" && shasum -a 256 TS4_Access-mac.zip install.sh > SHA256SUMS )
+( cd "$OUT" && shasum -a 256 SimSight-Companion-mac.zip install.sh > SHA256SUMS )
 echo "Release $TAG built:"; ls -la "$OUT"; cat "$OUT/SHA256SUMS"
 
 if (( PUBLISH )); then
   NOTES="$OUT/notes.md"
   cat > "$NOTES" <<MD
-TS4 Access for Mac, for The Sims 4 $GAME (UI from upstream $UPSTREAM).
+SimSight Companion for The Sims 4 $GAME on Mac (UI from upstream $UPSTREAM).
 
 **Install or update** (quit the game first), in Terminal:
 
 \`\`\`sh
-curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+curl -fsSL https://github.com/the40n8/simsight-companion/releases/latest/download/install.sh | zsh
 \`\`\`
 
-Or download TS4_Access-mac.zip and double-click "Install TS4 Access.command"
-(see READ ME FIRST.txt inside). Guides: [docs/mac](https://github.com/the40n8/Sims4Access-mac/tree/main/docs/mac).
+Or download SimSight-Companion-mac.zip and double-click "Install SimSight Companion.command"
+(see READ ME FIRST.txt inside). Guides: [docs/mac](https://github.com/the40n8/simsight-companion/tree/main/docs/mac).
 MD
   git tag "$TAG" && git push -q origin "$TAG"
-  gh release create "$TAG" "$OUT/TS4_Access-mac.zip" "$OUT/install.sh" "$OUT/SHA256SUMS" \
-    --repo the40n8/Sims4Access-mac --title "TS4 Access for Mac $TAG" --notes-file "$NOTES" --latest
+  gh release create "$TAG" "$OUT/SimSight-Companion-mac.zip" "$OUT/install.sh" "$OUT/SHA256SUMS" \
+    --repo the40n8/simsight-companion --title "SimSight Companion $TAG" --notes-file "$NOTES" --latest
 fi

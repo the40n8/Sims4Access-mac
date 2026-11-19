@@ -1,8 +1,8 @@
-# TS4 Access for Mac: player guide (phone companion)
+# SimSight Companion: player guide (phone companion)
 
 This guide explains, for players and for AI assistants helping them, how to
-play The Sims 4 on a Mac with the TS4 Access accessibility mod and its phone
-companion. It is written for blind and low-vision players using VoiceOver on
+play The Sims 4 on a Mac with SimSight Companion (the accessibility mod,
+based on TS4 Access, shown in game as "TS4 Access") and its phone companion. It is written for blind and low-vision players using VoiceOver on
 an iPhone, often playing together with a sighted player on the Mac.
 
 ## What it is
@@ -10,7 +10,7 @@ an iPhone, often playing together with a sighted player on the Mac.
 - **TS4 Access** is an accessibility mod for The Sims 4 (by tyjokr and
   LeonianUniverse). On the Mac, it reads what the mouse points at aloud and
   announces what the Sims do.
-- **This fork** (Sims4Access-mac) makes it work on macOS and adds a **phone
+- **This fork** (simsight-companion) makes it work on macOS and adds a **phone
   companion**: a web app on the phone that shows the game and controls it.
   It is fully usable with VoiceOver.
 - Nothing is sent to a server of ours. The Mac runs a small local server; the
@@ -188,5 +188,5 @@ From top to bottom:
   step-by-step instructions in terms of VoiceOver swipes, headings and button
   names as written above, not colours or positions on screen.
 - Game object and action names come from the game (usually English).
-- Source code: https://github.com/the40n8/Sims4Access-mac (phone app in
+- Source code: https://github.com/the40n8/simsight-companion (phone app in
   `companion/web`, game side in `Scripts/tyjokr_a11y_bridge.py`).

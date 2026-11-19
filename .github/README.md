@@ -1,7 +1,10 @@
-# TS4 Access for macOS
+# SimSight Companion
 
-An unofficial macOS port of **[TS4 Access](https://github.com/LeonianUniverse478/Sims4Access)**,
-the screen-reader mod for The Sims 4 by tyjokr, LeonianUniverse and contributors.
+Play The Sims 4 with a screen reader, on the Mac and from your phone. An
+independent project based on **[TS4 Access](https://github.com/LeonianUniverse478/Sims4Access)**,
+the screen-reader mod for The Sims 4 by tyjokr, LeonianUniverse and contributors
+(MIT licence; their credits and licence are kept here). In the game, the mod
+still calls itself "TS4 Access".
 It speaks menus, dialogs, tooltips, notifications and what your Sim is doing,
 using the macOS system voices.
 
@@ -17,7 +20,7 @@ edges.
 
 **Players:** read the [phone guide](../docs/mac/PHONE-GUIDE.md) (also in the
 app's Help tab). To ask ChatGPT or another assistant about the mod, point it
-at [`llms.txt`](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt).
+at [`llms.txt`](https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt).
 
 ## Install (players)
 
@@ -25,7 +28,7 @@ Quit The Sims 4, open Terminal (Command+Space, type Terminal, Return), paste
 this line and press Return:
 
 ```sh
-curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+curl -fsSL https://github.com/the40n8/simsight-companion/releases/latest/download/install.sh | zsh
 ```
 
 It says each step (VoiceOver reads them; with VoiceOver off, the Mac voice
@@ -34,9 +37,9 @@ installs the mod and allows mods in the game. Run the same line again to
 update; add `-s uninstall` at the end to remove it. Then start the game and
 load a household: Option+Command+A opens the accessibility menu.
 
-Without Terminal: download `TS4_Access-mac.zip` from the
-[latest release](https://github.com/the40n8/Sims4Access-mac/releases/latest)
-and double-click **Install TS4 Access.command** (macOS may ask you to allow
+Without Terminal: download `SimSight-Companion-mac.zip` from the
+[latest release](https://github.com/the40n8/simsight-companion/releases/latest)
+and double-click **Install SimSight Companion.command** (macOS may ask you to allow
 it in System Settings > Privacy & Security > Open Anyway).
 
 Nothing else to set up: the voice follows the game's language, and the phone

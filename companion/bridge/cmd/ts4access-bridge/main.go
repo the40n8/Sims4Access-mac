@@ -29,17 +29,17 @@ import (
 	"syscall"
 	"time"
 
-	v1 "github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/announce"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/demo"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/hub"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/meeting"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pairing"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pipe"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/server"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/speaker"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/tunnel"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/webui"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/announce"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/demo"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/hub"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/meeting"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/pairing"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/pipe"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/server"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/speaker"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/tunnel"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/webui"
 )
 
 func main() {

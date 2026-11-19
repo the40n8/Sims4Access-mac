@@ -273,7 +273,7 @@ const es: HelpSection[] = [
 
 export const HELP: Record<Locale, HelpSection[]> = { en, fr, es } as Record<Locale, HelpSection[]>;
 
-const LLMS = 'https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt';
+const LLMS = 'https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt';
 
 /** A ready-made question for ChatGPT or another assistant, in the app's language. */
 export const AI_PROMPT: Record<Locale, string> = {

@@ -1,4 +1,4 @@
-module github.com/the40n8/Sims4Access-mac/companion/bridge
+module github.com/the40n8/simsight-companion/companion/bridge
 
 go 1.26.0
 

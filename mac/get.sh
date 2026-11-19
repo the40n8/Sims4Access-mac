@@ -1,8 +1,8 @@
 #!/bin/zsh
-# TS4 Access for Mac: install or update with one command (published with each
+# SimSight Companion: install or update with one command (published with each
 # release as install.sh):
 #
-#   curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+#   curl -fsSL https://github.com/the40n8/simsight-companion/releases/latest/download/install.sh | zsh
 #
 # Remove it:   ... | zsh -s uninstall
 #
@@ -16,10 +16,10 @@
 # does nothing.
 main() {
   set -euo pipefail
-  local repo="${TS4A_REPO:-the40n8/Sims4Access-mac}"
+  local repo="${TS4A_REPO:-the40n8/simsight-companion}"
   local base="${TS4A_BASE:-https://github.com/$repo/releases/latest/download}"
   local userdir="$HOME/Documents/Electronic Arts/The Sims 4"
-  local zip="TS4_Access-mac.zip"
+  local zip="SimSight-Companion-mac.zip"
 
   # VoiceOver already reads the Terminal: only speak when it is off.
   if [[ -z "${TS4A_SPEAK:-}" ]]; then
@@ -37,21 +37,21 @@ main() {
     print -r -- "$answer"
   }
 
-  [[ "$(uname -s)" == Darwin ]] || { tell "TS4 Access for Mac only runs on macOS."; exit 1; }
+  [[ "$(uname -s)" == Darwin ]] || { tell "SimSight Companion only runs on macOS for now."; exit 1; }
 
   if [[ "${1:-}" == uninstall ]]; then
     if [[ -x "$userdir/Mods/TS4_Access/uninstall.sh" ]]; then
       "$userdir/Mods/TS4_Access/uninstall.sh"
-      tell "TS4 Access is removed. Your saves were not touched; the mod folder was moved to TS4 Access Backups."
+      tell "SimSight Companion is removed. Your saves were not touched; the mod folder was moved to TS4 Access Backups."
     else
-      tell "TS4 Access is not installed. Nothing was changed."
+      tell "SimSight Companion is not installed. Nothing was changed."
     fi
     return
   fi
 
   local what="install"
   [[ -d "$userdir/Mods/TS4_Access" ]] && what="update"
-  tell "TS4 Access for Mac, accessibility mod for The Sims 4. This will $what it."
+  tell "SimSight Companion, accessibility mod for The Sims 4. This will $what it."
   if pgrep -f "The Sims 4.app/Contents/MacOS" >/dev/null; then
     tell "The Sims 4 is running. Save, quit the game, then run this command again. Nothing was changed."; exit 1
   fi
@@ -75,7 +75,7 @@ main() {
   fi
   tell "Download checked."
   ditto -x -k "$tmp/$zip" "$tmp/x"
-  local dir="$tmp/x/TS4_Access-mac"
+  local dir="$tmp/x/SimSight-Companion"
   [[ -x "$dir/install.sh" ]] || { tell "The download is incomplete. Nothing was changed."; exit 1; }
   [[ -f "$dir/VERSION" ]] && print -r -- "Version: $(sed -n 's/^release=//p' "$dir/VERSION")"
   "$dir/install.sh"

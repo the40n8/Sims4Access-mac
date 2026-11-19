@@ -20,7 +20,7 @@ each person makes their own; the content below is the same for every route.
 
 Quickest: in ChatGPT's **Work** mode, ask **Plugin Creator** to create a
 plugin from this spec and send it the link
-https://github.com/the40n8/Sims4Access-mac/blob/main/docs/mac/PLUGIN.md
+https://github.com/the40n8/simsight-companion/blob/main/docs/mac/PLUGIN.md
 (it reads the name, workflow, integrations and examples from there).
 
 By hand:
@@ -33,10 +33,10 @@ By hand:
    reads the current guides each time and never needs updating.
 5. If it does not, upload these files as **reference files** (download each
    link with "Save as"), and upload them again when the guides change:
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/KEYBOARD.md
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/mac/PLAYERS.md
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/docs/mac/PHONE-GUIDE.md
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/docs/mac/KEYBOARD.md
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/mac/PLAYERS.md
 6. Save, then open it in the ChatGPT app on the phone to use it with
    VoiceOver.
 
@@ -54,7 +54,7 @@ Name, Description and Conversation starters are optional for a Project.
 ### Name
 
 ```
-TS4 Access helper (Mac)
+SimSight Companion helper
 ```
 
 ### Description
@@ -69,8 +69,8 @@ Help with TS4 Access on Mac: the Sims 4 accessibility mod and its phone app for 
 You help people play The Sims 4 on a Mac with the TS4 Access accessibility mod and its phone companion app. Many users are blind or low vision and use VoiceOver on an iPhone; often a sighted player plays on the Mac at the same time.
 
 At the start of every conversation, before answering, open and read:
-1. https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt
-2. https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
+1. https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt
+2. https://raw.githubusercontent.com/the40n8/simsight-companion/main/docs/mac/PHONE-GUIDE.md
 If these guides were given to you as reference files instead, use those, and say when an answer might be out of date. Read other files listed in llms.txt when the question needs them (Mac keyboard: docs/mac/KEYBOARD.md; installing: mac/PLAYERS.md; fixed address: docs/mac/FIXED-ADDRESS.md). These files are the source of truth and change often: always use the current version, never memory. If you cannot open them, say so and answer carefully from general knowledge, marking what you are unsure of.
 
 How to answer:

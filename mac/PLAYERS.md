@@ -1,6 +1,6 @@
-# TS4 Access for macOS (unofficial port)
+# SimSight Companion (The Sims 4 accessibility, Mac)
 
-https://github.com/the40n8/Sims4Access-mac
+https://github.com/the40n8/simsight-companion
 
 TS4 Access by tyjokr, LeonianUniverse and contributors (MIT licence),
 source: https://github.com/LeonianUniverse478/Sims4Access (branch `dev`,
@@ -15,11 +15,11 @@ The UI package is the official, unmodified release file.
 
 Quit the game, then in Terminal:
 
-    curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+    curl -fsSL https://github.com/the40n8/simsight-companion/releases/latest/download/install.sh | zsh
 
 The same line updates it; `... | zsh -s uninstall` removes it (saves are
 never touched; the mod folder is moved to `TS4 Access Backups`). Or use the
-zip from the latest release and its **Install TS4 Access.command**.
+zip from the latest release and its **Install SimSight Companion.command**.
 
 ## Controls that matter on Mac
 

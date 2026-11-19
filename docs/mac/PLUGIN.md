@@ -1,12 +1,12 @@
-# Plugin spec: TS4 Access helper (Mac)
+# Plugin spec: SimSight Companion helper
 
 Specification for ChatGPT's Plugin Creator. To create the plugin, send it
 this file's link:
-https://github.com/the40n8/Sims4Access-mac/blob/main/docs/mac/PLUGIN.md
+https://github.com/the40n8/simsight-companion/blob/main/docs/mac/PLUGIN.md
 
 ## Name and purpose
 
-- **Name:** TS4 Access helper (Mac)
+- **Name:** SimSight Companion helper
 - **Description:** Help with TS4 Access on Mac: the Sims 4 accessibility mod
   and its phone app for VoiceOver. Answers in your language.
 - **Purpose:** answer questions about playing The Sims 4 on a Mac with the
@@ -25,8 +25,8 @@ Steps:
 
 1. At the start of every conversation, before answering, read the current
    guides (they change often; never answer from memory):
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt
-   - https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/PHONE-GUIDE.md
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt
+   - https://raw.githubusercontent.com/the40n8/simsight-companion/main/docs/mac/PHONE-GUIDE.md
    Then read the other files listed in llms.txt when the question needs them
    (keyboard: docs/mac/KEYBOARD.md; installing: mac/PLAYERS.md; fixed phone
    address: docs/mac/FIXED-ADDRESS.md; testing and reporting problems:
@@ -63,7 +63,7 @@ Rules:
 - If plugins cannot browse: bundle these files as reference files instead,
   and tell the plugin owner they must be re-uploaded when the guides change:
   llms.txt, docs/mac/PHONE-GUIDE.md, docs/mac/KEYBOARD.md, mac/PLAYERS.md
-  (same raw.githubusercontent.com/the40n8/Sims4Access-mac/main/ base).
+  (same raw.githubusercontent.com/the40n8/simsight-companion/main/ base).
 - No other apps, tools or services.
 
 ## Examples

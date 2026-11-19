@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Install TS4 Access into The Sims 4 Mods folder: from a release folder
+# Install SimSight Companion (the TS4 Access mod and its helpers) into The Sims 4 Mods folder: from a release folder
 # (TS4_Access next to this script) or from the source tree (dist/TS4_Access,
 # made by mac/build.sh). Reversible: backs up Options.ini and saves first;
 # uninstall.sh undoes it. Your settings (TS4_Access.cfg) are kept.
@@ -37,7 +37,7 @@ if [[ -f "$HERE/VERSION" && -f "$USERDIR/GameVersion.txt" ]]; then
   want=$(sed -n 's/^game=//p' "$HERE/VERSION")
   have=$(LC_ALL=C tr -cd '0-9.\n' < "$USERDIR/GameVersion.txt" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
   if [[ -n "$want" && -n "$have" && "$have" != "$want" ]]; then
-    tell "Note: this TS4 Access is made for game version $want, your game is $have. It usually works; if something breaks, look for a newer TS4 Access."
+    tell "Note: this SimSight Companion is made for game version $want, your game is $have. It usually works; if something breaks, look for a newer SimSight Companion."
   fi
 fi
 
@@ -71,4 +71,4 @@ tell "Step 3 of 3: allowing mods in the game settings."
 sed -i '' -E 's/^([[:space:]]*scriptmodsenabled[[:space:]]*=[[:space:]]*)[0-9]+/\11/; s/^([[:space:]]*modsdisabled[[:space:]]*=[[:space:]]*)[0-9]+/\10/' "$USERDIR/Options.ini"
 grep -E '^(scriptmodsenabled|modsdisabled)' "$USERDIR/Options.ini" || true
 print -r -- "Installed to: $DEST"
-tell "TS4 Access is installed. Start The Sims 4 and load a household. Then Option Command A opens the accessibility menu."
+tell "SimSight Companion is installed. Start The Sims 4 and load a household. Then Option Command A opens the accessibility menu."

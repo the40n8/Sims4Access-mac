@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pairing"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/pairing"
 )
 
 // LinkFunc returns the phone link to show and a status for the page.

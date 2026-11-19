@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	v1 "github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1/ts4accessv1connect"
-	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/hub"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
+	"github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1/ts4accessv1connect"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/hub"
 )
 
 type service struct {

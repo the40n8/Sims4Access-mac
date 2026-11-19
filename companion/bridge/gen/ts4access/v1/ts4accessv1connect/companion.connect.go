@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
 	http "net/http"
 	strings "strings"
 )

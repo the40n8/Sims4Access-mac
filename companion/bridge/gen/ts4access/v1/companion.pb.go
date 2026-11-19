@@ -1582,7 +1582,7 @@ const file_ts4access_v1_companion_proto_rawDesc = "" +
 	"\rListInventory\x12\".ts4access.v1.ListInventoryRequest\x1a#.ts4access.v1.ListInventoryResponse\x12I\n" +
 	"\bMoveItem\x12\x1d.ts4access.v1.MoveItemRequest\x1a\x1e.ts4access.v1.MoveItemResponse\x12[\n" +
 	"\x0eSetMacAnnounce\x12#.ts4access.v1.SetMacAnnounceRequest\x1a$.ts4access.v1.SetMacAnnounceResponseB\xc5\x01\n" +
-	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/Sims4Access-mac/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
+	"\x10com.ts4access.v1B\x0eCompanionProtoP\x01ZPgithub.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1;ts4accessv1\xa2\x02\x03TXX\xaa\x02\fTs4access.V1\xca\x02\fTs4access\\V1\xe2\x02\x18Ts4access\\V1\\GPBMetadata\xea\x02\rTs4access::V1b\x06proto3"
 
 var (
 	file_ts4access_v1_companion_proto_rawDescOnce sync.Once
