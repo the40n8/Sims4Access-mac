@@ -19,6 +19,31 @@ edges.
 app's Help tab). To ask ChatGPT or another assistant about the mod, point it
 at [`llms.txt`](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/llms.txt).
 
+## Install (players)
+
+Quit The Sims 4, open Terminal (Command+Space, type Terminal, Return), paste
+this line and press Return:
+
+```sh
+curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+```
+
+It says each step (VoiceOver reads them; with VoiceOver off, the Mac voice
+says them), asks you to press Return, backs up your settings and saves,
+installs the mod and allows mods in the game. Run the same line again to
+update; add `-s uninstall` at the end to remove it. Then start the game and
+load a household: Option+Command+A opens the accessibility menu.
+
+Without Terminal: download `TS4_Access-mac.zip` from the
+[latest release](https://github.com/the40n8/Sims4Access-mac/releases/latest)
+and double-click **Install TS4 Access.command** (macOS may ask you to allow
+it in System Settings > Privacy & Security > Open Anyway).
+
+Nothing else to set up: the voice follows the game's language, and the phone
+app works right away (QR code or 6-digit code each session). Optional later:
+a [fixed address](../docs/mac/FIXED-ADDRESS.md) (your own domain) or a
+[meeting point](../docs/mac/MEETING-POINT.md) (free Cloudflare account).
+
 ## How it differs from upstream
 
 | | Windows (upstream) | macOS (this fork) |
@@ -27,13 +52,13 @@ at [`llms.txt`](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/l
 | Keyboard navigation, scanner | Windows key hooks | Off (the Mac game's Python has no `ctypes`) |
 | Main menu / Create a Sim speech | Loopback socket | Off (Windows-only peer check; its thread crashed the Mac game) |
 | UI package (patched Flash UI) | Built from `flash/` | Same file, taken from the pinned upstream release |
-| Helper / updater .exe | Yes | `mac/install.sh` |
+| Helper / updater .exe | Yes | One Terminal line (`mac/get.sh`), or `mac/install.sh` from source |
 
 The Python changes are small `sys.platform == 'darwin'` branches in four
 modules (`speech`, `settings`, `startup`, `plus_core`), so upstream changes
 merge cleanly. Windows-only files are removed (see `mac/windows-paths.txt`).
 
-## Build and install
+## Build from source
 
 Requirements: Xcode Command Line Tools (`swiftc`), Go, pnpm and a
 **Python 3.7** (the game only loads 3.7 bytecode). On Apple Silicon, one way
@@ -52,6 +77,8 @@ Then, with the game closed:
 mac/build.sh      # -> dist/TS4_Access (mod, bridge + phone app, speaker, UI package)
 mac/test.sh       # offline checks (fake game for the Mac-only mod code, Go tests)
 mac/install.sh    # backs up Options.ini and saves, installs, enables script mods
+mac/release.sh    # player release in dist/release (zip, SHA256SUMS, install.sh);
+                  # --publish creates the GitHub release
 ```
 
 Start the game, accept the mod list, load a household. Player notes:

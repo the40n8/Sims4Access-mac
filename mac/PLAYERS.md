@@ -11,6 +11,16 @@ This port changes the speech output: instead of Windows screen readers
 macOS companion that speaks with the system voices (AVSpeechSynthesizer).
 The UI package is the official, unmodified release file.
 
+## Install, update, remove
+
+Quit the game, then in Terminal:
+
+    curl -fsSL https://github.com/the40n8/Sims4Access-mac/releases/latest/download/install.sh | zsh
+
+The same line updates it; `... | zsh -s uninstall` removes it (saves are
+never touched; the mod folder is moved to `TS4 Access Backups`). Or use the
+zip from the latest release and its **Install TS4 Access.command**.
+
 ## Controls that matter on Mac
 
 Cheat console: Cmd+Shift+C (Ctrl+Shift+C on some keyboards), then type:

@@ -63,7 +63,7 @@ main() {
 
   local tmp
   tmp=$(mktemp -d -t ts4access)
-  trap 'rm -rf "$tmp"' EXIT
+  trap "rm -rf '$tmp'" EXIT
   tell "Downloading."
   curl -fsSL --retry 2 -o "$tmp/$zip" "$base/$zip" || { tell "Download failed. Check the internet connection and try again."; exit 1; }
   curl -fsSL --retry 2 -o "$tmp/SHA256SUMS" "$base/SHA256SUMS" || { tell "Download failed. Check the internet connection and try again."; exit 1; }
