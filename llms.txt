@@ -8,6 +8,7 @@
 - [Mac install and play notes](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/mac/PLAYERS.md): installing, defaults, phone companion summary
 - [Mac keyboard](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/KEYBOARD.md): the original mod's shortcuts with Mac keys
 - [Fixed phone address](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/FIXED-ADDRESS.md): optional setup
+- [Meeting point](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/MEETING-POINT.md): optional, one fixed app address that finds the Mac by itself, several Macs
 - [Test checklist](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/docs/mac/TESTING.md): what to try in a play session and how to report a problem
 - [Fork overview](https://raw.githubusercontent.com/the40n8/Sims4Access-mac/main/.github/README.md): what the fork is, how it is built
 

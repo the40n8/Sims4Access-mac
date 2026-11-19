@@ -1,7 +1,9 @@
 import type { Event, GameState } from './gen/ts4access/v1/game_pb.js';
-import { client, isUnauthenticated, token } from './client.js';
+import { client, isUnauthenticated, token, useGame } from './client.js';
+import { findGame, games, hosted, type Game } from './meeting.js';
 
-export type Status = 'unpaired' | 'rejected' | 'connecting' | 'live' | 'retrying';
+/** waiting: at a meeting point, no paired Mac has its game running. */
+export type Status = 'unpaired' | 'rejected' | 'connecting' | 'live' | 'retrying' | 'waiting';
 
 /** How many events the feed keeps on the phone. */
 const FEED_MAX = 100;
@@ -15,7 +17,9 @@ const FEED_MAX = 100;
 class Live {
 	state = $state<GameState | null>(null);
 	gameConnected = $state(false);
-	status = $state<Status>(token ? 'connecting' : 'unpaired');
+	status = $state<Status>((hosted ? games().length > 0 : !!token) ? 'connecting' : 'unpaired');
+	/** At a meeting point: the Mac in use. */
+	game = $state<Game | null>(null);
 	/** Newest first. */
 	feed = $state<Event[]>([]);
 	/** Called for each event that arrives after the initial backlog. */
@@ -25,7 +29,7 @@ class Live {
 	#lastSeq = 0n;
 
 	start() {
-		if (!token) return;
+		if (hosted ? games().length === 0 : !token) return;
 		document.addEventListener('visibilitychange', () => (document.hidden ? this.stop() : this.#run()));
 		this.#run();
 	}
@@ -47,6 +51,19 @@ class Live {
 		const abort = new AbortController();
 		this.#abort = abort;
 		while (!abort.signal.aborted) {
+			// At a meeting point: where is a paired Mac with its game running?
+			// (Its address changes each session.)
+			if (hosted) {
+				const found = await findGame();
+				if (abort.signal.aborted) return;
+				if (!found) {
+					this.status = 'waiting';
+					await new Promise((r) => setTimeout(r, 8000));
+					continue;
+				}
+				useGame(found.url, found.game.token);
+				this.game = found.game;
+			}
 			// The bridge replays recent events right after connecting, in one
 			// burst: those are shown in the feed but not announced.
 			const backlogUntil = Date.now() + 1000;

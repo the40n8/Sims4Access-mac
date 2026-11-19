@@ -33,6 +33,7 @@ import (
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/announce"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/demo"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/hub"
+	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/meeting"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pairing"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/pipe"
 	"github.com/the40n8/Sims4Access-mac/companion/bridge/internal/server"
@@ -121,9 +122,20 @@ func run() error {
 	// network), else the Mac's local address. Shown at http://127.0.0.1:<port>/pair.
 	var tun *tunnel.Tunnel
 	var onTunnelReady atomic.Pointer[func(url string)] // set once the speaker exists
+	// Optional meeting point: the phone app at one fixed address, which finds
+	// this Mac's tunnel by itself (docs/mac/MEETING-POINT.md).
+	var meet *meeting.Client
+	if cfg.MeetingPoint != "" {
+		meet = meeting.New(cfg.MeetingPoint, cfg.MacID, cfg.MacSecret)
+		go meet.Run(ctx)
+		slog.Info("meeting point", "url", cfg.MeetingPoint)
+	}
 	links := func() (string, string) {
 		if tun != nil {
 			if url, status := tun.URL(); url != "" {
+				if meet != nil {
+					return meet.AppLink(cfg.Token), "ready"
+				}
 				return url + "/#k=" + cfg.Token, "ready"
 			} else if status == "starting" {
 				return "", "Opening a Cloudflare tunnel for the phone… this page refreshes by itself."
@@ -139,6 +151,9 @@ func run() error {
 			link := url + "/#k=" + cfg.Token
 			path := filepath.Join(*dataDir, "phone-link.txt")
 			_ = os.WriteFile(path, []byte(link+"\n"+strings.Join(cfg.Links(), "\n")+"\n"), 0o600)
+			if meet != nil {
+				meet.SetURL(url)
+			}
 			if f := onTunnelReady.Load(); f != nil {
 				(*f)(url)
 			}
@@ -155,6 +170,11 @@ func run() error {
 	}
 	// Pairing code, said by the Mac voice when the phone link page opens.
 	codes := server.NewCodes(cfg.Token)
+	cors := ""
+	if meet != nil {
+		codes.OnNew(meet.SetCode)
+		cors = meet.Origin()
+	}
 	if *demoMode {
 		codes.SetSay(func(code string) { fmt.Fprintln(os.Stderr, "pairing code:", code) })
 	}
@@ -164,7 +184,7 @@ func run() error {
 		slog.Error("phone server unavailable", "port", cfg.Port, "err", err)
 	} else {
 		srv := &http.Server{
-			Handler:           server.Handler(h, cfg.Token, web, links, codes),
+			Handler:           server.Handler(h, cfg.Token, web, links, codes, cors),
 			ReadHeaderTimeout: 10 * time.Second,
 		}
 		go func() {

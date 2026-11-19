@@ -359,5 +359,16 @@
 	"pair_code_button": "Pair with the code",
 	"pair_code_wrong": "This code is not right, or it has expired. Open phone companion on the Mac again to hear a new code.",
 	"pair_code_locked": "Too many wrong tries. Open phone companion on the Mac again for a new code.",
-	"pair_code_offline": "The Mac cannot be reached. Is the game running?"
+	"pair_code_offline": "The Mac cannot be reached. Is the game running?",
+	"waiting_title": "Waiting for the game",
+	"waiting_help": "Start the game on {names} and load a household: the app connects by itself.",
+	"waiting_a_mac": "your Mac",
+	"pair_another": "Pair another computer",
+	"computers_title": "Computers",
+	"computers_help": "The app connects to whichever of these has the game running.",
+	"computer_in_use": "in use",
+	"forget_mac": "Forget {name}",
+	"forgot_mac": "{name} forgotten.",
+	"pair_another_code": "Pair another computer: its 6-digit code (phone companion on that Mac)",
+	"paired_with": "Paired with {name}."
 }

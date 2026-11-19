@@ -77,6 +77,8 @@ func PairPage(links LinkFunc, codes *Codes) http.HandlerFunc {
 		switch {
 		case link == "":
 			data.Refresh = true
+		case strings.Contains(link, "#m="):
+			data.Note = "Meeting point: add the app to the Home Screen once; it finds this Mac by itself each session."
 		case strings.Contains(link, "trycloudflare.com"):
 			data.Note = "This address changes each game session: scan again next time."
 		default:

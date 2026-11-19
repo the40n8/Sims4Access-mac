@@ -359,5 +359,16 @@
 	"pair_code_button": "Jumeler avec le code",
 	"pair_code_wrong": "Ce code n’est pas bon, ou il a expiré. Rouvre phone companion sur le Mac pour entendre un nouveau code.",
 	"pair_code_locked": "Trop d’essais ratés. Rouvre phone companion sur le Mac pour un nouveau code.",
-	"pair_code_offline": "Le Mac ne répond pas. Le jeu est-il lancé ?"
+	"pair_code_offline": "Le Mac ne répond pas. Le jeu est-il lancé ?",
+	"waiting_title": "En attente du jeu",
+	"waiting_help": "Lance le jeu sur {names} et charge un foyer : l’app se connecte toute seule.",
+	"waiting_a_mac": "ton Mac",
+	"pair_another": "Jumeler un autre ordinateur",
+	"computers_title": "Ordinateurs",
+	"computers_help": "L’app se connecte à celui de ces ordinateurs où le jeu tourne.",
+	"computer_in_use": "en cours",
+	"forget_mac": "Oublier {name}",
+	"forgot_mac": "{name} oublié.",
+	"pair_another_code": "Jumeler un autre ordinateur : son code à 6 chiffres (phone companion sur ce Mac)",
+	"paired_with": "Jumelé avec {name}."
 }

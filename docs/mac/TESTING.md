@@ -25,6 +25,8 @@ not appear on the phone; the Mac showed it. 21:40."
 - [ ] Phone companion shows the QR code; the phone opens the app.
 - [ ] Phone companion: the Mac says a 6-digit code; typed on the Pair this
       phone screen, it pairs the phone (a wrong code is refused).
+- [ ] Meeting point (if set up): the Home Screen app says "Waiting for the
+      game" with the game closed, and connects by itself once it is loaded.
 - [ ] Option+Command+S turns the Mac voice off and on ("Speech off" / "Speech on").
 
 ## Top bar and tabs

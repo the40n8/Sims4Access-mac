@@ -5,7 +5,9 @@ time the game starts, so the QR code must be scanned again each session and a
 Home Screen app stops working. With a fixed address, the phone keeps the same
 link: add it to the Home Screen once and open it like an app.
 
-You need a free Cloudflare account and a domain managed by Cloudflare.
+You need a free Cloudflare account and a domain managed by Cloudflare. No
+domain? A [meeting point](MEETING-POINT.md) gives the app a fixed address
+too, with only a free account.
 
 ## Set up (once)
 

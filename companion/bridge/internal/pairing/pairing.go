@@ -28,6 +28,13 @@ type Config struct {
 	// "https://sims.example.com". Empty: a random quick tunnel each session.
 	TunnelToken string `json:"tunnel_token,omitempty"`
 	PublicURL   string `json:"public_url,omitempty"`
+	// Optional meeting point: the address of your own TS4 Access Worker
+	// (companion/meeting-point). The phone app then lives there, at one
+	// fixed address, and finds this Mac by itself each session.
+	MeetingPoint string `json:"meeting_point,omitempty"`
+	// This Mac at the meeting point (made when meeting_point is set).
+	MacID     string `json:"mac_id,omitempty"`
+	MacSecret string `json:"mac_secret,omitempty"`
 }
 
 // Load reads dir/config.json, creating it with a fresh token if missing.
@@ -51,6 +58,11 @@ func Load(dir string) (*Config, error) {
 	}
 	if cfg.Port == 0 {
 		cfg.Port = DefaultPort
+		changed = true
+	}
+	if cfg.MeetingPoint != "" && (len(cfg.MacID) < 20 || len(cfg.MacSecret) < 20) {
+		cfg.MacID = NewToken()
+		cfg.MacSecret = NewToken()
 		changed = true
 	}
 	if changed {

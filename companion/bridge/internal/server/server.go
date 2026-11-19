@@ -175,7 +175,9 @@ func (a *auth) WrapStreamingHandler(next connect.StreamingHandlerFunc) connect.S
 
 // Handler serves the API, the web app (an SPA: unknown paths get
 // index.html) and, on this Mac only, the pairing page at /pair.
-func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes) http.Handler {
+// cors is the meeting point's origin, allowed to call this API from the
+// phone app it hosts ("" when there is none).
+func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes, cors string) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/pair", PairPage(links, codes))
 	if codes != nil {
@@ -202,5 +204,31 @@ func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes) 
 		w.Header().Set("Cache-Control", "no-cache")
 		http.ServeFileFS(w, r, web, "index.html")
 	})
-	return mux
+	if cors == "" {
+		return mux
+	}
+	return allowOrigin(cors, mux)
+}
+
+// allowOrigin lets the phone app at the meeting point use this API across
+// origins (it still needs the pairing key for everything but the code).
+func allowOrigin(origin string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Origin") != origin {
+			next.ServeHTTP(w, r)
+			return
+		}
+		h := w.Header()
+		h.Set("Access-Control-Allow-Origin", origin)
+		h.Add("Vary", "Origin")
+		h.Set("Access-Control-Expose-Headers", "Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin, Connect-Content-Encoding")
+		if r.Method == http.MethodOptions {
+			h.Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			h.Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Connect-Protocol-Version, Connect-Timeout-Ms, Connect-Accept-Encoding, Connect-Content-Encoding, X-User-Agent, X-Grpc-Web, Grpc-Timeout")
+			h.Set("Access-Control-Max-Age", "7200")
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }

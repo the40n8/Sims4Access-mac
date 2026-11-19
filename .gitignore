@@ -13,3 +13,5 @@ __pycache__/
 *.log
 helper/*.exe
 .a11y-work/
+companion/meeting-point/.wrangler/
+companion/meeting-point/node_modules/

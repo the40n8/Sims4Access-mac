@@ -37,7 +37,8 @@ an iPhone, often playing together with a sighted player on the Mac.
 5. The address changes each game session: scan again next time. The phone
    stays paired (it remembers its key). For an address that never changes
    (a Home Screen app that always works), see
-   [FIXED-ADDRESS.md](FIXED-ADDRESS.md).
+   [FIXED-ADDRESS.md](FIXED-ADDRESS.md), or
+   [MEETING-POINT.md](MEETING-POINT.md) (no domain needed, several Macs).
 
 ## Using the app with VoiceOver
 

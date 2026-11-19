@@ -359,5 +359,16 @@
 	"pair_code_button": "Vincular con el código",
 	"pair_code_wrong": "Este código no es correcto o ha caducado. Vuelve a abrir phone companion en el Mac para oír un código nuevo.",
 	"pair_code_locked": "Demasiados intentos fallidos. Vuelve a abrir phone companion en el Mac para un código nuevo.",
-	"pair_code_offline": "No se puede contactar con el Mac. ¿Está abierto el juego?"
+	"pair_code_offline": "No se puede contactar con el Mac. ¿Está abierto el juego?",
+	"waiting_title": "Esperando el juego",
+	"waiting_help": "Abre el juego en {names} y carga un hogar: la app se conecta sola.",
+	"waiting_a_mac": "tu Mac",
+	"pair_another": "Vincular otro ordenador",
+	"computers_title": "Ordenadores",
+	"computers_help": "La app se conecta al que tenga el juego abierto.",
+	"computer_in_use": "en uso",
+	"forget_mac": "Olvidar {name}",
+	"forgot_mac": "{name} olvidado.",
+	"pair_another_code": "Vincular otro ordenador: su código de 6 cifras (phone companion en ese Mac)",
+	"paired_with": "Vinculado con {name}."
 }

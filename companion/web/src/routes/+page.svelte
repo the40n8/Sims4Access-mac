@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import { linkInAddressBar, pairFromText, pairWithCode } from '$lib/session.js';
+	import * as meeting from '$lib/meeting.js';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
 	import { groupOf, prefs, socialShown } from '$lib/prefs.svelte.js';
@@ -48,7 +49,7 @@
 	let pasteFailed = $state(false);
 	function pastePairing(e: SubmitEvent) {
 		e.preventDefault();
-		pasteFailed = !pairFromText(pasted);
+		pasteFailed = !(meeting.hosted ? meeting.takeLink(pasted) : pairFromText(pasted));
 		if (!pasteFailed) location.reload();
 	}
 	// Or the 6-digit code the Mac says when its phone link page opens.
@@ -59,7 +60,7 @@
 		e.preventDefault();
 		if (codeBusy) return;
 		codeBusy = true;
-		const out = await pairWithCode(code);
+		const out = await (meeting.hosted ? meeting.pairWithCode(code) : pairWithCode(code));
 		codeBusy = false;
 		if (out === 'ok') return location.reload();
 		codeError =
@@ -88,7 +89,8 @@
 		// Drop the pairing token from the address bar once the app has started.
 		// SvelteKit's own state object is kept, so its router is unaffected.
 		setTimeout(() => {
-			if (linkInAddressBar()) history.replaceState(history.state, '', location.pathname + location.search);
+			if (linkInAddressBar() || meeting.linkInAddressBar())
+				history.replaceState(history.state, '', location.pathname + location.search);
 		});
 		live.onEvent = (e) => {
 			const group = groupOf(e.kind);
@@ -106,10 +108,23 @@
 
 <Announcer />
 
-{#if live.status === 'unpaired' || live.status === 'rejected'}
+{#if live.status === 'unpaired' || live.status === 'rejected' || live.status === 'waiting'}
 	<main class="page stack bare">
-		<h1>{m.pair_title()}</h1>
-		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
+		{#if live.status === 'waiting'}
+			<h1>{m.waiting_title()}</h1>
+			<p role="status">
+				{m.waiting_help({
+					names: meeting
+						.games()
+						.map((g) => g.name || m.waiting_a_mac())
+						.join(', ')
+				})}
+			</p>
+			<h2>{m.pair_another()}</h2>
+		{:else}
+			<h1>{m.pair_title()}</h1>
+			<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
+		{/if}
 		<form class="stack" onsubmit={codePairing}>
 			<label class="stack">
 				<span>{m.pair_code_label()}</span>

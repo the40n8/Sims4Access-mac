@@ -30,6 +30,7 @@ type Codes struct {
 	expires time.Time
 	tries   int
 	say     func(code string)
+	onNew   func(code string, until time.Time)
 }
 
 func NewCodes(token string) *Codes {
@@ -40,6 +41,13 @@ func NewCodes(token string) *Codes {
 func (c *Codes) SetSay(say func(code string)) {
 	c.mu.Lock()
 	c.say = say
+	c.mu.Unlock()
+}
+
+// OnNew is told each new code (the meeting point keeps it, hashed).
+func (c *Codes) OnNew(f func(code string, until time.Time)) {
+	c.mu.Lock()
+	c.onNew = f
 	c.mu.Unlock()
 }
 
@@ -59,8 +67,11 @@ func (c *Codes) Show(announce bool) string {
 		c.tries = 0
 		fresh = true
 	}
-	code, say := c.code, c.say
+	code, say, onNew, until := c.code, c.say, c.onNew, c.expires
 	c.mu.Unlock()
+	if fresh && onNew != nil {
+		onNew(code, until)
+	}
 	if say != nil && (fresh || announce) {
 		say(code)
 	}

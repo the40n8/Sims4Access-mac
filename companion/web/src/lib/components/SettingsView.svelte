@@ -10,6 +10,7 @@
 		type SocialLevel
 	} from '$lib/prefs.svelte.js';
 	import { forgetToken, loadToken } from '$lib/session.js';
+	import * as meeting from '$lib/meeting.js';
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText } from '$lib/text.js';
@@ -63,10 +64,14 @@
 
 	// For the app on the Home Screen (its own storage): paste this link there once.
 	async function copyLink() {
-		const token = loadToken();
+		const game = live.game;
+		const token = meeting.hosted ? game?.token : loadToken();
 		if (!token) return;
+		const link = meeting.hosted
+			? `${location.origin}/#m=${game!.id}&k=${token}`
+			: `${location.origin}/#k=${token}`;
 		try {
-			await navigator.clipboard.writeText(`${location.origin}/#k=${token}`);
+			await navigator.clipboard.writeText(link);
 			announce(m.pairing_copied());
 		} catch {
 			announce(m.prompt_copy_failed());
@@ -74,8 +79,40 @@
 	}
 
 	function unpair() {
-		forgetToken();
+		if (meeting.hosted) {
+			if (live.game) meeting.forgetGame(live.game.id);
+		} else forgetToken();
 		location.reload();
+	}
+
+	// At a meeting point: the paired computers, and pairing one more.
+	let paired = $state(meeting.hosted ? meeting.games() : []);
+	function forget(id: string, name: string) {
+		meeting.forgetGame(id);
+		paired = meeting.games();
+		announce(m.forgot_mac({ name: name || m.waiting_a_mac() }));
+		if (live.game?.id === id) location.reload();
+	}
+	let code = $state('');
+	let codeBusy = $state(false);
+	async function pairAnother(e: SubmitEvent) {
+		e.preventDefault();
+		if (codeBusy) return;
+		codeBusy = true;
+		const out = await meeting.pairWithCode(code);
+		codeBusy = false;
+		paired = meeting.games();
+		if (out === 'ok') {
+			code = '';
+			announce(m.paired_with({ name: paired[0]?.name || m.waiting_a_mac() }));
+		} else
+			announce(
+				out === 'locked'
+					? m.pair_code_locked()
+					: out === 'offline'
+						? m.pair_code_offline()
+						: m.pair_code_wrong()
+			);
 	}
 </script>
 
@@ -178,6 +215,39 @@
 	<button type="button" onclick={copyLink}>{m.copy_pairing_link()}</button>
 	<button type="button" onclick={unpair}>{m.unpair()}</button>
 </section>
+
+{#if meeting.hosted}
+	<section class="card stack" aria-labelledby="computers">
+		<h2 id="computers">{m.computers_title()}</h2>
+		<p class="muted">{m.computers_help()}</p>
+		<ul class="stack">
+			{#each paired as g (g.id)}
+				<li class="stack">
+					<span
+						>{g.name || m.waiting_a_mac()}{#if live.game?.id === g.id}{` · ${m.computer_in_use()}`}{/if}</span
+					>
+					<button type="button" onclick={() => forget(g.id, g.name)}
+						>{m.forget_mac({ name: g.name || m.waiting_a_mac() })}</button
+					>
+				</li>
+			{/each}
+		</ul>
+		<form class="stack" onsubmit={pairAnother}>
+			<label class="stack">
+				<span>{m.pair_another_code()}</span>
+				<input
+					type="text"
+					inputmode="numeric"
+					autocomplete="one-time-code"
+					maxlength="11"
+					bind:value={code}
+					enterkeyhint="go"
+				/>
+			</label>
+			<button type="submit" aria-disabled={codeBusy}>{m.pair_code_button()}</button>
+		</form>
+	</section>
+{/if}
 
 <style>
 	select {

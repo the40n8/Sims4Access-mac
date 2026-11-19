@@ -1,0 +1,19 @@
+// The phone app's meeting point (optional): deploy it to your own Cloudflare
+// account, then put its address in the Mac's config.json ("meeting_point").
+// Guide: docs/mac/MEETING-POINT.md
+{
+  "name": "ts4access",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  // The phone app itself, built by mac/build.sh (companion/web/build).
+  "assets": {
+    "directory": "../web/build",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "REGISTRY", "class_name": "Registry" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Registry"] }]
+}
