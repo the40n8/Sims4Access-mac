@@ -1,6 +1,6 @@
 // Shared helpers for things a Sim can interact with (Play and House screens).
 import { m } from './i18n/paraglide/messages.js';
-import type { Target } from './gen/ts4access/v1/game_pb.js';
+import type { Target } from './gen/simsight/v1/game_pb.js';
 
 export function groupLabel(t: Target): string {
 	if (t.isSelf) return m.group_SELF();

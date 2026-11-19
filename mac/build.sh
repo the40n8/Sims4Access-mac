@@ -1,9 +1,10 @@
 #!/bin/zsh
-# Build the macOS mod into dist/TS4_Access:
-#   TS4_Access.ts4script   compiled from Scripts/ with Python 3.7
-#   ts4access-bridge       phone companion: web app + API (Go, universal)
-#   ts4access-say          speech companion (Swift, universal)
-#   TS4_Access_UI.package  from the pinned upstream release (checksum verified)
+# Build the macOS mod into dist/SimSight:
+#   SimSight.ts4script     compiled from Scripts/ with Python 3.7
+#   simsight-bridge        phone companion: web app + API (Go, universal)
+#   simsight-say           speech companion (Swift, universal)
+#   SimSight_UI.package    from the pinned upstream release (checksum verified;
+#                          upstream names it TS4_Access_UI.package)
 #   cloudflared            Cloudflare's tunnel client, pinned and signature-checked
 # Env: PY37 = a Python 3.7 interpreter (default: micromamba env below).
 # Needs: swiftc (Xcode Command Line Tools), go, pnpm.
@@ -12,7 +13,7 @@ set -euo pipefail
 ROOT="${0:A:h:h}"
 MAC="$ROOT/mac"
 COMP="$ROOT/companion"
-DIST="$ROOT/dist/TS4_Access"
+DIST="$ROOT/dist/SimSight"
 CACHE="$MAC/.cache"
 PY37="${PY37:-$HOME/.local/micromamba/envs/py37/bin/python}"
 
@@ -27,9 +28,9 @@ echo "== Python mod"
 
 echo "== Speech companion"
 for arch in arm64 x86_64; do
-  swiftc -O -target "$arch-apple-macos13" -o "$CACHE/ts4access-say-$arch" "$COMP/speaker/TS4AccessSay.swift"
+  swiftc -O -target "$arch-apple-macos13" -o "$CACHE/simsight-say-$arch" "$COMP/speaker/SimSightSay.swift"
 done
-lipo -create -output "$DIST/ts4access-say" "$CACHE/ts4access-say-arm64" "$CACHE/ts4access-say-x86_64"
+lipo -create -output "$DIST/simsight-say" "$CACHE/simsight-say-arm64" "$CACHE/simsight-say-x86_64"
 
 echo "== Phone app"
 (cd "$COMP/web" && pnpm install --frozen-lockfile --silent && pnpm build >/dev/null)
@@ -39,10 +40,10 @@ cp -R "$COMP/web/build" "$COMP/bridge/internal/webui/dist"
 echo "== Bridge"
 for arch in arm64 amd64; do
   (cd "$COMP/bridge" && CGO_ENABLED=0 GOOS=darwin GOARCH=$arch \
-    go build -trimpath -ldflags "-s -w" -o "$CACHE/ts4access-bridge-$arch" ./cmd/ts4access-bridge)
+    go build -trimpath -ldflags "-s -w" -o "$CACHE/simsight-bridge-$arch" ./cmd/simsight-bridge)
 done
-lipo -create -output "$DIST/ts4access-bridge" "$CACHE/ts4access-bridge-arm64" "$CACHE/ts4access-bridge-amd64"
-chmod +x "$DIST/ts4access-say" "$DIST/ts4access-bridge"
+lipo -create -output "$DIST/simsight-bridge" "$CACHE/simsight-bridge-arm64" "$CACHE/simsight-bridge-amd64"
+chmod +x "$DIST/simsight-say" "$DIST/simsight-bridge"
 
 echo "== UI package (upstream release)"
 read -r REPO RELEASE ASSET SHA < <(python3 -I -c '
@@ -57,6 +58,7 @@ GOT=$(shasum -a 256 "$ZIP" | cut -d' ' -f1)
 [[ "$GOT" == "$SHA" ]] || { rm -f "$ZIP"; echo "Checksum mismatch for $ASSET ($GOT). Not used."; exit 1; }
 unzip -o -q -j "$ZIP" "Mods/TS4_Access/TS4_Access_UI.package" \
   "Mods/TS4_Access/README.txt" "Mods/TS4_Access/CONTROLS.txt" "Mods/TS4_Access/CHEATS.txt" -d "$DIST"
+mv -f "$DIST/TS4_Access_UI.package" "$DIST/SimSight_UI.package"
 
 echo "== cloudflared (Cloudflare quick tunnel)"
 read -r CF_VER CF_TEAM CF_ARM CF_AMD < <(python3 -I -c '

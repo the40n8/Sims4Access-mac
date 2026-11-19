@@ -19,7 +19,7 @@ too, with only a free account.
 3. **Public hostname**: choose a subdomain, for example `sims.example.com`,
    service **HTTP**, URL `localhost:47800`. Save.
 4. On the Mac, open
-   `~/Library/Application Support/TS4AccessCompanion/config.json` and add the
+   `~/Library/Application Support/SimSightCompanion/config.json` and add the
    two lines (keep the existing `token` and `port`):
 
    ```json
@@ -41,9 +41,9 @@ too, with only a free account.
 With `cloudflared` logged in to your account (`cloudflared tunnel login`):
 
 ```sh
-cloudflared tunnel create ts4access
-cloudflared tunnel route dns ts4access sims.example.com
-cloudflared tunnel token ts4access     # the tunnel_token for config.json
+cloudflared tunnel create simsight
+cloudflared tunnel route dns simsight sims.example.com
+cloudflared tunnel token simsight     # the tunnel_token for config.json
 ```
 
 No public hostname needed in the dashboard: the mod sends everything the

@@ -14,14 +14,14 @@ command -v cloudflared >/dev/null || { echo "cloudflared not found: brew install
 curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$PORT/" || echo "Note: no bridge answers on port $PORT yet (start the game); the tunnel works once it does."
 
 BRIDGE=""
-for b in "$ROOT/dist/TS4_Access/ts4access-bridge" \
-         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/ts4access-bridge"; do
+for b in "$ROOT/dist/SimSight/simsight-bridge" \
+         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/SimSight/simsight-bridge"; do
   # Feature check without running it (an old bridge would start serving).
   if [[ -x "$b" ]] && grep -qa "public address to link to" "$b"; then BRIDGE="$b"; break; fi
 done
 [[ -n "$BRIDGE" ]] || { echo "No bridge with tunnel support: run mac/build.sh first."; exit 1; }
 
-LOG=$(mktemp -t ts4access-tunnel)
+LOG=$(mktemp -t simsight-tunnel)
 cloudflared tunnel --no-autoupdate --url "http://127.0.0.1:$PORT" >"$LOG" 2>&1 &
 CF=$!
 trap 'kill $CF 2>/dev/null; rm -f "$LOG"; echo; echo "Tunnel closed."' EXIT INT TERM

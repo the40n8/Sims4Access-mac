@@ -19,7 +19,7 @@ pairing key. Without it, or if it is down, everything works as before.
 
 ## Set up (once)
 
-You need Node.js on the Mac (https://nodejs.org) and the TS4 Access source
+You need Node.js on the Mac (https://nodejs.org) and the SimSight source
 folder (this repository), built once with `mac/build.sh`.
 
 1. Deploy the Worker (it opens the browser once to log in to Cloudflare):
@@ -30,13 +30,13 @@ folder (this repository), built once with `mac/build.sh`.
    npx wrangler deploy
    ```
 
-   It prints the address, like `https://ts4access.<your-account>.workers.dev`.
+   It prints the address, like `https://simsight.<your-account>.workers.dev`.
 2. On the Mac, open
-   `~/Library/Application Support/TS4AccessCompanion/config.json` and add one
+   `~/Library/Application Support/SimSightCompanion/config.json` and add one
    line (keep the others):
 
    ```json
-   "meeting_point": "https://ts4access.<your-account>.workers.dev"
+   "meeting_point": "https://simsight.<your-account>.workers.dev"
    ```
 3. Start the game and load a household. Option+Command+A, **phone
    companion**: the QR code now opens the app at the meeting point, and the
@@ -57,7 +57,7 @@ that Mac says.
   so run `npx wrangler deploy` again after `mac/build.sh`. An old app with a
   newer mod may miss buttons.
 - **Your own domain** (optional): in the Cloudflare dashboard, Workers >
-  ts4access > Settings > Domains & Routes > add a custom domain such as
+  simsight > Settings > Domains & Routes > add a custom domain such as
   `sims-app.example.com`. Use a different name from a fixed tunnel address
   ([FIXED-ADDRESS.md](FIXED-ADDRESS.md)) if you have one; the two do not
   need each other.

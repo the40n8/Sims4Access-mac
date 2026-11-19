@@ -2,7 +2,7 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
 	import { money, simSummary, speedName } from '$lib/text.js';
-	import { Speed } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { Speed } from '$lib/gen/simsight/v1/game_pb.js';
 	import Feed from './Feed.svelte';
 	import VoiceToggle from './VoiceToggle.svelte';
 	import AttentionCard from './AttentionCard.svelte';

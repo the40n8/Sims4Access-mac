@@ -9,8 +9,8 @@ set -euo pipefail
 ROOT="${0:A:h:h}"
 PORT=47800
 BRIDGE=""
-for b in "$ROOT/dist/TS4_Access/ts4access-bridge" \
-         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/ts4access-bridge"; do
+for b in "$ROOT/dist/SimSight/simsight-bridge" \
+         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/SimSight/simsight-bridge"; do
   [[ -x "$b" ]] && { BRIDGE="$b"; break; }
 done
 [[ -n "$BRIDGE" ]] || { echo "No bridge: run mac/build.sh first."; exit 1; }
@@ -45,4 +45,4 @@ for _ in {1..600}; do
   done
   sleep 1
 done
-[[ -n "$seen" ]] || echo "❌ No connection after 10 minutes. Check the phone is on the same Wi-Fi (not a guest network), and the Mac firewall allows ts4access-bridge."
+[[ -n "$seen" ]] || echo "❌ No connection after 10 minutes. Check the phone is on the same Wi-Fi (not a guest network), and the Mac firewall allows simsight-bridge."

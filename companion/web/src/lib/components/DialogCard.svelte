@@ -3,7 +3,7 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { reasonText } from '$lib/text.js';
-	import type { Dialog, DialogChoice, DialogRow } from '$lib/gen/ts4access/v1/game_pb.js';
+	import type { Dialog, DialogChoice, DialogRow } from '$lib/gen/simsight/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
 
 	// One window the game is waiting on, answered from the phone like its own

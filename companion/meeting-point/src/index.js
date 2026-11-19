@@ -1,4 +1,4 @@
-// TS4 Access meeting point: one fixed address for the phone app, which then
+// SimSight meeting point: one fixed address for the phone app, which then
 // finds the Mac wherever its tunnel is today.
 //
 // - Serves the phone app (the same one the Mac serves), marked as hosted here.
@@ -34,7 +34,7 @@ export default {
       })
       .on('head', {
         element(el) {
-          el.append('<meta name="ts4access-meeting-point" content="1">', { html: true });
+          el.append('<meta name="simsight-meeting-point" content="1">', { html: true });
         }
       })
       .transform(res);
@@ -103,7 +103,7 @@ async function api(request, url, env) {
 // put the phone's games in the install's start address (cookie set by the app).
 async function manifest(request, res) {
   const cookie = request.headers.get('cookie') || '';
-  const m = /(?:^|;\s*)ts4g=([A-Za-z0-9_.~-]{20,2000})/.exec(cookie);
+  const m = /(?:^|;\s*)ssg=([A-Za-z0-9_.~-]{20,2000})/.exec(cookie);
   if (!m || !res.ok) return res;
   const data = await res.json();
   data.start_url = './#g=' + m[1];

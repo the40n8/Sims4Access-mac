@@ -4,7 +4,7 @@
 // Names come from the game in its language (English here).
 import { m } from './i18n/paraglide/messages.js';
 import { client } from './client.js';
-import type { Interaction, Target } from './gen/ts4access/v1/game_pb.js';
+import type { Interaction, Target } from './gen/simsight/v1/game_pb.js';
 
 export type Quick = {
 	label: () => string;

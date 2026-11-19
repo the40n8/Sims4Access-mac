@@ -1,6 +1,6 @@
 MAKE YOUR OWN FAMILY AND BUILD YOUR OWN HOUSE
 Step by step, written for you by Claude, October 6, 2026.
-TS4 Access Plus version 0.4.0.
+SimSight Plus version 0.4.0.
 
 Do one part at a time. If you get stuck anywhere, alt-tab to Claude and
 say "stuck", and what you heard last. Claude reads the game's log and tells
@@ -252,4 +252,4 @@ IF SOMETHING GOES WRONG
   restart JAWS once, then go back to the game.
 - You hear "Load a game first": load your save first (Part 1).
 - Anything else: alt-tab to Claude and say "stuck". Claude reads
-  Documents\Electronic Arts\The Sims 4\Mods\TS4_Access_Plus.log
+  Documents\Electronic Arts\The Sims 4\Mods\SimSight_Plus.log

@@ -2,7 +2,7 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { reasonText, simName } from '$lib/text.js';
-	import { ActionState, type Action, type Sim } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { ActionState, type Action, type Sim } from '$lib/gen/simsight/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
 
 	// What a Sim is doing and will do next, each with Cancel: on Live and Play.

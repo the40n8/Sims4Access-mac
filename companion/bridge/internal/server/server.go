@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
-	"github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1/ts4accessv1connect"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/simsight/v1"
+	"github.com/the40n8/simsight-companion/companion/bridge/gen/simsight/v1/simsightv1connect"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/hub"
 )
 
@@ -21,7 +21,7 @@ type service struct {
 	hub *hub.Hub
 }
 
-var _ ts4accessv1connect.CompanionServiceHandler = (*service)(nil)
+var _ simsightv1connect.CompanionServiceHandler = (*service)(nil)
 
 // heartbeat keeps quiet streams alive through proxies and tunnels that cut
 // idle connections (Cloudflare: about 100 s), e.g. while the game is paused.
@@ -184,7 +184,7 @@ func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes, 
 		mux.Handle("/api/pair-code", codes.Handler())
 	}
 	mux.Handle("/manifest.json", Manifest(web, token))
-	path, api := ts4accessv1connect.NewCompanionServiceHandler(&service{hub: h},
+	path, api := simsightv1connect.NewCompanionServiceHandler(&service{hub: h},
 		connect.WithInterceptors(authInterceptor(token)))
 	mux.Handle(path, api)
 

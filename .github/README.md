@@ -3,8 +3,7 @@
 Play The Sims 4 with a screen reader, on the Mac and from your phone. An
 independent project based on **[TS4 Access](https://github.com/LeonianUniverse478/Sims4Access)**,
 the screen-reader mod for The Sims 4 by tyjokr, LeonianUniverse and contributors
-(MIT licence; their credits and licence are kept here). In the game, the mod
-still calls itself "TS4 Access".
+(MIT licence; their credits and licence are kept here).
 It speaks menus, dialogs, tooltips, notifications and what your Sim is doing,
 using the macOS system voices.
 
@@ -51,7 +50,7 @@ a [fixed address](../docs/mac/FIXED-ADDRESS.md) (your own domain) or a
 
 | | Windows (upstream) | macOS (this fork) |
 |---|---|---|
-| Speech | NVDA/JAWS via Prism, or a SAPI voice | `ts4access-say` companion (AVSpeechSynthesizer) |
+| Speech | NVDA/JAWS via Prism, or a SAPI voice | `simsight-say` companion (AVSpeechSynthesizer) |
 | Keyboard navigation, scanner | Windows key hooks | Off (the Mac game's Python has no `ctypes`) |
 | Main menu / Create a Sim speech | Loopback socket | Off (Windows-only peer check; its thread crashed the Mac game) |
 | UI package (patched Flash UI) | Built from `flash/` | Same file, taken from the pinned upstream release |
@@ -77,7 +76,7 @@ MAMBA_ROOT_PREFIX=~/.local/micromamba ./bin/micromamba create -y \
 Then, with the game closed:
 
 ```sh
-mac/build.sh      # -> dist/TS4_Access (mod, bridge + phone app, speaker, UI package)
+mac/build.sh      # -> dist/SimSight (mod, bridge + phone app, speaker, UI package)
 mac/test.sh       # offline checks (fake game for the Mac-only mod code, Go tests)
 mac/install.sh    # backs up Options.ini and saves, installs, enables script mods
 mac/release.sh    # player release in dist/release (zip, SHA256SUMS, install.sh);
@@ -91,7 +90,7 @@ switches narration from outside the game.
 
 ## Phone companion
 
-While the game runs, `ts4access-bridge` serves a small web app: live
+While the game runs, `simsight-bridge` serves a small web app: live
 household status, a feed announced by VoiceOver, the game's own interaction
 menus, a room-by-room house map, game questions answered from the phone, and
 quick actions for what needs attention. See the
@@ -100,19 +99,19 @@ quick actions for what needs attention. See the
 1. Start the game. The bridge opens a Cloudflare quick tunnel by itself
    (bundled `cloudflared`, no account) so the phone works from any network;
    the Mac voice says "Phone link ready" and how to open the QR code.
-2. Show the QR code: in game, accessibility menu (`a11y.hub` in the cheat
-   console) > phone companion, or `a11y.companion`; from a terminal,
+2. Show the QR code: in game, accessibility menu (`simsight.hub` in the cheat
+   console) > phone companion, or `simsight.companion`; from a terminal,
    `mac/phone-link.sh`. Both open http://127.0.0.1:47800/pair (this Mac only).
 3. Scan it with the phone, then in Safari: Share > Add to Home Screen. The
    tunnel address changes each game session, so scan again next time.
 4. To revoke the pairing token, delete
-   `~/Library/Application Support/TS4AccessCompanion/config.json`.
-   `ts4access-bridge --tunnel=false` keeps everything on the local network.
+   `~/Library/Application Support/SimSightCompanion/config.json`.
+   `simsight-bridge --tunnel=false` keeps everything on the local network.
    `mac/wifi-test.sh` checks whether the phone reaches the Mac directly over
    Wi-Fi (works without the game). For a fixed address instead of a random
    one each session, see [docs/mac/FIXED-ADDRESS.md](../docs/mac/FIXED-ADDRESS.md).
 
-The first time, macOS may ask whether `ts4access-bridge` may accept incoming
+The first time, macOS may ask whether `simsight-bridge` may accept incoming
 connections: allow it, or the phone cannot connect.
 
 ## Keeping up with upstream
@@ -130,22 +129,22 @@ change and re-apply the `darwin` branch.
 
 ```
 Scripts/              the mod's Python (upstream + macOS branches)
-  tyjokr_a11y_bridge.py   game side of the phone companion (new in this fork)
+  simsight_bridge.py   game side of the phone companion (new in this fork)
 companion/
-  proto/              API and pipe messages (buf, ts4access.v1)
+  proto/              API and pipe messages (buf, simsight.v1)
   bridge/             Go: pipe to the game, Connect API, pairing, event detection
   web/                SvelteKit phone app (fr/en/es), embedded in the bridge
-  speaker/            TS4AccessSay.swift (macOS voices)
+  speaker/            SimSightSay.swift (macOS voices)
 mac/                  build, install, sync, docs
-  ui-package.json     pinned upstream release for TS4_Access_UI.package
+  ui-package.json     pinned upstream release for SimSight_UI.package
 docs/mac/             player guides (phone app, keyboard, fixed address, AI helper)
-docs/plus/            the original's player guides (TS4 Access Plus)
+docs/plus/            the original's player guides (SimSight Plus)
 flash/                the original's patched game interface source (reference)
 ```
 
 ## Development
 
-- Phone app without the game: `go run ./cmd/ts4access-bridge --demo` in
+- Phone app without the game: `go run ./cmd/simsight-bridge --demo` in
   `companion/bridge` (fake household on port 47800, link printed), then
   `pnpm dev` in `companion/web` (proxies the API to it).
 - While the game runs: `mac/dev.sh web` (phone app with live reload),
@@ -156,7 +155,7 @@ flash/                the original's patched game interface source (reference)
 - Checks: `go vet ./... && go test ./...` (bridge), `pnpm verify` (web).
 - Game-side rules on macOS: the game's Python has no `ctypes`, and a
   background thread importing a not-yet-loaded module crashed the game. Run
-  game work from the game's tick (see `tyjokr_a11y_bridge.py`), never import
+  game work from the game's tick (see `simsight_bridge.py`), never import
   inside a thread, and keep macOS changes as small `sys.platform == 'darwin'`
   branches so upstream merges stay clean. The original's Windows developer
   material (its build tooling, baselines and docs) is not kept in this fork:
@@ -166,6 +165,6 @@ flash/                the original's patched game interface source (reference)
 ## Licence and credits
 
 MIT, as upstream (see `LICENSE`). TS4 Access by **tyjokr**; lead development
-**LeonianUniverse**; TS4 Access Plus by **Michael Maslo**; Build cursor and
+**LeonianUniverse**; SimSight Plus by **Michael Maslo**; Build cursor and
 scanner additions by **DaRainbowGirlXX**. macOS port by the40n8.
 Please report Mac-specific problems here, not upstream.

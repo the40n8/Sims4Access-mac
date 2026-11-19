@@ -3,7 +3,7 @@ package announce
 import (
 	"testing"
 
-	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/simsight/v1"
 )
 
 func TestWantsAndText(t *testing.T) {

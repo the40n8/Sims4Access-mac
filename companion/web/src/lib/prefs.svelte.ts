@@ -1,5 +1,5 @@
 // Per-phone preferences: which events VoiceOver announces automatically.
-import { EventKind, type Event } from './gen/ts4access/v1/game_pb.js';
+import { EventKind, type Event } from './gen/simsight/v1/game_pb.js';
 
 export type Group = 'messages' | 'mood' | 'moodlet' | 'need' | 'action' | 'game';
 
@@ -61,7 +61,7 @@ type Stored = {
 	social: SocialLevel;
 };
 
-const KEY = 'ts4access.prefs';
+const KEY = 'simsight.prefs';
 const DEFAULTS: Stored = {
 	// Actions start often; off by default so announcements stay meaningful.
 	announce: { messages: true, mood: true, moodlet: true, need: true, action: false, game: true },

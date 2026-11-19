@@ -1,29 +1,29 @@
 #!/bin/zsh
-# Install SimSight Companion (the TS4 Access mod and its helpers) into The Sims 4 Mods folder: from a release folder
-# (TS4_Access next to this script) or from the source tree (dist/TS4_Access,
+# Install SimSight Companion (the SimSight mod and its helpers) into The Sims 4 Mods folder: from a release folder
+# (SimSight next to this script) or from the source tree (dist/SimSight,
 # made by mac/build.sh). Reversible: backs up Options.ini and saves first;
-# uninstall.sh undoes it. Your settings (TS4_Access.cfg) are kept.
+# uninstall.sh undoes it. Your settings (SimSight.cfg) are kept.
 #
-# TS4A_SPEAK=1 says each step with the Mac voice (the one-command installer
-# turns it on when VoiceOver is off); TS4A_SPEAK=0 keeps it quiet.
+# SIMSIGHT_SPEAK=1 says each step with the Mac voice (the one-command installer
+# turns it on when VoiceOver is off); SIMSIGHT_SPEAK=0 keeps it quiet.
 set -euo pipefail
 
 HERE="${0:A:h}"
-if [[ -f "$HERE/TS4_Access/TS4_Access.ts4script" ]]; then
-  SRC="$HERE/TS4_Access"
+if [[ -f "$HERE/SimSight/SimSight.ts4script" ]]; then
+  SRC="$HERE/SimSight"
 else
-  SRC="${HERE:h}/dist/TS4_Access"
+  SRC="${HERE:h}/dist/SimSight"
 fi
-[[ -f "$SRC/TS4_Access.ts4script" ]] || { echo "Run mac/build.sh first."; exit 1; }
+[[ -f "$SRC/SimSight.ts4script" ]] || { echo "Run mac/build.sh first."; exit 1; }
 USERDIR="$HOME/Documents/Electronic Arts/The Sims 4"
 MODS="$USERDIR/Mods"
-DEST="$MODS/TS4_Access"
+DEST="$MODS/SimSight"
 STAMP=$(date +%Y%m%d-%H%M%S)
-BACKUP="$USERDIR/TS4 Access Backups/$STAMP"
+BACKUP="$USERDIR/SimSight Backups/$STAMP"
 
 tell() {
   print -r -- "$1"
-  [[ "${TS4A_SPEAK:-0}" == 1 ]] && say -- "$1" 2>/dev/null || true
+  [[ "${SIMSIGHT_SPEAK:-0}" == 1 ]] && say -- "$1" 2>/dev/null || true
 }
 
 if pgrep -f "The Sims 4.app/Contents/MacOS" >/dev/null; then
@@ -54,7 +54,21 @@ print -r -- "Backup: $BACKUP"
 
 tell "Step 2 of 3: copying the mod."
 mkdir -p "$DEST"
-for f in TS4_Access.ts4script TS4_Access_UI.package ts4access-say ts4access-bridge cloudflared cloudflared-LICENSE.txt README.txt CONTROLS.txt CHEATS.txt LICENSE.txt README-MAC.md; do
+# Before the rename the mod lived in Mods/SimSight: keep its settings and
+# the names given to rooms and buildings, then set that folder aside (two
+# copies of the mod must never load together).
+OLDNAME="TS4_""Access"   # split: mac/rebrand.py must not rename it
+OLD="$MODS/$OLDNAME"
+if [[ -d "$OLD" ]]; then
+  for f in "$OLD"/${OLDNAME}*.(cfg|json|txt)(N); do
+    n="${f:t}"; n="SimSight${n#$OLDNAME}"
+    [[ -e "$DEST/$n" ]] || cp -p "$f" "$DEST/$n"
+  done
+  mkdir -p "$BACKUP/Mods"
+  mv "$OLD" "$BACKUP/Mods/"
+  tell "The previous version was moved to the backups; your settings were kept."
+fi
+for f in SimSight.ts4script SimSight_UI.package simsight-say simsight-bridge cloudflared cloudflared-LICENSE.txt README.txt CONTROLS.txt CHEATS.txt LICENSE.txt README-MAC.md; do
   cp -p "$SRC/$f" "$DEST/$f.new" && mv -f "$DEST/$f.new" "$DEST/$f"
 done
 cp -p "$HERE/uninstall.sh" "$DEST/uninstall.sh" 2>/dev/null || true
@@ -62,7 +76,7 @@ cp -p "$HERE/uninstall.sh" "$DEST/uninstall.sh" 2>/dev/null || true
 if [[ -d "$HERE/meeting-point" ]]; then
   rm -rf "$DEST/meeting-point" && cp -R "$HERE/meeting-point" "$DEST/meeting-point"
 fi
-chmod +x "$DEST/ts4access-say" "$DEST/ts4access-bridge" "$DEST/cloudflared" "$DEST/uninstall.sh" 2>/dev/null || true
+chmod +x "$DEST/simsight-say" "$DEST/simsight-bridge" "$DEST/cloudflared" "$DEST/uninstall.sh" 2>/dev/null || true
 # Downloaded with a browser, macOS would refuse to start the mod's helpers.
 xattr -dr com.apple.quarantine "$DEST" 2>/dev/null || true
 

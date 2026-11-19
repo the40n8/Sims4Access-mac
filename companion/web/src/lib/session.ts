@@ -1,7 +1,7 @@
 // Pairing: the Mac's link carries the token in the URL fragment (#k=...).
 // It is kept in this browser; the page then removes it from the address bar
 // (linkInAddressBar + replaceState), so it does not end up in screenshots, history or shared links.
-const KEY = 'ts4access.token';
+const KEY = 'simsight.token';
 
 function read(): string | null {
 	try {
@@ -34,7 +34,7 @@ export function loadToken(): string | null {
 function rememberForInstall(token: string): void {
 	try {
 		const secure = location.protocol === 'https:' ? '; Secure' : '';
-		document.cookie = `ts4k=${token}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`;
+		document.cookie = `ssk=${token}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`;
 		refreshManifest();
 	} catch {
 		// cookies off: install from a scanned link still works in Safari
@@ -55,7 +55,7 @@ export function refreshManifest(): void {
 
 export function forgetToken(): void {
 	try {
-		document.cookie = 'ts4k=; Path=/; Max-Age=0';
+		document.cookie = 'ssk=; Path=/; Max-Age=0';
 		localStorage.removeItem(KEY);
 	} catch {
 		// nothing stored

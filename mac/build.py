@@ -1,4 +1,4 @@
-"""Compile Scripts/ into TS4_Access.ts4script for the macOS game.
+"""Compile Scripts/ into SimSight.ts4script for the macOS game.
 
 Same output format as upstream compile.py (Python 3.7 .pyc, PEP 552 header,
 stored zip), but it writes only to the given folder and never deploys.
@@ -15,11 +15,11 @@ from importlib.util import MAGIC_NUMBER
 # sync-upstream.sh deletes them: the game imports every module at load, and
 # these need ctypes, which the Mac game does not have.
 SKIP_DIRS = {'ctypes', '__pycache__'}
-SKIP_FILES = {'tyjokr_a11y_prism.py',
+SKIP_FILES = {'simsight_prism.py',
               # Windows screen/DPI measurement and the SAPI kernel job (ctypes at load);
               # only the Windows build helpers that move the real mouse import them.
-              'tyjokr_a11y_build_coordinates.py', 'tyjokr_a11y_display_diagnostic.py',
-              'tyjokr_a11y_speech_process.py'}
+              'simsight_build_coordinates.py', 'simsight_display_diagnostic.py',
+              'simsight_speech_process.py'}
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
     src = os.path.join(sys.argv[1], 'Scripts')
     out = sys.argv[2]
     os.makedirs(out, exist_ok=True)
-    target = os.path.join(out, 'TS4_Access.ts4script')
+    target = os.path.join(out, 'SimSight.ts4script')
     count = 0
     with zipfile.ZipFile(target, 'w', zipfile.ZIP_STORED) as zf:
         for folder, subs, files in os.walk(src):

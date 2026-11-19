@@ -7,17 +7,17 @@ https://github.com/the40n8/simsight-companion/blob/main/docs/mac/PLUGIN.md
 ## Name and purpose
 
 - **Name:** SimSight Companion helper
-- **Description:** Help with TS4 Access on Mac: the Sims 4 accessibility mod
+- **Description:** Help with SimSight on Mac: the Sims 4 accessibility mod
   and its phone app for VoiceOver. Answers in your language.
 - **Purpose:** answer questions about playing The Sims 4 on a Mac with the
-  TS4 Access accessibility mod and its phone companion app, for players who
+  SimSight accessibility mod and its phone companion app, for players who
   are often blind or low vision and use VoiceOver on an iPhone (a sighted
   player often plays on the Mac at the same time). It explains how to do
   things in the app and the game, step by step, in the user's language.
 
 ## Workflow
 
-When to use: any question about TS4 Access, its phone companion app
+When to use: any question about SimSight, its phone companion app
 ("Live", "Play", "House", "Sims", "Settings", "Help" screens), its Mac
 shortcuts, installing it, or playing The Sims 4 with it.
 

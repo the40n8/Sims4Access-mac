@@ -11,7 +11,7 @@ import {
 	type Event,
 	type Mood,
 	type Sim
-} from './gen/ts4access/v1/game_pb.js';
+} from './gen/simsight/v1/game_pb.js';
 
 const NEEDS: Record<string, () => string> = {
 	hunger: m.need_hunger,

@@ -1,13 +1,13 @@
 #!/bin/zsh
-# Switch TS4 Access narration without opening the game's settings.
+# Switch SimSight narration without opening the game's settings.
 #   ./narration.sh on      automatic narration (hover mode)
 #   ./narration.sh off     silent
 #   ./narration.sh status
 # Takes effect at next game start, or immediately after typing
-# a11y.reload in the cheat console (Cmd+Shift+C). In game you can also type
-# a11y.speechmode off  /  a11y.speechmode hover
+# simsight.reload in the cheat console (Cmd+Shift+C). In game you can also type
+# simsight.speechmode off  /  simsight.speechmode hover
 set -euo pipefail
-CFG="$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/TS4_Access.cfg"
+CFG="$HOME/Documents/Electronic Arts/The Sims 4/Mods/SimSight/SimSight.cfg"
 
 case "${1:-status}" in
   on)  mode=hover ;;

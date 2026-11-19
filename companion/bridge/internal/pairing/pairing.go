@@ -28,7 +28,7 @@ type Config struct {
 	// "https://sims.example.com". Empty: a random quick tunnel each session.
 	TunnelToken string `json:"tunnel_token,omitempty"`
 	PublicURL   string `json:"public_url,omitempty"`
-	// Optional meeting point: the address of your own TS4 Access Worker
+	// Optional meeting point: the address of your own SimSight Worker
 	// (companion/meeting-point). The phone app then lives there, at one
 	// fixed address, and finds this Mac by itself each session.
 	MeetingPoint string `json:"meeting_point,omitempty"`
@@ -155,4 +155,17 @@ func lanIPs() []string {
 func (c *Config) WriteLinkFile(dir string) (string, error) {
 	path := filepath.Join(dir, "phone-link.txt")
 	return path, os.WriteFile(path, []byte(strings.Join(c.Links(), "\n")+"\n"), 0o600)
+}
+
+// MoveOldFolder renames the folder used before the project was renamed
+// to SimSight, so the pairing key, the fixed address settings
+// and the meeting point stay: paired phones keep working.
+func MoveOldFolder(dir string) {
+	if _, err := os.Stat(dir); err == nil {
+		return
+	}
+	old := filepath.Join(filepath.Dir(dir), "TS4"+"AccessCompanion") // split: mac/rebrand.py must not rename it
+	if _, err := os.Stat(old); err == nil {
+		_ = os.Rename(old, dir)
+	}
 }

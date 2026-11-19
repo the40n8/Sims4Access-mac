@@ -14,7 +14,7 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText } from '$lib/text.js';
-	import type { Narration } from '$lib/gen/ts4access/v1/game_pb.js';
+	import type { Narration } from '$lib/gen/simsight/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
 
 	const narration = $derived(live.state?.narration);

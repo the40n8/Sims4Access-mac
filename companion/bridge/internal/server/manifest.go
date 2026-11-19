@@ -10,7 +10,7 @@ import (
 // ManifestCookie carries the pairing key to the Home Screen install: iOS
 // gives an installed web app its own storage, so the key Safari kept would
 // be missing there. Set by the paired page itself (lib/session.ts).
-const ManifestCookie = "ts4k"
+const ManifestCookie = "ssk"
 
 // Manifest serves the web app manifest. For a phone that is already paired
 // (it sends the key in the cookie), the start address carries the key, so

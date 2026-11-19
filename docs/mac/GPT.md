@@ -1,4 +1,4 @@
-# A ChatGPT helper for TS4 Access on Mac
+# A ChatGPT helper for SimSight on Mac
 
 Ask ChatGPT (or any assistant) about the mod and its phone app, in your
 language, with VoiceOver-friendly steps. The assistant reads the guides
@@ -44,7 +44,7 @@ The guides' history on GitHub (docs/mac) shows when they changed.
 
 ### As a ChatGPT Project
 
-1. In ChatGPT, create a **Project** (for example "TS4 Access").
+1. In ChatGPT, create a **Project** (for example "SimSight").
 2. Open the project's instructions and paste the **Instructions** block below.
 3. Make sure web search is allowed in that project, so it can read the guides.
 4. Ask questions inside the project.
@@ -60,13 +60,13 @@ SimSight Companion helper
 ### Description
 
 ```
-Help with TS4 Access on Mac: the Sims 4 accessibility mod and its phone app for VoiceOver. Answers in your language.
+Help with SimSight on Mac: the Sims 4 accessibility mod and its phone app for VoiceOver. Answers in your language.
 ```
 
 ### Instructions
 
 ```
-You help people play The Sims 4 on a Mac with the TS4 Access accessibility mod and its phone companion app. Many users are blind or low vision and use VoiceOver on an iPhone; often a sighted player plays on the Mac at the same time.
+You help people play The Sims 4 on a Mac with the SimSight accessibility mod and its phone companion app. Many users are blind or low vision and use VoiceOver on an iPhone; often a sighted player plays on the Mac at the same time.
 
 At the start of every conversation, before answering, open and read:
 1. https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt

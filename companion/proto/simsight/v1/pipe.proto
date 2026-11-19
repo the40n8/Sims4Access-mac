@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package simsight.v1;
+
+import "simsight/v1/companion.proto";
+import "simsight/v1/game.proto";
+
+// Game <-> bridge pipe. One message per line, protobuf JSON (camelCase
+// field names, enum value names as strings). The game writes ToBridge lines
+// on the bridge's stdin and reads ToGame lines from its stdout. Lines that
+// start with "I" or "Q" instead of "{" are speech, in the original
+// SimSight fallback-voice format (I = interrupt, Q = queue, then the
+// percent-encoded text).
+
+message Voice {
+  int32 rate = 1;    // -10..10
+  int32 volume = 2;  // 0..100
+  string name = 3;   // part of a macOS voice name, empty for default
+  string lang = 4;   // BCP 47, empty for default
+}
+
+message Hello {
+  string mod_version = 1;
+  string game_version = 2;
+}
+
+message CommandResult {
+  string id = 1;
+  CommandOutcome outcome = 2;
+  // Data some commands return.
+  repeated Target targets = 3;
+  repeated Interaction interactions = 4;
+  bool names_pending = 5;
+  HouseMap house_map = 6;
+  repeated InventoryItem inventory = 7;
+}
+
+message ToBridge {
+  oneof payload {
+    Hello hello = 1;
+    GameState state = 2;
+    Event event = 3;
+    CommandResult result = 4;
+    Voice voice = 5;
+    // Bare keys the mod owns right now (Windows VK codes, "+shift" variants),
+    // for the Mac key helper to take while the game is in front.
+    GrabKeys grab = 6;
+  }
+}
+
+message ToGame {
+  string id = 1;
+  oneof command {
+    SetSpeedRequest set_speed = 2;
+    SelectSimRequest select_sim = 3;
+    CancelActionRequest cancel_action = 4;
+    SetNarrationRequest set_narration = 5;
+    ListTargetsRequest list_targets = 6;
+    GetInteractionsRequest get_interactions = 7;
+    RunInteractionRequest run_interaction = 8;
+    GetHouseMapRequest get_house_map = 9;
+    OpenMenuRequest open_menu = 10;
+    RespondDialogRequest respond_dialog = 11;
+    SetCameraRequest set_camera = 12;
+    KeyEvent key = 13;
+    ListInventoryRequest list_inventory = 14;
+    MoveItemRequest move_item = 15;
+  }
+}
+
+// Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
+// menu bar icon, not from the phone).
+message OpenMenuRequest {
+  // "hub": the SimSight menu (simsight.hub).
+  string menu = 1;
+}
+
+message GrabKeys {
+  repeated string keys = 1;
+}
+
+// A key from the Mac key helper, in the original mod's terms.
+message KeyEvent {
+  // chord (Ctrl+Alt on Windows), needs (Ctrl+Shift+N), plus (Alt+key),
+  // plain (bare key the mod owns) or focus (the game lost focus).
+  string family = 1;
+  // Windows virtual-key code.
+  int32 vk = 2;
+  bool down = 3;
+  bool shift = 4;
+}

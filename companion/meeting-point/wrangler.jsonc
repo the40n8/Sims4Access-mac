@@ -2,7 +2,7 @@
 // account, then put its address in the Mac's config.json ("meeting_point").
 // Guide: docs/mac/MEETING-POINT.md
 {
-  "name": "ts4access",
+  "name": "simsight",
   "main": "src/index.js",
   "compatibility_date": "2026-11-01",
   // The phone app itself, built by mac/build.sh (companion/web/build).

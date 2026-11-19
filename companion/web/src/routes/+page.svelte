@@ -30,7 +30,7 @@
 	// History is opened from Live ("Full history"), not a tab of its own:
 	// six tabs fit two even rows.
 	const VIEWS: { id: Tab; label: () => string }[] = [...TABS, { id: 'history', label: m.tab_history }];
-	const TAB_KEY = 'ts4access.tab';
+	const TAB_KEY = 'simsight.tab';
 
 	function savedTab(): Tab {
 		try {

@@ -5,12 +5,12 @@ import { refreshManifest } from './session.js';
 
 /** True when this app is served by a meeting point (it marks the page). */
 export const hosted =
-	typeof document !== 'undefined' && !!document.querySelector('meta[name="ts4access-meeting-point"]');
+	typeof document !== 'undefined' && !!document.querySelector('meta[name="simsight-meeting-point"]');
 
 export type Game = { id: string; token: string; name: string };
 export type Found = { game: Game; url: string };
 
-const GAMES = 'ts4access.games';
+const GAMES = 'simsight.games';
 const KEY = /^[A-Za-z0-9_-]{20,64}$/;
 
 export function games(): Game[] {
@@ -34,8 +34,8 @@ function store(list: Game[]): void {
 		const value = list.map((g) => `${g.id}.${g.token}`).join('~');
 		const secure = location.protocol === 'https:' ? '; Secure' : '';
 		document.cookie = value
-			? `ts4g=${value}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`
-			: 'ts4g=; Path=/; Max-Age=0';
+			? `ssg=${value}; Path=/; Max-Age=31536000; SameSite=Strict${secure}`
+			: 'ssg=; Path=/; Max-Age=0';
 		refreshManifest();
 	} catch {
 		// cookies off

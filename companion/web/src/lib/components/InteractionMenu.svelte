@@ -3,7 +3,7 @@
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
 	import { reasonText } from '$lib/text.js';
-	import type { Interaction, Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import type { Interaction, Target } from '$lib/gen/simsight/v1/game_pb.js';
 	import { menuDone, menuOpened } from '$lib/speed.svelte.js';
 	import { announce } from './Announcer.svelte';
 

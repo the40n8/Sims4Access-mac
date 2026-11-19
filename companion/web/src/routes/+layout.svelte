@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/migrate.js';
 	import '@fontsource-variable/atkinson-hyperlegible-next';
 	import '../app.css';
 	import { onMount } from 'svelte';

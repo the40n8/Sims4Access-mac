@@ -1,5 +1,5 @@
-// Package speaker runs the ts4access-say companion (macOS voices) and feeds
-// it speech lines in the TS4 Access fallback-voice format.
+// Package speaker runs the simsight-say companion (macOS voices) and feeds
+// it speech lines in the SimSight fallback-voice format.
 package speaker
 
 import (
@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/simsight/v1"
 )
 
 type Speaker struct {

@@ -2,16 +2,16 @@
 
 This guide explains, for players and for AI assistants helping them, how to
 play The Sims 4 on a Mac with SimSight Companion (the accessibility mod,
-based on TS4 Access, shown in game as "TS4 Access") and its phone companion. It is written for blind and low-vision players using VoiceOver on
+based on TS4 Access) and its phone companion. It is written for blind and low-vision players using VoiceOver on
 an iPhone, often playing together with a sighted player on the Mac.
 
 ## What it is
 
-- **TS4 Access** is an accessibility mod for The Sims 4 (by tyjokr and
-  LeonianUniverse). On the Mac, it reads what the mouse points at aloud and
-  announces what the Sims do.
-- **This fork** (simsight-companion) makes it work on macOS and adds a **phone
-  companion**: a web app on the phone that shows the game and controls it.
+- **SimSight** is an accessibility mod for The Sims 4, based on TS4 Access
+  by tyjokr and LeonianUniverse. On the Mac, it reads what the mouse points
+  at aloud and announces what the Sims do.
+- It also has a **phone companion**: a web app on the phone that shows the
+  game and controls it.
   It is fully usable with VoiceOver.
 - Nothing is sent to a server of ours. The Mac runs a small local server; the
   phone reaches it through a temporary Cloudflare address (random, changes
@@ -22,7 +22,7 @@ an iPhone, often playing together with a sighted player on the Mac.
 1. Start the game on the Mac. When the Mac says "Phone link ready. Press
    Option Command A for the accessibility menu, then choose phone companion",
    it is ready.
-2. Press Option+Command+A: the TS4 Access menu opens with **phone companion**
+2. Press Option+Command+A: the SimSight menu opens with **phone companion**
    first; choose it (or click the accessibility icon in the macOS menu bar,
    then **Phone companion…**). A page with a QR code opens, and the Mac
    voice says a 6-digit **pairing code** (twice; it is also on the page).
@@ -161,9 +161,9 @@ From top to bottom:
 ## On the Mac
 
 - **Option+Command+S**: speech on/off (also while the game has focus).
-- **Option+Command+A**: the TS4 Access menu.
+- **Option+Command+A**: the SimSight menu.
 - Accessibility icon in the macOS menu bar: the same, plus Phone companion….
-- Cheat console (Cmd+Shift+C): `a11y.hub` (menu), `a11y.companion` (QR code).
+- Cheat console (Cmd+Shift+C): `simsight.hub` (menu), `simsight.companion` (QR code).
 - The original mod's keyboard works too, with Mac keys (Control+Shift for its
   Ctrl+Alt keys, Option+Shift for its Alt keys): see [KEYBOARD.md](KEYBOARD.md).
 
@@ -189,4 +189,4 @@ From top to bottom:
   names as written above, not colours or positions on screen.
 - Game object and action names come from the game (usually English).
 - Source code: https://github.com/the40n8/simsight-companion (phone app in
-  `companion/web`, game side in `Scripts/tyjokr_a11y_bridge.py`).
+  `companion/web`, game side in `Scripts/simsight_bridge.py`).

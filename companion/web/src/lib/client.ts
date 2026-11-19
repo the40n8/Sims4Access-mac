@@ -1,6 +1,6 @@
 import { Code, ConnectError, createClient, type Interceptor } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
-import { CompanionService, type CommandOutcome } from './gen/ts4access/v1/companion_pb.js';
+import { CompanionService, type CommandOutcome } from './gen/simsight/v1/companion_pb.js';
 import { loadToken } from './session.js';
 import { hosted } from './meeting.js';
 

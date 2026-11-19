@@ -28,19 +28,19 @@ UPSTREAM=$(python3 -c 'import json;print(json.load(open("mac/ui-package.json"))[
 OUT="$ROOT/dist/release"
 PKG="$OUT/SimSight-Companion"
 rm -rf "$OUT" && mkdir -p "$PKG"
-cp -Rp dist/TS4_Access "$PKG/TS4_Access"
+cp -Rp dist/SimSight "$PKG/SimSight"
 cp -p mac/install.sh mac/uninstall.sh "$PKG/"
 cat > "$PKG/Install SimSight Companion.command" <<'CMD'
 #!/bin/zsh
-# Double-click to install or update TS4 Access (quit the game first).
+# Double-click to install or update SimSight (quit the game first).
 cd "${0:A:h}" && ./install.sh
 echo; echo "You can close this window."
 CMD
 cat > "$PKG/Uninstall SimSight Companion.command" <<'CMD'
 #!/bin/zsh
-# Double-click to remove TS4 Access (saves are not touched).
+# Double-click to remove SimSight (saves are not touched).
 cd "${0:A:h}" && ./uninstall.sh
-echo; echo "TS4 Access removed. You can close this window."
+echo; echo "SimSight removed. You can close this window."
 CMD
 chmod +x "$PKG"/*.command "$PKG"/*.sh
 # The optional meeting point, with the phone app it serves.

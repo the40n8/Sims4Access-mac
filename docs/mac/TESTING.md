@@ -20,7 +20,7 @@ not appear on the phone; the Mac showed it. 21:40."
 
 - [ ] Game loads a household; the Mac says "Phone link ready. Press Option
       Command A…" once you are in the house (not at the main menu). **new**
-- [ ] Option+Command+A opens the TS4 Access menu, **phone companion** first,
+- [ ] Option+Command+A opens the SimSight menu, **phone companion** first,
       then the new grouped menu (yourself, needs, Sims, places…).
 - [ ] Phone companion shows the QR code; the phone opens the app.
 - [ ] Phone companion: the Mac says a 6-digit code; typed on the Pair this
@@ -98,7 +98,7 @@ not appear on the phone; the Mac showed it. 21:40."
 Only while the game is the front app (see KEYBOARD.md):
 - [ ] Control+Shift+H (menu), +C (time), +Q (queue), +N (needs), +1/2 (switch Sims).
 - [ ] Option+Shift+T (time), +N (needs), +R (rooms), +W (where am I).
-- [ ] With keyboard navigation on (TS4 Access settings): arrows, Tab, Enter,
+- [ ] With keyboard navigation on (SimSight settings): arrows, Tab, Enter,
       Esc move through an open menu or dialog with speech; outside menus the
       game keeps its keys.
 - [ ] Other apps keep their shortcuts while the game is in the background.

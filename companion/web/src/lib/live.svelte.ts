@@ -1,4 +1,4 @@
-import type { Event, GameState } from './gen/ts4access/v1/game_pb.js';
+import type { Event, GameState } from './gen/simsight/v1/game_pb.js';
 import { client, isUnauthenticated, token, useGame } from './client.js';
 import { findGame, games, hosted, type Game } from './meeting.js';
 

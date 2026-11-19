@@ -3,7 +3,7 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { awaySentence, duration, levelName, moodName, needName, reasonText, simName } from '$lib/text.js';
-	import { ActionState, NeedLevel, type Action, type Sim } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { ActionState, NeedLevel, type Action, type Sim } from '$lib/gen/simsight/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
 
 	const sims = $derived(live.state?.inGame ? live.state.sims : []);

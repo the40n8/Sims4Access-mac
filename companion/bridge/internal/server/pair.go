@@ -14,7 +14,7 @@ type LinkFunc func() (link string, status string)
 
 var pairTmpl = template.Must(template.New("pair").Parse(`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TS4 Access: phone link</title>
+<title>SimSight: phone link</title>
 {{if .Refresh}}<meta http-equiv="refresh" content="3;url=/pair?again=1">{{end}}
 <style>
 body{font:18px/1.5 system-ui,sans-serif;background:#0f2a1f;color:#eef7f1;margin:0;display:grid;place-items:center;min-height:100vh}

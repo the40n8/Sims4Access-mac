@@ -17,8 +17,8 @@ if [[ $# -eq 0 ]] && curl -s -o /dev/null --max-time 2 http://127.0.0.1:47800/pa
   exit 0
 fi
 BRIDGE=""
-for b in "$ROOT/dist/TS4_Access/ts4access-bridge" \
-         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access/ts4access-bridge"; do
+for b in "$ROOT/dist/SimSight/simsight-bridge" \
+         "$HOME/Documents/Electronic Arts/The Sims 4/Mods/SimSight/simsight-bridge"; do
   # Feature check without running it (an old bridge would start serving).
   if [[ -x "$b" ]] && grep -qa "QR for terminals with a light background" "$b"; then BRIDGE="$b"; break; fi
 done

@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Bring upstream TS4 Access changes into this macOS fork.
+# Bring changes from TS4 Access (the project SimSight is based on) into SimSight.
 #
 #   mac/sync-upstream.sh            merge upstream/dev into the current branch
 #
@@ -34,11 +34,16 @@ else
   if [[ -n "$CONFLICTS" ]]; then
     echo
     echo "Resolve these by hand (keep upstream's change plus our macOS guard),"
-    echo "then: git add <files> && git commit"
+    echo "then: python3 mac/rebrand.py && git add -A && git commit"
     echo "$CONFLICTS"
     exit 2
   fi
-  git commit -q -m "Merge upstream/dev ($(git rev-parse --short upstream/dev)) into macOS fork"
+  # Upstream code uses the TS4 Access names (modules, commands, files):
+  # rename it like ours. Changes to modules we already renamed merge through
+  # git's rename detection; new modules are renamed here.
+  python3 mac/rebrand.py
+  git add -A
+  git commit -q -m "Merge upstream/dev ($(git rev-parse --short upstream/dev)) into SimSight"
   echo "Merged. Changed upstream Python modules:"
   git diff --stat "$BEFORE" HEAD -- Scripts | tail -20
 fi

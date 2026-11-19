@@ -8,7 +8,7 @@ TS4 ACCESS PLUS - CHANGELOG
   not close, it takes them back with Undo and draws the room again,
   up to 4 tries, instead of stopping.
 - The log file is now ALSO saved in your Windows user folder:
-  C:\Users\(your name)\TS4_Access_Plus.log  (outside OneDrive), so it
+  C:\Users\(your name)\SimSight_Plus.log  (outside OneDrive), so it
   can always be found. If the Mods folder copy cannot be written, that
   copy says why.
 
@@ -33,7 +33,7 @@ TWO-FLOOR HOUSES WITH STAIRS (Alt+B, Build my house)
   Cancel bar at the bottom of the screen, or on something already
   standing on the lot. The mod now never points at the bottom panels.
   If it still happens, start on an EMPTY lot and send Claude the file
-  TS4_Access_Plus.log from the Mods folder.
+  SimSight_Plus.log from the Mods folder.
 
 0.6.0 - October 6, 2026 (tested live by Claude, game NOT saved)
 NEW IN THE BUILD HELPER (Alt+B in Build mode)
@@ -65,7 +65,7 @@ NEW IN THE BUILD HELPER (Alt+B in Build mode)
   for now. Choosing other colors comes later.
 - Sell things in a room (TESTED: sold 2 things, got 170 back): lists everything in the room with what it sells
   for. Check the ones you want to sell (Space or Enter), choose OK, then
-  say Yes. You get the money back, the same as the TS4 Access X key.
+  say Yes. You get the money back, the same as the SimSight X key.
   Things that have something on them, or that someone is using, cannot be
   sold until that is moved.
 NEXT: moving and turning furniture, choosing colors, stairs.
@@ -123,11 +123,11 @@ FIXES
 - The game's tutorial aspirations are no longer offered.
 
 KNOWN
-- TS4 Access says "Needs - O" when a list closes. Harmless.
+- SimSight says "Needs - O" when a list closes. Harmless.
 - Lot prices are "about": within 100 simoleons.
 - Stairs, second floors and roofs: next.
-Add-on for the TS4 Access mod. File: Mods\TS4_Access_Plus.ts4script
-Source and tools: Downloads\TS4_Access_Review\plus
+Add-on for the SimSight mod. File: Mods\SimSight_Plus.ts4script
+Source and tools: Downloads\SimSight_Review\plus
 
 0.2.0 - October 4, 2026 (tested live by Claude in your Robinson save, not saved)
 
@@ -158,11 +158,11 @@ TESTED AND WORKING
   - Paint the floor of a room: not tested yet.
 
 IMPORTANT CHANGE TO THE TS4 ACCESS INTERFACE FILE
-- The Catalog needs a small addition inside TS4 Access's interface file
-  (Mods\TS4_Access_UI.package). Claude added it to all 25 interface parts and
-  checked each one: nothing else in TS4 Access was changed.
-- The untouched original is saved in Downloads\TS4_Access_Review\backup.
-- If you update TS4 Access, the Catalog stops working until Claude re-applies
+- The Catalog needs a small addition inside SimSight's interface file
+  (Mods\SimSight_UI.package). Claude added it to all 25 interface parts and
+  checked each one: nothing else in SimSight was changed.
+- The untouched original is saved in Downloads\SimSight_Review\backup.
+- If you update SimSight, the Catalog stops working until Claude re-applies
   the addition (everything else in Access Plus keeps working).
 
 KNOWN LIMITS

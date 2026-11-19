@@ -23,7 +23,7 @@ class Msg:
 
 WORDS = {1: 'Cook', 2: 'What to cook?', 3: 'Pancakes', 4: 'Lobster', 5: 'Needs skill 9'}
 SENT, CALLS = [], []
-module('tyjokr_a11y_bridge', text_of=lambda v, fb='': WORDS.get(getattr(v, 'hash', 0), fb),
+module('simsight_bridge', text_of=lambda v, fb='': WORDS.get(getattr(v, 'hash', 0), fb),
        send=SENT.append, log=lambda m: None)
 
 
@@ -53,7 +53,7 @@ DIALOG = Msg(picker_rows=[row(11, 3, True), row(12, 4, False, 5)])
 module('services', ui_dialog_service=lambda: SERVICE)
 SERVICE = Service({7: DIALOG})
 
-import tyjokr_a11y_dialogs as dialogs  # noqa: E402
+import simsight_dialogs as dialogs  # noqa: E402
 
 
 class DialogsTest(unittest.TestCase):

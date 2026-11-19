@@ -8,9 +8,9 @@ import fakegame
 fakegame.scripts_on_path()
 
 LOG = []
-module('tyjokr_a11y_speech', log_line=lambda m: None)
-module('tyjokr_a11y_pump', alive=lambda: True, post=lambda fn, *a: LOG.append(('post',)))
-KEYS = module('tyjokr_a11y_keys', _enabled=True, _REPEAT_DELAY=0.03, _REPEAT_INTERVAL=0.0,
+module('simsight_speech', log_line=lambda m: None)
+module('simsight_pump', alive=lambda: True, post=lambda fn, *a: LOG.append(('post',)))
+KEYS = module('simsight_keys', _enabled=True, _REPEAT_DELAY=0.03, _REPEAT_INTERVAL=0.0,
               _chord_repeating=False, CHORDS={0x28: ('next', True), 0x48: ('help', False)},
               _REPEATABLE={'A11yArrowDown'}, _announce_ui_settings=lambda: None)
 KEYS.modal = True
@@ -33,9 +33,9 @@ def read_time():
     LOG.append(('plus', 'time'))
 
 
-module('tyjokr_a11y_plus_core', HOTKEYS={0x54: (read_time, 'time')}, _wants_shift=lambda fn: False)
+module('simsight_plus_core', HOTKEYS={0x54: (read_time, 'time')}, _wants_shift=lambda fn: False)
 
-import tyjokr_a11y_mackeys as mackeys  # noqa: E402
+import simsight_mackeys as mackeys  # noqa: E402
 
 
 class MacKeysTest(unittest.TestCase):

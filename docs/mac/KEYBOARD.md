@@ -1,4 +1,4 @@
-# TS4 Access keyboard on a Mac
+# SimSight keyboard on a Mac
 
 The original mod's keyboard (CONTROLS.txt) works on the Mac with Mac keys.
 The keys are taken only while The Sims 4 is the front app, so other apps,
@@ -8,12 +8,12 @@ printed on your keyboard (AZERTY, QWERTZ...).
 | Original (Windows) | Mac |
 |---|---|
 | Ctrl+Alt+key | **Control+Shift+key** (⌃⇧) |
-| Alt+key (TS4 Access Plus) | **Option+Shift+key** (⌥⇧) |
+| Alt+key (SimSight Plus) | **Option+Shift+key** (⌥⇧) |
 | Alt+Shift+arrow (drawing cursor, 5 m) | **Option+Shift+Command+arrow** |
 | Ctrl+Shift+N (needs) | **Control+Shift+N** |
 | Arrows, Tab, Enter, Space, Backspace, Esc in menus and the scanner | the same keys |
 
-Always on the Mac: **Option+Command+A** opens the TS4 Access menu,
+Always on the Mac: **Option+Command+A** opens the SimSight menu,
 **Option+Command+S** turns the speech on or off.
 
 ## On by default, and turning navigation on
@@ -21,8 +21,8 @@ Always on the Mac: **Option+Command+A** opens the TS4 Access menu,
 The information keys (Control+Shift and Option+Shift) always work. Moving
 through menus, dialogs and pickers with the arrows, Tab and Enter, and the
 scanner, are off by default on the Mac (the sighted player uses the mouse):
-turn **keyboard navigation** on in the TS4 Access settings menu
-(Option+Command+A, settings menu), or type `a11y.keys on` in the cheat
+turn **keyboard navigation** on in the SimSight settings menu
+(Option+Command+A, settings menu), or type `simsight.keys on` in the cheat
 console (Command+Shift+C). Bare keys are only taken while the mod owns
 them (a menu or dialog is open, scanner mode is on, or the Build cursor is
 active); otherwise the game gets them as usual.
@@ -55,7 +55,7 @@ active); otherwise the game gets them as usual.
 | ⌃⇧ [ / ] | rotate left / right |
 | ⌃⇧ Z / Y / X | undo / redo / sell |
 
-## Option+Shift keys (the original's Alt, TS4 Access Plus)
+## Option+Shift keys (the original's Alt, SimSight Plus)
 
 | Key | Action |
 |---|---|

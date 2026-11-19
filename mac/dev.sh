@@ -7,8 +7,8 @@
 set -euo pipefail
 ROOT="${0:A:h:h}"
 COMP="$ROOT/companion"
-MODS="$HOME/Documents/Electronic Arts/The Sims 4/Mods/TS4_Access"
-LINKS="$HOME/Library/Application Support/TS4AccessCompanion/phone-link.txt"
+MODS="$HOME/Documents/Electronic Arts/The Sims 4/Mods/SimSight"
+LINKS="$HOME/Library/Application Support/SimSightCompanion/phone-link.txt"
 
 # Replace a binary that may be running: write next to it, then rename over it
 # (copying over a running binary on macOS can get the new one killed).
@@ -27,15 +27,15 @@ case "${1:-}" in
   bridge)
     (cd "$COMP/web" && pnpm build >/dev/null)
     rm -rf "$COMP/bridge/internal/webui/dist" && cp -R "$COMP/web/build" "$COMP/bridge/internal/webui/dist"
-    (cd "$COMP/bridge" && go build -o "$ROOT/mac/.cache/ts4access-bridge-dev" ./cmd/ts4access-bridge)
-    swap "$ROOT/mac/.cache/ts4access-bridge-dev" ts4access-bridge
-    pkill -f "$MODS/ts4access-bridge" || true
+    (cd "$COMP/bridge" && go build -o "$ROOT/mac/.cache/simsight-bridge-dev" ./cmd/simsight-bridge)
+    swap "$ROOT/mac/.cache/simsight-bridge-dev" simsight-bridge
+    pkill -f "$MODS/simsight-bridge" || true
     echo "Bridge swapped; the game restarts it within a few seconds and the phone reconnects."
     ;;
   speaker)
-    swiftc -O -o "$ROOT/mac/.cache/ts4access-say-dev" "$COMP/speaker/TS4AccessSay.swift"
-    swap "$ROOT/mac/.cache/ts4access-say-dev" ts4access-say
-    pkill -f "$MODS/ts4access-say" || true
+    swiftc -O -o "$ROOT/mac/.cache/simsight-say-dev" "$COMP/speaker/SimSightSay.swift"
+    swap "$ROOT/mac/.cache/simsight-say-dev" simsight-say
+    pkill -f "$MODS/simsight-say" || true
     echo "Voice swapped; the next sentence starts the new one."
     ;;
   *)

@@ -3,8 +3,8 @@
 import { client, run } from './client.js';
 import { live } from './live.svelte.js';
 import { prefs } from './prefs.svelte.js';
-import { Speed } from './gen/ts4access/v1/game_pb.js';
-import type { CommandOutcome } from './gen/ts4access/v1/companion_pb.js';
+import { Speed } from './gen/simsight/v1/game_pb.js';
+import type { CommandOutcome } from './gen/simsight/v1/companion_pb.js';
 
 let resumeTo = Speed.NORMAL;
 

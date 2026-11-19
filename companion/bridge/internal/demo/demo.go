@@ -8,7 +8,7 @@ import (
 	"math/rand/v2"
 	"time"
 
-	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/ts4access/v1"
+	v1 "github.com/the40n8/simsight-companion/companion/bridge/gen/simsight/v1"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/hub"
 	"google.golang.org/protobuf/proto"
 )

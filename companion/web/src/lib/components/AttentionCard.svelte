@@ -4,7 +4,7 @@
 	import { client, run } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { levelName, needName, reasonText, simName } from '$lib/text.js';
-	import { NeedLevel, type Problem, type Sim, type Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import { NeedLevel, type Problem, type Sim, type Target } from '$lib/gen/simsight/v1/game_pb.js';
 	import {
 		BILLS_HELP,
 		NEED_HELP,

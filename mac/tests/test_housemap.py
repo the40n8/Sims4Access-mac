@@ -46,7 +46,7 @@ OBJECTS = [Obj(1, 3, 7, {'Func_Fridge'}), Obj(2, 6, 5, {'BuyCatSS_Door'}), Obj(3
            Obj(4, 9, 5), Obj(5, 1, 1), Obj(6, 13, 9), Obj(7, 10, 5, {'Build_Stair'}, (0, 1))]
 LOT = types.SimpleNamespace(corners=[V(0, 0, 0), V(14, 0, 0), V(14, 0, 10), V(0, 0, 10)], min_level=0, max_level=1)
 
-module('tyjokr_a11y_plus_rooms', room_id_at=room_id, tag_names=lambda o: o.tags, given_name=lambda r: '',
+module('simsight_plus_rooms', room_id_at=room_id, tag_names=lambda o: o.tags, given_name=lambda r: '',
        KINDS=(('Kitchen', ('Func_Fridge',), 5),))
 module('services', active_lot=lambda: LOT, get_active_sim=lambda: SIM,
        object_manager=lambda: types.SimpleNamespace(get_valid_objects_gen=lambda: iter(OBJECTS)),
@@ -55,9 +55,9 @@ module('build_buy', is_location_pool=lambda p, level: p.x < 2 and p.z < 3)
 module('terrain', get_terrain_height=lambda x, z: 0.0)
 math_mod = module('sims4.math', Vector3=V)
 module('sims4', math=math_mod)
-module('tyjokr_a11y_bridge', _classify=lambda o: ('MISC', 'k', ''), _object_name=lambda o: 'obj%d' % o.id)
+module('simsight_bridge', _classify=lambda o: ('MISC', 'k', ''), _object_name=lambda o: 'obj%d' % o.id)
 
-import tyjokr_a11y_housemap as housemap  # noqa: E402
+import simsight_housemap as housemap  # noqa: E402
 
 
 class HouseMapTest(unittest.TestCase):

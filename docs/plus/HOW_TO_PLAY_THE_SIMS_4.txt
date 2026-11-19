@@ -1,6 +1,6 @@
 HOW TO PLAY THE SIMS 4 WITH A SCREEN READER
 A beginner's guide, written for you by Claude, October 2026.
-Uses two mods: TS4 Access (by another author) and TS4 Access Plus (my add-on).
+Uses two mods: SimSight (by another author) and SimSight Plus (my add-on).
 
 Read one part at a time. You do not need to learn it all at once.
 
@@ -38,11 +38,11 @@ faster and works better.
 PART 2. BEFORE YOU START THE GAME
 
 1. Close the game if it is open.
-2. You do not need to run TS4AccessHelper.exe every time. Run it only
+2. You do not need to run SimSightHelper.exe every time. Run it only
    after a Sims 4 update. It turns the mod settings back on. Mods are on
    right now.
 3. Start JAWS first, then start The Sims 4 from Steam.
-4. On the main menu, TS4 Access reads the buttons. Use arrows and Enter.
+4. On the main menu, SimSight reads the buttons. Use arrows and Enter.
 
 
 PART 3. GETTING A FAMILY TO PLAY
@@ -69,7 +69,7 @@ Other ways to get a family:
 
 PART 4. THE TWO MOST IMPORTANT TOOLS
 
-A. THE SCANNER (from TS4 Access): finding things and telling Sims what to do
+A. THE SCANNER (from SimSight): finding things and telling Sims what to do
 
 In The Sims you tell a Sim what to do by choosing an object or another Sim
 and picking an action from its menu. For example: fridge, then "Quick Meal".
@@ -118,10 +118,10 @@ Automatic warnings (Alt+A, then Settings, turns each one on or off):
 - Work reminders: "Bella has work in 1 hour, at 9 AM".
 - Bills: "Bills have arrived: 450 simoleons. Pay them at the mailbox."
 
-Other useful TS4 Access keys:
-  Ctrl+Alt+H      TS4 Access menu: skills, career, relationships, inventory,
+Other useful SimSight keys:
+  Ctrl+Alt+H      SimSight menu: skills, career, relationships, inventory,
                   calendar, phone, settings.
-  Ctrl+Shift+N    Needs (the TS4 Access version).
+  Ctrl+Shift+N    Needs (the SimSight version).
   Ctrl+Alt+E      Mood and moodlets.
   Ctrl+Alt+G      Wants and fears.
   Ctrl+Alt+P      Phone: answer a call or text, or open phone actions.
@@ -225,8 +225,8 @@ D. FURNITURE
    1. Alt+B, Catalog, "Furniture and other objects", then a kind, such as
       Beds or Refrigerators. Enter on one.
    2. Alt+B, "Put the chosen object in a room". Choose the room.
-   TS4 Access finds a free spot and tells you where it went and the price.
-   (TS4 Access's own grid placement, in its CONTROLS.txt, still works too.)
+   SimSight finds a free spot and tells you where it went and the price.
+   (SimSight's own grid placement, in its CONTROLS.txt, still works too.)
 
 E. PAINT
    Alt+B, Catalog, "Wall patterns" (or "Floor patterns"), Enter on one.
@@ -253,9 +253,9 @@ PART 10. IF SOMETHING GOES WRONG
   try again.
 - You hear nothing when pressing an Alt key: make sure the game window is in
   front, and that a family is loaded.
-- The game reads too much or jumps around: that is TS4 Access's reader.
+- The game reads too much or jumps around: that is SimSight's reader.
   Ctrl+Alt+R reads the current thing again, or stops speech.
 - After a Sims 4 update the mods may be off: close the game, run
-  TS4AccessHelper.exe, choose Enable Script Mods, start the game again.
+  SimSightHelper.exe, choose Enable Script Mods, start the game again.
 - Tell me what happened. My add-on writes a log file I can read:
-  Documents\Electronic Arts\The Sims 4\Mods\TS4_Access_Plus.log
+  Documents\Electronic Arts\The Sims 4\Mods\SimSight_Plus.log

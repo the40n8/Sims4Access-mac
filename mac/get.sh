@@ -16,18 +16,18 @@
 # does nothing.
 main() {
   set -euo pipefail
-  local repo="${TS4A_REPO:-the40n8/simsight-companion}"
-  local base="${TS4A_BASE:-https://github.com/$repo/releases/latest/download}"
+  local repo="${SIMSIGHT_REPO:-the40n8/simsight-companion}"
+  local base="${SIMSIGHT_BASE:-https://github.com/$repo/releases/latest/download}"
   local userdir="$HOME/Documents/Electronic Arts/The Sims 4"
   local zip="SimSight-Companion-mac.zip"
 
   # VoiceOver already reads the Terminal: only speak when it is off.
-  if [[ -z "${TS4A_SPEAK:-}" ]]; then
-    if pgrep -xq VoiceOver; then export TS4A_SPEAK=0; else export TS4A_SPEAK=1; fi
+  if [[ -z "${SIMSIGHT_SPEAK:-}" ]]; then
+    if pgrep -xq VoiceOver; then export SIMSIGHT_SPEAK=0; else export SIMSIGHT_SPEAK=1; fi
   fi
   tell() {
     print -r -- "$1"
-    [[ "$TS4A_SPEAK" == 1 ]] && say -- "$1" 2>/dev/null || true
+    [[ "$SIMSIGHT_SPEAK" == 1 ]] && say -- "$1" 2>/dev/null || true
   }
   # Answers come from the keyboard, not from the downloaded script.
   ask() {
@@ -40,9 +40,9 @@ main() {
   [[ "$(uname -s)" == Darwin ]] || { tell "SimSight Companion only runs on macOS for now."; exit 1; }
 
   if [[ "${1:-}" == uninstall ]]; then
-    if [[ -x "$userdir/Mods/TS4_Access/uninstall.sh" ]]; then
-      "$userdir/Mods/TS4_Access/uninstall.sh"
-      tell "SimSight Companion is removed. Your saves were not touched; the mod folder was moved to TS4 Access Backups."
+    if [[ -x "$userdir/Mods/SimSight/uninstall.sh" ]]; then
+      "$userdir/Mods/SimSight/uninstall.sh"
+      tell "SimSight Companion is removed. Your saves were not touched; the mod folder was moved to SimSight Backups."
     else
       tell "SimSight Companion is not installed. Nothing was changed."
     fi
@@ -50,7 +50,7 @@ main() {
   fi
 
   local what="install"
-  [[ -d "$userdir/Mods/TS4_Access" ]] && what="update"
+  [[ -d "$userdir/Mods/SimSight" ]] && what="update"
   tell "SimSight Companion, accessibility mod for The Sims 4. This will $what it."
   if pgrep -f "The Sims 4.app/Contents/MacOS" >/dev/null; then
     tell "The Sims 4 is running. Save, quit the game, then run this command again. Nothing was changed."; exit 1
@@ -62,7 +62,7 @@ main() {
   [[ "$go" == [nN]* ]] && { tell "Stopped. Nothing was changed."; exit 0; }
 
   local tmp
-  tmp=$(mktemp -d -t ts4access)
+  tmp=$(mktemp -d -t simsight)
   trap "rm -rf '$tmp'" EXIT
   tell "Downloading."
   curl -fsSL --retry 2 -o "$tmp/$zip" "$base/$zip" || { tell "Download failed. Check the internet connection and try again."; exit 1; }

@@ -4,7 +4,7 @@
 	import { client } from '$lib/client.js';
 	import { live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
-	import type { HouseMap, Room, RoomItem, RoomLink, Target } from '$lib/gen/ts4access/v1/game_pb.js';
+	import type { HouseMap, Room, RoomItem, RoomLink, Target } from '$lib/gen/simsight/v1/game_pb.js';
 	import { isMinor, objectName, rank } from '$lib/targets.js';
 	import { dir, floorName, kindName, part, roomName, side } from '$lib/rooms.js';
 	import { announce } from './Announcer.svelte';

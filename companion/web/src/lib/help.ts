@@ -73,7 +73,7 @@ const en: HelpSection[] = [
 		id: 'mac',
 		title: 'On the Mac',
 		body: [
-			'Option+Command+S turns the Mac’s speech on or off. Option+Command+A opens the TS4 Access menu. The accessibility icon in the macOS menu bar has the same actions and "Phone companion…", which shows the QR code. The original mod’s keyboard works with Mac keys while the game is in front: Control+Shift for its Ctrl+Alt keys, Option+Shift for its Alt keys.'
+			'Option+Command+S turns the Mac’s speech on or off. Option+Command+A opens the SimSight menu. The accessibility icon in the macOS menu bar has the same actions and "Phone companion…", which shows the QR code. The original mod’s keyboard works with Mac keys while the game is in front: Control+Shift for its Ctrl+Alt keys, Option+Shift for its Alt keys.'
 		]
 	},
 	{
@@ -162,7 +162,7 @@ const fr: HelpSection[] = [
 		id: 'mac',
 		title: 'Sur le Mac',
 		body: [
-			'Option+Commande+S coupe ou rallume la voix du Mac. Option+Commande+A ouvre le menu TS4 Access. L’icône d’accessibilité dans la barre des menus propose les mêmes actions et « Phone companion… », qui affiche le QR code. Le clavier du mod d’origine marche avec les touches Mac quand le jeu est au premier plan : Contrôle+Maj pour ses touches Ctrl+Alt, Option+Maj pour ses touches Alt.'
+			'Option+Commande+S coupe ou rallume la voix du Mac. Option+Commande+A ouvre le menu SimSight. L’icône d’accessibilité dans la barre des menus propose les mêmes actions et « Phone companion… », qui affiche le QR code. Le clavier du mod d’origine marche avec les touches Mac quand le jeu est au premier plan : Contrôle+Maj pour ses touches Ctrl+Alt, Option+Maj pour ses touches Alt.'
 		]
 	},
 	{
@@ -251,7 +251,7 @@ const es: HelpSection[] = [
 		id: 'mac',
 		title: 'En el Mac',
 		body: [
-			'Opción+Comando+S apaga o enciende la voz del Mac. Opción+Comando+A abre el menú de TS4 Access. El icono de accesibilidad en la barra de menús tiene las mismas acciones y «Phone companion…», que muestra el código QR. El teclado del mod original funciona con teclas de Mac cuando el juego está delante: Control+Mayús para sus teclas Ctrl+Alt, Opción+Mayús para sus teclas Alt.'
+			'Opción+Comando+S apaga o enciende la voz del Mac. Opción+Comando+A abre el menú de SimSight. El icono de accesibilidad en la barra de menús tiene las mismas acciones y «Phone companion…», que muestra el código QR. El teclado del mod original funciona con teclas de Mac cuando el juego está delante: Control+Mayús para sus teclas Ctrl+Alt, Opción+Mayús para sus teclas Alt.'
 		]
 	},
 	{
@@ -277,7 +277,7 @@ const LLMS = 'https://raw.githubusercontent.com/the40n8/simsight-companion/main/
 
 /** A ready-made question for ChatGPT or another assistant, in the app's language. */
 export const AI_PROMPT: Record<Locale, string> = {
-	en: `Read ${LLMS} and the guides it links to, then help me play The Sims 4 with the TS4 Access mod and its phone app. I use VoiceOver on an iPhone: give step-by-step instructions with the screen, heading and button names. Answer in English.`,
-	fr: `Lis ${LLMS} et les guides qu’il indique, puis aide-moi à jouer aux Sims 4 avec le mod TS4 Access et son appli téléphone. J’utilise VoiceOver sur iPhone : donne des étapes précises avec les noms des écrans, titres et boutons. Réponds en français.`,
-	es: `Lee ${LLMS} y las guías que enlaza, y ayúdame a jugar a Los Sims 4 con el mod TS4 Access y su app del teléfono. Uso VoiceOver en un iPhone: dame pasos concretos con los nombres de pantallas, encabezados y botones. Responde en español.`
+	en: `Read ${LLMS} and the guides it links to, then help me play The Sims 4 with the SimSight mod and its phone app. I use VoiceOver on an iPhone: give step-by-step instructions with the screen, heading and button names. Answer in English.`,
+	fr: `Lis ${LLMS} et les guides qu’il indique, puis aide-moi à jouer aux Sims 4 avec le mod SimSight et son appli téléphone. J’utilise VoiceOver sur iPhone : donne des étapes précises avec les noms des écrans, titres et boutons. Réponds en français.`,
+	es: `Lee ${LLMS} y las guías que enlaza, y ayúdame a jugar a Los Sims 4 con el mod SimSight y su app del teléfono. Uso VoiceOver en un iPhone: dame pasos concretos con los nombres de pantallas, encabezados y botones. Responde en español.`
 } as Record<Locale, string>;
