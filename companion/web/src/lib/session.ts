@@ -74,3 +74,23 @@ export function pairFromText(text: string): boolean {
 	rememberForInstall(match[1]);
 	return true;
 }
+
+/**
+ * Pairs with the 6-digit code the Mac says when its phone link page opens:
+ * nothing to scan or paste.
+ */
+export async function pairWithCode(code: string): Promise<'ok' | 'wrong' | 'locked' | 'offline'> {
+	try {
+		const res = await fetch('/api/pair-code', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ code })
+		});
+		if (res.status === 429) return 'locked';
+		if (!res.ok) return 'wrong';
+		const { token } = (await res.json()) as { token?: string };
+		return token && pairFromText(token) ? 'ok' : 'wrong';
+	} catch {
+		return 'offline';
+	}
+}

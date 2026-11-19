@@ -23,6 +23,8 @@ not appear on the phone; the Mac showed it. 21:40."
 - [ ] Option+Command+A opens the TS4 Access menu, **phone companion** first,
       then the new grouped menu (yourself, needs, Sims, places…).
 - [ ] Phone companion shows the QR code; the phone opens the app.
+- [ ] Phone companion: the Mac says a 6-digit code; typed on the Pair this
+      phone screen, it pairs the phone (a wrong code is refused).
 - [ ] Option+Command+S turns the Mac voice off and on ("Speech off" / "Speech on").
 
 ## Top bar and tabs

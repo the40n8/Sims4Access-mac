@@ -30,7 +30,9 @@ You need a free Cloudflare account and a domain managed by Cloudflare.
    ```
 5. Start the game. Once a household is loaded the Mac says "Phone link
    ready…"; the QR code (Option+Command+A, phone companion) now shows the
-   fixed address. Scan it once, then **Share > Add to Home Screen**.
+   fixed address. Scan it once, then **Share > Add to Home Screen**. If the
+   Home Screen app ever says **Pair this phone**, choose phone companion on
+   the Mac and type the 6-digit code it says: no scanning needed.
 
 ## Or from the command line
 

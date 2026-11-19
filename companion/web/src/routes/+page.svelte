@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
-	import { linkInAddressBar, pairFromText } from '$lib/session.js';
+	import { linkInAddressBar, pairFromText, pairWithCode } from '$lib/session.js';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { live } from '$lib/live.svelte.js';
 	import { groupOf, prefs, socialShown } from '$lib/prefs.svelte.js';
@@ -51,6 +51,24 @@
 		pasteFailed = !pairFromText(pasted);
 		if (!pasteFailed) location.reload();
 	}
+	// Or the 6-digit code the Mac says when its phone link page opens.
+	let code = $state('');
+	let codeBusy = $state(false);
+	let codeError = $state('');
+	async function codePairing(e: SubmitEvent) {
+		e.preventDefault();
+		if (codeBusy) return;
+		codeBusy = true;
+		const out = await pairWithCode(code);
+		codeBusy = false;
+		if (out === 'ok') return location.reload();
+		codeError =
+			out === 'locked'
+				? m.pair_code_locked()
+				: out === 'offline'
+					? m.pair_code_offline()
+					: m.pair_code_wrong();
+	}
 	let heading: HTMLHeadingElement | undefined = $state();
 	const title = $derived(VIEWS.find((t) => t.id === tab)!.label());
 
@@ -92,6 +110,21 @@
 	<main class="page stack bare">
 		<h1>{m.pair_title()}</h1>
 		<p>{live.status === 'rejected' ? m.pair_rejected() : m.pair_help()}</p>
+		<form class="stack" onsubmit={codePairing}>
+			<label class="stack">
+				<span>{m.pair_code_label()}</span>
+				<input
+					type="text"
+					inputmode="numeric"
+					autocomplete="one-time-code"
+					maxlength="11"
+					bind:value={code}
+					enterkeyhint="go"
+				/>
+			</label>
+			<button type="submit" aria-disabled={codeBusy}>{m.pair_code_button()}</button>
+			{#if codeError}<p role="alert">{codeError}</p>{/if}
+		</form>
 		<form class="stack" onsubmit={pastePairing}>
 			<label class="stack">
 				<span>{m.pair_paste_label()}</span>

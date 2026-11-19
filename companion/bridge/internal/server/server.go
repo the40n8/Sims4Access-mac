@@ -175,9 +175,12 @@ func (a *auth) WrapStreamingHandler(next connect.StreamingHandlerFunc) connect.S
 
 // Handler serves the API, the web app (an SPA: unknown paths get
 // index.html) and, on this Mac only, the pairing page at /pair.
-func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc) http.Handler {
+func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes) http.Handler {
 	mux := http.NewServeMux()
-	mux.Handle("/pair", PairPage(links))
+	mux.Handle("/pair", PairPage(links, codes))
+	if codes != nil {
+		mux.Handle("/api/pair-code", codes.Handler())
+	}
 	mux.Handle("/manifest.json", Manifest(web, token))
 	path, api := ts4accessv1connect.NewCompanionServiceHandler(&service{hub: h},
 		connect.WithInterceptors(authInterceptor(token)))

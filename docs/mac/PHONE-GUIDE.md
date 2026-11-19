@@ -24,8 +24,14 @@ an iPhone, often playing together with a sighted player on the Mac.
    it is ready.
 2. Press Option+Command+A: the TS4 Access menu opens with **phone companion**
    first; choose it (or click the accessibility icon in the macOS menu bar,
-   then **Phone companion…**). A page with a QR code opens.
+   then **Phone companion…**). A page with a QR code opens, and the Mac
+   voice says a 6-digit **pairing code** (twice; it is also on the page).
 3. Scan the QR code with the phone camera and open the link in Safari.
+   **Or, without the camera:** open the app (or the address) on the phone;
+   on the **Pair this phone** screen, type the code in **Pairing code
+   (6 digits)**, then **Pair with the code**. A code works once, for 5
+   minutes, and after 5 wrong tries it stops: choose phone companion again
+   for a new one.
 4. Optional: in Safari, **Share > Add to Home Screen**: the app opens full
    screen from its icon, already paired.
 5. The address changes each game session: scan again next time. The phone

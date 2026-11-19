@@ -153,13 +153,18 @@ func run() error {
 	} else if *useTunnel {
 		slog.Info("no cloudflared: phone link on the local network only")
 	}
+	// Pairing code, said by the Mac voice when the phone link page opens.
+	codes := server.NewCodes(cfg.Token)
+	if *demoMode {
+		codes.SetSay(func(code string) { fmt.Fprintln(os.Stderr, "pairing code:", code) })
+	}
 	ln, err := net.Listen("tcp", ":"+strconv.Itoa(cfg.Port))
 	if err != nil {
 		// Another game session or bridge holds the port: keep speech working.
 		slog.Error("phone server unavailable", "port", cfg.Port, "err", err)
 	} else {
 		srv := &http.Server{
-			Handler:           server.Handler(h, cfg.Token, web, links),
+			Handler:           server.Handler(h, cfg.Token, web, links, codes),
 			ReadHeaderTimeout: 10 * time.Second,
 		}
 		go func() {
@@ -198,6 +203,9 @@ func run() error {
 		tell()
 	}
 	onTunnelReady.Store(&linkUp)
+	codes.SetSay(func(code string) {
+		spk.Line("Q" + url.PathEscape("Pairing code: "+server.SpokenCode(code)+". Again: "+server.SpokenCode(code)+"."))
+	})
 	go func() {
 		// Only new events: Subscribe replays recent ones first.
 		since := h.LastEventSeq()

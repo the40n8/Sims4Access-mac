@@ -12,7 +12,7 @@
 	"status_no_game": "The game is not running on the Mac.",
 	"status_menu": "Waiting for a game: the game is at the menu or loading.",
 	"pair_title": "Pair this phone",
-	"pair_help": "Scan the QR code shown on the Mac (Option+Command+A, then phone companion), or paste its link below.",
+	"pair_help": "On the Mac, open phone companion (Option+Command+A): the Mac says a 6-digit code. Type it below. You can also scan the QR code, or paste its link.",
 	"pair_rejected": "This phone is no longer paired. Open the link from the Mac again.",
 	"unpair": "Forget this Mac",
 	"live_title": "Live",
@@ -354,5 +354,10 @@
 	"put_in": "Put in {place}, {meters} m",
 	"moved_to": "{name} put in {place}.",
 	"qa_put_away": "Put away",
-	"reason_not_accepted": "it does not go there"
+	"reason_not_accepted": "it does not go there",
+	"pair_code_label": "Pairing code (6 digits)",
+	"pair_code_button": "Pair with the code",
+	"pair_code_wrong": "This code is not right, or it has expired. Open phone companion on the Mac again to hear a new code.",
+	"pair_code_locked": "Too many wrong tries. Open phone companion on the Mac again for a new code.",
+	"pair_code_offline": "The Mac cannot be reached. Is the game running?"
 }
