@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
-	import { live } from '$lib/live.svelte.js';
+	import { computer, live } from '$lib/live.svelte.js';
 	import { reasonText } from '$lib/text.js';
 	import { announce } from './Announcer.svelte';
 
@@ -22,7 +22,7 @@
 </script>
 
 <div class="voice">
-	<!-- A switch: VoiceOver says "Mac voice, switch, on". -->
+	<!-- A switch: VoiceOver says "Mac voice, switch, on" ("PC voice" on Windows). -->
 	<button
 		type="button"
 		role="switch"
@@ -30,10 +30,10 @@
 		aria-disabled={busy || !live.gameConnected}
 		onclick={toggle}
 	>
-		<span>{m.narration_title()}</span>
+		<span>{m.narration_title(computer())}</span>
 		<span class="state" aria-hidden="true">{on ? m.voice_on() : m.voice_off()}</span>
 	</button>
-	<p class="muted">{m.voice_shortcut()}</p>
+	{#if computer().computer === 'Mac'}<p class="muted">{m.voice_shortcut()}</p>{/if}
 </div>
 
 <style>

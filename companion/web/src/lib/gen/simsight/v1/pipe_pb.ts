@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file simsight/v1/pipe.proto.
  */
 export const file_simsight_v1_pipe: GenFile = /*@__PURE__*/
-  fileDesc("ChZzaW1zaWdodC92MS9waXBlLnByb3RvEgtzaW1zaWdodC52MSJBCgVWb2ljZRIMCgRyYXRlGAEgASgFEg4KBnZvbHVtZRgCIAEoBRIMCgRuYW1lGAMgASgJEgwKBGxhbmcYBCABKAkiMgoFSGVsbG8SEwoLbW9kX3ZlcnNpb24YASABKAkSFAoMZ2FtZV92ZXJzaW9uGAIgASgJIo8CCg1Db21tYW5kUmVzdWx0EgoKAmlkGAEgASgJEiwKB291dGNvbWUYAiABKAsyGy5zaW1zaWdodC52MS5Db21tYW5kT3V0Y29tZRIkCgd0YXJnZXRzGAMgAygLMhMuc2ltc2lnaHQudjEuVGFyZ2V0Ei4KDGludGVyYWN0aW9ucxgEIAMoCzIYLnNpbXNpZ2h0LnYxLkludGVyYWN0aW9uEhUKDW5hbWVzX3BlbmRpbmcYBSABKAgSKAoJaG91c2VfbWFwGAYgASgLMhUuc2ltc2lnaHQudjEuSG91c2VNYXASLQoJaW52ZW50b3J5GAcgAygLMhouc2ltc2lnaHQudjEuSW52ZW50b3J5SXRlbSKCAgoIVG9CcmlkZ2USIwoFaGVsbG8YASABKAsyEi5zaW1zaWdodC52MS5IZWxsb0gAEicKBXN0YXRlGAIgASgLMhYuc2ltc2lnaHQudjEuR2FtZVN0YXRlSAASIwoFZXZlbnQYAyABKAsyEi5zaW1zaWdodC52MS5FdmVudEgAEiwKBnJlc3VsdBgEIAEoCzIaLnNpbXNpZ2h0LnYxLkNvbW1hbmRSZXN1bHRIABIjCgV2b2ljZRgFIAEoCzISLnNpbXNpZ2h0LnYxLlZvaWNlSAASJQoEZ3JhYhgGIAEoCzIVLnNpbXNpZ2h0LnYxLkdyYWJLZXlzSABCCQoHcGF5bG9hZCKrBgoGVG9HYW1lEgoKAmlkGAEgASgJEjEKCXNldF9zcGVlZBgCIAEoCzIcLnNpbXNpZ2h0LnYxLlNldFNwZWVkUmVxdWVzdEgAEjMKCnNlbGVjdF9zaW0YAyABKAsyHS5zaW1zaWdodC52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOQoNY2FuY2VsX2FjdGlvbhgEIAEoCzIgLnNpbXNpZ2h0LnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI5Cg1zZXRfbmFycmF0aW9uGAUgASgLMiAuc2ltc2lnaHQudjEuU2V0TmFycmF0aW9uUmVxdWVzdEgAEjcKDGxpc3RfdGFyZ2V0cxgGIAEoCzIfLnNpbXNpZ2h0LnYxLkxpc3RUYXJnZXRzUmVxdWVzdEgAEj8KEGdldF9pbnRlcmFjdGlvbnMYByABKAsyIy5zaW1zaWdodC52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPQoPcnVuX2ludGVyYWN0aW9uGAggASgLMiIuc2ltc2lnaHQudjEuUnVuSW50ZXJhY3Rpb25SZXF1ZXN0SAASOAoNZ2V0X2hvdXNlX21hcBgJIAEoCzIfLnNpbXNpZ2h0LnYxLkdldEhvdXNlTWFwUmVxdWVzdEgAEjEKCW9wZW5fbWVudRgKIAEoCzIcLnNpbXNpZ2h0LnYxLk9wZW5NZW51UmVxdWVzdEgAEjsKDnJlc3BvbmRfZGlhbG9nGAsgASgLMiEuc2ltc2lnaHQudjEuUmVzcG9uZERpYWxvZ1JlcXVlc3RIABIzCgpzZXRfY2FtZXJhGAwgASgLMh0uc2ltc2lnaHQudjEuU2V0Q2FtZXJhUmVxdWVzdEgAEiQKA2tleRgNIAEoCzIVLnNpbXNpZ2h0LnYxLktleUV2ZW50SAASOwoObGlzdF9pbnZlbnRvcnkYDiABKAsyIS5zaW1zaWdodC52MS5MaXN0SW52ZW50b3J5UmVxdWVzdEgAEjEKCW1vdmVfaXRlbRgPIAEoCzIcLnNpbXNpZ2h0LnYxLk1vdmVJdGVtUmVxdWVzdEgAQgkKB2NvbW1hbmQiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAkiGAoIR3JhYktleXMSDAoEa2V5cxgBIAMoCSJDCghLZXlFdmVudBIOCgZmYW1pbHkYASABKAkSCgoCdmsYAiABKAUSDAoEZG93bhgDIAEoCBINCgVzaGlmdBgEIAEoCGIGcHJvdG8z", [file_simsight_v1_companion, file_simsight_v1_game]);
+  fileDesc("ChZzaW1zaWdodC92MS9waXBlLnByb3RvEgtzaW1zaWdodC52MSJBCgVWb2ljZRIMCgRyYXRlGAEgASgFEg4KBnZvbHVtZRgCIAEoBRIMCgRuYW1lGAMgASgJEgwKBGxhbmcYBCABKAkiMgoFSGVsbG8SEwoLbW9kX3ZlcnNpb24YASABKAkSFAoMZ2FtZV92ZXJzaW9uGAIgASgJIo8CCg1Db21tYW5kUmVzdWx0EgoKAmlkGAEgASgJEiwKB291dGNvbWUYAiABKAsyGy5zaW1zaWdodC52MS5Db21tYW5kT3V0Y29tZRIkCgd0YXJnZXRzGAMgAygLMhMuc2ltc2lnaHQudjEuVGFyZ2V0Ei4KDGludGVyYWN0aW9ucxgEIAMoCzIYLnNpbXNpZ2h0LnYxLkludGVyYWN0aW9uEhUKDW5hbWVzX3BlbmRpbmcYBSABKAgSKAoJaG91c2VfbWFwGAYgASgLMhUuc2ltc2lnaHQudjEuSG91c2VNYXASLQoJaW52ZW50b3J5GAcgAygLMhouc2ltc2lnaHQudjEuSW52ZW50b3J5SXRlbSKCAgoIVG9CcmlkZ2USIwoFaGVsbG8YASABKAsyEi5zaW1zaWdodC52MS5IZWxsb0gAEicKBXN0YXRlGAIgASgLMhYuc2ltc2lnaHQudjEuR2FtZVN0YXRlSAASIwoFZXZlbnQYAyABKAsyEi5zaW1zaWdodC52MS5FdmVudEgAEiwKBnJlc3VsdBgEIAEoCzIaLnNpbXNpZ2h0LnYxLkNvbW1hbmRSZXN1bHRIABIjCgV2b2ljZRgFIAEoCzISLnNpbXNpZ2h0LnYxLlZvaWNlSAASJQoEZ3JhYhgGIAEoCzIVLnNpbXNpZ2h0LnYxLkdyYWJLZXlzSABCCQoHcGF5bG9hZCLTBgoGVG9HYW1lEgoKAmlkGAEgASgJEjEKCXNldF9zcGVlZBgCIAEoCzIcLnNpbXNpZ2h0LnYxLlNldFNwZWVkUmVxdWVzdEgAEjMKCnNlbGVjdF9zaW0YAyABKAsyHS5zaW1zaWdodC52MS5TZWxlY3RTaW1SZXF1ZXN0SAASOQoNY2FuY2VsX2FjdGlvbhgEIAEoCzIgLnNpbXNpZ2h0LnYxLkNhbmNlbEFjdGlvblJlcXVlc3RIABI5Cg1zZXRfbmFycmF0aW9uGAUgASgLMiAuc2ltc2lnaHQudjEuU2V0TmFycmF0aW9uUmVxdWVzdEgAEjcKDGxpc3RfdGFyZ2V0cxgGIAEoCzIfLnNpbXNpZ2h0LnYxLkxpc3RUYXJnZXRzUmVxdWVzdEgAEj8KEGdldF9pbnRlcmFjdGlvbnMYByABKAsyIy5zaW1zaWdodC52MS5HZXRJbnRlcmFjdGlvbnNSZXF1ZXN0SAASPQoPcnVuX2ludGVyYWN0aW9uGAggASgLMiIuc2ltc2lnaHQudjEuUnVuSW50ZXJhY3Rpb25SZXF1ZXN0SAASOAoNZ2V0X2hvdXNlX21hcBgJIAEoCzIfLnNpbXNpZ2h0LnYxLkdldEhvdXNlTWFwUmVxdWVzdEgAEjEKCW9wZW5fbWVudRgKIAEoCzIcLnNpbXNpZ2h0LnYxLk9wZW5NZW51UmVxdWVzdEgAEjsKDnJlc3BvbmRfZGlhbG9nGAsgASgLMiEuc2ltc2lnaHQudjEuUmVzcG9uZERpYWxvZ1JlcXVlc3RIABIzCgpzZXRfY2FtZXJhGAwgASgLMh0uc2ltc2lnaHQudjEuU2V0Q2FtZXJhUmVxdWVzdEgAEiQKA2tleRgNIAEoCzIVLnNpbXNpZ2h0LnYxLktleUV2ZW50SAASOwoObGlzdF9pbnZlbnRvcnkYDiABKAsyIS5zaW1zaWdodC52MS5MaXN0SW52ZW50b3J5UmVxdWVzdEgAEjEKCW1vdmVfaXRlbRgPIAEoCzIcLnNpbXNpZ2h0LnYxLk1vdmVJdGVtUmVxdWVzdEgAEiYKA3NheRgQIAEoCzIXLnNpbXNpZ2h0LnYxLlNheVJlcXVlc3RIAEIJCgdjb21tYW5kIi0KClNheVJlcXVlc3QSDAoEdGV4dBgBIAEoCRIRCglpbnRlcnJ1cHQYAiABKAgiHwoPT3Blbk1lbnVSZXF1ZXN0EgwKBG1lbnUYASABKAkiGAoIR3JhYktleXMSDAoEa2V5cxgBIAMoCSJDCghLZXlFdmVudBIOCgZmYW1pbHkYASABKAkSCgoCdmsYAiABKAUSDAoEZG93bhgDIAEoCBINCgVzaGlmdBgEIAEoCGIGcHJvdG8z", [file_simsight_v1_companion, file_simsight_v1_game]);
 
 /**
  * @generated from message simsight.v1.Voice
@@ -279,6 +279,12 @@ export type ToGame = Message<"simsight.v1.ToGame"> & {
      */
     value: MoveItemRequest;
     case: "moveItem";
+  } | {
+    /**
+     * @generated from field: simsight.v1.SayRequest say = 16;
+     */
+    value: SayRequest;
+    case: "say";
   } | { case: undefined; value?: undefined };
 };
 
@@ -288,6 +294,31 @@ export type ToGame = Message<"simsight.v1.ToGame"> & {
  */
 export const ToGameSchema: GenMessage<ToGame> = /*@__PURE__*/
   messageDesc(file_simsight_v1_pipe, 4);
+
+/**
+ * Windows: something for the screen reader to say (the bridge's
+ * announcements and the pairing code; the Mac bridge speaks them itself).
+ *
+ * @generated from message simsight.v1.SayRequest
+ */
+export type SayRequest = Message<"simsight.v1.SayRequest"> & {
+  /**
+   * @generated from field: string text = 1;
+   */
+  text: string;
+
+  /**
+   * @generated from field: bool interrupt = 2;
+   */
+  interrupt: boolean;
+};
+
+/**
+ * Describes the message simsight.v1.SayRequest.
+ * Use `create(SayRequestSchema)` to create a new message.
+ */
+export const SayRequestSchema: GenMessage<SayRequest> = /*@__PURE__*/
+  messageDesc(file_simsight_v1_pipe, 5);
 
 /**
  * Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
@@ -309,7 +340,7 @@ export type OpenMenuRequest = Message<"simsight.v1.OpenMenuRequest"> & {
  * Use `create(OpenMenuRequestSchema)` to create a new message.
  */
 export const OpenMenuRequestSchema: GenMessage<OpenMenuRequest> = /*@__PURE__*/
-  messageDesc(file_simsight_v1_pipe, 5);
+  messageDesc(file_simsight_v1_pipe, 6);
 
 /**
  * @generated from message simsight.v1.GrabKeys
@@ -326,7 +357,7 @@ export type GrabKeys = Message<"simsight.v1.GrabKeys"> & {
  * Use `create(GrabKeysSchema)` to create a new message.
  */
 export const GrabKeysSchema: GenMessage<GrabKeys> = /*@__PURE__*/
-  messageDesc(file_simsight_v1_pipe, 6);
+  messageDesc(file_simsight_v1_pipe, 7);
 
 /**
  * A key from the Mac key helper, in the mod's (Windows) key terms.
@@ -365,5 +396,5 @@ export type KeyEvent = Message<"simsight.v1.KeyEvent"> & {
  * Use `create(KeyEventSchema)` to create a new message.
  */
 export const KeyEventSchema: GenMessage<KeyEvent> = /*@__PURE__*/
-  messageDesc(file_simsight_v1_pipe, 7);
+  messageDesc(file_simsight_v1_pipe, 8);
 

@@ -65,7 +65,15 @@ message ToGame {
     KeyEvent key = 13;
     ListInventoryRequest list_inventory = 14;
     MoveItemRequest move_item = 15;
+    SayRequest say = 16;
   }
+}
+
+// Windows: something for the screen reader to say (the bridge's
+// announcements and the pairing code; the Mac bridge speaks them itself).
+message SayRequest {
+  string text = 1;
+  bool interrupt = 2;
 }
 
 // Open one of the mod's own menus on the Mac (from a keyboard shortcut or the

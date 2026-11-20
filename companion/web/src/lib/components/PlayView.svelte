@@ -2,7 +2,7 @@
 	import { tick } from 'svelte';
 	import { m } from '$lib/i18n/paraglide/messages.js';
 	import { client, run } from '$lib/client.js';
-	import { live } from '$lib/live.svelte.js';
+	import { computer, live } from '$lib/live.svelte.js';
 	import { reasonText, simName } from '$lib/text.js';
 	import { Speed, type Target } from '$lib/gen/simsight/v1/game_pb.js';
 	import { CameraMode, type CommandOutcome } from '$lib/gen/simsight/v1/companion_pb.js';
@@ -139,7 +139,7 @@
 		{#if me && me.here}
 			<section class="card stack" aria-labelledby="camera">
 				<h2 id="camera">{m.camera_title()}</h2>
-				<p class="muted">{m.camera_help()}</p>
+				<p class="muted">{m.camera_help(computer())}</p>
 				<div class="pair">
 					<button
 						type="button"

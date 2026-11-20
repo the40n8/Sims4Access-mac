@@ -3,6 +3,7 @@
 // game knows (moodlets, actions) come in the game's language.
 import { roomName } from './rooms.js';
 import { m } from './i18n/paraglide/messages.js';
+import { computer } from './live.svelte.js';
 import {
 	ActionState,
 	EventKind,
@@ -158,7 +159,7 @@ export function eventText(e: Event): string {
 		case EventKind.FUNDS:
 			return m.ev_funds({ amount: e.subject });
 		case EventKind.SPOKEN:
-			return m.ev_spoken({ text: e.subject });
+			return m.ev_spoken({ text: e.subject, ...computer() });
 		case EventKind.AWAY_STARTED:
 			return e.subject === 'school' ? m.ev_left_school({ sim }) : m.ev_left_work({ sim });
 		case EventKind.AWAY_ENDED:

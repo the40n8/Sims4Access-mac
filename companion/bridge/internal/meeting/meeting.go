@@ -11,10 +11,11 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-	"os/exec"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/osutil"
 )
 
 // Every so often, so the meeting point knows the Mac is still there.
@@ -32,12 +33,7 @@ type Client struct {
 }
 
 func New(base, id, secret string) *Client {
-	name := "Mac"
-	if out, err := exec.Command("/usr/sbin/scutil", "--get", "ComputerName").Output(); err == nil {
-		if n := strings.TrimSpace(string(out)); n != "" {
-			name = n
-		}
-	}
+	name := osutil.ComputerName()
 	return &Client{base: strings.TrimRight(base, "/"), id: id, secret: secret, name: name,
 		http: &http.Client{Timeout: 10 * time.Second}, poke: make(chan struct{}, 1)}
 }

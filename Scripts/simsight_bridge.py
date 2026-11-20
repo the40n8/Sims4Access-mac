@@ -1,8 +1,11 @@
-"""Companion bridge (macOS): game <-> simsight-bridge <-> phone.
+"""Companion bridge (macOS and Windows): game <-> simsight-bridge <-> phone.
 
 The bridge is a child process started here, on the game's loading thread.
-- Speech: the speech module writes its usual "I..."/"Q..." lines to the
-  bridge, which forwards them to the macOS voice (see SpeechPipe).
+- Speech: on macOS the speech module writes its usual "I..."/"Q..." lines to
+  the bridge, which forwards them to the macOS voice (see SpeechPipe). On
+  Windows the screen reader speaks (Prism) and each line is copied to the
+  bridge for the phone's history (mirror); the bridge's own announcements
+  come back as "say" commands, spoken by the screen reader.
 - State: a JSON snapshot of the household (needs, mood, moodlets, actions,
   clock, funds), sent when it changes, at most once per second.
 - Commands from the phone arrive on the bridge's stdout and run here.
@@ -27,7 +30,9 @@ except ImportError:
 import simsight_speech as speech
 
 IS_MAC = sys.platform == 'darwin'
-BRIDGE = 'simsight-bridge'
+IS_WINDOWS = sys.platform == 'win32'
+BRIDGE = 'simsight-bridge.exe' if IS_WINDOWS else 'simsight-bridge'
+CREATE_NO_WINDOW = 0x08000000   # Windows: no console window for the bridge
 SPEAKER = 'simsight-say'
 STATE_INTERVAL = 1.0      # seconds between state snapshots (sent only if changed)
 POLL_INTERVAL = 0.1       # seconds between command polls
@@ -75,22 +80,29 @@ def start():
         _last_state_json = None   # the new bridge needs a full state
     _last_spawn = time.monotonic()
     path = _find(BRIDGE)
-    if not IS_MAC or subprocess is None or path is None:
+    if not (IS_MAC or IS_WINDOWS) or subprocess is None or path is None:
         return False
     args = [path]
-    speaker = _find(SPEAKER)
-    if speaker:
-        args += ['--speaker', speaker]
+    extra = {}
+    if IS_WINDOWS:
+        # The screen reader speaks on Windows: the bridge only listens.
+        args += ['--speaker', 'none']
+        extra['creationflags'] = CREATE_NO_WINDOW
+    else:
+        speaker = _find(SPEAKER)
+        if speaker:
+            args += ['--speaker', speaker]
     try:
         _proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                 stderr=subprocess.DEVNULL, close_fds=True)
-        os.set_blocking(_proc.stdout.fileno(), False)
+                                 stderr=subprocess.DEVNULL, close_fds=True, **extra)
+        if not IS_WINDOWS:
+            os.set_blocking(_proc.stdout.fileno(), False)
     except Exception as ex:
         log('start failed: {!r}'.format(ex))
         _proc = None
         return False
     log('started (pid {})'.format(_proc.pid))
-    send({'hello': {'modVersion': 'mac', 'gameVersion': _game_version()}})
+    send({'hello': {'modVersion': 'windows' if IS_WINDOWS else 'mac', 'gameVersion': _game_version()}})
     if _voice is not None:
         send({'voice': _voice})
     return True
@@ -116,6 +128,14 @@ def write_line(data):
 
 def send(message):
     return write_line(json.dumps(message, separators=(',', ':'), ensure_ascii=False).encode('utf-8'))
+
+
+def mirror(text, interrupt):
+    """Windows: a line the screen reader just said, for the phone's history."""
+    if not alive():
+        return False
+    from urllib.parse import quote
+    return write_line((('I' if interrupt else 'Q') + quote(text)).encode('ascii'))
 
 
 def set_voice(rate, volume, name, lang):
@@ -200,10 +220,27 @@ def _install_tick():
     core.on_tick = on_tick
 
 
+def _waiting_bytes():
+    """Windows pipes cannot be made non-blocking: ask how much is waiting
+    (PeekNamedPipe), so reading never blocks the game's tick."""
+    handle = _msvcrt.get_osfhandle(_proc.stdout.fileno())
+    avail = _ctypes.c_ulong(0)
+    if not _ctypes.windll.kernel32.PeekNamedPipe(_ctypes.c_void_p(handle), None, 0, None,
+                                                  _ctypes.byref(avail), None):
+        return 0   # closed: the bridge exited (alive() notices)
+    return avail.value
+
+
 def _read_commands():
     global _read_buf
     try:
-        chunk = os.read(_proc.stdout.fileno(), 65536)
+        if IS_WINDOWS:
+            waiting = _waiting_bytes()
+            if not waiting:
+                return
+            chunk = os.read(_proc.stdout.fileno(), min(waiting, 65536))
+        else:
+            chunk = os.read(_proc.stdout.fileno(), 65536)
     except BlockingIOError:
         return
     except Exception as ex:
@@ -259,6 +296,13 @@ def _run(cmd):
         speech.set_mode('hover' if narration.get('macVoice') else 'off')
         import simsight_settings as settings
         settings.set('sim_actions', bool(narration.get('simActions')))
+        return True, ''
+    if 'say' in cmd:
+        # Windows: the bridge's announcements and pairing code, spoken by the
+        # screen reader (the Mac bridge has its own voice).
+        text = cmd['say'].get('text', '')
+        if text:
+            speech.speak(text, interrupt=bool(cmd['say'].get('interrupt')), source='event', explicit=True)
         return True, ''
     if not _in_game():
         return False, 'not_in_game'
@@ -1493,12 +1537,15 @@ SETUP_URL = 'http://127.0.0.1:47800/setup'
 
 
 def _open_on_mac(url, said):
-    """Open one of the bridge's pages in the Mac's browser (in front of the game)."""
-    if not IS_MAC or subprocess is None:
-        return False
+    """Open one of the bridge's pages in the computer's browser (in front of the game)."""
     try:
-        subprocess.Popen(['/usr/bin/open', url], stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL, close_fds=True)
+        if IS_WINDOWS:
+            os.startfile(url)
+        elif IS_MAC and subprocess is not None:
+            subprocess.Popen(['/usr/bin/open', url], stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL, close_fds=True)
+        else:
+            return False
         speech.speak(said, explicit=True)
         return True
     except Exception as ex:
@@ -1508,7 +1555,7 @@ def _open_on_mac(url, said):
 
 def open_pairing_page():
     """Show the phone link's QR code and pairing code."""
-    return _open_on_mac(PAIR_URL, 'Phone link opened on the Mac.')
+    return _open_on_mac(PAIR_URL, 'Phone link opened in the browser.')
 
 
 def open_setup_page():
@@ -1536,12 +1583,21 @@ except Exception as _ex:
 
 _dialogs = None
 _mackeys = None
+_msvcrt = _ctypes = None
+if IS_WINDOWS:
+    try:
+        import msvcrt as _msvcrt
+        import ctypes as _ctypes
+    except Exception as _ex:
+        IS_WINDOWS = False   # no way to read the pipe without blocking: no companion
+        log('companion unavailable on Windows: {!r}'.format(_ex))
 if IS_MAC:
     try:
         import simsight_mackeys as _mackeys
     except Exception as _ex:
         _mackeys = None
         log('keyboard unavailable: {!r}'.format(_ex))
+if IS_MAC or IS_WINDOWS:
     try:
         _install_route_fail()
     except Exception as _ex:

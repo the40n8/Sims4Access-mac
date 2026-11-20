@@ -401,6 +401,7 @@ type ToGame struct {
 	//	*ToGame_Key
 	//	*ToGame_ListInventory
 	//	*ToGame_MoveItem
+	//	*ToGame_Say
 	Command       isToGame_Command `protobuf_oneof:"command"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -576,6 +577,15 @@ func (x *ToGame) GetMoveItem() *MoveItemRequest {
 	return nil
 }
 
+func (x *ToGame) GetSay() *SayRequest {
+	if x != nil {
+		if x, ok := x.Command.(*ToGame_Say); ok {
+			return x.Say
+		}
+	}
+	return nil
+}
+
 type isToGame_Command interface {
 	isToGame_Command()
 }
@@ -636,6 +646,10 @@ type ToGame_MoveItem struct {
 	MoveItem *MoveItemRequest `protobuf:"bytes,15,opt,name=move_item,json=moveItem,proto3,oneof"`
 }
 
+type ToGame_Say struct {
+	Say *SayRequest `protobuf:"bytes,16,opt,name=say,proto3,oneof"`
+}
+
 func (*ToGame_SetSpeed) isToGame_Command() {}
 
 func (*ToGame_SelectSim) isToGame_Command() {}
@@ -664,6 +678,62 @@ func (*ToGame_ListInventory) isToGame_Command() {}
 
 func (*ToGame_MoveItem) isToGame_Command() {}
 
+func (*ToGame_Say) isToGame_Command() {}
+
+// Windows: something for the screen reader to say (the bridge's
+// announcements and the pairing code; the Mac bridge speaks them itself).
+type SayRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	Interrupt     bool                   `protobuf:"varint,2,opt,name=interrupt,proto3" json:"interrupt,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SayRequest) Reset() {
+	*x = SayRequest{}
+	mi := &file_simsight_v1_pipe_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SayRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SayRequest) ProtoMessage() {}
+
+func (x *SayRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_simsight_v1_pipe_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SayRequest.ProtoReflect.Descriptor instead.
+func (*SayRequest) Descriptor() ([]byte, []int) {
+	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SayRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+func (x *SayRequest) GetInterrupt() bool {
+	if x != nil {
+		return x.Interrupt
+	}
+	return false
+}
+
 // Open one of the mod's own menus on the Mac (from a keyboard shortcut or the
 // menu bar icon, not from the phone).
 type OpenMenuRequest struct {
@@ -676,7 +746,7 @@ type OpenMenuRequest struct {
 
 func (x *OpenMenuRequest) Reset() {
 	*x = OpenMenuRequest{}
-	mi := &file_simsight_v1_pipe_proto_msgTypes[5]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -688,7 +758,7 @@ func (x *OpenMenuRequest) String() string {
 func (*OpenMenuRequest) ProtoMessage() {}
 
 func (x *OpenMenuRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_simsight_v1_pipe_proto_msgTypes[5]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -701,7 +771,7 @@ func (x *OpenMenuRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenMenuRequest.ProtoReflect.Descriptor instead.
 func (*OpenMenuRequest) Descriptor() ([]byte, []int) {
-	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{5}
+	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *OpenMenuRequest) GetMenu() string {
@@ -720,7 +790,7 @@ type GrabKeys struct {
 
 func (x *GrabKeys) Reset() {
 	*x = GrabKeys{}
-	mi := &file_simsight_v1_pipe_proto_msgTypes[6]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -732,7 +802,7 @@ func (x *GrabKeys) String() string {
 func (*GrabKeys) ProtoMessage() {}
 
 func (x *GrabKeys) ProtoReflect() protoreflect.Message {
-	mi := &file_simsight_v1_pipe_proto_msgTypes[6]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -745,7 +815,7 @@ func (x *GrabKeys) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GrabKeys.ProtoReflect.Descriptor instead.
 func (*GrabKeys) Descriptor() ([]byte, []int) {
-	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{6}
+	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GrabKeys) GetKeys() []string {
@@ -771,7 +841,7 @@ type KeyEvent struct {
 
 func (x *KeyEvent) Reset() {
 	*x = KeyEvent{}
-	mi := &file_simsight_v1_pipe_proto_msgTypes[7]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -783,7 +853,7 @@ func (x *KeyEvent) String() string {
 func (*KeyEvent) ProtoMessage() {}
 
 func (x *KeyEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_simsight_v1_pipe_proto_msgTypes[7]
+	mi := &file_simsight_v1_pipe_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -796,7 +866,7 @@ func (x *KeyEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KeyEvent.ProtoReflect.Descriptor instead.
 func (*KeyEvent) Descriptor() ([]byte, []int) {
-	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{7}
+	return file_simsight_v1_pipe_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *KeyEvent) GetFamily() string {
@@ -856,7 +926,7 @@ const file_simsight_v1_pipe_proto_rawDesc = "" +
 	"\x06result\x18\x04 \x01(\v2\x1a.simsight.v1.CommandResultH\x00R\x06result\x12*\n" +
 	"\x05voice\x18\x05 \x01(\v2\x12.simsight.v1.VoiceH\x00R\x05voice\x12+\n" +
 	"\x04grab\x18\x06 \x01(\v2\x15.simsight.v1.GrabKeysH\x00R\x04grabB\t\n" +
-	"\apayload\"\xdd\a\n" +
+	"\apayload\"\x8a\b\n" +
 	"\x06ToGame\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12;\n" +
 	"\tset_speed\x18\x02 \x01(\v2\x1c.simsight.v1.SetSpeedRequestH\x00R\bsetSpeed\x12>\n" +
@@ -875,8 +945,13 @@ const file_simsight_v1_pipe_proto_rawDesc = "" +
 	"set_camera\x18\f \x01(\v2\x1d.simsight.v1.SetCameraRequestH\x00R\tsetCamera\x12)\n" +
 	"\x03key\x18\r \x01(\v2\x15.simsight.v1.KeyEventH\x00R\x03key\x12J\n" +
 	"\x0elist_inventory\x18\x0e \x01(\v2!.simsight.v1.ListInventoryRequestH\x00R\rlistInventory\x12;\n" +
-	"\tmove_item\x18\x0f \x01(\v2\x1c.simsight.v1.MoveItemRequestH\x00R\bmoveItemB\t\n" +
-	"\acommand\"%\n" +
+	"\tmove_item\x18\x0f \x01(\v2\x1c.simsight.v1.MoveItemRequestH\x00R\bmoveItem\x12+\n" +
+	"\x03say\x18\x10 \x01(\v2\x17.simsight.v1.SayRequestH\x00R\x03sayB\t\n" +
+	"\acommand\">\n" +
+	"\n" +
+	"SayRequest\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\x12\x1c\n" +
+	"\tinterrupt\x18\x02 \x01(\bR\tinterrupt\"%\n" +
 	"\x0fOpenMenuRequest\x12\x12\n" +
 	"\x04menu\x18\x01 \x01(\tR\x04menu\"\x1e\n" +
 	"\bGrabKeys\x12\x12\n" +
@@ -900,67 +975,69 @@ func file_simsight_v1_pipe_proto_rawDescGZIP() []byte {
 	return file_simsight_v1_pipe_proto_rawDescData
 }
 
-var file_simsight_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_simsight_v1_pipe_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_simsight_v1_pipe_proto_goTypes = []any{
 	(*Voice)(nil),                  // 0: simsight.v1.Voice
 	(*Hello)(nil),                  // 1: simsight.v1.Hello
 	(*CommandResult)(nil),          // 2: simsight.v1.CommandResult
 	(*ToBridge)(nil),               // 3: simsight.v1.ToBridge
 	(*ToGame)(nil),                 // 4: simsight.v1.ToGame
-	(*OpenMenuRequest)(nil),        // 5: simsight.v1.OpenMenuRequest
-	(*GrabKeys)(nil),               // 6: simsight.v1.GrabKeys
-	(*KeyEvent)(nil),               // 7: simsight.v1.KeyEvent
-	(*CommandOutcome)(nil),         // 8: simsight.v1.CommandOutcome
-	(*Target)(nil),                 // 9: simsight.v1.Target
-	(*Interaction)(nil),            // 10: simsight.v1.Interaction
-	(*HouseMap)(nil),               // 11: simsight.v1.HouseMap
-	(*InventoryItem)(nil),          // 12: simsight.v1.InventoryItem
-	(*GameState)(nil),              // 13: simsight.v1.GameState
-	(*Event)(nil),                  // 14: simsight.v1.Event
-	(*SetSpeedRequest)(nil),        // 15: simsight.v1.SetSpeedRequest
-	(*SelectSimRequest)(nil),       // 16: simsight.v1.SelectSimRequest
-	(*CancelActionRequest)(nil),    // 17: simsight.v1.CancelActionRequest
-	(*SetNarrationRequest)(nil),    // 18: simsight.v1.SetNarrationRequest
-	(*ListTargetsRequest)(nil),     // 19: simsight.v1.ListTargetsRequest
-	(*GetInteractionsRequest)(nil), // 20: simsight.v1.GetInteractionsRequest
-	(*RunInteractionRequest)(nil),  // 21: simsight.v1.RunInteractionRequest
-	(*GetHouseMapRequest)(nil),     // 22: simsight.v1.GetHouseMapRequest
-	(*RespondDialogRequest)(nil),   // 23: simsight.v1.RespondDialogRequest
-	(*SetCameraRequest)(nil),       // 24: simsight.v1.SetCameraRequest
-	(*ListInventoryRequest)(nil),   // 25: simsight.v1.ListInventoryRequest
-	(*MoveItemRequest)(nil),        // 26: simsight.v1.MoveItemRequest
+	(*SayRequest)(nil),             // 5: simsight.v1.SayRequest
+	(*OpenMenuRequest)(nil),        // 6: simsight.v1.OpenMenuRequest
+	(*GrabKeys)(nil),               // 7: simsight.v1.GrabKeys
+	(*KeyEvent)(nil),               // 8: simsight.v1.KeyEvent
+	(*CommandOutcome)(nil),         // 9: simsight.v1.CommandOutcome
+	(*Target)(nil),                 // 10: simsight.v1.Target
+	(*Interaction)(nil),            // 11: simsight.v1.Interaction
+	(*HouseMap)(nil),               // 12: simsight.v1.HouseMap
+	(*InventoryItem)(nil),          // 13: simsight.v1.InventoryItem
+	(*GameState)(nil),              // 14: simsight.v1.GameState
+	(*Event)(nil),                  // 15: simsight.v1.Event
+	(*SetSpeedRequest)(nil),        // 16: simsight.v1.SetSpeedRequest
+	(*SelectSimRequest)(nil),       // 17: simsight.v1.SelectSimRequest
+	(*CancelActionRequest)(nil),    // 18: simsight.v1.CancelActionRequest
+	(*SetNarrationRequest)(nil),    // 19: simsight.v1.SetNarrationRequest
+	(*ListTargetsRequest)(nil),     // 20: simsight.v1.ListTargetsRequest
+	(*GetInteractionsRequest)(nil), // 21: simsight.v1.GetInteractionsRequest
+	(*RunInteractionRequest)(nil),  // 22: simsight.v1.RunInteractionRequest
+	(*GetHouseMapRequest)(nil),     // 23: simsight.v1.GetHouseMapRequest
+	(*RespondDialogRequest)(nil),   // 24: simsight.v1.RespondDialogRequest
+	(*SetCameraRequest)(nil),       // 25: simsight.v1.SetCameraRequest
+	(*ListInventoryRequest)(nil),   // 26: simsight.v1.ListInventoryRequest
+	(*MoveItemRequest)(nil),        // 27: simsight.v1.MoveItemRequest
 }
 var file_simsight_v1_pipe_proto_depIdxs = []int32{
-	8,  // 0: simsight.v1.CommandResult.outcome:type_name -> simsight.v1.CommandOutcome
-	9,  // 1: simsight.v1.CommandResult.targets:type_name -> simsight.v1.Target
-	10, // 2: simsight.v1.CommandResult.interactions:type_name -> simsight.v1.Interaction
-	11, // 3: simsight.v1.CommandResult.house_map:type_name -> simsight.v1.HouseMap
-	12, // 4: simsight.v1.CommandResult.inventory:type_name -> simsight.v1.InventoryItem
+	9,  // 0: simsight.v1.CommandResult.outcome:type_name -> simsight.v1.CommandOutcome
+	10, // 1: simsight.v1.CommandResult.targets:type_name -> simsight.v1.Target
+	11, // 2: simsight.v1.CommandResult.interactions:type_name -> simsight.v1.Interaction
+	12, // 3: simsight.v1.CommandResult.house_map:type_name -> simsight.v1.HouseMap
+	13, // 4: simsight.v1.CommandResult.inventory:type_name -> simsight.v1.InventoryItem
 	1,  // 5: simsight.v1.ToBridge.hello:type_name -> simsight.v1.Hello
-	13, // 6: simsight.v1.ToBridge.state:type_name -> simsight.v1.GameState
-	14, // 7: simsight.v1.ToBridge.event:type_name -> simsight.v1.Event
+	14, // 6: simsight.v1.ToBridge.state:type_name -> simsight.v1.GameState
+	15, // 7: simsight.v1.ToBridge.event:type_name -> simsight.v1.Event
 	2,  // 8: simsight.v1.ToBridge.result:type_name -> simsight.v1.CommandResult
 	0,  // 9: simsight.v1.ToBridge.voice:type_name -> simsight.v1.Voice
-	6,  // 10: simsight.v1.ToBridge.grab:type_name -> simsight.v1.GrabKeys
-	15, // 11: simsight.v1.ToGame.set_speed:type_name -> simsight.v1.SetSpeedRequest
-	16, // 12: simsight.v1.ToGame.select_sim:type_name -> simsight.v1.SelectSimRequest
-	17, // 13: simsight.v1.ToGame.cancel_action:type_name -> simsight.v1.CancelActionRequest
-	18, // 14: simsight.v1.ToGame.set_narration:type_name -> simsight.v1.SetNarrationRequest
-	19, // 15: simsight.v1.ToGame.list_targets:type_name -> simsight.v1.ListTargetsRequest
-	20, // 16: simsight.v1.ToGame.get_interactions:type_name -> simsight.v1.GetInteractionsRequest
-	21, // 17: simsight.v1.ToGame.run_interaction:type_name -> simsight.v1.RunInteractionRequest
-	22, // 18: simsight.v1.ToGame.get_house_map:type_name -> simsight.v1.GetHouseMapRequest
-	5,  // 19: simsight.v1.ToGame.open_menu:type_name -> simsight.v1.OpenMenuRequest
-	23, // 20: simsight.v1.ToGame.respond_dialog:type_name -> simsight.v1.RespondDialogRequest
-	24, // 21: simsight.v1.ToGame.set_camera:type_name -> simsight.v1.SetCameraRequest
-	7,  // 22: simsight.v1.ToGame.key:type_name -> simsight.v1.KeyEvent
-	25, // 23: simsight.v1.ToGame.list_inventory:type_name -> simsight.v1.ListInventoryRequest
-	26, // 24: simsight.v1.ToGame.move_item:type_name -> simsight.v1.MoveItemRequest
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	7,  // 10: simsight.v1.ToBridge.grab:type_name -> simsight.v1.GrabKeys
+	16, // 11: simsight.v1.ToGame.set_speed:type_name -> simsight.v1.SetSpeedRequest
+	17, // 12: simsight.v1.ToGame.select_sim:type_name -> simsight.v1.SelectSimRequest
+	18, // 13: simsight.v1.ToGame.cancel_action:type_name -> simsight.v1.CancelActionRequest
+	19, // 14: simsight.v1.ToGame.set_narration:type_name -> simsight.v1.SetNarrationRequest
+	20, // 15: simsight.v1.ToGame.list_targets:type_name -> simsight.v1.ListTargetsRequest
+	21, // 16: simsight.v1.ToGame.get_interactions:type_name -> simsight.v1.GetInteractionsRequest
+	22, // 17: simsight.v1.ToGame.run_interaction:type_name -> simsight.v1.RunInteractionRequest
+	23, // 18: simsight.v1.ToGame.get_house_map:type_name -> simsight.v1.GetHouseMapRequest
+	6,  // 19: simsight.v1.ToGame.open_menu:type_name -> simsight.v1.OpenMenuRequest
+	24, // 20: simsight.v1.ToGame.respond_dialog:type_name -> simsight.v1.RespondDialogRequest
+	25, // 21: simsight.v1.ToGame.set_camera:type_name -> simsight.v1.SetCameraRequest
+	8,  // 22: simsight.v1.ToGame.key:type_name -> simsight.v1.KeyEvent
+	26, // 23: simsight.v1.ToGame.list_inventory:type_name -> simsight.v1.ListInventoryRequest
+	27, // 24: simsight.v1.ToGame.move_item:type_name -> simsight.v1.MoveItemRequest
+	5,  // 25: simsight.v1.ToGame.say:type_name -> simsight.v1.SayRequest
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_simsight_v1_pipe_proto_init() }
@@ -993,6 +1070,7 @@ func file_simsight_v1_pipe_proto_init() {
 		(*ToGame_Key)(nil),
 		(*ToGame_ListInventory)(nil),
 		(*ToGame_MoveItem)(nil),
+		(*ToGame_Say)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1000,7 +1078,7 @@ func file_simsight_v1_pipe_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_simsight_v1_pipe_proto_rawDesc), len(file_simsight_v1_pipe_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

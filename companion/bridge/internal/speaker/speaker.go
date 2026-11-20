@@ -28,6 +28,9 @@ type Speaker struct {
 	grab string
 }
 
+// New returns the speaker for simsight-say at path. A nil *Speaker (no
+// voice of its own, as on Windows where the screen reader speaks) is valid:
+// every method then does nothing.
 func New(path string, voice *v1.Voice) *Speaker {
 	return &Speaker{path: path, voice: voice}
 }
@@ -36,6 +39,9 @@ func New(path string, voice *v1.Voice) *Speaker {
 // shortcut (Option+Command+S) reported to onKey("voice"). The shortcut must
 // work while speech is off, so the speaker does not wait for a first line.
 func (s *Speaker) Listen(onKey func(name string)) {
+	if s == nil {
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.onKey = onKey
@@ -126,6 +132,9 @@ func (s *Speaker) stopLocked() {
 
 // Line forwards one speech line ("I<text>", "Q<text>" or "I").
 func (s *Speaker) Line(line string) {
+	if s == nil {
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if err := s.startLocked(); err != nil {
@@ -140,6 +149,9 @@ func (s *Speaker) Line(line string) {
 
 // Grab tells the speaker which bare keys the mod owns now.
 func (s *Speaker) Grab(keys []string) {
+	if s == nil {
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.grab = "G " + strings.Join(keys, ",")
@@ -152,6 +164,9 @@ func (s *Speaker) Grab(keys []string) {
 
 // SetVoice applies new voice settings by restarting the speaker.
 func (s *Speaker) SetVoice(v *v1.Voice) {
+	if s == nil {
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.voice = v
@@ -162,6 +177,9 @@ func (s *Speaker) SetVoice(v *v1.Voice) {
 }
 
 func (s *Speaker) Close() {
+	if s == nil {
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.closed = true

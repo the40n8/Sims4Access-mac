@@ -31,6 +31,7 @@ type Hub struct {
 	subs      map[chan *v1.WatchResponse]struct{}
 	// Bridge-side settings shown in every state (not sent by the game).
 	macAnnounce *v1.MacAnnounce
+	platform    string // "mac" or "windows", copied into every state
 	persist     func(*v1.MacAnnounce) error
 
 	send    Sender
@@ -113,6 +114,7 @@ func (h *Hub) SetState(s *v1.GameState) {
 	if h.macAnnounce != nil {
 		s.MacAnnounce = h.macAnnounce
 	}
+	s.Platform = h.platform
 	if h.state != nil && proto.Equal(h.state, s) {
 		return
 	}
@@ -121,6 +123,20 @@ func (h *Hub) SetState(s *v1.GameState) {
 	h.broadcast(&v1.WatchResponse{Payload: &v1.WatchResponse_State{State: s}})
 	for _, e := range events {
 		h.addEventLocked(e)
+	}
+}
+
+// SetPlatform names the computer for the phones ("mac", "windows"), in
+// every state from now on.
+func (h *Hub) SetPlatform(p string) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	h.platform = p
+	if h.state != nil {
+		s := proto.Clone(h.state).(*v1.GameState)
+		s.Platform = p
+		h.state = s
+		h.broadcast(&v1.WatchResponse{Payload: &v1.WatchResponse_State{State: s}})
 	}
 }
 

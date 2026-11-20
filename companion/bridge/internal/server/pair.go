@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/osutil"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/pairing"
 )
 
@@ -79,11 +80,11 @@ func PairPage(links LinkFunc, codes *Codes) http.HandlerFunc {
 		case link == "":
 			data.Refresh = true
 		case strings.Contains(link, "#m="):
-			data.Note = "Meeting point: add the app to the Home Screen once; it finds this Mac by itself each session."
+			data.Note = "Meeting point: add the app to the Home Screen once; it finds this " + osutil.Computer() + " by itself each session."
 		case strings.Contains(link, "trycloudflare.com"):
 			data.Note = "This address changes each game session: scan again next time."
 		default:
-			data.Note = "Local network link: the phone must be on the same Wi-Fi as this Mac."
+			data.Note = "Local network link: the phone must be on the same Wi-Fi as this " + osutil.Computer() + "."
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")

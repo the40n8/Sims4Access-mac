@@ -788,10 +788,10 @@ def open_hub():
 
 
 def _companion_rows():
-    """macOS: the phone companion's QR code page and the setup page."""
+    """The phone companion's QR code page and the setup page (macOS, Windows)."""
     import sys
     bridge = sys.modules.get('simsight_bridge')
-    if sys.platform != 'darwin' or bridge is None:
+    if sys.platform not in ('darwin', 'win32') or bridge is None:
         return ()
     return (('phone companion', bridge.open_pairing_page),
             ('companion setup', bridge.open_setup_page))

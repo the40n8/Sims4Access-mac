@@ -13,25 +13,25 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/osutil"
 )
 
 var urlPattern = regexp.MustCompile(`https://[a-z0-9-]+\.trycloudflare\.com`)
 
 // Find returns cloudflared: next to the bridge first (bundled), then Homebrew.
 func Find() string {
-	exe, _ := os.Executable()
 	for _, p := range []string{
-		filepath.Join(filepath.Dir(exe), "cloudflared"),
+		osutil.NextToMe(osutil.Exe("cloudflared")),
 		"/opt/homebrew/bin/cloudflared",
 		"/usr/local/bin/cloudflared",
 	} {
-		if st, err := os.Stat(p); err == nil && st.Mode()&0o111 != 0 {
+		if osutil.Runnable(p) {
 			return p
 		}
 	}
@@ -107,6 +107,7 @@ func (t *Tunnel) once(ctx context.Context) {
 		cmd = exec.CommandContext(ctx, t.bin, "tunnel", "--no-autoupdate", "--url", t.target, "run")
 		cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+t.token)
 	}
+	osutil.HideWindow(cmd)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		t.set("", "unavailable")

@@ -1,17 +1,22 @@
 # SimSight Companion
 
-Play The Sims 4 with a screen reader, on the Mac and from your phone. An
+Play The Sims 4 with a screen reader, on the Mac or Windows, and from your phone. An
 independent project based on **[TS4 Access](https://github.com/LeonianUniverse478/Sims4Access)**,
 the screen-reader mod for The Sims 4 by tyjokr, LeonianUniverse and contributors
 (MIT licence; their credits and licence are kept here).
-It speaks menus, dialogs, tooltips, notifications and what your Sim is doing,
-using the macOS system voices.
+It speaks menus, dialogs, tooltips, notifications and what your Sim is doing:
+with the macOS system voices on the Mac, through NVDA or JAWS on Windows.
 
 Made for playing together: a sighted player on the mouse, a blind player
-hearing what happens. Keyboard-only play (scanner, build cursor, Ctrl+Alt
-shortcuts) is Windows-only for now.
+hearing what happens, and a phone app for either of them. Keyboard-only play
+(scanner, build cursor, Ctrl+Alt shortcuts) comes from TS4 Access on Windows;
+the Mac has its own keys ([KEYBOARD.md](../docs/mac/KEYBOARD.md)).
 
-**Status:** works in game on an Apple Silicon Mac, game 1.129.39.1230
+**Windows: new, not yet tried in game.** The Windows parts of TS4 Access
+(speech, keyboard) are unchanged; the phone companion and the installer are
+new there. Testers welcome.
+
+**Status (Mac):** works in game on an Apple Silicon Mac, game 1.129.39.1230
 (hover narration, Sim actions). The phone companion works in game (status,
 feed, speed, Play menus, House map); its newest parts (game questions,
 notifications, Needs attention) are still being tried. Early: expect rough
@@ -22,6 +27,25 @@ app's Help tab). To ask ChatGPT or another assistant about the mod, point it
 at [`llms.txt`](https://raw.githubusercontent.com/the40n8/simsight-companion/main/llms.txt).
 
 ## Install (players)
+
+### Windows
+
+Quit The Sims 4, open PowerShell (Windows+X, then Terminal), paste this line
+and press Enter:
+
+```powershell
+irm https://github.com/the40n8/simsight-companion/releases/latest/download/install.ps1 | iex
+```
+
+It writes each step as a line your screen reader reads, finds your Sims 4
+folder (OneDrive and other languages too), backs up your settings and saves,
+installs the mod with its speech pack (Prism, for NVDA and JAWS) and allows
+mods in the game. Run it again to update, or to remove SimSight (type r).
+Without PowerShell: `SimSight-Companion-windows.zip` from the latest release,
+then **Install SimSight Companion.cmd**. Guides:
+[docs/windows](../docs/windows/README.txt).
+
+### Mac
 
 Quit The Sims 4, open Terminal (Command+Space, type Terminal, Return), paste
 this line and press Return:
@@ -117,7 +141,8 @@ connections: allow it, or the phone cannot connect.
 
 ```
 Scripts/              the mod's Python
-  simsight_bridge.py  game side of the phone companion
+  simsight_bridge.py  game side of the phone companion (Mac and Windows)
+  ctypes/             CPython 3.7 ctypes, Windows build only
 companion/
   proto/              API and pipe messages (buf, simsight.v1)
   bridge/             Go: pipe to the game, Connect API, pairing, event detection
@@ -126,8 +151,11 @@ companion/
 companion/meeting-point/  optional Cloudflare Worker (fixed app address)
 mac/                  build, install, release, tests, player notes
   ui-package.json     pinned TS4 Access release for SimSight_UI.package
+windows/              Windows build (on the Mac), installers, pinned downloads
+                      (cloudflared, Prism speech pack)
 docs/mac/             player guides (phone app, keyboard, commands, fixed address,
                       meeting point, AI helper)
+docs/windows/         Windows guides (README, CONTROLS, CHEATS)
 ```
 
 ## Development

@@ -12,7 +12,7 @@
 	import { forgetToken, loadToken } from '$lib/session.js';
 	import * as meeting from '$lib/meeting.js';
 	import { client, run } from '$lib/client.js';
-	import { live } from '$lib/live.svelte.js';
+	import { computer, live } from '$lib/live.svelte.js';
 	import { reasonText } from '$lib/text.js';
 	import type { Narration } from '$lib/gen/simsight/v1/game_pb.js';
 	import { announce } from './Announcer.svelte';
@@ -140,7 +140,7 @@
 	{/each}
 	<label class="check">
 		<input type="checkbox" bind:checked={prefs.showSpoken} onchange={savePrefs} />
-		{m.show_spoken()}
+		{m.show_spoken(computer())}
 	</label>
 </fieldset>
 
@@ -165,24 +165,24 @@
 </section>
 
 <section class="card stack" aria-labelledby="narration">
-	<h2 id="narration">{m.narration_title()}</h2>
+	<h2 id="narration">{m.narration_title(computer())}</h2>
 	<button
 		type="button"
 		aria-pressed={narration?.macVoice ?? false}
 		aria-disabled={busy || !live.gameConnected}
-		onclick={() => setNarration({ macVoice: !narration?.macVoice })}>{m.mac_voice()}</button
+		onclick={() => setNarration({ macVoice: !narration?.macVoice })}>{m.mac_voice(computer())}</button
 	>
 	<button
 		type="button"
 		aria-pressed={narration?.simActions ?? false}
 		aria-disabled={busy || !live.gameConnected}
-		onclick={() => setNarration({ simActions: !narration?.simActions })}>{m.sim_actions()}</button
+		onclick={() => setNarration({ simActions: !narration?.simActions })}>{m.sim_actions(computer())}</button
 	>
 </section>
 
 <fieldset class="card stack">
-	<legend><h2>{m.mac_announce_title()}</h2></legend>
-	<p class="muted">{m.mac_announce_help()}</p>
+	<legend><h2>{m.mac_announce_title(computer())}</h2></legend>
+	<p class="muted">{m.mac_announce_help(computer())}</p>
 	{#each GROUPS as group (group)}
 		<label class="check">
 			<input
@@ -213,7 +213,7 @@
 	<h2 id="pairing">{m.pairing_title()}</h2>
 	<p class="muted">{m.pairing_help()}</p>
 	<button type="button" onclick={copyLink}>{m.copy_pairing_link()}</button>
-	<button type="button" onclick={unpair}>{m.unpair()}</button>
+	<button type="button" onclick={unpair}>{m.unpair(computer())}</button>
 </section>
 
 {#if meeting.hosted}

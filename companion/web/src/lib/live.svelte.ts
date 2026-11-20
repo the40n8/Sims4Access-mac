@@ -96,3 +96,8 @@ class Live {
 }
 
 export const live = new Live();
+
+/** The computer the game runs on, as the texts name it: "Mac" or "PC". */
+export function computer(): { computer: string } {
+	return { computer: live.state?.platform === 'windows' ? 'PC' : 'Mac' };
+}

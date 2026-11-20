@@ -128,6 +128,9 @@ message GameState {
   string camera_follows = 12;
   // What the Mac voice announces by itself (set from the phone, kept on the Mac).
   MacAnnounce mac_announce = 13;
+  // The computer the game runs on: "mac" or "windows" (set by the bridge),
+  // for the phone app's wording and shortcuts.
+  string platform = 14;
 }
 
 message MacAnnounce {

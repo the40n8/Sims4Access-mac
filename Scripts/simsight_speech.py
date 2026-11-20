@@ -774,6 +774,15 @@ def _speak_now(text, source='tooltip'):
     # through here, whereas text merely captured in manual/off never does.
     _post_caption(text)
     log_line('SPEAK[{}{}]: {}'.format(source[0], 'i' if interrupt else 'q', text))
+    if not IS_MAC:
+        # Windows: the phone's history shows what the screen reader said
+        # (on macOS the speech itself goes through the bridge).
+        bridge = sys.modules.get('simsight_bridge')
+        if bridge is not None:
+            try:
+                bridge.mirror(text, interrupt)
+            except Exception as ex:
+                log_line('companion mirror failed: {!r}'.format(ex))
     if _backend_name == 'prism' and _prism is not None:
         try:
             if _prism.output(text, _braille_text(text), braille_mode, interrupt):

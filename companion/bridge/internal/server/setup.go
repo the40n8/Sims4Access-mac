@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/osutil"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/pairing"
 )
 
@@ -77,7 +78,7 @@ func (s *Setup) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.render(w, d, http.StatusOK)
 	case http.MethodPost:
 		if !s.sameOrigin(r) {
-			http.Error(w, "Refused: this form only works from the page on this Mac.", http.StatusForbidden)
+			http.Error(w, "Refused: this form only works from the page on this "+osutil.Computer()+".", http.StatusForbidden)
 			return
 		}
 		r.Body = http.MaxBytesReader(w, r.Body, 64<<10)
@@ -155,7 +156,7 @@ func (s *Setup) data(cfg *pairing.Config) setupData {
 		case link == "":
 			d.LinkStatus = status
 		case status == "local":
-			d.LinkStatus = "The phone reaches this Mac on the home Wi-Fi only."
+			d.LinkStatus = "The phone reaches this " + osutil.Computer() + " on the home Wi-Fi only."
 			d.Address = addressOf(link)
 		default:
 			d.LinkStatus = "The phone link is ready."
@@ -210,7 +211,7 @@ func (s *Setup) save(w http.ResponseWriter, r *http.Request, cfg *pairing.Config
 			next.PublicURL = u
 		}
 	default:
-		problem("mode-quick", "Choose how the phone reaches this Mac.")
+		problem("mode-quick", "Choose how the phone reaches this "+osutil.Computer()+".")
 	}
 	next.MeetingPoint = ""
 	if d.Meeting != "" {
@@ -322,7 +323,8 @@ func (s *Setup) render(w http.ResponseWriter, d setupData, status int) {
 	}
 }
 
-var setupTmpl = template.Must(template.New("setup").Parse(`<!doctype html>
+// The page names this computer ("this Mac", "this PC") and its menu keys.
+var setupTmpl = template.Must(template.New("setup").Parse(localize(`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{if ne .Title "SimSight setup"}}{{.Title}}: {{end}}SimSight setup</title>
 <style>
@@ -445,4 +447,8 @@ code{font-size:.9em;word-break:break-all}
 <p><button type="submit" name="action" value="done" class="secondary">Done</button></p>
 </form>{{end}}
 {{end}}
-</main></body></html>`))
+</main></body></html>`)))
+
+func localize(page string) string {
+	return strings.NewReplacer("this Mac", "this "+osutil.Computer(), "Option Command A", osutil.MenuKeys()).Replace(page)
+}

@@ -5,6 +5,7 @@
 // network and exits when the game closes the pipe.
 //
 //	simsight-bridge --speaker /path/simsight-say [--rate 3 --volume 70 --voice Thomas --lang fr-FR]
+//	simsight-bridge --speaker none   # Windows: the screen reader speaks, through the mod
 //	simsight-bridge --demo   # fake game, for developing the phone app
 //	simsight-bridge link     # print the phone link and its QR code
 //	simsight-bridge setup    # open the settings page (game running or not)
@@ -21,9 +22,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -35,6 +36,7 @@ import (
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/demo"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/hub"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/meeting"
+	"github.com/the40n8/simsight-companion/companion/bridge/internal/osutil"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/pairing"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/pipe"
 	"github.com/the40n8/simsight-companion/companion/bridge/internal/server"
@@ -65,14 +67,13 @@ func main() {
 }
 
 func run() error {
-	home, _ := os.UserHomeDir()
 	var (
-		speakerPath = flag.String("speaker", "", "path to simsight-say (default: next to this binary)")
+		speakerPath = flag.String("speaker", "", `path to simsight-say (default: next to this binary); "none": no voice of its own, announcements go to the mod (Windows)`)
 		rate        = flag.Int("rate", 3, "voice rate -10..10")
 		volume      = flag.Int("volume", 70, "voice volume 0..100")
 		voiceName   = flag.String("voice", "", "part of a macOS voice name")
 		lang        = flag.String("lang", "", "voice language, e.g. fr-FR")
-		dataDir     = flag.String("data", filepath.Join(home, "Library", "Application Support", "SimSightCompanion"), "pairing and log folder")
+		dataDir     = flag.String("data", osutil.DataDir(), "pairing and log folder")
 		webDir      = flag.String("web", "", "serve the phone app from this folder instead of the embedded build (development)")
 		port        = flag.Int("port", 0, "listen port (default: saved port, 47800)")
 		demoMode    = flag.Bool("demo", false, "run a fake game instead of reading the mod's pipe")
@@ -122,6 +123,7 @@ func run() error {
 	defer stop()
 
 	h := hub.New(nil)
+	h.SetPlatform(osutil.Platform())
 	// What the Mac voice announces: kept in the data folder, set from the phone.
 	h.SetMacAnnounceSaver(func(a *v1.MacAnnounce) error { return announce.Save(*dataDir, a) })
 	_ = h.SetMacAnnounce(announce.Load(*dataDir))
@@ -190,7 +192,14 @@ func run() error {
 	if *demoMode {
 		codes.SetSay(func(code string) { fmt.Fprintln(os.Stderr, "pairing code:", code) })
 	}
-	ln, err := net.Listen("tcp", ":"+strconv.Itoa(cfg.Port))
+	// All networks, so a phone on the same Wi-Fi can connect. On Windows,
+	// only this PC while the tunnel carries the phone: listening on the
+	// network makes Windows show a firewall question over the game.
+	listen := ":" + strconv.Itoa(cfg.Port)
+	if runtime.GOOS == "windows" && tun != nil {
+		listen = "127.0.0.1:" + strconv.Itoa(cfg.Port)
+	}
+	ln, err := net.Listen("tcp", listen)
 	if err != nil {
 		// Another game session or bridge holds the port: keep speech working.
 		slog.Error("phone server unavailable", "port", cfg.Port, "err", err)
@@ -218,16 +227,33 @@ func run() error {
 	}
 
 	if *speakerPath == "" {
-		exe, _ := os.Executable()
-		*speakerPath = filepath.Join(filepath.Dir(exe), "simsight-say")
+		*speakerPath = osutil.NextToMe("simsight-say")
+		if runtime.GOOS == "windows" {
+			*speakerPath = "none"
+		}
 	}
-	spk := speaker.New(*speakerPath, &v1.Voice{Rate: int32(*rate), Volume: int32(*volume), Name: *voiceName, Lang: *lang})
+	// say: the bridge's own announcements. With a speaker (Mac) its voice;
+	// without (Windows) the mod's screen reader, through the pipe.
+	var spk *speaker.Speaker
+	var say func(text string)
+	if *speakerPath == "none" {
+		say = func(text string) {
+			go func() {
+				sctx, cancel := context.WithTimeout(ctx, hub.CommandTimeout)
+				defer cancel()
+				h.Command(sctx, &v1.ToGame{Command: &v1.ToGame_Say{Say: &v1.SayRequest{Text: text}}})
+			}()
+		}
+	} else {
+		spk = speaker.New(*speakerPath, &v1.Voice{Rate: int32(*rate), Volume: int32(*volume), Name: *voiceName, Lang: *lang})
+		say = func(text string) { spk.Line("Q" + url.PathEscape(text)) }
+	}
 	// Said once, when the phone link works and a household is loaded (the
 	// accessibility menu only opens in a household): how to show the QR code.
 	var linkReady, told atomic.Bool
 	tell := func() {
 		if linkReady.Load() && h.State().GetInGame() && told.CompareAndSwap(false, true) {
-			spk.Line("Q" + url.PathEscape("Phone link ready. Press Option Command A for the accessibility menu, then choose phone companion."))
+			say("Phone link ready. Press " + osutil.MenuKeys() + " for the accessibility menu, then choose phone companion.")
 		}
 	}
 	linkUp := func(string) {
@@ -236,7 +262,7 @@ func run() error {
 	}
 	onTunnelReady.Store(&linkUp)
 	codes.SetSay(func(code string) {
-		spk.Line("Q" + url.PathEscape("Pairing code: "+server.SpokenCode(code)+". Again: "+server.SpokenCode(code)+"."))
+		say("Pairing code: " + server.SpokenCode(code) + ". Again: " + server.SpokenCode(code) + ".")
 	})
 	go func() {
 		// Only new events: Subscribe replays recent ones first.
@@ -252,7 +278,7 @@ func run() error {
 			// The Mac voice off (Option+Command+S) silences these too.
 			if a := h.MacAnnounce(); a != nil && h.State().GetNarration().GetMacVoice() && announce.Wants(a, e) {
 				if text := announce.Text(e); text != "" {
-					spk.Line("Q" + url.PathEscape(text))
+					say(text)
 				}
 			}
 		}
@@ -292,11 +318,11 @@ func run() error {
 		case "hub":
 			go openMenu(h, "hub")
 		case "phone":
-			if err := exec.Command("/usr/bin/open", pairPage).Run(); err != nil {
+			if err := osutil.OpenURL(pairPage); err != nil {
 				slog.Warn("open pairing page failed", "err", err)
 			}
 		case "setup":
-			if err := exec.Command("/usr/bin/open", setupPage).Run(); err != nil {
+			if err := osutil.OpenURL(setupPage); err != nil {
 				slog.Warn("open setup page failed", "err", err)
 			}
 		}
@@ -367,9 +393,8 @@ func openMenu(h *hub.Hub, menu string) {
 
 // printLink shows the phone link as text and as a QR code to scan.
 func printLink(args []string) error {
-	home, _ := os.UserHomeDir()
 	fs := flag.NewFlagSet("link", flag.ExitOnError)
-	dataDir := fs.String("data", filepath.Join(home, "Library", "Application Support", "SimSightCompanion"), "pairing folder")
+	dataDir := fs.String("data", osutil.DataDir(), "pairing folder")
 	all := fs.Bool("all", false, "list every address")
 	invert := fs.Bool("invert", false, "QR for terminals with a light background")
 	port := fs.Int("port", 0, "link to a different port (e.g. 5173 for the live-reload dev server)")
@@ -412,9 +437,8 @@ func printLink(args []string) error {
 // serves the page; otherwise this serves it on 127.0.0.1 until "Done" is
 // pressed (or 30 minutes pass).
 func runSetup(args []string) error {
-	home, _ := os.UserHomeDir()
 	fs := flag.NewFlagSet("setup", flag.ExitOnError)
-	dataDir := fs.String("data", filepath.Join(home, "Library", "Application Support", "SimSightCompanion"), "pairing folder")
+	dataDir := fs.String("data", osutil.DataDir(), "pairing folder")
 	noOpen := fs.Bool("no-open", false, "print the address without opening the browser")
 	_ = fs.Parse(args)
 
@@ -428,7 +452,7 @@ func runSetup(args []string) error {
 		if *noOpen {
 			return
 		}
-		if err := exec.Command("/usr/bin/open", page).Run(); err != nil {
+		if err := osutil.OpenURL(page); err != nil {
 			fmt.Fprintln(os.Stderr, "Open this address in a browser:", page)
 		}
 	}
