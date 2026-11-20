@@ -39,6 +39,12 @@ an iPhone, often playing together with a sighted player on the Mac.
    (a Home Screen app that always works), see
    [FIXED-ADDRESS.md](FIXED-ADDRESS.md), or
    [MEETING-POINT.md](MEETING-POINT.md) (no domain needed, several Macs).
+6. Settings on the Mac side are on the **SimSight setup** page:
+   accessibility menu > **companion setup** (or double-click
+   `SimSight Setup.command` in the Mods/SimSight folder, game closed or
+   not). It chooses the phone address (changing, fixed, or home Wi-Fi
+   only), the meeting point, and **Disconnect every phone** if a phone is
+   lost. Changes apply when the game starts.
 
 ## Using the app with VoiceOver
 

@@ -12,6 +12,8 @@ keys before using menus.
 
 - `simsight.hub`: the accessibility menu.
 - `simsight.companion`: the phone link page (QR code and pairing code).
+- `simsight.setup`: SimSight setup on the Mac (phone address, meeting point,
+  disconnect every phone).
 - `simsight.menu window`: the settings window (simplified menus, Build controls).
 - `simsight.settings`: read the current settings.
 - `simsight.reload`: apply changes made by hand to `SimSight.cfg`.

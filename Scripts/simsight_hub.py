@@ -788,12 +788,13 @@ def open_hub():
 
 
 def _companion_rows():
-    """macOS: the phone companion's QR code page."""
+    """macOS: the phone companion's QR code page and the setup page."""
     import sys
     bridge = sys.modules.get('simsight_bridge')
     if sys.platform != 'darwin' or bridge is None:
         return ()
-    return (('phone companion', bridge.open_pairing_page),)
+    return (('phone companion', bridge.open_pairing_page),
+            ('companion setup', bridge.open_setup_page))
 
 
 @sims4.commands.Command('simsight.hub', 'a11y.hub', command_type=sims4.commands.CommandType.Live)

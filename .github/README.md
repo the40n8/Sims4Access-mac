@@ -100,9 +100,12 @@ quick actions for what needs attention. See the
    `mac/phone-link.sh`. Both open http://127.0.0.1:47800/pair (this Mac only).
 3. Scan it with the phone, then in Safari: Share > Add to Home Screen. The
    tunnel address changes each game session, so scan again next time.
-4. To revoke the pairing token, delete
+4. Settings: **SimSight setup**, a page on the Mac (accessibility menu >
+   companion setup, `SimSight Setup.command`, or `simsight-bridge setup`).
+   It chooses the phone address (changing, fixed, or home Wi-Fi only), the
+   optional meeting point, and disconnects every phone with a new pairing
+   key. It writes
    `~/Library/Application Support/SimSightCompanion/config.json`.
-   `simsight-bridge --tunnel=false` keeps everything on the local network.
    `mac/wifi-test.sh` checks whether the phone reaches the Mac directly over
    Wi-Fi (works without the game). For a fixed address instead of a random
    one each session, see [docs/mac/FIXED-ADDRESS.md](../docs/mac/FIXED-ADDRESS.md).

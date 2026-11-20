@@ -42,6 +42,7 @@ cat > "$PKG/Uninstall SimSight Companion.command" <<'CMD'
 cd "${0:A:h}" && ./uninstall.sh
 echo; echo "SimSight removed. You can close this window."
 CMD
+cp -p "mac/SimSight Setup.command" "$PKG/"
 chmod +x "$PKG"/*.command "$PKG"/*.sh
 # The optional meeting point, with the phone app it serves.
 mkdir -p "$PKG/meeting-point"
@@ -65,6 +66,10 @@ double-click it again.
 
 Then start The Sims 4 and load a household. Option+Command+A opens the
 accessibility menu; "phone companion" there connects a phone.
+
+Optional settings (fixed phone address, meeting point, disconnect phones):
+double-click "SimSight Setup.command", or choose "companion setup" in the
+accessibility menu.
 
 Guides: https://github.com/the40n8/simsight-companion/tree/main/docs/mac
 Remove: double-click "Uninstall SimSight Companion.command" (saves are not touched).

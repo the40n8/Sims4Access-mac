@@ -18,18 +18,12 @@ too, with only a free account.
    runs the tunnel itself while the game is open.
 3. **Public hostname**: choose a subdomain, for example `sims.example.com`,
    service **HTTP**, URL `localhost:47800`. Save.
-4. On the Mac, open
-   `~/Library/Application Support/SimSightCompanion/config.json` and add the
-   two lines (keep the existing `token` and `port`):
-
-   ```json
-   {
-     "token": "…keep…",
-     "port": 47800,
-     "tunnel_token": "the token from step 2",
-     "public_url": "https://sims.example.com"
-   }
-   ```
+4. Open **SimSight setup**: in game, accessibility menu (Option+Command+A) >
+   **companion setup**; with the game closed, double-click
+   `SimSight Setup.command` in the Mods/SimSight folder. Choose **Fixed
+   address**, paste the token (the whole command is fine) and type the
+   public hostname, then **Save**. If the game was running, quit and restart
+   it.
 5. Start the game. Once a household is loaded the Mac says "Phone link
    ready…"; the QR code (Option+Command+A, phone companion) now shows the
    fixed address. Scan it once, then **Share > Add to Home Screen**. If the
@@ -43,7 +37,7 @@ With `cloudflared` logged in to your account (`cloudflared tunnel login`):
 ```sh
 cloudflared tunnel create simsight
 cloudflared tunnel route dns simsight sims.example.com
-cloudflared tunnel token simsight     # the tunnel_token for config.json
+cloudflared tunnel token simsight     # the token to paste in SimSight setup
 ```
 
 No public hostname needed in the dashboard: the mod sends everything the
@@ -55,5 +49,7 @@ tunnel receives to the phone app.
   the address alone is not enough to see or control the game.
 - For an extra lock, Cloudflare Access can ask for an email code before the
   page opens (Zero Trust > Access > Applications).
-- To go back to random addresses, remove the two lines.
-- `config.json` holds secrets: do not share it.
+- To go back to random addresses: SimSight setup > **Changing address**.
+- The settings live in
+  `~/Library/Application Support/SimSightCompanion/config.json` (the setup
+  page writes it). It holds secrets: do not share it.

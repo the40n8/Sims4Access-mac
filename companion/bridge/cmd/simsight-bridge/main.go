@@ -7,6 +7,7 @@
 //	simsight-bridge --speaker /path/simsight-say [--rate 3 --volume 70 --voice Thomas --lang fr-FR]
 //	simsight-bridge --demo   # fake game, for developing the phone app
 //	simsight-bridge link     # print the phone link and its QR code
+//	simsight-bridge setup    # open the settings page (game running or not)
 package main
 
 import (
@@ -45,6 +46,13 @@ import (
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "link" {
 		if err := printLink(os.Args[2:]); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
+	if len(os.Args) > 1 && os.Args[1] == "setup" {
+		if err := runSetup(os.Args[2:]); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
@@ -146,6 +154,10 @@ func run() error {
 		}
 		return "", "No network address: is the Mac on Wi-Fi?"
 	}
+	if cfg.LocalOnly {
+		*useTunnel = false
+		slog.Info("home Wi-Fi only (setup page): no tunnel")
+	}
 	if bin := tunnel.Find(); *useTunnel && bin != "" {
 		ready := func(url string) {
 			link := url + "/#k=" + cfg.Token
@@ -184,7 +196,7 @@ func run() error {
 		slog.Error("phone server unavailable", "port", cfg.Port, "err", err)
 	} else {
 		srv := &http.Server{
-			Handler:           server.Handler(h, cfg.Token, web, links, codes, cors),
+			Handler:           server.Handler(h, cfg.Token, web, links, codes, cors, server.NewSetup(*dataDir, cfg.Port, links)),
 			ReadHeaderTimeout: 10 * time.Second,
 		}
 		go func() {
@@ -260,6 +272,7 @@ func run() error {
 		}
 	}()
 	pairPage := "http://127.0.0.1:" + strconv.Itoa(cfg.Port) + "/pair"
+	setupPage := "http://127.0.0.1:" + strconv.Itoa(cfg.Port) + "/setup"
 	spk.Listen(func(name string) {
 		if rest, ok := strings.CutPrefix(name, "key "); ok {
 			// "key <family> <vk> <down|up> <shift 0|1>" from the key helper,
@@ -281,6 +294,10 @@ func run() error {
 		case "phone":
 			if err := exec.Command("/usr/bin/open", pairPage).Run(); err != nil {
 				slog.Warn("open pairing page failed", "err", err)
+			}
+		case "setup":
+			if err := exec.Command("/usr/bin/open", setupPage).Run(); err != nil {
+				slog.Warn("open setup page failed", "err", err)
 			}
 		}
 	})
@@ -388,5 +405,69 @@ func printLink(args []string) error {
 			fmt.Println(l)
 		}
 	}
+	return nil
+}
+
+// runSetup opens the settings page. With the game running, its bridge
+// serves the page; otherwise this serves it on 127.0.0.1 until "Done" is
+// pressed (or 30 minutes pass).
+func runSetup(args []string) error {
+	home, _ := os.UserHomeDir()
+	fs := flag.NewFlagSet("setup", flag.ExitOnError)
+	dataDir := fs.String("data", filepath.Join(home, "Library", "Application Support", "SimSightCompanion"), "pairing folder")
+	noOpen := fs.Bool("no-open", false, "print the address without opening the browser")
+	_ = fs.Parse(args)
+
+	cfg, err := pairing.Load(*dataDir)
+	if err != nil {
+		return err
+	}
+	addr := "127.0.0.1:" + strconv.Itoa(cfg.Port)
+	page := "http://" + addr + "/setup"
+	open := func() {
+		if *noOpen {
+			return
+		}
+		if err := exec.Command("/usr/bin/open", page).Run(); err != nil {
+			fmt.Fprintln(os.Stderr, "Open this address in a browser:", page)
+		}
+	}
+	// The game's bridge already listens on this port: it serves the page.
+	if c, err := net.DialTimeout("tcp", addr, time.Second); err == nil {
+		c.Close()
+		fmt.Println("The game is running. Setup page:", page)
+		open()
+		return nil
+	}
+	ln, err := net.Listen("tcp", addr)
+	if err != nil {
+		return fmt.Errorf("cannot open the setup page on %s: %w", addr, err)
+	}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Minute)
+	defer cancel()
+
+	setup := server.NewSetup(*dataDir, cfg.Port, nil)
+	var once atomic.Bool
+	setup.OnDone = func() {
+		if once.CompareAndSwap(false, true) {
+			// Let the "Finished" page reach the browser first.
+			time.AfterFunc(500*time.Millisecond, cancel)
+		}
+	}
+	mux := http.NewServeMux()
+	mux.Handle("/setup", setup)
+	mux.Handle("/", http.RedirectHandler("/setup", http.StatusFound))
+	srv := &http.Server{Handler: mux, ReadHeaderTimeout: 10 * time.Second}
+	go func() { _ = srv.Serve(ln) }()
+	fmt.Println("Setup page open in the browser:", page)
+	fmt.Println("Press Done on the page when finished.")
+	open()
+	<-ctx.Done()
+	sctx, scancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer scancel()
+	_ = srv.Shutdown(sctx)
+	fmt.Println("Setup page closed.")
 	return nil
 }

@@ -1489,20 +1489,31 @@ def run_interaction(target_id, option_id):
 # ---------------------------------------------------------------- pairing page
 
 PAIR_URL = 'http://127.0.0.1:47800/pair'
+SETUP_URL = 'http://127.0.0.1:47800/setup'
 
 
-def open_pairing_page():
-    """Show the phone link's QR code in the Mac's browser (in front of the game)."""
+def _open_on_mac(url, said):
+    """Open one of the bridge's pages in the Mac's browser (in front of the game)."""
     if not IS_MAC or subprocess is None:
         return False
     try:
-        subprocess.Popen(['/usr/bin/open', PAIR_URL], stdout=subprocess.DEVNULL,
+        subprocess.Popen(['/usr/bin/open', url], stdout=subprocess.DEVNULL,
                          stderr=subprocess.DEVNULL, close_fds=True)
-        speech.speak('Phone link opened on the Mac.', explicit=True)
+        speech.speak(said, explicit=True)
         return True
     except Exception as ex:
-        log('open pairing page failed: {!r}'.format(ex))
+        log('open {} failed: {!r}'.format(url, ex))
         return False
+
+
+def open_pairing_page():
+    """Show the phone link's QR code and pairing code."""
+    return _open_on_mac(PAIR_URL, 'Phone link opened on the Mac.')
+
+
+def open_setup_page():
+    """SimSight setup: phone address, meeting point, disconnect phones."""
+    return _open_on_mac(SETUP_URL, 'SimSight setup opened in the browser.')
 
 
 try:
@@ -1512,6 +1523,11 @@ try:
     def a11y_companion(_connection=None):
         """Open the phone companion's QR code on the Mac."""
         return open_pairing_page()
+
+    @sims4.commands.Command('simsight.setup', command_type=sims4.commands.CommandType.Live)
+    def simsight_setup(_connection=None):
+        """Open SimSight setup on the Mac (phone address, meeting point)."""
+        return open_setup_page()
 except Exception as _ex:
     log('companion command unavailable: {!r}'.format(_ex))
 

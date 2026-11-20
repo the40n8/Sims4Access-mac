@@ -35,6 +35,8 @@ type Config struct {
 	// This Mac at the meeting point (made when meeting_point is set).
 	MacID     string `json:"mac_id,omitempty"`
 	MacSecret string `json:"mac_secret,omitempty"`
+	// No Cloudflare tunnel: the phone app on the home Wi-Fi only.
+	LocalOnly bool `json:"local_only,omitempty"`
 }
 
 // Load reads dir/config.json, creating it with a fresh token if missing.
@@ -80,6 +82,11 @@ func NewToken() string {
 		panic(err) // crypto/rand never fails on macOS
 	}
 	return base64.RawURLEncoding.EncodeToString(b)
+}
+
+// Save writes dir/config.json (private to this user).
+func (c *Config) Save(dir string) error {
+	return c.save(filepath.Join(dir, "config.json"))
 }
 
 func (c *Config) save(path string) error {
@@ -156,4 +163,3 @@ func (c *Config) WriteLinkFile(dir string) (string, error) {
 	path := filepath.Join(dir, "phone-link.txt")
 	return path, os.WriteFile(path, []byte(strings.Join(c.Links(), "\n")+"\n"), 0o600)
 }
-

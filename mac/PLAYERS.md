@@ -52,7 +52,10 @@ relationships and work performance. When the game starts, the Mac voice says "Ph
 link ready". Open the cheat console (Cmd+Shift+C) and type `simsight.companion`
 (or open the accessibility menu with `simsight.hub` > phone companion): a page
 with a QR code opens on the Mac. Scan it with the phone, then in Safari:
-Share > Add to Home Screen. The address changes each game session. Language follows the phone
+Share > Add to Home Screen. The address changes each game session (a fixed
+address, the meeting point and "disconnect every phone" are in the
+accessibility menu > companion setup, or `SimSight Setup.command` in this
+folder). Language follows the phone
 (French, English, Spanish) and can be changed in Settings.
 
 ## Shortcuts and menu bar icon
@@ -65,7 +68,8 @@ While the game runs (no need to leave it):
 
 The keys follow the letters printed on the keyboard (AZERTY too). An
 accessibility icon in the macOS menu bar offers the same two actions plus
-"Phone companion…", which opens the page with the phone QR code. In full
+"Phone companion…", which opens the page with the phone QR code, and
+"SimSight Setup…". In full
 screen, move the pointer to the top of the screen to show the menu bar. The
 phone has the speech switch at the top of Live and Play. While the game runs,
 these two shortcuts belong to SimSight in every app.

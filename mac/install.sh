@@ -58,11 +58,12 @@ for f in SimSight.ts4script SimSight_UI.package simsight-say simsight-bridge clo
   cp -p "$SRC/$f" "$DEST/$f.new" && mv -f "$DEST/$f.new" "$DEST/$f"
 done
 cp -p "$HERE/uninstall.sh" "$DEST/uninstall.sh" 2>/dev/null || true
+cp -p "$HERE/SimSight Setup.command" "$DEST/SimSight Setup.command" 2>/dev/null || true
 # The optional meeting point, ready to deploy (docs/mac/MEETING-POINT.md).
 if [[ -d "$HERE/meeting-point" ]]; then
   rm -rf "$DEST/meeting-point" && cp -R "$HERE/meeting-point" "$DEST/meeting-point"
 fi
-chmod +x "$DEST/simsight-say" "$DEST/simsight-bridge" "$DEST/cloudflared" "$DEST/uninstall.sh" 2>/dev/null || true
+chmod +x "$DEST/simsight-say" "$DEST/simsight-bridge" "$DEST/cloudflared" "$DEST/uninstall.sh" "$DEST/SimSight Setup.command" 2>/dev/null || true
 # Downloaded with a browser, macOS would refuse to start the mod's helpers.
 xattr -dr com.apple.quarantine "$DEST" 2>/dev/null || true
 

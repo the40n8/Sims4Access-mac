@@ -176,10 +176,14 @@ func (a *auth) WrapStreamingHandler(next connect.StreamingHandlerFunc) connect.S
 // Handler serves the API, the web app (an SPA: unknown paths get
 // index.html) and, on this Mac only, the pairing page at /pair.
 // cors is the meeting point's origin, allowed to call this API from the
-// phone app it hosts ("" when there is none).
-func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes, cors string) http.Handler {
+// phone app it hosts ("" when there is none). setup is the settings page
+// (/setup, this Mac only; nil for none).
+func Handler(h *hub.Hub, token string, web fs.FS, links LinkFunc, codes *Codes, cors string, setup http.Handler) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/pair", PairPage(links, codes))
+	if setup != nil {
+		mux.Handle("/setup", setup)
+	}
 	if codes != nil {
 		mux.Handle("/api/pair-code", codes.Handler())
 	}

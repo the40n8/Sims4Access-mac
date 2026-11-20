@@ -31,13 +31,10 @@ folder (this repository), built once with `mac/build.sh`.
    ```
 
    It prints the address, like `https://simsight.<your-account>.workers.dev`.
-2. On the Mac, open
-   `~/Library/Application Support/SimSightCompanion/config.json` and add one
-   line (keep the others):
-
-   ```json
-   "meeting_point": "https://simsight.<your-account>.workers.dev"
-   ```
+2. Open **SimSight setup** (accessibility menu > **companion setup**, or
+   double-click `SimSight Setup.command` in the Mods/SimSight folder), type
+   that address under **Meeting point**, then **Save**. If the game was
+   running, quit and restart it.
 3. Start the game and load a household. Option+Command+A, **phone
    companion**: the QR code now opens the app at the meeting point, and the
    Mac says a 6-digit code.
@@ -47,7 +44,7 @@ folder (this repository), built once with `mac/build.sh`.
 
 From then on: just open the app.
 
-**Another Mac:** set the same `meeting_point` in that Mac's config.json; on
+**Another Mac:** type the same meeting point in that Mac's SimSight setup; on
 the phone, Settings > Computers > **Pair another computer**, type the code
 that Mac says.
 

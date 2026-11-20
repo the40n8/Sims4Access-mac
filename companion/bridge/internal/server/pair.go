@@ -31,6 +31,7 @@ code{word-break:break-all;font-size:.8rem;color:#b5d3c2}
 <p><code>{{.Link}}</code></p>
 {{else}}<p>{{.Status}}</p>{{end}}
 <p>{{.Note}}</p>
+<p><a href="/setup" style="color:inherit">SimSight setup</a>: fixed address, meeting point, disconnect phones.</p>
 </main></body></html>`))
 
 // localOnly accepts requests made on this Mac to 127.0.0.1/localhost, and

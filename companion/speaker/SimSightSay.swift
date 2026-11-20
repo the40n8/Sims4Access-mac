@@ -335,6 +335,7 @@ final class Controls: NSObject {
         menu.addItem(entry("Speech on or off", key: "s", action: #selector(voice)))
         menu.addItem(.separator())
         menu.addItem(entry("Phone companion…", key: "", action: #selector(phone)))
+        menu.addItem(entry("SimSight Setup…", key: "", action: #selector(setup)))
         item.menu = menu
         self.item = item
     }
@@ -349,6 +350,7 @@ final class Controls: NSObject {
     @objc func hub() { report("hub") }
     @objc func voice() { report("voice") }
     @objc func phone() { report("phone") }
+    @objc func setup() { report("setup") }
 }
 
 let app = NSApplication.shared
